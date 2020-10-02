@@ -1,0 +1,18 @@
+{
+  "navigationBarBackgroundColor": "#6BD78C",
+  "titleNView": {
+    "searchInput": {
+      "align": "left",
+      "disabled": "true",
+      "borderRadius": "10px",
+      "backgroundColor": "#ffffff",
+      "placeholder": "搜索线路/站点/地点",
+      "placeholderColor": "#AAAAAA"
+    }
+  },
+  "usingComponents": {
+    "u-cell-group": "/uview-ui/components/u-cell-group/u-cell-group",
+    "u-cell-item": "/uview-ui/components/u-cell-item/u-cell-item",
+    "u-icon": "/uview-ui/components/u-icon/u-icon"
+  }
+}

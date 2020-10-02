@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "uni-icons": "/pages_ZXGP/components/ZXGP/StarJudge/uni-icons/uni-icons"
+  }
+}

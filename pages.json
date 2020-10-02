@@ -1,0 +1,435 @@
+{
+	//-------------------定义组件引入规则，一个pages只能一个easycom，引入uview框架---------------------
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [
+		//-------------------交通在线首页---------------------
+		{
+			"path": "pages/home/h_jtzx_home",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
+					"background": "transparent", // 背景透明
+					"backgroundColor": "rgba(0,0,0,0)", // 背景透明
+					"popGesture": "none" // 关闭IOS屏幕左边滑动关闭当前页面的功能
+				}
+			}
+		},
+		//-------------------南平综合出行首页---------------------
+		{
+			"path": "pages/home/h_np_home",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
+					"background": "transparent", // 背景透明
+					"backgroundColor": "rgba(0,0,0,0)", // 背景透明
+					"popGesture": "none" // 关闭IOS屏幕左边滑动关闭当前页面的功能
+				}
+			}
+		},
+		
+		
+		//----------------------------个人中心模块开始----------------------------
+		//--------------------微信授权登录--------------------
+		//#ifdef MP-WEIXIN
+		{
+			"path": "pages/GRZX/wxAuthorize",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		//#endif
+		{
+			"path": "pages/GRZX/user",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/GRZX/userLogin",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/GRZX/wxLogin",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/GRZX/passengerInfo",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/GRZX/addPassenger", //添加乘客信息
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					//app页面不显示滚动条
+					"scrollIndicator": "none"
+				}
+			}
+		},
+		{
+			"path": "pages/GRZX/addFreeChildren", //添加免票儿童
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					//app页面不显示滚动条
+					"scrollIndicator": "none"
+				}
+			}
+		},
+				{
+			"path": "pages/home/serve",
+			"style": {
+				// #ifdef H5
+				"navigationStyle": "custom",
+				// #endif
+				"navigationBarTitleText": "服务"
+			}
+		},
+        {
+            "path" : "pages/order/newOrderList",
+            "style" : {
+				"navigationBarBackgroundColor": "#F5F5F5"
+			}
+        },
+		{
+			"path": "pages/GRZX/notice", //推文通知
+			"style": {
+				// #ifdef H5
+				"navigationStyle": "custom",
+				// #endif
+				"navigationBarTitleText": "通知"
+			}
+		},
+		{
+			"path": "pages/GRZX/detailTweet", //推文通知
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		}
+		//----------------------------个人中心模块结束----------------------------
+		
+	    ,{
+            "path" : "pages/ZXDT/zxdt_information",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/ZXDT/infor_details",
+            "style" : {}
+        }
+    ],
+	
+	"subPackages":[
+		//---------------------------------------------第一个包：个人中心------------------------------------------
+		{
+			"root": "pages_GRZX/",
+			"pages": [
+				{
+					"path": "pages/GRZX/personal",
+					"style": {}
+				},
+				{
+					"path": "pages/GRZX/set",
+					"style": {
+						"navigationBarTitleText": "设置"
+					}
+				},
+				{
+					"path": "pages/GRZX/aboutApp", //关于App
+					"style": {
+						"navigationBarTitleText": "关于App"
+					}
+				},
+				{
+					"path": "pages/GRZX/infoList", //常用信息设置
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "pages/GRZX/privacyService", //软件许可及服务协议
+					"style": {
+						"navigationBarTitleText": "软件许可及服务协议",
+						"navigationBarBackgroundColor": "#FFFFFF"
+					}
+				},
+				{
+					"path": "pages/GRZX/complaint", //投诉
+					"style": {}
+				},
+				{
+					"path": "pages/GRZX/complaintList", //投诉列表
+					"style": {}
+				},
+				{
+					"path": "pages/GRZX/complaintStatus", //投诉详情
+					"style": {}
+				},
+				{
+					"path": "pages/GRZX/Feedback", //意见反馈
+					"style": {}
+				},
+				{
+					"path": "pages/GRZX/FeedbackView", //意见反馈列表
+					"style": {}
+				}		
+			]
+		},
+		//---------------------------------------------第二个包：专线购票------------------------------------------
+		{
+			"root": "pages_ZXGP/",
+			"pages": [
+				//----------------------------------定制巴士--------------------------------------------
+				{
+					"path": "pages/ZXGP/SpecialBus/Home/specialBusHome",
+					"style": {}
+				}, {
+					"path": "pages/ZXGP/SpecialBus/Home/specialLinePicker",
+					"style": {}
+				}, {
+					"path": "pages/ZXGP/SpecialBus/Home/specialReserve",
+					"style": {}
+				},
+				{
+					"path": "pages/ZXGP/SpecialBus/Home/zxgpHomePage",
+					"style": {
+						"navigationBarTitleText": "武夷新区直达",
+						"navigationBarBackgroundColor": "#ffad29"
+					}
+				},
+				{
+					"path": "pages/ZXGP/SpecialBus/ScheduleLineList/specialBusLineList",
+					"style": {
+						"navigationBarTitleText": "班次列表"
+					}
+				},
+				{
+					"path": "pages/ZXGP/SpecialBus/ScheduleLineList/specialBusTakeOrder",
+					"style": {}
+				},
+				{
+					"path": "pages/ZXGP/SpecialBus/stationPicker/specialBusStationPicker",
+					"style": {}
+				},
+				{
+					"path": "pages/ZXGP/SpecialBus/specialBusOrderPayment/specialBusOrderPayment",
+					"style": {}
+				},
+				//----------------------------------传统班车/定制班车-----------------------------------
+				{
+					"path": "pages/ZXGP/TraditionSpecial/Home/ctkyIndex",
+					"style": {
+						"navigationBarTitleText": "车票订购"
+					}
+				}
+				, {
+					"path": "pages/ZXGP/TraditionSpecial/stationPicker/homeSattionPick",
+					"style": {
+						"navigationBarTitleText": "选择站点"
+					}
+				}, {
+					"path": "pages/ZXGP/TraditionSpecial/Order/selectTickets",
+					"style": {
+						"enablePullDownRefresh":true,
+						"navigationBarTitleText": "班次列表"
+					}
+				}, {
+					"path": "pages/ZXGP/TraditionSpecial/Order/scheduleDetails",
+					"style": {
+						"backgroundColor": "#F1F1F1",
+						"navigationBarBackgroundColor": "#FC4646",
+						"navigationBarTextStyle": "white",
+						"navigationBarTitleText": "班次详情"
+					}
+				},
+				{
+					"path": "pages/ZXGP/TraditionSpecial/seatSelection",
+					"style": {
+						"backgroundColor": "#F1F1F1",
+						"navigationBarBackgroundColor": "#FC4646",
+						"navigationBarTextStyle": "white",
+						"navigationBarTitleText": "选择座位"
+					}
+				}, {
+					"path": "pages/ZXGP/TraditionSpecial/Order/oederList",
+					"style": {
+						"navigationBarTitleText": "订单列表"
+					}
+				},
+				{
+					"path": "pages/ZXGP/TraditionSpecial/Order/orderDetail",
+					"style": {
+						"navigationBarTitleText": "订单详情"
+					}
+				},
+				{
+					"path": "pages/ZXGP/TraditionSpecial/issueView",
+					"style": {
+						"navigationBarTitleText": "订单评价"
+					}
+				},
+				{
+					"path": "pages/ZXGP/TraditionSpecial/MapMark/traditionCarMark",
+					"style": {
+						"navigationBarTitleText": "传统地图标识"
+					}
+				},
+				{
+					"path": "pages/ZXGP/TraditionSpecial/MapMark/specialMark",
+					"style": {
+						"navigationBarTitleText": "定制标识"
+					}
+				}, {
+					"path": "pages/ZXGP/TraditionSpecial/MapMark/checkBusLocation",
+					"style": {
+						"navigationBarTitleText": "查看班车位置"
+					}
+				}, {
+					"path": "pages/ZXGP/TraditionSpecial/PayMent/orderPayment",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				}, {
+					"path": "pages/ZXGP/TraditionSpecial/stationPicker/selectStation", //上下车点选择
+					// #ifdef APP-PLUS
+					"navigationStyle": "custom",
+					// #endif
+					"style": {
+						"navigationBarTitleText": "上下车点选择",
+						"navigationBarBackgroundColor": "#FE6C66"
+					}
+				},
+				{
+					"path": "pages/ZXGP/TraditionSpecial/PayMent/CTKYPaySuccess",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				}, {
+					"path": "pages/ZXGP/TraditionSpecial/PayMent/CTKYPayFail",
+					"style": {
+			
+					}
+				},
+				{
+				    "path" : "pages/ZXGP/TraditionSpecial/Home/stzxIndex",
+				    "style" : {
+						"navigationBarTitleText": "邵泰快线"
+					}
+				}
+			]
+		},
+		//---------------------------------------------第三个包：公交车------------------------------------------
+		{
+			"root":"pages_BUS/",
+			"pages":[
+				{
+					"path": "pages/Bus/BusQuery",
+					"style": {
+						"navigationBarBackgroundColor": "#6BD78C",
+						"titleNView": {
+							"searchInput": {
+								"align": "left",
+								"disabled": "true",
+								"borderRadius": "10px",
+								"backgroundColor": "#ffffff",
+								"placeholder": "搜索线路/站点/地点",
+								"placeholderColor": "#AAAAAA"
+							}
+						}
+					}
+				},
+				{
+					"path": "pages/Bus/BusLocation",
+					"style": {
+						"navigationBarTitleText": "公交位置"
+					}
+				},
+				{
+					"path": "pages/Bus/RoutePlan", 
+					"style": {
+						"navigationBarTitleText": "线路方案"
+					}
+				},
+				{
+					"path": "pages/Bus/SearchDetail", 
+					"style": {
+						"navigationBarTitleText": "搜索详情"
+					}
+				},
+				{
+					"path": "pages/Bus/TicketPurchase", 
+					"style": {
+						"navigationBarTitleText": ""
+					}
+				},
+				{
+					"path": "pages/Bus/TransitSearch",
+					"style": {
+						"navigationBarTitleText": "公交搜索"
+					}
+				}
+			]
+		}
+	],
+	
+
+
+
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		// "navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#333333",
+		"selectedColor": "#ff9012",
+		"backgroundColor": "#FFFFFF",
+		"borderStyle": "black",
+		//#ifdef APP-PLUS
+		"fontSize": "16px",
+		//#endif
+		"list": [{
+				"pagePath": "pages/home/h_jtzx_home",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/GRZX/notice",
+				"text": "通知"
+			},
+			// {
+			// 	"pagePath": "pages/home/serve",
+			// 	"text": "服务"
+			// },
+			{
+				"pagePath": "pages/order/newOrderList",
+				"text": "订单"
+			},
+
+			{
+				"pagePath": "pages/GRZX/user",
+				"text": "我的"
+			}
+		]
+	},
+
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
+	}
+}

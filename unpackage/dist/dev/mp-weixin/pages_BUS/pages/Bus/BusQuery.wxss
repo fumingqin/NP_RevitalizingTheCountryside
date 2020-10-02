@@ -1,0 +1,132 @@
+
+page,
+.myView {
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	        flex-direction: column;
+	width: 100%;
+	height: 100%;
+	background: #F1F1F1;
+}
+/* 顶部背景图 */
+.topImage{
+	margin-top: -1rpx;
+}
+/* 起终点的view */
+.station {
+	position: relative;
+	background-color: #FFFFFF;
+	margin-top: -100rpx;
+	margin-left: 30rpx;
+	margin-right: 30rpx;
+	-webkit-border-radius: 12rpx;
+	        border-radius: 12rpx;
+	padding-bottom: 40rpx;
+}
+/* 查询按钮 */
+.queryButton{
+	margin-top: 30rpx;
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+	background-color: #35C762;
+	color: #FFFFFF;
+	-webkit-border-radius: 12rpx;
+	        border-radius: 12rpx;
+	height: 90rpx;
+	font-size: 38rpx;
+}
+/* 标题：附近 */
+.around{
+	font-size: 32rpx;
+	color: #343434;
+	margin-left: 40rpx;
+	margin-top: 20rpx;
+	font-weight: 900;
+}
+/* 显示附近的站点的view */
+.aroundView{
+	margin-top: 20rpx;
+	margin-left: 30rpx;
+	margin-right: 30rpx;
+	-webkit-border-radius: 12rpx;
+	        border-radius: 12rpx;
+	background-color: #FFFFFF;
+	padding-bottom: 20rpx;
+}
+.aroundViewTop{
+	height: 100rpx;
+	width: 100%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	        flex-direction: row; 
+	-webkit-box-align: center; 
+	-webkit-align-items: center; 
+	        align-items: center;
+}
+.aroundImage{
+	width: 27rpx;
+	height: 32rpx;
+	margin-left: 36rpx;
+}
+.aroundStation{
+	margin-left: 20rpx;
+	font-size: 32rpx;
+	font-weight: 900;
+}
+.distance{
+	margin-left: 20rpx;
+	font-size: 24rpx;
+	font-weight: 300;
+	color: #343434;
+}
+.lineView{
+	margin-top: 20rpx;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	        justify-content: space-between;
+}
+.lineText{
+	font-weight: 300;
+	font-size: 25rpx;
+	color: #343434;
+}
+.bottomView{
+	height: 60rpx;
+	width: 100%;
+	margin-top: 20rpx;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+}
+.more{
+	color: #888888;
+	font-size: 28rpx;
+	font-weight: 300;
+}
+

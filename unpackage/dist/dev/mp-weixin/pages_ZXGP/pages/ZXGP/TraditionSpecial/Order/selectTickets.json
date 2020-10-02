@@ -1,0 +1,8 @@
+{
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "班次列表",
+  "usingComponents": {
+    "u-empty": "/uview-ui/components/u-empty/u-empty",
+    "mx-date-picker": "/pages_ZXGP/components/ZXGP/mx-datepicker/mx-datepicker"
+  }
+}

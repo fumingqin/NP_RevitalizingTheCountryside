@@ -1,0 +1,60 @@
+
+page {
+	background-color: #F4F6F8;
+}
+.problem-info{
+	background-color: #FFFFFF;
+	-webkit-border-radius: 20rpx;
+	        border-radius: 20rpx;
+	margin:20rpx 28rpx;
+}
+.problem-textare-view{
+	margin-left: 30rpx;
+	margin-top: 10rpx;
+}
+.problem-textare{
+	width: 634rpx;
+	height: 250rpx;
+	font-size: 32rpx;
+}
+.top-view-bottomtext{
+	font-size: 28rpx;
+	color: #AAAAAA;
+	text-align: right;
+	padding: 40rpx;
+}
+.top-text {
+	font-size: 34rpx;
+	color: #333333;
+	margin-left: 30rpx;
+	padding-top: 25rpx;
+	padding-bottom: 10rpx;
+	font-weight: bold;
+}
+.btnClass{
+	text-align: center;
+	font-size: 34rpx;
+	-webkit-border-radius: 20rpx;
+	        border-radius: 20rpx;
+	padding: 30rpx 0;
+	color: #FFFFFF;
+	width: 90%;
+	position: fixed;
+	left: 5%;
+	bottom: 30rpx;
+}
+.jiantou{
+	width: 28rpx;
+	height: 13rpx;
+}
+.shangjiantou{
+	margin-top: 20rpx;
+	margin-left: 302rpx;
+	padding-bottom: 20rpx;
+}
+.jiantou1{
+	margin-top: 10rpx;
+	margin-left: 325rpx;
+	padding-bottom: 10rpx;
+}
+

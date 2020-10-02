@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "uni-transition": "/pages_ZXGP/components/ZXGP/uni-transition/uni-transition"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "订单详情",
+  "usingComponents": {
+    "tki-qrcode": "/pages_ZXGP/components/ZXGP/tki-qrcode/tki-qrcode"
+  }
+}

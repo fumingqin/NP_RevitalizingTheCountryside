@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "邵泰快线",
+  "usingComponents": {
+    "u-image": "/uview-ui/components/u-image/u-image",
+    "u-loading": "/uview-ui/components/u-loading/u-loading",
+    "u-button": "/uview-ui/components/u-button/u-button",
+    "mx-date-picker": "/pages_ZXGP/components/ZXGP/mx-datepicker/mx-datepicker"
+  }
+}

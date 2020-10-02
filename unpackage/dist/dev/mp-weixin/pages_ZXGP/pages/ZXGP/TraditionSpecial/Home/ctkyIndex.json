@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "车票订购",
+  "usingComponents": {
+    "mx-date-picker": "/pages_ZXGP/components/ZXGP/mx-datepicker/mx-datepicker"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "enablePullDownRefresh": true,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "u-empty": "/uview-ui/components/u-empty/u-empty"
+  }
+}

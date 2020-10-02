@@ -1,0 +1,112 @@
+{
+  "pages": [
+    "pages/home/h_jtzx_home",
+    "pages/home/h_np_home",
+    "pages/GRZX/wxAuthorize",
+    "pages/GRZX/user",
+    "pages/GRZX/userLogin",
+    "pages/GRZX/wxLogin",
+    "pages/GRZX/passengerInfo",
+    "pages/GRZX/addPassenger",
+    "pages/GRZX/addFreeChildren",
+    "pages/home/serve",
+    "pages/order/newOrderList",
+    "pages/GRZX/notice",
+    "pages/GRZX/detailTweet",
+    "pages/ZXDT/zxdt_information",
+    "pages/ZXDT/infor_details"
+  ],
+  "subPackages": [
+    {
+      "root": "pages_GRZX/",
+      "pages": [
+        "pages/GRZX/personal",
+        "pages/GRZX/set",
+        "pages/GRZX/aboutApp",
+        "pages/GRZX/infoList",
+        "pages/GRZX/privacyService",
+        "pages/GRZX/complaint",
+        "pages/GRZX/complaintList",
+        "pages/GRZX/complaintStatus",
+        "pages/GRZX/Feedback",
+        "pages/GRZX/FeedbackView"
+      ]
+    },
+    {
+      "root": "pages_ZXGP/",
+      "pages": [
+        "pages/ZXGP/SpecialBus/Home/specialBusHome",
+        "pages/ZXGP/SpecialBus/Home/specialLinePicker",
+        "pages/ZXGP/SpecialBus/Home/specialReserve",
+        "pages/ZXGP/SpecialBus/Home/zxgpHomePage",
+        "pages/ZXGP/SpecialBus/ScheduleLineList/specialBusLineList",
+        "pages/ZXGP/SpecialBus/ScheduleLineList/specialBusTakeOrder",
+        "pages/ZXGP/SpecialBus/stationPicker/specialBusStationPicker",
+        "pages/ZXGP/SpecialBus/specialBusOrderPayment/specialBusOrderPayment",
+        "pages/ZXGP/TraditionSpecial/Home/ctkyIndex",
+        "pages/ZXGP/TraditionSpecial/stationPicker/homeSattionPick",
+        "pages/ZXGP/TraditionSpecial/Order/selectTickets",
+        "pages/ZXGP/TraditionSpecial/Order/scheduleDetails",
+        "pages/ZXGP/TraditionSpecial/seatSelection",
+        "pages/ZXGP/TraditionSpecial/Order/oederList",
+        "pages/ZXGP/TraditionSpecial/Order/orderDetail",
+        "pages/ZXGP/TraditionSpecial/issueView",
+        "pages/ZXGP/TraditionSpecial/MapMark/traditionCarMark",
+        "pages/ZXGP/TraditionSpecial/MapMark/specialMark",
+        "pages/ZXGP/TraditionSpecial/MapMark/checkBusLocation",
+        "pages/ZXGP/TraditionSpecial/PayMent/orderPayment",
+        "pages/ZXGP/TraditionSpecial/stationPicker/selectStation",
+        "pages/ZXGP/TraditionSpecial/PayMent/CTKYPaySuccess",
+        "pages/ZXGP/TraditionSpecial/PayMent/CTKYPayFail",
+        "pages/ZXGP/TraditionSpecial/Home/stzxIndex"
+      ]
+    },
+    {
+      "root": "pages_BUS/",
+      "pages": [
+        "pages/Bus/BusQuery",
+        "pages/Bus/BusLocation",
+        "pages/Bus/RoutePlan",
+        "pages/Bus/SearchDetail",
+        "pages/Bus/TicketPurchase",
+        "pages/Bus/TransitSearch"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#333333",
+    "selectedColor": "#ff9012",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/h_jtzx_home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/GRZX/notice",
+        "text": "通知"
+      },
+      {
+        "pagePath": "pages/order/newOrderList",
+        "text": "订单"
+      },
+      {
+        "pagePath": "pages/GRZX/user",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap49.json"
+}

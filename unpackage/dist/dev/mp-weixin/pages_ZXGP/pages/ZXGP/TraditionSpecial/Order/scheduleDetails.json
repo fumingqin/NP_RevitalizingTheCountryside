@@ -1,0 +1,10 @@
+{
+  "backgroundColor": "#F1F1F1",
+  "navigationBarBackgroundColor": "#FC4646",
+  "navigationBarTextStyle": "white",
+  "navigationBarTitleText": "班次详情",
+  "usingComponents": {
+    "u-popup": "/uview-ui/components/u-popup/u-popup",
+    "popup": "/pages_ZXGP/components/ZXGP/uni-popup/uni-popup"
+  }
+}

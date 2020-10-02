@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "uni-icons": "/pages_GRZX/components/GRZX/uni-icons/uni-icons"
+  }
+}

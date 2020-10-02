@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "班次列表",
+  "usingComponents": {
+    "mx-date-picker": "/pages_ZXGP/components/ZXGP/mx-datepicker/mx-datepicker"
+  }
+}

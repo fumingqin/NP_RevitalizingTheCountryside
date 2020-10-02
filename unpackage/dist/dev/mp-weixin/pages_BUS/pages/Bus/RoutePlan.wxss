@@ -1,0 +1,68 @@
+
+page {
+	background-color: #F5F5F5;
+}
+.title-block {
+	/*想名字是真NM的头疼 */
+	margin-bottom: 20rpx;
+	padding: 40rpx 40rpx;
+	background-color: #4282FF;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	        flex-direction: row;
+	-webkit-border-radius: 16rpx;
+	        border-radius: 16rpx;
+}
+.site-name-font {
+	font-size: 30rpx;
+	font-family: Source Han Sans SC;
+	font-weight: 400;
+}
+.site-name-color{
+	color: #FFFFFF;
+}
+.icon-block {
+	margin: 0 20rpx;
+}
+.item-title-font {
+	font-size: 32rpx;
+	font-family: Source Han Sans SC;
+	font-weight: 500;
+	color: #343434;
+}
+.title-margin-left {
+	margin-left: 20rpx;
+}
+.item-subtitle-font {
+	font-size: 24rpx;
+	font-family: Source Han Sans SC;
+	font-weight: 300;
+	color: #4282FF;
+}
+.plan-explain-font {
+	font-size: 32rpx;
+	font-family: Source Han Sans SC;
+	font-weight: 400;
+	color: #4282FF;
+}
+.plan-detail-font {
+	font-size: 30rpx;
+	font-family: Source Han Sans SC;
+	font-weight: 300;
+	color: #343434;
+}
+.detail-margin-top {
+	margin-top: 20rpx;
+}
+.detail-margin-left {
+	margin-left: 40rpx;
+}
+.attention{
+	color: #4282FF;
+	font-weight: bold;
+}
+

@@ -1,0 +1,73 @@
+
+page {
+	background-color: #F5F5F5;
+}
+.header-view {
+	background-color: #FFF;
+	padding: 30rpx 30rpx;
+}
+.history-main {
+	padding: 30rpx 30rpx;
+}
+.history-main-view {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	        justify-content: space-between;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+}
+.history-main-font {
+	color: #333333;
+	font-weight: bold;
+	font-size: 32rpx;
+}
+.history-main-img {
+	width: 36rpx;
+	height: 36rpx;
+}
+.history-content {
+	margin-top: 30rpx;
+	background-color: #FFF;
+	-webkit-border-radius: 12rpx;
+	        border-radius: 12rpx;
+}
+.history-content-view {
+	padding: 40rpx 30rpx;
+	font-size: 30rpx;
+}
+.history-content-detial {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	padding: 15rpx 0;
+}
+.history-content-name {
+	padding-right: 15rpx;
+}
+.history-content-img {
+	width: 32rpx;
+	height: 32rpx;
+}
+.search-content {
+	background-color: #FFF;
+	padding: 30rpx;
+}
+.search-content-font {
+	padding: 20rpx 0 30rpx 0;
+	border-bottom: solid 1rpx #F5F5F5;
+	font-size: 30rpx;
+}
+.view_hover{
+	-webkit-transition: all .3s;
+	transition: all .3s;/*过度 */
+	opacity: 0.9;
+	background: #bdbdbd;
+}
+

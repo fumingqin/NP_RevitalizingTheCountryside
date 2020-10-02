@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "公交位置",
+  "usingComponents": {
+    "u-popup": "/uview-ui/components/u-popup/u-popup",
+    "bus-time-steps": "/pages_BUS/commponents/BUS/BUS"
+  }
+}

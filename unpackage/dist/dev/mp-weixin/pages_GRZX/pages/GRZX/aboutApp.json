@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "关于App",
+  "usingComponents": {
+    "uni-popup": "/components/HOME/uni-popup/uni-popup"
+  }
+}

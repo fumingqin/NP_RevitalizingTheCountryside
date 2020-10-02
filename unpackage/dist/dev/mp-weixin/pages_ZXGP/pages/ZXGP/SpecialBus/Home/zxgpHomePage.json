@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "武夷新区直达",
+  "navigationBarBackgroundColor": "#ffad29",
+  "usingComponents": {
+    "uni-popup": "/pages_ZXGP/components/ZXGP/uni-popup/uni-popup",
+    "mx-date-picker": "/pages_ZXGP/components/ZXGP/mx-datepicker/mx-datepicker"
+  }
+}

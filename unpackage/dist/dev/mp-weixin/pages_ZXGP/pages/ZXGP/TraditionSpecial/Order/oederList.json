@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "订单列表",
+  "usingComponents": {
+    "popup": "/pages_ZXGP/components/ZXGP/uni-popup/uni-popup"
+  }
+}

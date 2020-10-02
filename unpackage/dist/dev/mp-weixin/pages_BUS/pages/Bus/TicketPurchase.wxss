@@ -1,0 +1,11 @@
+
+.status_bar {
+	height: 25px;
+	width: 100%;
+	-webkit-box-sizing: content-box;
+	        box-sizing: content-box;
+}
+#search {
+	height: 40px;
+}
+

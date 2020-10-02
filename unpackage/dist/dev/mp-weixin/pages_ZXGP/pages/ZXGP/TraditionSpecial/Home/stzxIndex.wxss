@@ -1,0 +1,134 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 引入uview框架 */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+page {
+  background-color: #f9f9f9;
+}
+.si_content {
+  z-index: 999;
+  position: absolute;
+  width: 100%;
+  top: 370rpx;
+}
+.si_content .si_ct_selectAddress {
+  background: #FFFFFF;
+  -webkit-border-radius: 14rpx;
+          border-radius: 14rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  padding-top: 30rpx;
+  width: 95%;
+  padding-bottom: 60rpx;
+}
+.si_content .si_ct_selectAddress .si_ct_sa_lineClass {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  justify-items: center;
+  margin-left: 36rpx;
+  margin-right: 36rpx;
+  padding-bottom: 8rpx;
+  border-bottom: 1px #F5F5F5 dotted;
+}
+.si_content .si_ct_selectAddress .si_ct_sa_lineClass .start {
+  font-size: 32rpx;
+  font-weight: 300;
+  color: #2C2D2D;
+  left: 0;
+  text-align: left;
+  margin-top: 40rpx;
+  padding-bottom: 20rpx;
+}
+.si_content .si_ct_selectAddress .si_ct_sa_lineClass .changeImage {
+  width: 50rpx;
+  height: 52rpx;
+  padding-top: 22rpx;
+  margin: 0 auto;
+}
+.si_content .si_st_historyView {
+  padding-top: 20rpx;
+  background-color: #FFFFFF;
+  -webkit-border-radius: 14rpx;
+          border-radius: 14rpx;
+  margin-top: 20rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  width: 95%;
+  font-family: MicrosoftYaHei;
+  color: #999999;
+  font-size: 24rpx;
+}
+.si_content .si_st_historyView .si_st_hv_history {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.si_content .si_st_historyView .si_st_hv_history .historyTitle {
+  font-size: 28rpx;
+  color: #2C2D2D;
+  margin-left: 20rpx;
+}
+.si_content .si_st_historyView .si_st_hv_history .clearHistory {
+  font-size: 28rpx;
+  color: #2C2D2D;
+  margin-right: 20rpx;
+  float: right;
+}
+.si_content .si_st_historyView .si_st_historyListView {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+          flex-direction: row;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+          justify-content: flex-start;
+  color: #999999;
+  font-size: 26rpx;
+  font-weight: 300;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  padding-bottom: 20rpx;
+}
+.si_content .si_st_historyView .si_st_historyListView .historyText {
+  margin-top: 20rpx;
+  margin-right: 20rpx;
+}
+
