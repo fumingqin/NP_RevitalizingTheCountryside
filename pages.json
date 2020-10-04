@@ -4,6 +4,19 @@
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [
+		//-------------------乡村振兴首页---------------------
+		{
+		    "path" : "pages/home/h_xczx_home",
+		    "style" : {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
+					"background": "transparent", // 背景透明
+					"backgroundColor": "rgba(0,0,0,0)", // 背景透明
+					"popGesture": "none" // 关闭IOS屏幕左边滑动关闭当前页面的功能
+				}
+			}
+		},
 		//-------------------交通在线首页---------------------
 		{
 			"path": "pages/home/h_jtzx_home",
@@ -30,7 +43,7 @@
 				}
 			}
 		},
-		
+
 		
 		//----------------------------个人中心模块开始----------------------------
 		//--------------------微信授权登录--------------------
@@ -401,22 +414,17 @@
 		"fontSize": "16px",
 		//#endif
 		"list": [{
-				"pagePath": "pages/home/h_jtzx_home",
+				"pagePath": "pages/home/h_xczx_home",
 				"text": "首页"
 			},
 			{
 				"pagePath": "pages/GRZX/notice",
 				"text": "通知"
 			},
-			// {
-			// 	"pagePath": "pages/home/serve",
-			// 	"text": "服务"
-			// },
 			{
 				"pagePath": "pages/order/newOrderList",
 				"text": "订单"
 			},
-
 			{
 				"pagePath": "pages/GRZX/user",
 				"text": "我的"
