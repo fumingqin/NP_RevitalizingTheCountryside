@@ -12,8 +12,7 @@ page {
 	-webkit-box-direction: normal;
 	-webkit-flex-direction: row;
 	        flex-direction: row;
-	-webkit-border-radius: 24rpx;
-	        border-radius: 24rpx;
+	border-radius: 24rpx;
 	padding: 26rpx 28rpx;
 }
 .search-image {
@@ -27,8 +26,7 @@ page {
 .guess-view {
 	margin: 0rpx 30rpx 30rpx 30rpx;
 	background-color: #FFFFFF;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 }
 .top-text {
 	font-size: 34rpx;
@@ -63,8 +61,7 @@ page {
 }
 .user-talk {
 	background-color: #FFFFFF;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 	margin: 25rpx;
 	padding-bottom: 15rpx;
 	margin-bottom: 140rpx;
@@ -72,8 +69,7 @@ page {
 .user-topimage {
 	width: 72rpx;
 	height: 72rpx;
-	-webkit-border-radius: 50%;
-	        border-radius: 50%;
+	border-radius: 50%;
 	margin-top: 7rpx;
 }
 .user-talkinfo {
@@ -119,8 +115,7 @@ page {
 	background-color: #F5F9FC;
 	margin-left: 124rpx;
 	margin-top: 25rpx;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 }
 .huifu-view {
 	padding: 27rpx 27rpx 10rpx 27rpx;
@@ -163,8 +158,7 @@ page {
 	font-size: 24rpx;
 	padding: 10rpx 20rpx;
 	background-color: #e7e7e7;
-	-webkit-border-radius: 30rpx;
-	        border-radius: 30rpx;
+	border-radius: 30rpx;
 	margin-left: 20rpx;
 }
 .mb{

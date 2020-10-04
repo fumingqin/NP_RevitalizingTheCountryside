@@ -111,8 +111,7 @@
   width: 24rpx;
   height: 24rpx;
   border: 2rpx solid #35C762;
-  -webkit-border-radius: 50%;
-          border-radius: 50%;
+  border-radius: 50%;
   overflow: hidden;
   z-index: 998;
 }
@@ -151,8 +150,7 @@
   width: 50rpx;
   height: 50rpx;
   background-color: #06C918;
-  -webkit-border-radius: 30rpx;
-          border-radius: 30rpx;
+  border-radius: 30rpx;
   z-index: 999;
   display: -webkit-box;
   display: -webkit-flex;

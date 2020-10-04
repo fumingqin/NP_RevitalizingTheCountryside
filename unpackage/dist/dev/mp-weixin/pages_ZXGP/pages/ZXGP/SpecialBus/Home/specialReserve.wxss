@@ -41,8 +41,7 @@ page, .myView {
 }
 .orderCommonClass {
   background: #FFFFFF;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
   display: -webkit-box;
@@ -60,8 +59,7 @@ page, .myView {
   background: #FFFFFF;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
 }
 /* 优惠券面板 */
 .discountView {
@@ -229,8 +227,7 @@ page, .myView {
   width: 20rpx;
   height: 20rpx;
   background: #f3f3f3;
-  -webkit-border-radius: 100px;
-          border-radius: 100px;
+  border-radius: 100px;
 }
 .coupon-item .circle.r {
   left: auto;

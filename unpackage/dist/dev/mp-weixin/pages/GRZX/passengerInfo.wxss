@@ -63,16 +63,14 @@ page {
   margin-bottom: 160rpx;
 }
 .btnAdd1 {
-  -webkit-border-radius: 12rpx;
-          border-radius: 12rpx;
+  border-radius: 12rpx;
   width: 45%;
   height: 90rpx;
   line-height: 90rpx;
   margin-top: 30rpx;
 }
 .btnDefinite {
-  -webkit-border-radius: 12rpx;
-          border-radius: 12rpx;
+  border-radius: 12rpx;
   width: 45%;
   height: 90rpx;
   line-height: 90rpx;
@@ -82,8 +80,7 @@ page {
   width: 92%;
   height: 90rpx;
   line-height: 90rpx;
-  -webkit-border-radius: 12rpx;
-          border-radius: 12rpx;
+  border-radius: 12rpx;
   background-color: #FC4646;
   margin-top: 30rpx;
 }
@@ -96,8 +93,7 @@ page {
   font-size: 28rpx;
   color: #666666;
   position: relative;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
 }
 .nameClass {
   font-size: 36rpx;
@@ -194,8 +190,7 @@ page {
   color: #ff0000;
   margin-left: 20rpx;
   border: 1rpx solid #ff0000;
-  -webkit-border-radius: 10rpx;
-          border-radius: 10rpx;
+  border-radius: 10rpx;
   text-align: center;
 }
 .noneData {

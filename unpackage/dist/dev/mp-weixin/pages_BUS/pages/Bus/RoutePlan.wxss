@@ -14,8 +14,7 @@ page {
 	-webkit-box-direction: normal;
 	-webkit-flex-direction: row;
 	        flex-direction: row;
-	-webkit-border-radius: 16rpx;
-	        border-radius: 16rpx;
+	border-radius: 16rpx;
 }
 .site-name-font {
 	font-size: 30rpx;

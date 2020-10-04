@@ -151,8 +151,7 @@ page {
 .h_quickEntry .qui_imageview .qui_imageview_view .qui_imageview_view_image {
   width: 216rpx;
   height: 160rpx;
-  -webkit-border-radius: 12rpx;
-          border-radius: 12rpx;
+  border-radius: 12rpx;
 }
 .h_quickEntry .qui_imageview .qui_imageview_view .qui_imageview_view_text {
   position: absolute;

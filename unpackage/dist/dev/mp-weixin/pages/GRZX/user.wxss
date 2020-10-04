@@ -48,8 +48,7 @@ page.data-v-9df977f0 {
   width: 128rpx;
   height: 128rpx;
   margin: 20rpx;
-  -webkit-border-radius: 50%;
-          border-radius: 50%;
+  border-radius: 50%;
 }
 .boxClass.data-v-9df977f0 {
   display: -webkit-box;
@@ -74,8 +73,7 @@ page.data-v-9df977f0 {
   margin-top: 10rpx;
   background-color: #333333;
   opacity: 0.3;
-  -webkit-border-radius: 8rpx;
-          border-radius: 8rpx;
+  border-radius: 8rpx;
 }
 .lists.data-v-9df977f0 {
   margin: 10px 0;
@@ -91,8 +89,7 @@ page.data-v-9df977f0 {
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
-  -webkit-border-radius: 25rpx;
-          border-radius: 25rpx;
+  border-radius: 25rpx;
 }
 .myBox .myClass.data-v-9df977f0 {
   font-size: 35rpx;
@@ -120,8 +117,7 @@ page.data-v-9df977f0 {
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
-  -webkit-border-radius: 10rpx;
-          border-radius: 10rpx;
+  border-radius: 10rpx;
 }
 .imgStyle1.data-v-9df977f0 {
   width: 61rpx;
@@ -139,8 +135,7 @@ page.data-v-9df977f0 {
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
-  -webkit-border-radius: 10rpx;
-          border-radius: 10rpx;
+  border-radius: 10rpx;
 }
 .imgStyle2.data-v-9df977f0 {
   width: 61rpx;
@@ -158,8 +153,7 @@ page.data-v-9df977f0 {
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
-  -webkit-border-radius: 10rpx;
-          border-radius: 10rpx;
+  border-radius: 10rpx;
 }
 .imgStyle3.data-v-9df977f0 {
   width: 61rpx;
@@ -182,8 +176,7 @@ page.data-v-9df977f0 {
   height: 160rpx;
   margin-top: 25rpx;
   margin-left: 4.27%;
-  -webkit-border-radius: 12rpx;
-          border-radius: 12rpx;
+  border-radius: 12rpx;
 }
 .serviceBox.data-v-9df977f0 {
   width: 90%;
@@ -278,8 +271,7 @@ page.data-v-9df977f0 {
   background-color: white;
   z-index: 1002;
   overflow: auto;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
 }
 .popup_title.data-v-9df977f0 {
   padding-top: 20rpx;
@@ -302,8 +294,7 @@ page.data-v-9df977f0 {
 .popup_button.data-v-9df977f0 {
   color: white;
   background-color: #4399FC;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
   margin-top: 83rpx;
   margin-left: 5%;
 }

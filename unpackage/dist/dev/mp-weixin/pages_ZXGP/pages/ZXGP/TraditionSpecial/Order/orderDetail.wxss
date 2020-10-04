@@ -389,8 +389,7 @@ page,
 /* 头部视图 */
 .head {
 	background: #FFFFFF;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 	margin: 20rpx;
 	margin-top: -40rpx;
 	padding: 20rpx 0;
@@ -413,8 +412,7 @@ page,
 	font-weight: 300;
 }
 .infoCotent {
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 	background: #FFFFFF;
 	margin: 20rpx;
 	padding: 20rpx 0;

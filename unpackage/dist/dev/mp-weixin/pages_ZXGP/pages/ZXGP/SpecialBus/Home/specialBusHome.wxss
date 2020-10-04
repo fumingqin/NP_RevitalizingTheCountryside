@@ -19,8 +19,7 @@ page,.content{
 .center {
 	background-color: #FFFFFF;
 	padding: 10rpx 40rpx;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 	margin-left: 20rpx;
 	margin-right: 20rpx;
 	position: relative;
@@ -45,8 +44,7 @@ page,.content{
 	-webkit-justify-content: center;
 	        justify-content: center;
 	background-color: #FC4646;
-	-webkit-border-radius: 12rpx;
-	        border-radius: 12rpx;
+	border-radius: 12rpx;
 	color: #FFFFFF;
 	font-size: 34rpx;
 	height: 94rpx;
@@ -60,8 +58,7 @@ page,.content{
 	background: #FC4646;
 	color: #FFFFFF;
 	font-size: 38rpx;
-	-webkit-border-radius: 10rpx;
-	        border-radius: 10rpx;
+	border-radius: 10rpx;
 }
 .tip {
 	width: 100%;

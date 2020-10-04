@@ -44,8 +44,7 @@ page {
   background-color: #FFFFFF;
   margin-top: 20rpx;
   margin-left: 4%;
-  -webkit-border-radius: 10rpx;
-          border-radius: 10rpx;
+  border-radius: 10rpx;
 }
 .generalStyle {
   width: 92%;

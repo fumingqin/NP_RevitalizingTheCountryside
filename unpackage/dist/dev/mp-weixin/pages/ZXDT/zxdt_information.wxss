@@ -43,8 +43,7 @@
   background: #007AFF;
   color: #FFFFFF;
   padding: 4rpx 8rpx;
-  -webkit-border-radius: 4rpx;
-          border-radius: 4rpx;
+  border-radius: 4rpx;
 }
 .infor_view .view_titleView .tv_view .tv_title {
   font-weight: bold;
@@ -55,8 +54,7 @@
 .infor_view .view_titleView .tv_image {
   width: 220rpx;
   height: 160rpx;
-  -webkit-border-radius: 8rpx;
-          border-radius: 8rpx;
+  border-radius: 8rpx;
 }
 .infor_view .view_contentView {
   font-size: 24rpx;

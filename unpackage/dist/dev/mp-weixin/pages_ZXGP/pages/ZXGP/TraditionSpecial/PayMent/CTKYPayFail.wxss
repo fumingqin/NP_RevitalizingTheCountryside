@@ -43,10 +43,8 @@ page {
   width: 702rpx;
   height: 90%;
   background: #FFFFFF;
-  -webkit-box-shadow: 0px 0.2px 0px #aaa;
-          box-shadow: 0px 0.2px 0px #aaa;
-  -webkit-border-radius: 16rpx;
-          border-radius: 16rpx;
+  box-shadow: 0px 0.2px 0px #aaa;
+  border-radius: 16rpx;
   text-align: center;
 }
 .cover-container .okImage {
@@ -79,8 +77,7 @@ page {
   height: 104rpx;
   font-size: 34rpx;
   background: #FC4646;
-  -webkit-border-radius: 16rpx;
-          border-radius: 16rpx;
+  border-radius: 16rpx;
   color: #fff;
 }
 .cover-container .buttonView .homeButton {
@@ -88,8 +85,7 @@ page {
   width: 280rpx;
   height: 104rpx;
   font-size: 34rpx;
-  -webkit-border-radius: 16rpx;
-          border-radius: 16rpx;
+  border-radius: 16rpx;
   color: #FC4646;
   border: 1px solid #FC4646;
 }

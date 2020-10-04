@@ -83,8 +83,7 @@ page {
 .itemClass {
   margin: 30rpx 5% 0 5%;
   background-color: #FFFFFF;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -111,8 +110,7 @@ page {
 .itemClass .btnClass {
   margin: 20rpx 0 30rpx 65%;
   padding: 18rpx 0rpx;
-  -webkit-border-radius: 15rpx;
-          border-radius: 15rpx;
+  border-radius: 15rpx;
   width: 28%;
   text-align: center;
   border: 1rpx solid #999999;

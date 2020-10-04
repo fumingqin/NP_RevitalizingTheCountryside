@@ -74,8 +74,7 @@ page {
   top: 324rpx;
   left: 4.8%;
   background-color: white;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
 }
 .inputItem {
   width: 87.6%;
@@ -165,8 +164,7 @@ page {
   left: 64%;
   width: 30%;
   font-size: 28rpx;
-  -webkit-border-radius: 12rpx;
-          border-radius: 12rpx;
+  border-radius: 12rpx;
   text-align: center;
   line-height: 64rpx;
   height: 64rpx;
@@ -192,8 +190,7 @@ page {
   color: #FFFFFF;
   width: 90%;
   padding: 25rpx 0;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
   background: -webkit-linear-gradient(36deg, #ff8008 0%, #ffc837 100%);
   background: linear-gradient(54deg, #ff8008 0%, #ffc837 100%);
 }

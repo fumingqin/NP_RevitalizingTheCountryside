@@ -5,8 +5,7 @@ page {
 .progress {
 	margin: 30rpx 20rpx 28rpx 28rpx;
 	background-color: #FFFFFF;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 }
 .progress-status {
 	margin-left: 4rpx;
@@ -22,22 +21,19 @@ page {
 .type {
 	margin: 0rpx 20rpx 28rpx 28rpx;
 	background-color: #FFFFFF;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 	padding-bottom: 25rpx;
 }
 .complaintinfo {
 	margin: 0rpx 20rpx 28rpx 28rpx;
 	background-color: #FFFFFF;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 	padding-bottom: 25rpx;
 }
 .backinfo {
 	margin: 0rpx 20rpx 28rpx 28rpx;
 	background-color: #FFFFFF;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 	padding-bottom: 25rpx;
 }
 .type-text {

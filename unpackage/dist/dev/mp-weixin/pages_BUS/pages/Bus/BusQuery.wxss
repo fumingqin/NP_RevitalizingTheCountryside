@@ -20,8 +20,7 @@ page,
 	margin-top: -100rpx;
 	margin-left: 30rpx;
 	margin-right: 30rpx;
-	-webkit-border-radius: 12rpx;
-	        border-radius: 12rpx;
+	border-radius: 12rpx;
 	padding-bottom: 40rpx;
 }
 /* 查询按钮 */
@@ -40,8 +39,7 @@ page,
 	        justify-content: center;
 	background-color: #35C762;
 	color: #FFFFFF;
-	-webkit-border-radius: 12rpx;
-	        border-radius: 12rpx;
+	border-radius: 12rpx;
 	height: 90rpx;
 	font-size: 38rpx;
 }
@@ -58,8 +56,7 @@ page,
 	margin-top: 20rpx;
 	margin-left: 30rpx;
 	margin-right: 30rpx;
-	-webkit-border-radius: 12rpx;
-	        border-radius: 12rpx;
+	border-radius: 12rpx;
 	background-color: #FFFFFF;
 	padding-bottom: 20rpx;
 }

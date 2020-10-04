@@ -34,8 +34,7 @@ page {
   left: 39%;
   width: 180rpx;
   height: 180rpx;
-  -webkit-border-radius: 50%;
-          border-radius: 50%;
+  border-radius: 50%;
 }
 .titleClass {
   position: absolute;
@@ -143,8 +142,7 @@ page {
   width: 82%;
   margin-left: 9%;
   background-color: #FFFFFF;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
 }
 .pTitleClass {
   padding-top: 15rpx;

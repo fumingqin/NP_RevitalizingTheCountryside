@@ -61,8 +61,7 @@ page {
 }
 .orderCommonClass {
   background: #FFFFFF;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
   display: -webkit-box;

@@ -36,8 +36,7 @@ page {
 }
 .si_content .si_ct_selectAddress {
   background: #FFFFFF;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
   margin-left: 20rpx;
   margin-right: 20rpx;
   padding-top: 30rpx;
@@ -75,8 +74,7 @@ page {
 .si_content .si_st_historyView {
   padding-top: 20rpx;
   background-color: #FFFFFF;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
   margin-top: 20rpx;
   margin-left: 20rpx;
   margin-right: 20rpx;

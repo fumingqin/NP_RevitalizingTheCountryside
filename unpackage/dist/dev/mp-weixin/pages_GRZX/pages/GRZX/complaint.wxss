@@ -4,8 +4,7 @@ page {
 }
 .problem-info{
 	background-color: #FFFFFF;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 	margin:20rpx 28rpx;
 }
 .problem-textare-view{
@@ -34,8 +33,7 @@ page {
 .btnClass{
 	text-align: center;
 	font-size: 34rpx;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 	padding: 30rpx 0;
 	color: #FFFFFF;
 	width: 90%;

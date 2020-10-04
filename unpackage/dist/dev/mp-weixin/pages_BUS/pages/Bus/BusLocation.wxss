@@ -41,8 +41,7 @@ page,
   margin-top: 20rpx;
   margin-left: 20rpx;
   margin-right: 20rpx;
-  -webkit-border-radius: 12rpx;
-          border-radius: 12rpx;
+  border-radius: 12rpx;
   background-color: #35C762;
 }
 .topHead {
@@ -112,8 +111,7 @@ page,
   font-size: 30rpx;
   font-weight: 600;
   width: 210rpx;
-  -webkit-border-radius: 8rpx;
-          border-radius: 8rpx;
+  border-radius: 8rpx;
   padding: 5rpx 10rpx;
   color: #FFFFFF;
   border: 1rpx solid #FFFFFF;
@@ -147,8 +145,7 @@ page,
   margin-left: 20rpx;
   margin-right: 20rpx;
   width: 710rpx;
-  -webkit-border-radius: 12rpx;
-          border-radius: 12rpx;
+  border-radius: 12rpx;
   background-color: #FFFFFF;
 }
 .bottomView {

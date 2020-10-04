@@ -27,8 +27,7 @@
 		width: 36rpx;
 		text-align: center;
 		line-height: 35rpx;
-		-webkit-border-radius: 17rpx;
-		        border-radius: 17rpx;
+		border-radius: 17rpx;
 		color: white;
 		font-size: 30rpx;
 		padding-bottom: 2rpx;
@@ -36,8 +35,7 @@
 .imageItem image, .moveImage{
 		width: 160rpx;
 		height: 160rpx;
-		-webkit-border-radius: 8rpx;
-		        border-radius: 8rpx;
+		border-radius: 8rpx;
 }
 .imageUpload{
 /* 		line-height: 130upx; */
@@ -45,8 +43,7 @@
 		font-size: 150upx; */
 /* 		color: #D9D9D9; */
 		border: 1px solid #D9D9D9;
-		-webkit-border-radius: 8rpx;
-		        border-radius: 8rpx;
+		border-radius: 8rpx;
 		display: -webkit-box;
 		display: -webkit-flex;
 		display: flex;

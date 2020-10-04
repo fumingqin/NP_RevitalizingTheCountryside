@@ -30,15 +30,13 @@ page {
 }
 .top-view {
   background-color: #FFFFFF;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
   margin: 30rpx 20rpx 28rpx 28rpx;
 }
 .top-view-Type {
   width: 193rpx;
   height: 68rpx;
-  -webkit-border-radius: 34rpx;
-          border-radius: 34rpx;
+  border-radius: 34rpx;
   background-color: #ECEEF0;
   margin-left: 29rpx;
   margin-top: 30rpx;
@@ -56,8 +54,7 @@ page {
   text-align: center;
   width: 193rpx;
   height: 68rpx;
-  -webkit-border-radius: 34rpx;
-          border-radius: 34rpx;
+  border-radius: 34rpx;
 }
 .top-view-textarea {
   margin-left: 43rpx;
@@ -73,8 +70,7 @@ page {
 }
 .bottom-view {
   background-color: #FFFFFF;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
   margin: 0rpx 20rpx 28rpx 28rpx;
   padding-bottom: 10rpx;
 }
@@ -92,8 +88,7 @@ page {
   width: 92%;
   text-align: center;
   font-size: 34rpx;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
   padding: 30rpx 0;
 }
 .changecolor1 {

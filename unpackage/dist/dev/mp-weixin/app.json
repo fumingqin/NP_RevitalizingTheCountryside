@@ -71,6 +71,13 @@
         "pages/Bus/TicketPurchase",
         "pages/Bus/TransitSearch"
       ]
+    },
+    {
+      "root": "pages_LYFW/",
+      "pages": [
+        "pages/LYFW/agricultureProducts/ovof_list",
+        "pages/LYFW/agricultureProducts/ovof_edit"
+      ]
     }
   ],
   "window": {
@@ -107,6 +114,5 @@
       "desc": "你的位置信息将用于小程序位置接口的效果展示"
     }
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap49.json"
+  "usingComponents": {}
 }

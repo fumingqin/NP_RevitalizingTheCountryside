@@ -48,8 +48,7 @@ page,
 }
 .np_content .np_ct_orderCommonClass {
   background: #FFFFFF;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
   display: -webkit-box;
@@ -154,8 +153,7 @@ page,
 }
 .np_content .np_ct_mapPunctuation {
   background: #FFFFFF;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
   display: -webkit-box;
@@ -194,8 +192,7 @@ page,
 }
 .np_content .np_ct_routeSite {
   background: #FFFFFF;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
   display: -webkit-box;
@@ -240,8 +237,7 @@ page,
   background: #FFFFFF;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
 }
 .np_content .np_ct_stationContentView .np_ct_sc_boarding {
   background: #FFFFFF;
@@ -285,8 +281,7 @@ page,
 }
 .np_content .np_ct_Passengers {
   background: #FFFFFF;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
   display: -webkit-box;
@@ -371,8 +366,7 @@ page,
 .np_content .np_ct_Passengers .np_ct_pe_passengerInformation .np_ct_pe_pi_passengerInfoDetail .np_ct_pe_pi_pi_content .content .contentView .viewClass {
   background: #EBEBEB;
   font-size: 18rpx;
-  -webkit-border-radius: 24rpx;
-          border-radius: 24rpx;
+  border-radius: 24rpx;
   width: 100rpx;
   height: 37rpx;
   line-height: 37rpx;
@@ -396,8 +390,7 @@ page,
 }
 .np_content .np_ct_coupon {
   background: #FFFFFF;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
   display: -webkit-box;
@@ -592,8 +585,7 @@ page,
   width: 20rpx;
   height: 20rpx;
   background: #f3f3f3;
-  -webkit-border-radius: 100px;
-          border-radius: 100px;
+  border-radius: 100px;
 }
 .coupon-item .circle.r {
   left: auto;
@@ -686,8 +678,7 @@ page,
   padding: 16rpx 40rpx;
   padding-bottom: 92rpx;
   background: #FFFFFF;
-  -webkit-border-radius: 20rpx;
-          border-radius: 20rpx;
+  border-radius: 20rpx;
   z-index: 999;
 }
 .boxView2 .titleView2 {
@@ -726,8 +717,7 @@ page,
 }
 .orderCommonClass {
   background: #FFFFFF;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
   display: -webkit-box;
@@ -763,8 +753,7 @@ page,
   background: #FFFFFF;
   margin: 0 26rpx;
   margin-bottom: 20rpx;
-  -webkit-border-radius: 14rpx;
-          border-radius: 14rpx;
+  border-radius: 14rpx;
 }
 /* 优惠券面板 */
 .discountView {
