@@ -193,8 +193,4 @@
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
 	}
-	
-	.u-form-item{
-		padding: 20rpx 0 0 0;
-	}
 </style>

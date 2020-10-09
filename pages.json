@@ -406,6 +406,14 @@
 				{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_edit",
 				    "style" : {}
+				},
+				{
+				    "path" : "pages/LYFW/agricultureProducts/ovof_generalList",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/LYFW/agricultureProducts/ovof_detailsPage",
+				    "style" : {}
 				}
 			]
 		}
