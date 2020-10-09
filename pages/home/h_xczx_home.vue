@@ -60,7 +60,7 @@
 		</view> -->
 		<!-- 乡村特产 -->
 		<view class="h_quickEntry">
-			<view class="qui_titleView">乡村特产</view>
+			<view class="qui_titleView">乡村美景</view>
 			<view class="sixBackground">
 				<view v-for="(item,index) in quickEntryData" :key="index">
 					<view class="darkCurtain"></view>
@@ -77,9 +77,9 @@
 		
 
 		<!-- 公示项目 -->
-		<view style="background: #FFFFFF; padding: 32upx 0;">
-			<view style="margin: 0upx 32upx 32upx 32upx; font-size: 34upx; font-weight: bold;">公示项目</view>
-			<u-swiper style="margin-top: 32upx;" :list="advertisingMap" :effect3d="true" :title="true" name="ShowImageURL" bg-color="#ffffff"></u-swiper>
+		<view class="gs_view">
+			<view class="gs_title">公示项目</view>
+			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" name="ShowImageURL" bg-color="#ffffff"></u-swiper>
 		</view>
 
 
@@ -535,6 +535,20 @@
 		height: 188upx;
 		padding-left: 16upx;
 		padding-top: 6upx;
+	}
+	
+	//公示项目
+	.gs_view{
+		background: #FFFFFF; 
+		padding: 32upx 0 80upx 0;
+		.gs_title{
+			margin: 0upx 32upx 32upx 32upx; 
+			font-size: 34upx; 
+			font-weight: bold;
+		}
+		.gs_swiper{
+			margin-top: 32upx;
+		}
 	}
 
 	//-------------------------------点击状态---------------------------
