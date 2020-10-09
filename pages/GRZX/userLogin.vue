@@ -23,15 +23,6 @@
 
 		<!-- logo -->
 		<image :src="logo" class="logoClass"></image>
-
-		<!-- 第三方登录 -->
-		<view class="loginMode">第三方登录</view>
-		<view class="leftLine"></view>
-		<view class="rightLine"></view>
-		<!-- <image src="../../static/GRZX/qqLogo.png" class="qqClass" @click="qqLogin"></image> -->
-		<!-- 苹果登录 -->
-		<image src="../../static/GRZX/appleLogo.png" class="appleClass" @click="appleLogin" v-if="platform=='ios'"></image>
-		<image src="../../static/GRZX/wxLogo.png" :class="platform=='ios'?'wxClass':'wxClass1'" @click="wxLogin" ></image>
 	</view>
 </template>
 
@@ -646,12 +637,7 @@
 				var that = this;
 				if(that.urlData == 1){
 					that.$GrzxInter.navToHome();//返回首页
-				}else if (that.urlData == 2) {
-					uni.switchTab({ //返回订单页
-						url: '/pages/order/OrderList',
-					})
-				} else {
-					console.log("返回上一页")
+				}else{
 					uni.navigateBack(); //返回上一页
 				}
 			},
@@ -695,27 +681,6 @@
 				}
 				var newDate = structDate.getFullYear() + "-" + month + "-" + day;
 			},
-
-			//---------------------推送时使用----------------------------
-			// setJYJPushAlias: function(phoneNumber) {
-			// 	var that = this;
-			// 	jyJPush.deleteJYJPushAlias({
-			// 		//  可以不用传值进去，但是需要配置这项数据
-			// 	}, result => {
-			// 		jyJPush.setJYJPushAlias({
-			// 			userAlias: phoneNumber,
-			// 		}, result => {
-			// 			//  设置成功或者失败，都会通过这个result回调返回数据；数据格式保持极光返回的安卓/iOS数据一致
-			// 			//  注：若没有返回任何数据，考虑是否初始化完成
-			// 			console.log(result);
-			// 			jyJPush.getRegistrationID(
-			// 				//  返回的数据会有registrationID，errorCode
-			// 				result => {
-			// 					console.log(result)
-			// 				});
-			// 		});
-			// 	});
-			// },
 
 			// ----------------------------登录时写日志--------------------------------
 			LoginLog: function(UserID, Phone) {
@@ -774,6 +739,7 @@
 	.content {
 		width: 100%;
 		position: relative;
+		background-color: #007AFF;
 	}
 
 	.backClass {

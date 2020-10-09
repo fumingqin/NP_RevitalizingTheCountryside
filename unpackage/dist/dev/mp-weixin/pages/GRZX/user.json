@@ -1,6 +1,0 @@
-{
-  "navigationStyle": "custom",
-  "usingComponents": {
-    "u-skeleton": "/uview-ui/components/u-skeleton/u-skeleton"
-  }
-}

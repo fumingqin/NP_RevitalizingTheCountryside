@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "date-picker": "/pages_ZXGP/components/ZXGP/mx-datepicker/ctkyDatePicker",
-    "popup": "/pages_ZXGP/components/ZXGP/uni-popup/uni-popup"
-  }
-}

@@ -42,7 +42,7 @@
 	export default{
 		data(){
 			return{
-				title:'南平综合出行',
+				title:'乡村振兴',
 				versionNum:'Version ',
 				functionIntroduction:'功能介绍',
 				checkVersion:'检查新版本',
