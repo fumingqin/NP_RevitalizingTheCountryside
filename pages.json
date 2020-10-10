@@ -160,7 +160,7 @@
 				{
 					"path": "pages/GRZX/aboutApp", //关于App
 					"style": {
-						"navigationBarTitleText": "关于App"
+						"navigationBarTitleText": "关于APP"
 					}
 				},
 				{
@@ -196,7 +196,14 @@
 				{
 					"path": "pages/GRZX/FeedbackView", //意见反馈列表
 					"style": {}
-				}		
+				},
+				{
+					"path": "pages/GRZX/editDuty", //修改职责
+					"style": {
+						"navigationBarTitleText": "修改职责",
+						"navigationBarBackgroundColor": "#FFFFFF"
+					}
+				}
 			]
 		},
 		//---------------------------------------------第二个包：专线购票------------------------------------------
@@ -396,7 +403,7 @@
 		},
 		//---------------------------------------------第四个包：旅游服务------------------------------------------
 		{
-			"root": "pages_LYFW/",
+			"root": "pages_YCYD/",
 			"pages": [
 				//----------------------------------通用页面----------------------------------
 				{
@@ -414,6 +421,23 @@
 				,{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_detailsPage",
 				    "style" : {}
+				}
+				,{
+				    "path" : "pages/LYFW/agricultureProducts/ovof_feedback",
+				    "style" : {}
+				}
+			]
+		},
+		//---------------------------------------------第五个包：政策发布------------------------------------------
+		{
+			"root": "pages_ZCFB/",
+			"pages": [
+				//----------------------------------通用页面----------------------------------
+				{
+				    "path" : "pages/ZCFB/issuePolicy",
+				    "style" : {
+						"navigationBarTitleText": "发布政策"
+					}
 				}
 			]
 		},

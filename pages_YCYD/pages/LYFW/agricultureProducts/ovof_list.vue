@@ -28,7 +28,7 @@
 							</view>
 							<view class="projectContent">{{item.content}}</view>
 							<text class="cost">{{item.updatedTime}}&nbsp;&nbsp;{{item.count}}浏览量</text>
-							<text class="sellComment" style="color: #42e800;" v-if="item.colleagueStatus==true">上架中</text>
+							<text class="sellComment" style="color: #5AD234;" v-if="item.colleagueStatus==true">上架中</text>
 							<text class="sellComment" style="color: #ff0000;" v-if="item.colleagueStatus==false">已下架</text>
 						</view>
 					</view>
@@ -180,8 +180,8 @@
 		.groupTour {
 			display: flex;
 			background-color: #FFFFFF;
-			padding-top: 40upx;
-			padding-bottom: 40upx;
+			padding-top: 26upx;
+			padding-bottom: 26upx;
 			padding-left: 30upx;
 			padding-right: 30upx;
 			margin-bottom: 20upx;
@@ -192,7 +192,7 @@
 				// display: flex;
 				.contentImage {
 					width: 190upx;
-					height: 150upx;
+					height: 100%;
 					border-radius: 12upx;
 				}
 			}
@@ -216,7 +216,7 @@
 						margin-bottom: 22upx;
 						
 						.contentText {
-							font-size: 36upx;
+							font-size: 32upx;
 							font-weight: bold;
 							font-family: Source Han Sans SC;
 							overflow: hidden; //超出溢出
@@ -231,7 +231,7 @@
 							position: absolute;
 							// font-weight: bold;
 							right: 0;
-							font-size: 36upx;
+							font-size: 30upx;
 							color: #FF5555;
 						}
 					}
