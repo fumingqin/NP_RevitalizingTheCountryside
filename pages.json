@@ -422,6 +422,10 @@
 				    "path" : "pages/LYFW/agricultureProducts/ovof_detailsPage",
 				    "style" : {}
 				}
+				,{
+				    "path" : "pages/LYFW/agricultureProducts/ovof_feedback",
+				    "style" : {}
+				}
 			]
 		},
 		//---------------------------------------------第五个包：政策发布------------------------------------------
