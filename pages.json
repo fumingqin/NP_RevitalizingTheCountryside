@@ -416,6 +416,23 @@
 				    "style" : {}
 				}
 			]
+		},
+		//---------------------------------------------第5个包：特派员服务------------------------------------------
+		{
+			"root": "pages_PYFW/",
+			"pages": [
+				
+			{
+                    "path" : "pages/pyfw_edit",
+                    "style" : {
+						"navigationBarTitleText": "申请派员"
+					}
+                }
+                ,{
+                    "path" : "pages/pyfw_personalList",
+                    "style" : {}
+                }
+            ]
 		}
 	],
 	
