@@ -28,7 +28,7 @@
 				<!-- 顶部滑动 -->
 				<view class="screen">
 					<view class="screenView">
-						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)">
+						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)"> 
 							项目介绍
 						</view>
 						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
