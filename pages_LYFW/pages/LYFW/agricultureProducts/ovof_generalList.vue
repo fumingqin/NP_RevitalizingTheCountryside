@@ -1,21 +1,9 @@
 <template>
 	<view>
-		<view>
-			<view style="margin-top: 30upx;padding-left: 32upx;">
-				<scroll-view class="to_scroll" scroll-x="true" >
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == true">上架</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == false">下架</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">删除</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">添加</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">修改</u-button>
-				</scroll-view>
-			</view>
-		</view>
-		
 		<!-- 内容1 -->
 		<view>
 			<view class="content">
-				<view class="groupTour" :class="{'select':selectIndex == index}" @tap="selectClick(index)" v-for="(item,index) in groupTitle" :key="index" v-if="index < scenicListIndex">
+				<view class="groupTour" v-for="(item,index) in groupTitle" :key="index" v-if="index < scenicListIndex">
 					<view class="groupContent">
 						<image class="contentImage" :src="item.imgUrl" mode="aspectFill"></image>
 					</view>
@@ -45,17 +33,6 @@
 	export default {
 		data() {
 			return {
-				customStyle: { //button样式
-					paddingTop: '25px',
-					paddingBottom: '25px',
-					paddingLeft: '30px',
-					paddingRight: '30px',
-					marginRight: '16px',
-					background: '#FFFFFF',
-					borderRadius: '10px',
-					color: '#161616',
-					fontSize:'17px',
-				},
 				groupTitle:[{
 					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
 					title:'农田基础建设项目',

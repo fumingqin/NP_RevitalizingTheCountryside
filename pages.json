@@ -160,7 +160,7 @@
 				{
 					"path": "pages/GRZX/aboutApp", //关于App
 					"style": {
-						"navigationBarTitleText": "关于App"
+						"navigationBarTitleText": "关于APP"
 					}
 				},
 				{
@@ -196,7 +196,14 @@
 				{
 					"path": "pages/GRZX/FeedbackView", //意见反馈列表
 					"style": {}
-				}		
+				},
+				{
+					"path": "pages/GRZX/editDuty", //修改职责
+					"style": {
+						"navigationBarTitleText": "修改职责",
+						"navigationBarBackgroundColor": "#FFFFFF"
+					}
+				}
 			]
 		},
 		//---------------------------------------------第二个包：专线购票------------------------------------------
@@ -405,6 +412,14 @@
 				},
 				{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_edit",
+				    "style" : {}
+				},
+				{
+				    "path" : "pages/LYFW/agricultureProducts/ovof_generalList",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/LYFW/agricultureProducts/ovof_detailsPage",
 				    "style" : {}
 				}
 			]

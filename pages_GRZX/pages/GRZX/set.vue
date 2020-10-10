@@ -5,7 +5,7 @@
 			<text class="sizeClass">{{currentSize}}</text>
 			<image src="../../static/GRZX/icon-right.png" class="rightClass"></image>
 		</view>
-		<!-- #ifdef APP-PLUS -->
+		<!-- #ifdef APP-PLUS || MP-WEIXIN -->
 		<view class="itemClass" @click="aboutAPP" hover-class="btnClass">
 			<text class="">关于APP</text>
 			<image src="../../static/GRZX/icon-right.png" class="rightClass1"></image>
@@ -97,7 +97,6 @@
 						//#ifdef APP-PLUS
 						setTimeout(function(){
 							uni.navigateTo({
-								// url  : '/pages/GRZX/userLogin',
 								url:that.$GrzxInter.Route.userLogin.url +'?urlData=1'
 							}) 
 						},1000);
@@ -114,16 +113,13 @@
 			//------------------------------------清除缓存--------------------------
 			clearStorage(){
 				var user=uni.getStorageSync('userInfo');
-				var RealNameInfo=uni.getStorageSync('RealNameInfo');
 				uni.showModal({
 				    content: '是否清除数据',
 				    success: (e)=>{
 				    	if(e.confirm){
 							uni.clearStorageSync();
 							uni.setStorageSync('userInfo',user);
-							uni.setStorageSync('RealNameInfo',RealNameInfo);
 							uni.redirectTo({
-								// url:'/pages/GRZX/set'
 								url:this.$GrzxInter.Route.set.url,
 							})
 				    	}
