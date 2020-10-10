@@ -24,7 +24,24 @@
 			</view>
 			
 			<view class="u-content">
-				<u-read-more :toggle="toggle" :show-height="showHeight">
+				
+				<!-- 顶部滑动 -->
+				<view class="screen">
+					<view class="screenView">
+						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)">
+							项目介绍
+						</view>
+						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
+							相关文件
+						</view>
+					</view>
+				</view>
+				
+				<u-read-more v-if="type==0" :toggle="toggle" :show-height="showHeight">
+					<u-parse :html="content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+				</u-read-more>
+				
+				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
 					<u-parse :html="content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 				</u-read-more>
 			</view>
@@ -44,6 +61,7 @@
 				toggle: false,
 				name:'张三丰',
 				post:'市级职责人员',
+				type: 0,
 				// 字符串的形式
 				style: {
 					p: 'letter-spacing: 4rpx;text-align: justify;line-height: 48rpx;font-size:30rpx;text-justify: inter-ideograph; text-indent: 2em;padding-bottom: 20rpx;padding-top: 20rpx;',
@@ -78,6 +96,15 @@
 					}
 				})
 			},
+			
+			
+			tabClick(e) {
+				if (e == 0) {
+					this.type = 0;
+				} else if (e == 1) {
+					this.type = 1;
+				}
+			},
 		}
 	}
 </script>
@@ -103,7 +130,6 @@
 	}
 	
 	.ovof_dp_bg_title{
-		margin-top: 20upx;
 		color: #333333;
 		font-size: 40upx;
 		font-weight: bold;
@@ -179,6 +205,56 @@
 			color: #333333;
 			right: 0;
 			top: 16upx;
+		}
+	}
+	
+	
+	//筛选样式
+	.screen {
+		height: 87upx;
+		position: sticky;
+		top: 0;
+		z-index: 1;
+
+		.screenView {
+			left: 0;
+			display: flex;
+			width: 50%;
+			height: 87upx;
+			z-index: 10;
+			position: sticky;
+			top: 0;
+			// background-color: #F5F5F5;
+			margin-top: 20upx;
+
+			.screenText {
+				flex: 1;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100%;
+				font-size: 30upx;
+				color: #888;
+				position: relative;
+
+
+
+				&.current {
+					color: #70c778;
+					// background-color: #FFFFFF;
+
+					&:after {
+						content: '';
+						position: absolute;
+						left: 50%;
+						bottom: 0;
+						transform: translateX(-50%);
+						width: 104upx;
+						height: 0;
+						border-bottom: 4upx solid #70c778;
+					}
+				}
+			}
 		}
 	}
 </style>
