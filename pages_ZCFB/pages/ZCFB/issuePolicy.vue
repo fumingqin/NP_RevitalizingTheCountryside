@@ -1,122 +1,134 @@
 <template>
 	<view>
-		<scroll-view style="height: 1020rpx;" :scroll-y='true'>
-			<view>
-				<view class="ps_view">
-					<view style="margin-left: 40rpx;">
-						<view style="padding-top: 20rpx ;">
-							<text class="titleFont">标题</text>
-						</view>
-						<view style="padding: 20rpx 0;border-bottom: #EAEAEA 1px solid;display: flex;flex-direction: row;width: 90%;">
-							<input class="contentFont" v-model="title" placeholder="请输入标题" />
-						</view>
+		<view class="content">
+			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
+	
+				<!-- 商品名称 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="政策标题" :border-bottom="false" prop="name">
+					<view class="viewClass" style="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入政策标题" v-model="model.name" :type="text"></u-input>
 					</view>
-					<view style="margin-left: 40rpx;">
-						<view style="padding-top: 20rpx ;">
-							<text class="titleFont">同行人数</text>
-						</view>
-						<view style="padding: 20rpx 0;border-bottom: #EAEAEA 1px solid;display: flex;flex-direction: row;width: 90%;">
-							<input class="contentFont" type="number" v-model="people_number" placeholder="请输入可同行人数" maxlength="2" />
-						</view>
+				</u-form-item>
+				<!-- 文件上传 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false" prop="name">
+					<view class="viewClass" style="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入政策标题" v-model="model.name" :type="text"></u-input>
 					</view>
-					<view style="margin-left: 40rpx;">
-						<view style="padding-top: 20rpx ;">
-							<text class="titleFont">预算费用</text>
+				</u-form-item>
+				<!-- 上传图片 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
+					<u-upload ref="uUpload" :custom-btn="true" :max-count="maxCount" :multiple="multiple" width="160" height="160" :action="action" v-model="model.photo">
+						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
+							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
 						</view>
-						<view style="padding: 20rpx 0;border-bottom: #EAEAEA 1px solid;display: flex;flex-direction: row;width: 90%;">
-							<input class="contentFont" type="number" v-model="people_cost" placeholder="请输入预算人均费用" maxlength="5" />
-						</view>
+					</u-upload>
+				</u-form-item>
+	
+				<!-- 商品来源地 -->
+				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品来源地" :border-bottom="false" prop="region">
+					<view class="viewClass" style="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" type="select" :select-open="pickerShow" v-model="model.region" placeholder="请选择商品来源地" @click="pickerShow = true"></u-input>
 					</view>
-					<view class="fb_Text2">主页图片</view>
-					<view class="add-img-box">
-						<view class="add-img-item" v-for="(item, index) in imgList" :key="index">
-							<image class="add-img" @click="imgInfo(index)" :src="item.path" mode="aspectFill"></image>
-							<image class="add-img-del" @click="delImg(index)" src="../../static/JBCX/delete.png"></image>
-						</view>
-						<view v-if="imgList.length < 1 " class="add-img-item" @click="openCamera">
-							<image class="add-img" src="../../static/JBCX/add.png"></image>
-						</view>
+				</u-form-item> -->
+	
+				<!-- 商品价格 -->
+				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品价格" :border-bottom="false" prop="cost">
+					<view class="viewClass" s1tyle="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品价格" v-model="model.cost" :type="text"></u-input>
 					</view>
-				</view>
-				<view style="font-weight: bold;font-size: 30upx;padding-left: 34upx;padding-top: 30upx;margin-bottom: 20upx;">同行说明</view>
-				<view class="container">
-					<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
-					 :placeholder="placeholder" @statuschange="onStatusChange" @ready="onEditorReady" v-model="text">
-					</editor>
-				</view>
-				<view class="toolbar" @touchend.stop="format" :style="'bottom: ' + (isIOS ? keyboardHeight : 0) + 'px'">
-				<!-- 	<i class="iconfont icon-charutupian" @touchend.stop="insertImage"></i> -->
-					<i :class="'iconfont icon-format-header-1 ' + (formats.header === 1 ? 'ql-active' : '')" data-name="header"
-					 :data-value="1"></i>
-					<i :class="'iconfont icon-format-header-2 ' + (formats.header === 2 ? 'ql-active' : '')" data-name="header"
-					 :data-value="2"></i>
-					<i :class="'iconfont icon-format-header-3 ' + (formats.header === 3 ? 'ql-active' : '')" data-name="header"
-					 :data-value="3"></i>
-					<i :class="'iconfont icon-format-header-4 ' + (formats.header === 4 ? 'ql-active' : '')" data-name="header"
-					 :data-value="4"></i>
-					<i :class="'iconfont icon-format-header-5 ' + (formats.header === 5 ? 'ql-active' : '')" data-name="header"
-					 :data-value="5"></i>
-					<i :class="'iconfont icon-format-header-6 ' + (formats.header === 6 ? 'ql-active' : '')" data-name="header"
-					 :data-value="6"></i>
-					<i :class="'iconfont icon-zitijiacu ' + (formats.bold ? 'ql-active' : '')" data-name="bold"></i>
-					<i :class="'iconfont icon-zitishanchuxian ' + (formats.strike ? 'ql-active' : '')" data-name="strike"></i>
-					<i :class="'iconfont icon-zitixieti ' + (formats.italic ? 'ql-active' : '')" data-name="italic"></i>
-					<i :class="'iconfont icon-zuoduiqi ' + (formats.align === 'left' ? 'ql-active' : '')" data-name="align" data-value="left"></i>
-					<i :class="'iconfont icon-juzhongduiqi ' + (formats.align === 'center' ? 'ql-active' : '')" data-name="align"
-					 data-value="center"></i>
-					<i :class="'iconfont icon-youduiqi ' + (formats.align === 'right' ? 'ql-active' : '')" data-name="align"
-					 data-value="right"></i>
-					<i :class="'iconfont icon-zuoyouduiqi ' + (formats.align === 'justify' ? 'ql-active' : '')" data-name="align"
-					 data-value="justify"></i>
-					<i :class="'iconfont icon-line-height ' + (formats.lineHeight ? 'ql-active' : '')" data-name="lineHeight"
-					 data-value="2"></i>
-					<i :class="'iconfont icon-Character-Spacing ' + (formats.letterSpacing ? 'ql-active' : '')" data-name="letterSpacing"
-					 data-value="2em"></i>
-					<i :class="'iconfont icon-722bianjiqi_duanqianju ' + (formats.marginTop ? 'ql-active' : '')" data-name="marginTop"
-					 data-value="20px"></i>
-					<i :class="'iconfont icon-723bianjiqi_duanhouju ' + (formats.micon-previewarginBottom ? 'ql-active' : '')"
-					 data-name="marginBottom" data-value="20px"></i>
-					<i class="iconfont icon-clearedformat" @tap="removeFormat"></i>
-					<i :class="'iconfont icon-font ' + (formats.fontFamily ? 'ql-active' : '')" data-name="fontFamily" data-value="Pacifico"></i>
-					<i :class="'iconfont icon-fontsize ' + (formats.fontSize === '24px' ? 'ql-active' : '')" data-name="fontSize"
-					 data-value="24px"></i>
-					<i :class="'iconfont icon-text_color ' + (formats.color === fontColor ? 'ql-active' : '')" data-name="color"
-					 :data-value="fontColor" @tap="open"></i>
-					<i :class="'iconfont icon-fontbgcolor ' + (formats.backgroundColor === '#00ff00' ? 'ql-active' : '')" data-name="backgroundColor"
-					 data-value="#00ff00"></i>
-					<!-- 引用黄河浪的color取色器 -->
-					<i class="iconfont icon-date" @tap="insertDate"></i>
-					<i class="iconfont icon-undo" @tap="undo"></i>
-					<i class="iconfont icon-redo" @tap="redo"></i>
-					<i :class="'iconfont icon-zitixiahuaxian ' + (formats.underline ? 'ql-active' : '')" data-name="underline"></i>
-					<i class="iconfont icon--checklist" data-name="list" data-value="check"></i>
-					<i :class="'iconfont icon-youxupailie ' + (formats.list === 'ordered' ? 'ql-active' : '')" data-name="list"
-					 data-value="ordered"></i>
-					<i :class="'iconfont icon-wuxupailie ' + (formats.list === 'bullet' ? 'ql-active' : '')" data-name="list"
-					 data-value="bullet"></i>
-					<i class="iconfont icon-outdent" data-name="indent" data-value="-1"></i>
-					<i class="iconfont icon-indent" data-name="indent" data-value="+1"></i>
-					<i class="iconfont icon-fengexian" @tap="insertDivider"></i>
-					<i class="iconfont icon-preview" @tap="store" id="2"></i>
-					<i :class="'iconfont icon-zitixiabiao ' + (formats.script === 'sub' ? 'ql-active' : '')" data-name="script"
-					 data-value="sub"></i>
-					<i :class="'iconfont icon-zitishangbiao ' + (formats.script === 'super' ? 'ql-active' : '')" data-name="script"
-					 data-value="super"></i>
-					<!-- <i class="iconfont icon-quanping"></i> -->
-					<i class="iconfont icon-shanchu" @tap="clear"></i>
-					<i :class="'iconfont icon-direction-rtl ' + (formats.direction === 'rtl' ? 'ql-active' : '')" data-name="direction"
-					 data-value="rtl"></i>
-					<i class="iconfont icon-baocun" @tap="store" id="1"></i>
-				</view>
-				<t-color-picker ref="colorPicker" :color="color" @confirm="confirm" @cancel="cancel"></t-color-picker>
-			</view>
-		</scroll-view>
-		<view class="tjButton" @click="submitState">提交</view>
+				</u-form-item> -->
+	
+				<!-- 上传视频 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+					<u-upload ref="uUpload" :custom-btn="true" :max-count="maxCount" :multiple="multiple" width="160" height="160" :action="action" v-model="model.photo">
+						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
+							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
+						</view>
+					</u-upload>
+				</u-form-item>
+				
+				<!-- 商品简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false" prop="intro">
+					<view class="viewClass" style="padding: 20rpx;">
+						<view class="container">
+							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
+							 :placeholder="placeholder" @statuschange="onStatusChange" @ready="onEditorReady">
+							</editor>
+						</view>
+						
+						<view class="toolbar" @touchend.stop="format" :style="'bottom: ' + (isIOS ? keyboardHeight : 0) + 'px'">
+							<i class="iconfont icon-charutupian" @touchend.stop="insertImage"></i>
+							<i :class="'iconfont icon-format-header-1 ' + (formats.header === 1 ? 'ql-active' : '')" data-name="header"
+							 :data-value="1"></i>
+							<i :class="'iconfont icon-format-header-2 ' + (formats.header === 2 ? 'ql-active' : '')" data-name="header"
+							 :data-value="2"></i>
+							<i :class="'iconfont icon-format-header-3 ' + (formats.header === 3 ? 'ql-active' : '')" data-name="header"
+							 :data-value="3"></i>
+							<i :class="'iconfont icon-format-header-4 ' + (formats.header === 4 ? 'ql-active' : '')" data-name="header"
+							 :data-value="4"></i>
+							<i :class="'iconfont icon-format-header-5 ' + (formats.header === 5 ? 'ql-active' : '')" data-name="header"
+							 :data-value="5"></i>
+							<i :class="'iconfont icon-format-header-6 ' + (formats.header === 6 ? 'ql-active' : '')" data-name="header"
+							 :data-value="6"></i>
+							<i :class="'iconfont icon-zitijiacu ' + (formats.bold ? 'ql-active' : '')" data-name="bold"></i>
+							<i :class="'iconfont icon-zitishanchuxian ' + (formats.strike ? 'ql-active' : '')" data-name="strike"></i>
+							<i :class="'iconfont icon-zitixieti ' + (formats.italic ? 'ql-active' : '')" data-name="italic"></i>
+							<i :class="'iconfont icon-zuoduiqi ' + (formats.align === 'left' ? 'ql-active' : '')" data-name="align" data-value="left"></i>
+							<i :class="'iconfont icon-juzhongduiqi ' + (formats.align === 'center' ? 'ql-active' : '')" data-name="align"
+							 data-value="center"></i>
+							<i :class="'iconfont icon-youduiqi ' + (formats.align === 'right' ? 'ql-active' : '')" data-name="align" data-value="right"></i>
+							<i :class="'iconfont icon-zuoyouduiqi ' + (formats.align === 'justify' ? 'ql-active' : '')" data-name="align"
+							 data-value="justify"></i>
+							<i :class="'iconfont icon-line-height ' + (formats.lineHeight ? 'ql-active' : '')" data-name="lineHeight" data-value="2"></i>
+							<i :class="'iconfont icon-Character-Spacing ' + (formats.letterSpacing ? 'ql-active' : '')" data-name="letterSpacing"
+							 data-value="2em"></i>
+							<i :class="'iconfont icon-722bianjiqi_duanqianju ' + (formats.marginTop ? 'ql-active' : '')" data-name="marginTop"
+							 data-value="20px"></i>
+							<i :class="'iconfont icon-723bianjiqi_duanhouju ' + (formats.micon-previewarginBottom ? 'ql-active' : '')" data-name="marginBottom"
+							 data-value="20px"></i>
+							<i class="iconfont icon-clearedformat" @tap="removeFormat"></i>
+							<i :class="'iconfont icon-font ' + (formats.fontFamily ? 'ql-active' : '')" data-name="fontFamily" data-value="Pacifico"></i>
+							<i :class="'iconfont icon-fontsize ' + (formats.fontSize === '24px' ? 'ql-active' : '')" data-name="fontSize"
+							 data-value="24px"></i>
+							<i :class="'iconfont icon-text_color ' + (formats.color === fontColor ? 'ql-active' : '')" data-name="color"
+							 :data-value="fontColor" @tap="open"></i>
+							<i :class="'iconfont icon-fontbgcolor ' + (formats.backgroundColor === '#00ff00' ? 'ql-active' : '')" data-name="backgroundColor"
+							 data-value="#00ff00"></i>
+							<!-- 引用黄河浪的color取色器 -->
+							<i class="iconfont icon-date" @tap="insertDate"></i>
+							<i class="iconfont icon-undo" @tap="undo"></i>
+							<i class="iconfont icon-redo" @tap="redo"></i>
+							<i :class="'iconfont icon-zitixiahuaxian ' + (formats.underline ? 'ql-active' : '')" data-name="underline"></i>
+							<i class="iconfont icon--checklist" data-name="list" data-value="check"></i>
+							<i :class="'iconfont icon-youxupailie ' + (formats.list === 'ordered' ? 'ql-active' : '')" data-name="list"
+							 data-value="ordered"></i>
+							<i :class="'iconfont icon-wuxupailie ' + (formats.list === 'bullet' ? 'ql-active' : '')" data-name="list" data-value="bullet"></i>
+							<i class="iconfont icon-outdent" data-name="indent" data-value="-1"></i>
+							<i class="iconfont icon-indent" data-name="indent" data-value="+1"></i>
+							<i class="iconfont icon-fengexian" @tap="insertDivider"></i>
+							<i class="iconfont icon-preview" @tap="store" id="2"></i>
+							<i :class="'iconfont icon-zitixiabiao ' + (formats.script === 'sub' ? 'ql-active' : '')" data-name="script"
+							 data-value="sub"></i>
+							<i :class="'iconfont icon-zitishangbiao ' + (formats.script === 'super' ? 'ql-active' : '')" data-name="script"
+							 data-value="super"></i>
+							<!-- <i class="iconfont icon-quanping"></i> -->
+							<i class="iconfont icon-shanchu" @tap="clear"></i>
+							<i :class="'iconfont icon-direction-rtl ' + (formats.direction === 'rtl' ? 'ql-active' : '')" data-name="direction"
+							 data-value="rtl"></i>
+							<i class="iconfont icon-baocun" @tap="store" id="1"></i>
+						</view>
+						<t-color-picker ref="colorPicker" :color="color" @confirm="confirm" @cancel="cancel"></t-color-picker>
+					</view>
+				</u-form-item>
+			</u-form>
+			<u-button type="success" :custom-style="buttonStyle" @click="submit">提交</u-button>
+			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
+		</view>
 	</view>
 </template>
 
 <script>
-	import tColorPicke from '@/pages_ZCFB/components/ZCFB/t-color-picker.vue';
+	import tColorPicke from '@/components/t-color-picker.vue';
 	var _self;
 	export default {
 		components: {
@@ -124,39 +136,103 @@
 		},
 		data() {
 			return {
-				color: {
-					r: 255,
-					g: 0,
-					b: 0,
-					a: 0.6
+					color: {
+						r: 255,
+						g: 0,
+						b: 0,
+						a: 0.6
+					},
+					isEdit: false,
+					fontColor: '#000',
+					formats: {},
+					readOnly: false,
+					placeholder: '开始输入...',
+					editorHeight: 300,
+					keyboardHeight: 0,
+					isIOS: false,
+				model: {
+					name: '', //商品名称value
+					region: '', //选择来源地value
+					cost: '',//价格
+					photo:'',//图片
+					intro:'',//商品简介
 				},
-				isEdit: false,
-				fontColor: '#000',
-				formats: {},
-				readOnly: false,
-				placeholder: '开始输入...',
-				editorHeight: 300,
-				keyboardHeight: 0,
-				isIOS: false,
-				title: '',
-				people_number: '',
-				people_cost: '',
-				type: 'range',
-				timer: '',
-				issueText: '',
-				range: [],
-				value: '',
-				showPicker: false,
-				text: '',
-				imgList: [],
-				list: [],
-				cloudimgList: [],
-				info: [],
-				imgCount: 1, //最多支持9张上传，可以修改
-				submissionState: false,
-				oneImg: '',
-				issueimage: '',
+				//----------------uview样式--------------------------
+				customStyle: {
+					fontWeight: 'bold',
+					fontSize: '17px',
+				},
+				buttonStyle: {
+					marginTop:'20px',
+				},
+				tradeNameStyle: {
+					background: '#FFFFFF',
+					paddingTop: '5px',
+					paddingBottom: '5px',
+					paddingLeft: '10px',
+					paddingRight: '10px',
+					borderRadius: "6px",
+				},
+				textareaStyle:{
+					background: '#FFFFFF',
+					paddingTop: '10px',
+					paddingBottom: '10px',
+					paddingLeft: '10px',
+					paddingRight: '10px',
+					borderRadius: "6px",
+				},
+				//----------------uview表单验证--------------------------
+				rules: {
+					name: [{
+							required: true,
+							message: '请输入政策标题',
+							trigger: 'blur',
+						},
+						{
+							min: 1,
+							message: '请输入政策标题',
+							trigger: ['change', 'blur'],
+						},
+					],
+					region: [{
+						required: true,
+						message: '请选择商品来源地',
+						trigger: 'change',
+					}],
+					cost: [{
+							required: true,
+							message: '请输入价格',
+							trigger: ['change', 'blur'],
+						},
+						{
+							type: 'number',
+							message: '价格只能为数字',
+							trigger: ['change', 'blur'],
+						}
+					],
+					intro: [
+						{
+							required: true,
+							message: '请填写简介'
+						},
+						{
+							min: 5,
+							message: '简介不能少于5个字',
+							trigger: 'change' ,
+						},
+					],
+				},
+				pickerShow: false,
+				errorType: ['message'],
+				labelPosition: 'right',
+				maxCount:3,
+				multiple:true,
+				action: 'http://www.example.com/upload',
+				autoHeight:true,
 			}
+		},
+		onReady() {
+			this.$refs.uForm.setRules(this.rules);
 		},
 		onLoad() {
 			uni.getStorage({
@@ -177,33 +253,8 @@
 				}
 			});
 			_self = this;
-			this.getTodayDate();
 		},
 		methods: {
-
-			//---------------------------------获取当前日期---------------------------------
-			getTodayDate: function() {
-				/*
-				当前选择时间（必须选择2天后的时间）
-				*/
-				var date = new Date(),
-					year = date.getFullYear(),
-					month = date.getMonth() + 1,
-					day = date.getDate();
-				month >= 1 && month <= 9 ? (month = "0" + month) : "";
-				day >= 0 && day <= 9 ? (day = "0" + day) : "";
-				var timer = year + '/' + month + '/' + day; //当前年月日时分
-				this.range.push(timer);
-				this.range.push(timer);
-				this.timer = timer;
-			},
-
-
-			onShowDatePicker(type) { //显示
-				this.type = type;
-				this.showPicker = true;
-				this.value = this[type];
-			},
 			onSelected(e) { //选择
 				this.showPicker = false;
 				if (e) {
@@ -553,148 +604,33 @@
 
 <style lang="scss">
 	@import "./editor.css";
-
+	//默认背景颜色
 	page {
-		background-color: #F5F7F9;
+		background-color: #f6f6f6;
 	}
-
-	.titleFont {
-		font-size: 36rpx;
-		font-family: Source Han Sans SC;
-		font-weight: bold;
-		color: #333333;
+	
+	.content {
+		margin: 0 30upx 40upx 30upx;
 	}
-
-	.contentFont {
-		font-size: 34rpx;
-		font-family: Source Han Sans SC;
-		font-weight: 400;
-		color: #2C2D2D;
-	}
-
-	.ps_view {
-		width: 100%;
-		height: 120%;
+	
+	.viewClass {
 		background: #FFFFFF;
-
-
-		.dl_choice {
-			display: flex;
-			font-size: 38upx;
-			color: #5E5E60;
-			padding-top: 41upx;
-			padding-left: 20upx;
-		}
-
-		.lineClass {
-			display: flex;
-			align-items: center;
-			justify-items: center;
-			padding-left: 20upx;
-			margin-top: 20upx;
-
-			.li_input {
-				width: 700upx;
-				height: 60upx;
-				border: 1px solid #000000;
-			}
-		}
-
-		//转换图片
-		.changeImage {
-
-			width: 57upx;
-			height: 59upx;
-			padding-top: 44upx;
-			margin: 0 auto;
-		}
-
-		.fb_Text2 {
-			font-weight: bold;
-			font-size: 30upx;
-			padding-left: 34upx;
-			padding-top: 30upx;
-		}
-
-		.add-img-box {
-			display: flex;
-			width: 750rpx;
-			padding-left: 10rpx;
-			flex-direction: row;
-			flex-wrap: wrap;
-			margin-bottom: 40rpx;
-		}
-
-		.add-img-item {
-			width: 200rpx;
-			height: 200rpx;
-			border-radius: 24rpx;
-			position: relative;
-			padding: 9rpx 0;
-			margin-left: 20rpx;
-		}
-
-		.add-img {
-			width: 200rpx;
-			height: 200rpx;
-			margin-top: 32upx;
-			margin-left: 20upx;
-			border-radius: 24rpx;
-		}
-
-		.add-img-del {
-			position: absolute;
-			width: 40rpx;
-			height: 40rpx;
-			right: -23rpx;
-			top: 23rpx;
-			border-radius: 20rpx;
-		}
-
+		border-radius: 6px;
 	}
-
-	.fb_view3 {
-		margin-top: 200upx;
-		margin-left: 70upx;
-
-		.fb_btn {
-			width: 600upx;
-			height: 100upx;
-			border-radius: 12upx;
-			background: #FC4646;
-			color: #FFFFFF;
-		}
-
-		.fb_text {
-			padding-left: 180upx;
-			padding-top: 30upx;
-			font-size: 32upx;
-		}
+	
+	//自定义上传按钮
+	.slot-btn {
+		width: 88px;
+		height: 88px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background: #FFFFFF;
+		border-radius: 10rpx;
+		margin: 10upx;
 	}
-
-	.tjButton {
-		position: fixed;
-		bottom: 50upx;
-		left: 0;
-		right: 0;
-		padding: 24upx 0;
-		border-radius: 64upx;
-		margin: 0 40upx;
-		background: #FC4646;
-		text-align: center;
-		color: #FFFFFF;
-		font-size: 38upx;
-		font-weight: 400;
-		box-shadow: 0px 0.2px 0px #aaa;
-	}
-
-	.test {
-		text-align: center;
-		padding: 10px 0;
-	}
-
-	button {
-		margin: 20upx;
-		font-size: 28upx;
+	//自定义上传按钮颜色
+	.slot-btn__hover {
+		background-color: rgb(235, 236, 238);
 	}
 </style>
