@@ -113,8 +113,7 @@
 						ImageURL: "../../static/GRZX/icon/set.png",
 						ItemTitle: "设置",
 						style:"SETicon",
-					},
-					]
+					},]
 			},
 			
 			// ---------------------------加载数据----------------------------
