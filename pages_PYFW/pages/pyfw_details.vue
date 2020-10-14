@@ -20,7 +20,7 @@
 		</u-form-item>
 		
 		<!-- 特派员信息 -->
-		<u-form-item :label-style="customStyle" :label-position="labelPosition" label="特派员信息" :border-bottom="false" prop="name">
+		<u-form-item :label-style="customStyle" :label-position="labelPosition" label="执行结果" :border-bottom="false" prop="name">
 			<view style="padding: 0 32rpx;"><text>姓名：</text>这是我的家</view>
 			<view style="padding: 0 32rpx;"><text>电话：</text>这是我的家</view>
 			<view style="padding: 0 32rpx;"><text>技术类型：</text>这是我的家</view>
@@ -41,7 +41,7 @@
 				stepsList : [{
 					title:'申请中'
 				},{
-					title:'派员中'
+					title:'执行中'
 				},{
 					title:'已完成'
 				}], //时间轴的标题数组
