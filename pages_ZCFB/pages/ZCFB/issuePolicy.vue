@@ -2,7 +2,7 @@
 	<view>
 		<view class="content">
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
-	
+
 				<!-- 商品名称 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="政策标题" :border-bottom="false" prop="name">
 					<view class="viewClass" style="padding-right: 20rpx;">
@@ -12,41 +12,51 @@
 				<!-- 文件上传 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false" prop="name">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入政策标题" v-model="model.name" :type="text"></u-input>
+							<view class="padding">
+								<button @tap="onUpload">上传</button>
+							</view>
 					</view>
 				</u-form-item>
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
-					<u-upload ref="uUpload" :custom-btn="true" :max-count="maxCount" :multiple="multiple" width="160" height="160" :action="action" v-model="model.photo">
+					<u-upload ref="uUpload" :custom-btn="true" :max-count="maxCount" :multiple="multiple" width="160" height="160"
+					 :action="action" v-model="model.photo">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
 						</view>
 					</u-upload>
 				</u-form-item>
-	
+
 				<!-- 商品来源地 -->
 				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品来源地" :border-bottom="false" prop="region">
 					<view class="viewClass" style="padding-right: 20rpx;">
 						<u-input :custom-style="tradeNameStyle" :border="false" type="select" :select-open="pickerShow" v-model="model.region" placeholder="请选择商品来源地" @click="pickerShow = true"></u-input>
 					</view>
 				</u-form-item> -->
-	
+
 				<!-- 商品价格 -->
 				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品价格" :border-bottom="false" prop="cost">
 					<view class="viewClass" s1tyle="padding-right: 20rpx;">
 						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品价格" v-model="model.cost" :type="text"></u-input>
 					</view>
 				</u-form-item> -->
-	
+
 				<!-- 上传视频 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
-					<u-upload ref="uUpload" :custom-btn="true" :max-count="maxCount" :multiple="multiple" width="160" height="160" :action="action" v-model="model.photo">
-						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
-							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
+					<u-upload ref="uUpload" :custom-btn="true" :max-count="maxCount" :multiple="multiple" width="160" height="160"
+					 :action="action" v-model="model.src">
+						<view class="uni-uploader__file" v-if="src">
+						    <view class="uploader_video">
+						        <view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
+						        <video :src="src" class="video"></video>
+						    </view>
+						</view>
+						<view>
+							<button @tap="chooseVideo">上传</button>
 						</view>
 					</u-upload>
 				</u-form-item>
-				
+
 				<!-- 商品简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false" prop="intro">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -55,7 +65,7 @@
 							 :placeholder="placeholder" @statuschange="onStatusChange" @ready="onEditorReady">
 							</editor>
 						</view>
-						
+
 						<view class="toolbar" @touchend.stop="format" :style="'bottom: ' + (isIOS ? keyboardHeight : 0) + 'px'">
 							<i class="iconfont icon-charutupian" @touchend.stop="insertImage"></i>
 							<i :class="'iconfont icon-format-header-1 ' + (formats.header === 1 ? 'ql-active' : '')" data-name="header"
@@ -73,19 +83,22 @@
 							<i :class="'iconfont icon-zitijiacu ' + (formats.bold ? 'ql-active' : '')" data-name="bold"></i>
 							<i :class="'iconfont icon-zitishanchuxian ' + (formats.strike ? 'ql-active' : '')" data-name="strike"></i>
 							<i :class="'iconfont icon-zitixieti ' + (formats.italic ? 'ql-active' : '')" data-name="italic"></i>
-							<i :class="'iconfont icon-zuoduiqi ' + (formats.align === 'left' ? 'ql-active' : '')" data-name="align" data-value="left"></i>
+							<i :class="'iconfont icon-zuoduiqi ' + (formats.align === 'left' ? 'ql-active' : '')" data-name="align"
+							 data-value="left"></i>
 							<i :class="'iconfont icon-juzhongduiqi ' + (formats.align === 'center' ? 'ql-active' : '')" data-name="align"
 							 data-value="center"></i>
-							<i :class="'iconfont icon-youduiqi ' + (formats.align === 'right' ? 'ql-active' : '')" data-name="align" data-value="right"></i>
+							<i :class="'iconfont icon-youduiqi ' + (formats.align === 'right' ? 'ql-active' : '')" data-name="align"
+							 data-value="right"></i>
 							<i :class="'iconfont icon-zuoyouduiqi ' + (formats.align === 'justify' ? 'ql-active' : '')" data-name="align"
 							 data-value="justify"></i>
-							<i :class="'iconfont icon-line-height ' + (formats.lineHeight ? 'ql-active' : '')" data-name="lineHeight" data-value="2"></i>
+							<i :class="'iconfont icon-line-height ' + (formats.lineHeight ? 'ql-active' : '')" data-name="lineHeight"
+							 data-value="2"></i>
 							<i :class="'iconfont icon-Character-Spacing ' + (formats.letterSpacing ? 'ql-active' : '')" data-name="letterSpacing"
 							 data-value="2em"></i>
 							<i :class="'iconfont icon-722bianjiqi_duanqianju ' + (formats.marginTop ? 'ql-active' : '')" data-name="marginTop"
 							 data-value="20px"></i>
-							<i :class="'iconfont icon-723bianjiqi_duanhouju ' + (formats.micon-previewarginBottom ? 'ql-active' : '')" data-name="marginBottom"
-							 data-value="20px"></i>
+							<i :class="'iconfont icon-723bianjiqi_duanhouju ' + (formats.micon-previewarginBottom ? 'ql-active' : '')"
+							 data-name="marginBottom" data-value="20px"></i>
 							<i class="iconfont icon-clearedformat" @tap="removeFormat"></i>
 							<i :class="'iconfont icon-font ' + (formats.fontFamily ? 'ql-active' : '')" data-name="fontFamily" data-value="Pacifico"></i>
 							<i :class="'iconfont icon-fontsize ' + (formats.fontSize === '24px' ? 'ql-active' : '')" data-name="fontSize"
@@ -102,7 +115,8 @@
 							<i class="iconfont icon--checklist" data-name="list" data-value="check"></i>
 							<i :class="'iconfont icon-youxupailie ' + (formats.list === 'ordered' ? 'ql-active' : '')" data-name="list"
 							 data-value="ordered"></i>
-							<i :class="'iconfont icon-wuxupailie ' + (formats.list === 'bullet' ? 'ql-active' : '')" data-name="list" data-value="bullet"></i>
+							<i :class="'iconfont icon-wuxupailie ' + (formats.list === 'bullet' ? 'ql-active' : '')" data-name="list"
+							 data-value="bullet"></i>
 							<i class="iconfont icon-outdent" data-name="indent" data-value="-1"></i>
 							<i class="iconfont icon-indent" data-name="indent" data-value="+1"></i>
 							<i class="iconfont icon-fengexian" @tap="insertDivider"></i>
@@ -129,33 +143,48 @@
 
 <script>
 	import tColorPicke from '@/components/t-color-picker.vue';
+	import lFile from '@/components/l-file/l-file.vue'
 	var _self;
 	export default {
 		components: {
 			't-color-picker': tColorPicke,
+			lFile,
 		},
 		data() {
 			return {
-					color: {
-						r: 255,
-						g: 0,
-						b: 0,
-						a: 0.6
-					},
-					isEdit: false,
-					fontColor: '#000',
-					formats: {},
-					readOnly: false,
-					placeholder: '开始输入...',
-					editorHeight: 300,
-					keyboardHeight: 0,
-					isIOS: false,
+				localPath: '',
+				tip: `
+					纯粹是看大家对选择文件多端上传需求比较大\n
+					又得不到好的解决\n
+					所以只好自己写了一个不需要集成原生插件的上传顺便分享给大家\n
+					这里只做了“微信端、android、ios”的上传\n
+					h5及其他端自己改改(因为APP使用了plus)\n
+					希望能帮到你\n
+					不喜勿喷，不要期待更新，我很懒\n
+					`,
+				sourceTypeIndex: 2,
+				submissionState: false,
+				color: {
+					r: 255,
+					g: 0,
+					b: 0,
+					a: 0.6
+				},
+				isEdit: false,
+				fontColor: '#000',
+				formats: {},
+				readOnly: false,
+				placeholder: '开始输入...',
+				editorHeight: 300,
+				keyboardHeight: 0,
+				isIOS: false,
 				model: {
 					name: '', //商品名称value
 					region: '', //选择来源地value
-					cost: '',//价格
-					photo:'',//图片
-					intro:'',//商品简介
+					cost: '', //价格
+					photo: '', //图片
+					intro: '', //商品简介
+					src:'',
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
@@ -163,7 +192,7 @@
 					fontSize: '17px',
 				},
 				buttonStyle: {
-					marginTop:'20px',
+					marginTop: '20px',
 				},
 				tradeNameStyle: {
 					background: '#FFFFFF',
@@ -173,7 +202,7 @@
 					paddingRight: '10px',
 					borderRadius: "6px",
 				},
-				textareaStyle:{
+				textareaStyle: {
 					background: '#FFFFFF',
 					paddingTop: '10px',
 					paddingBottom: '10px',
@@ -210,25 +239,24 @@
 							trigger: ['change', 'blur'],
 						}
 					],
-					intro: [
-						{
+					intro: [{
 							required: true,
 							message: '请填写简介'
 						},
 						{
 							min: 5,
 							message: '简介不能少于5个字',
-							trigger: 'change' ,
+							trigger: 'change',
 						},
 					],
 				},
 				pickerShow: false,
 				errorType: ['message'],
 				labelPosition: 'right',
-				maxCount:3,
-				multiple:true,
+				maxCount: 3,
+				multiple: true,
 				action: 'http://www.example.com/upload',
-				autoHeight:true,
+				autoHeight: true,
 			}
 		},
 		onReady() {
@@ -255,16 +283,64 @@
 			_self = this;
 		},
 		methods: {
-			onSelected(e) { //选择
-				this.showPicker = false;
-				if (e) {
-					this[this.type] = e.value;
-					//选择的值
-					console.log('value => ' + e.value);
-					//原始的Date对象
-					console.log('date => ' + e.date);
-				}
-			},
+			//---------------上传视频--------------
+			chooseVideo(){
+                // 上传视频
+                console.log('上传视频')
+                uni.chooseVideo({
+                    maxDuration:10,
+                    count: 1,
+                    camera: this.cameraList[this.cameraIndex].value,
+                    sourceType: sourceType[this.sourceTypeIndex],
+                    success: (res) => {
+                        console.log(JSON.stringify(res.tempFilePath),'视频')
+                        this.src = res.tempFilePath;
+                        console.log(this.src)
+                    }
+                })
+            },
+			
+				onOpenDoc() {
+					let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
+					/* 下载返回临时路径（退出应用失效） */
+					this.$refs.lFile.download(url)
+					.then(path=>{
+						/* 预览 */
+						this.$refs.lFile.open(path);
+					});
+				},
+				
+				/* 保存 */
+				onDown() {
+					let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
+					this.$refs.lFile.download(url,'local')
+					.then(path=>{
+						this.localPath = path;
+					}); 
+				},
+				
+				/* 上传 */
+				onUpload() {
+					this.$refs.lFile.upload({
+						// #ifdef APP-PLUS
+						// nvue页面使用时请查阅nvue获取当前webview的api，当前示例为vue窗口
+						currentWebview: this.$mp.page.$getAppWebview(),
+						// #endif
+						//非真实地址，记得更换,调试时ios有跨域，需要后端开启跨域并且接口地址不要使用http://localhost/
+						url: 'https://www.example.com/upload',
+						//默认file,上传文件的key
+						name: 'myFile',
+						// header: {'Authorization':'token'},
+						//...其他参数
+					});
+				},
+				onSuccess(res) {
+					console.log('上传成功回调',JSON.stringify(res));
+					uni.showToast({
+						title: JSON.stringify(res),
+						icon: 'none'
+					})
+				},
 			//-----------上传图片----------------------------------------
 			openCamera() {
 				uni.chooseImage({
@@ -307,56 +383,10 @@
 
 			submitState: function() {
 				var that = this;
-				if (that.title == '') {
-					uni.showToast({
-						title: '标题不能为空',
-						icon: 'none'
-					})
-				}
-				if (that.people_number == '') {
-					uni.showToast({
-						title: '结伴人数不能为空',
-						icon: 'none'
-					})
-				}
-				if (that.people_cost == '') {
-					uni.showToast({
-						title: '人均预算不能为空',
-						icon: 'none'
-					})
-				}
-				if (that.range[0] <= that.timer) {
-					uni.showToast({
-						title: '请选择当前日期之后的时间',
-						icon: 'none'
-					})
-				};
-				console.log(that.imgList);
-				if (that.imgList.length == 0) {
-					uni.showToast({
-						title: '主页图片不能为空',
-						icon: 'none'
-					})
-				};
-				this.editorCtx.getContents({
-					success: function(res) {
-						console.log(res);
-						that.issueText = res.html;
-						console.log(res.html);
-						console.log(that.issueText);
-					}
-				});
 
-
-				if (that.issueText == '' || that.issueText == '开始输入') {
-					uni.showToast({
-						title: '请输入同行说明',
-						icon: 'none'
-					})
-				};
 				if (this.submissionState == false) {
 					this.submissionState = true;
-					this.getimgList();
+					this.submit();
 				} else if (this.submissionState == true) {
 					uni.showToast({
 						title: '请勿重复点击提交',
@@ -365,23 +395,7 @@
 					})
 				}
 			},
-			//-----------------------------------------
-			getimgList: function() {
-				var that = this;
-				uni.saveFile({
-					tempFilePath: that.imgList[0].path,
-					success: function(res1) {
-						console.log(res1);
-						pathToBase64(res1.savedFilePath)
-							.then(base64 => {
-								that.oneImg = base64;
-								if (that.imgList.length == 1) {
-									that.getImage(that.oneImg);
-								}
-							})
-					},
-				});
-			},
+
 			submit: function() {
 				uni.showLoading({
 					title: '提交数据中...'
@@ -443,38 +457,6 @@
 						})
 					}
 				})
-			},
-			getImage: function(e) {
-				var that = this;
-				uni.request({
-					url: 'http://218.67.107.93:9210/api/app/upload-base64',
-					method: 'POST',
-					data: {
-						image: e,
-					},
-					success: (res) => {
-						console.log(res)
-						if (res.data.msg == '上传成功') {
-							that.issueimage = res.data.data;
-							that.submit();
-						} else {
-							uni.showToast({
-								title: '提交失败',
-								icon: 'none'
-							})
-						}
-					},
-					fail: (res) => {
-						console.log(res)
-						uni.showToast({
-							title: '提交失败',
-							icon: 'none'
-						})
-					},
-
-				});
-
-
 			},
 
 			//------------------富文本--------------
@@ -604,20 +586,21 @@
 
 <style lang="scss">
 	@import "./editor.css";
+
 	//默认背景颜色
 	page {
 		background-color: #f6f6f6;
 	}
-	
+
 	.content {
 		margin: 0 30upx 40upx 30upx;
 	}
-	
+
 	.viewClass {
 		background: #FFFFFF;
 		border-radius: 6px;
 	}
-	
+
 	//自定义上传按钮
 	.slot-btn {
 		width: 88px;
@@ -629,8 +612,33 @@
 		border-radius: 10rpx;
 		margin: 10upx;
 	}
+
 	//自定义上传按钮颜色
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
+	}
+	
+	.uni-uploader__file,.uploader_video{
+	    position: relative;
+	    z-index: 1;
+	    width: 200upx;
+	    height: 200upx;
+	}
+	.icon-cuo {
+	    position: absolute;
+	    right: 0;
+	    top: 5upx;
+	    background: linear-gradient(90deg,rgba(251,91,80,1) 0%,rgba(240,45,51,1) 100%);
+	    color: #FFFFFF;
+	    z-index: 999;
+	    border-top-right-radius: 20upx;
+	    border-bottom-left-radius: 20upx;
+	}
+	.padding-sm {
+		padding: 20upx;
+	}
+	
+	.padding {
+		padding: 30upx;
 	}
 </style>
