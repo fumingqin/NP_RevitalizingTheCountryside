@@ -147,6 +147,7 @@
 				customStyle: {
 					fontWeight: 'bold',
 					fontSize: '17px',
+					paddingTop: '8px',
 				},
 				buttonStyle: {
 					marginTop:'20px',
@@ -383,6 +384,7 @@
 	}
 
 	.viewClass {
+		width: 100%;
 		background: #FFFFFF;
 		border-radius: 6px;
 	}

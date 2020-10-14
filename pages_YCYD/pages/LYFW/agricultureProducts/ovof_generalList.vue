@@ -5,18 +5,18 @@
 			<view class="content">
 				<view class="groupTour" v-for="(item,index) in groupTitle" :key="index" v-if="index < scenicListIndex">
 					<view class="groupContent">
-						<image class="contentImage" :src="item.imgUrl" mode="aspectFill"></image>
+						<image class="contentImage" :src="item.image" mode="aspectFill"></image>
 					</view>
 					<view class="groupText">
 						<!-- <text class="contentLabel">{{item2.contentLabelS1}} | {{item2.contentLabelS2}} | {{item2.contentLabelS3}}</text> -->
 						<view class="groupCost">
 							<view class="TitleContent">
 								<text class="contentText">{{item.title}}</text>
-								<text class="contentCost">￥{{item.cost}}</text>
+								<!-- <text class="contentCost">￥{{item.cost}}</text> -->
 							</view>
 							<view class="projectContent">{{item.content}}</view>
-							<text class="cost">{{item.updatedTime}}&nbsp;&nbsp;{{item.count}}浏览量</text>
-							<text class="sellComment" style="color: #42e800;" v-if="item.colleagueStatus==true">上架中</text>
+							<text class="cost">{{item.update_time}}&nbsp;&nbsp;{{item.count}}浏览量</text>
+							<text class="sellComment" style="color: #42e800;" v-if="item.colleagueStatus==true">已上架</text>
 							<text class="sellComment" style="color: #ff0000;" v-if="item.colleagueStatus==false">已下架</text>
 						</view>
 					</view>
@@ -33,66 +33,7 @@
 	export default {
 		data() {
 			return {
-				groupTitle:[{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:1,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:2,
-					updatedTime:'2020-09-12',
-					colleagueStatus:false
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:3,
-					updatedTime:'2020-09-12',
-					colleagueStatus:false
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:4,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:5,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:6,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				}],
+				groupTitle:[],
 				selectId:'',//去出id
 				selectIndex:0,//下标
 				loadingType: 0, //加载更多状态
@@ -104,6 +45,11 @@
 				scenicListIndex:5,//列表默认数量
 			}
 		},
+		
+		onLoad() {
+			this.ycydData();
+		},
+		
 		onReachBottom() {
 			this.getMore();
 		},
@@ -132,6 +78,22 @@
 					this.loadingType = 2;
 				}
 			},
+			
+			//----------------------列表接口--------------------------------
+			ycydData:function(){
+				uni.request({
+					url:this.$ycyd.KyInterface.getArchives.Url,
+					method:this.$ycyd.KyInterface.getArchives.method,
+					success:(res) =>{
+						// console.log('列表数据',res)
+						this.groupTitle=res.data.data;
+						console.log('列表数据',this.groupTitle)
+					},
+					fail(res) {
+						// console.log(res)
+					}
+				})
+			}
 		}
 	}
 </script>

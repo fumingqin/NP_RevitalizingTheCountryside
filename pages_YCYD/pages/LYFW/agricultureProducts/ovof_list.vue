@@ -28,8 +28,8 @@
 							</view>
 							<view class="projectContent">{{item.content}}</view>
 							<text class="cost">{{item.updatedTime}}&nbsp;&nbsp;{{item.count}}浏览量</text>
-							<text class="sellComment" style="color: #5AD234;" v-if="item.colleagueStatus==true">上架中</text>
-							<text class="sellComment" style="color: #ff0000;" v-if="item.colleagueStatus==false">已下架</text>
+							<text class="sellComment" style="color: #5AD234;" v-if="item.colleagueStatus==true">发布中</text>
+							<text class="sellComment" style="color: #ff0000;" v-if="item.colleagueStatus==false">未发布</text>
 						</view>
 					</view>
 				</view>
