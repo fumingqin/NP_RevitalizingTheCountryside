@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view> 
 		<view v-for="(item, index) in tweetArticle" :key="index" class="boxClass">
 			<view class="timeClass">{{formatTime(item.CreateTime)}}</view>
 			<view class="boxClass1" @click="selete(item)">
