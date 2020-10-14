@@ -114,7 +114,7 @@
 </template>
 
 <script>
-	import tColorPicke from '@/pages_YCYD/components/LYFW/t-color-picker.vue';
+	import tColorPicke from '@/components/t-color-picker.vue';
 	var _self;
 	export default {
 		components: {
