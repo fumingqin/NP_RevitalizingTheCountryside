@@ -456,6 +456,10 @@
                     "path" : "pages/pyfw_personalList",
                     "style" : {}
                 }
+                ,{
+                    "path" : "pages/pyfw_details",
+                    "style" : {}
+                }
             ]
 		}
 	],

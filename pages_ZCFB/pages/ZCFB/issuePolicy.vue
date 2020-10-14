@@ -31,10 +31,10 @@
 					<view class="add-img-box">
 						<view class="add-img-item" v-for="(item, index) in imgList" :key="index">
 							<image class="add-img" @click="imgInfo(index)" :src="item.path" mode="aspectFill"></image>
-							<image class="add-img-del" @click="delImg(index)" src="../../static/JBCX/delete.png"></image>
+							<!-- <image class="add-img-del" @click="delImg(index)" src="../../static/JBCX/delete.png"></image> -->
 						</view>
 						<view v-if="imgList.length < 1 " class="add-img-item" @click="openCamera">
-							<image class="add-img" src="../../static/JBCX/add.png"></image>
+							<!-- <image class="add-img" src="../../static/JBCX/add.png"></image> -->
 						</view>
 					</view>
 				</view>

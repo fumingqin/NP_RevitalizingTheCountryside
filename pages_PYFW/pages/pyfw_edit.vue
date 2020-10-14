@@ -18,9 +18,9 @@
 				</u-form-item> -->
 
 				<!-- 技术类型 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="技术类型" :border-bottom="false" prop="cost">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="问题类型" :border-bottom="false" prop="cost">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请选择技术类型" v-model="model.cost" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请选择问题类型" v-model="model.cost" :type="text"></u-input>
 					</view>
 				</u-form-item>
 
@@ -34,9 +34,9 @@
 				</u-form-item>
 				
 				<!-- 简要备注 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="技术问题" :border-bottom="false" prop="intro">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="问题内容" :border-bottom="false" prop="intro">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="textareaStyle" type="textarea"  :height="200" :auto-height="autoHeight" :border="border" placeholder="请填写商品简介" :maxlength="50000" v-model="model.intro" />
+						<u-input :custom-style="textareaStyle" type="textarea"  :height="200" :auto-height="autoHeight" :border="border" placeholder="请描述遇到的问题" :maxlength="50000" v-model="model.intro" />
 					</view>
 				</u-form-item>
 			</u-form>
