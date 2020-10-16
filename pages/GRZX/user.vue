@@ -6,7 +6,7 @@
 					<image class="userinfo-avatar u-skeleton-circle" :src="port ||'/static/GRZX/missing-face.png'"></image>
 					<view class="boxClass1">
 						<text class="u-skeleton-fillet fontStyle1">{{nickname}}</text>
-						<text v-if="nickname != '立即登录'" class="u-skeleton-fillet fontStyle2">{{userType}}</text>
+						<text v-if="nickname != '立即登录'" class="u-skeleton-fillet fontStyle2">{{duty}}</text>
 					</view>
 				</block>
 			</view>
@@ -54,21 +54,15 @@
 	export default {
 		data() {
 			return {
-				applyName:'',   //应用名称
+				duty:'',   //职责
 				
 				QQ: '32589407', 		//qq客服
 				nickname: '', 	//昵称
 				port: '', 		//头像
-				userType:'普通用户',	//用户类型
 				advert:'../../static/GRZX/icon/advert.png',
-				userFeedbackHidden: true,  //是否隐藏弹框
-				focusType: false, 		   //是否获取input焦点
 				
 				userInfo: [], 		//用户信息
-				contantPhone: '',	//紧急联系人电话
 				userId: '', 		//用户id
-				phoneNumber: '', 	//客服电话
-				RealNameStatus: '', 	//是否实名--已实名、未实名、认证中
 				
 				serviceList:[], 	//服务功能模块
 				
@@ -122,58 +116,26 @@
 				uni.getStorage({
 					key: 'userInfo',
 					success(user) {
-						// console.log(that.$GrzxInter.systemConfig.openidtype,"应用类型")
 						var phone = user.data.phoneNumber;
 						if (phone != "" && phone != null && user.data != "") {
-							console.log("应用名称",that.$GrzxInter.systemConfig.appName);
-							console.log("应用类型",that.$GrzxInter.systemConfig.openidtype);
-							console.log("手机号",phone);
 							uni.request({
 								url: that.$GrzxInter.Interface.login.value,
 								data: {
 									phoneNumber: phone,
-									systemname:that.$GrzxInter.systemConfig.appName,//应用名称
-									openidtype:that.$GrzxInter.systemConfig.openidtype,//应用类型
 								},
 								method: that.$GrzxInter.Interface.login.method,
 								success(res) {
 									console.log(res,'res')
 									let data = res.data.data;
-									var user = new Object();
-									user = {
-										address : data.Address,
-										autograph : data.Autograph,
-										birthday : data.Birthday,
-										gender : data.Gender,
-										openId_app : data.OpenId_app,
-										openId_ios : data.OpenId_ios,
-										openId_qq : data.OpenId_qq,
-										openId_wx : data.OpenId_wx,
-										openId_xcx : data.OpenId_xcx,
-										phoneNumber : data.PhoneNumber,
-										portrait : data.Portrait,
-										userId : data.UserId,
-										nickname : data.Nickname,
-									};
-									uni.setStorageSync('userInfo', user);
-									that.userInfo = user;
-									if (user.nickname == "" || user.nickname == null) {
+									uni.setStorageSync('userInfo', data);
+									if (data.userName == "" || data.userName == null) {
 										that.nickname="请输入昵称";
 									} else {
-										that.nickname = user.nickname;
+										that.nickname = data.userName;
 									}
-									var base64 = user.portrait;
-									if (that.isBase64(base64)) {
-										base64ToPath(base64)
-										.then(path => {
-											that.port = path;
-										})
-										.catch(error => {												
-										})
-									} else {
-										that.port = base64;
-									}
-									that.userId = user.userId;
+									that.port = data.portrait;
+									that.userId = data.userId;
+									that.duty = data.duty;
 								},
 								fail(err) {
 									console.log(err);
@@ -223,9 +185,7 @@
 			operateClick(e){
 				switch(e) {
 					case '修改职责':
-						uni.navigateTo({
-							url:'/pages_GRZX/pages/GRZX/editDuty',
-						})
+						this.changeDuty();
 						break;
 					case 'QQ客服':
 						this.QQClick();
@@ -243,11 +203,34 @@
 				}
 			},
 			
+			//------------------------------修改职责-----------------------
+			changeDuty(){
+				let user = uni.getStorageSync('userInfo');
+				if(user.phoneNumber != "" && user.phoneNumber != null){
+					uni.navigateTo({
+						url:'/pages_GRZX/pages/GRZX/editDuty',
+					})
+				}else{
+					uni.showToast({
+						title: '请先登录',
+						icon:'none'
+					});
+				}
+			},
+			
 			//------------------------------意见反馈-----------------------
 			feedbackClick() {
-				uni.navigateTo({
-					url: this.$GrzxInter.Route.feedback.url,
-				})
+				let user = uni.getStorageSync('userInfo');
+				if(user.phoneNumber != "" && user.phoneNumber != null){
+					uni.navigateTo({
+						url: this.$GrzxInter.Route.feedback.url,
+					})
+				}else{
+					uni.showToast({
+						title: '请先登录',
+						icon:'none'
+					});
+				}
 			},
 			
 			//----------------------------是否登录--------------------------
@@ -347,7 +330,7 @@
 			color: #333333;
 		}
 		.fontStyle2{
-			width: 130upx;
+			width: 150upx;
 			height: 44upx;
 			line-height: 44upx;
 			text-align: center;
@@ -356,7 +339,7 @@
 			margin-top: 10upx;
 			background-color: #333333;
 			opacity: 0.3;
-			border-radius: 8Upx;
+			border-radius: 8upx;
 		}
 	
 		.lists {

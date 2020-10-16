@@ -1,20 +1,10 @@
 /* 接口参数区 */
 // 示例
 import $oSit from '@/common/overallSituation.js';
-// const Url='http://zntc.145u.net';
-// const Url = 'https://zntc.145u.net:9099';//接口地址
-//const ddtUrl='http://111.231.109.113:8004' //达达通接口地址
-//const Url = 'https://zntc.145u.net:9098';//综合出行接口地址
-//const Url = 'http://zntc.145u.net'; //http请求
+
 
 //接口域名
-// #ifdef H5
-	const Url=$oSit.Interface.address.Url;
-// #endif
-// #ifndef H5
-	const Url=$oSit.Interface.address.Url;
-// #endif
-
+const Url=$oSit.Interface.address.xczx_Url;
 
 //APP下载地址
 const downloadAPP = "http://27.148.155.9:9248/LoadAppWebsite/泉运出行综合平台.apk"; 
@@ -35,150 +25,42 @@ const appConfig={
 }
 
 const Interface={
-	getWxUserinfo:{
-		value:'http://27.148.155.9:9056/CTKY/getWxUserinfo',
-		name:'公众号获取OpenID',
+	upload:{
+		value:'http://120.24.144.6:8080/api/file/upload',
+		name:'上传图片',
 		method:'POST',
 		pages: [],
 	},
-	Get_AppSetting:{
-		value:Url+'/api/AppSetting/Get_AppSetting',
-		name:'获取appid和秘钥',
-		method:'GET',
-		pages: [],
-	},
+	
 	login:{
-		value:Url+'/api/person/login',
+		value:Url+'/api/user/login',
 		name:'用户登录',
 		method:'POST',
 		pages: [],
 	},
-	changeInfo:{
-		value:Url+'/api/person/changeInfo',
-		name:'修改个人信息（除头像外）',
-		method:'POST',
-		pages: [],
-	},
-	//乘车人信息开始
-	userInfoList:{
-		value:Url+'/api/person/userInfoList',
-		name:'获取乘车人信息',
-		method:'POST',
-		pages: [],
-	},
-	changeUserInfo:{
-		value:Url+'/api/person/changeUserInfo',
-		name:'修改乘车人信息',
-		method:'POST',
-		pages: [],
-	},
-	deletuserInfoList:{
-		value:Url+'/api/person/deletuserInfoList',
-		name:'删除乘车人信息',
-		method:'POST',
-		pages: [],
-	},
-	//乘车人信息结束
 	getLoginCode:{
-		value:Url+'/api/person/getLoginCode',
+		value:'https://appdl.xmjdt.cn:18443/api/person/getLoginCode',
 		name:'获取手机验证码',
 		method:'POST',
 		pages: [],
 	},
-	changeInfoPortrait:{
-		value:Url+'/api/person/changeInfoPortrait',
-		name:'只修改头像',
+	changeDuty:{
+		value:Url+'/api/user/changeDuty',
+		name:'修改职责',
 		method:'POST',
 		pages: [],
 	},
-	GetUserInfoByOpenId:{
-		value:Url+'/api/person/GetUserInfoByOpenId',
-		name:'根据openid获取相应的用户信息',
-		method:'POST',
-		pages: [],
-	 },
-	GetVersion:{
-		value:Url+'/api/ShowContent/GetVersion',
-		name:'获取版本号',
-		method:'POST',
-		pages: [],
-	}, 
-	GetOpenId_xcx:{
-		value:Url+'/api/person/GetOpenId_xcx',
-		name:'获取微信小程序的openid',
+	getFeedbackList:{
+		value:Url+'/api/user/getFeedbackList',
+		name:'获取反馈列表',
 		method:'POST',
 		pages: [],
 	},
-	getallMsg:{
-		value:Url+'/api/ky/getallMsg',
-		name:'通知列表',
+	addFeedback:{
+		value:Url+'/api/user/addFeedback',
+		name:'添加反馈',
 		method:'POST',
 		pages: [],
-	},
-	getbymsg:{
-		value:Url+'/api/ky/getbymsg',
-		name:'通知详情',
-		method:'POST',
-		pages: [],
-	},
-	AddEmergencyContact:{
-		value: Url + '/api/person/AddEmergencyContact',
-		name:'添加紧急联系人',
-		method:'POST',//GET-POST
-		pages:[]
-	},
-	// getByTitle:{
-	// 	value: Url + '/api/ky/getByTitle',
-	// 	name:'获取乘车须知',
-	// 	method:'POST',//GET-POST
-	// 	pages:[]
-	// },
-	GetAggrement:{
-		value: Url + '/api/ShowContent/GetAggrement',
-		name:'获取乘车须知',
-		method:'POST',//GET-POST
-		pages:[]
-	},
-	
-	//------------------------------------意见反馈------------------------------------
-	Add_Suggestion:{
-		value: Url + '/api/Suggestion/Add_Suggestion',
-		name:'添加意见反馈',
-		method:'POST',//GET-POST
-		pages:[]
-	},
-	GetMySuggestionList:{
-		value: Url + '/api/Suggestion/GetMySuggestionList',
-		name:'查询意见反馈列表',
-		method:'POST',//GET-POST
-		pages:[]
-	},
-	
-	//------------------------------------我的投诉------------------------------------
-	Add_Complaint:{
-		value: Url + '/api/Complaint/Add_Complaint',
-		name:'添加投诉',
-		method:'POST',//GET-POST
-		pages:[]
-	},
-	
-	GetMyComplaintList:{
-		value: Url + '/api/Complaint/GetMyComplaintList',
-		name:'通过userID获取投诉列表',
-		method:'POST',//GET-POST
-		pages:[]
-	},
-	GetThisComplaint:{
-		value: Url + '/api/Complaint/GetThisComplaint',
-		name:'通过AID获取投诉',
-		method:'POST',//GET-POST
-		pages:[]
-	},
-	GetComplaintbyOrderID:{
-		value: Url + '/api/Complaint/GetComplaintbyOrderID',
-		name:'通过订单号获取投诉列表',
-		method:'POST',//GET-POST
-		pages:[]
 	},
 }
 

@@ -11,7 +11,7 @@ const Interface = {
 		// 小程序/APP
 			Url : 'https://appdl.xmjdt.cn:18443', //南平综合出行
 		// #endif
-		
+		xczx_Url:'http://36.250.234.10:19755',
 	},
 	
 	system:{
