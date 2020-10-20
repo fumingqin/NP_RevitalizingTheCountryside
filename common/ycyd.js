@@ -38,6 +38,21 @@ const KyInterface = {
 		name:'一村一档详情',
 		method:'POST',
 	},
+	
+	//--------------------------------------接口--------------------------------------
+	upload:{
+		Url:'http://120.24.144.6:8080/api/file/upload',
+		name:'上传图片',
+		method:'POST',
+		pages: [],
+	},
+	
+	//--------------------------------------接口--------------------------------------
+	releaseArchives:{
+		Url:Url + '/api/village/releaseArchives',
+		name:'上传内容',
+		method:'POST',
+	},
 }
 
 // 接口声明区

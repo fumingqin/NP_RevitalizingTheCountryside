@@ -17,33 +17,6 @@
 				}
 			}
 		},
-		//-------------------交通在线首页---------------------
-		{
-			"path": "pages/home/h_jtzx_home",
-			"style": {
-				"navigationStyle": "custom",
-				"app-plus": {
-					"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
-					"background": "transparent", // 背景透明
-					"backgroundColor": "rgba(0,0,0,0)", // 背景透明
-					"popGesture": "none" // 关闭IOS屏幕左边滑动关闭当前页面的功能
-				}
-			}
-		},
-		//-------------------南平综合出行首页---------------------
-		{
-			"path": "pages/home/h_np_home",
-			"style": {
-				"navigationStyle": "custom",
-				"app-plus": {
-					"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
-					"background": "transparent", // 背景透明
-					"backgroundColor": "rgba(0,0,0,0)", // 背景透明
-					"popGesture": "none" // 关闭IOS屏幕左边滑动关闭当前页面的功能
-				}
-			}
-		},
-
 		
 		//----------------------------个人中心模块开始----------------------------
 		//--------------------微信授权登录--------------------

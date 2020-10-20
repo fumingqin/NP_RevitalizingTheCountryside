@@ -189,7 +189,7 @@
 			this.getTodayDate();
 			// #ifdef MP-WEIXIN
 			// 校验小程序登录
-			this.getLoginState();
+			// this.getLoginState();
 			//#endif
 		},
 
