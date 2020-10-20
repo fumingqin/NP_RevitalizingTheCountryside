@@ -4,19 +4,24 @@
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
 
 				<!-- 商品名称 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="政策标题" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品名称" :border-bottom="false" prop="name">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入政策标题" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品名称" v-model="model.name" :type="text"></u-input>
 					</view>
 				</u-form-item>
 				<!-- 文件上传 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false" prop="name">
+				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false" prop="name">
+					<l-file ref="lFile" @up-success="onSuccess"></l-file>
 					<view class="viewClass" style="padding-right: 20rpx;">
-							<view class="padding">
-								<button @tap="onUpload">上传</button>
-							</view>
+						<l-file ref="lFile" @up-success="onSuccess"></l-file>
+					<view class="padding text-center">
+						<view class="padding">
+							<button @tap="onUpload">上传</button>
+							<view class="text-center">{{localPath}}</view>
+						</view>
+						</view>
 					</view>
-				</u-form-item>
+				</u-form-item> -->
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
 					<u-upload ref="uUpload" :custom-btn="true" :max-count="maxCount" :multiple="multiple" width="160" height="160"
@@ -28,45 +33,39 @@
 				</u-form-item>
 
 				<!-- 商品来源地 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品来源地" :border-bottom="false" prop="region">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品来源地" :border-bottom="false" prop="region">
 					<view class="viewClass" style="padding-right: 20rpx;">
 						<u-input :custom-style="tradeNameStyle" :border="false" type="select" :select-open="pickerShow" v-model="model.region" placeholder="请选择商品来源地" @click="pickerShow = true"></u-input>
 					</view>
-				</u-form-item> -->
+				</u-form-item>
 
 				<!-- 商品价格 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品价格" :border-bottom="false" prop="cost">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品价格" :border-bottom="false" prop="cost">
 					<view class="viewClass" s1tyle="padding-right: 20rpx;">
 						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品价格" v-model="model.cost" :type="text"></u-input>
 					</view>
-				</u-form-item> -->
+				</u-form-item>
 
 				<!-- 上传视频 -->
-				<view class="burst-wrap">
-				    <view class="burst-wrap-bg">
-				        <view>
-				            <!-- 信息提交 -->
-				            <view class="burst-info">
-				                <view class="uni-uploader-body">
-				                    <view class="uni-uploader__files">
-				                        <!-- 视频 -->
-				                        <view class="uni-uploader__file" v-if="src">
-				                            <view class="uploader_video">
-				                                <view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
-				                                <video :src="src" class="video"></video>
-				                            </view>
-				                        </view>
-				                        <view>
-											<button @tap="chooseVideo">上传</button>
-				                        </view>
-				                    </view>
-				                </view>
-				
-				
-				            </view>
-				        </view>
-				    </view>
-				</view>
+				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+					<u-upload ref="uUpload" :custom-btn="true" :max-count="maxCount" :multiple="multiple" width="160" height="160"
+					 :action="action" v-model="model.src">
+					 <view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
+					 	<view class="uni-uploader__file" v-if="src">
+					 	    <view class="uploader_video">
+					 	        <view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
+					 	        <video :src="src" class="video"></video>
+					 	    </view>
+					 	</view>
+					 	<view>
+					 		<button @tap="chooseVideo">上传</button>
+					 	</view>
+						<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
+					 </view>
+						
+					</u-upload>
+				</u-form-item>
+ -->
 				<!-- 商品简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false" prop="intro">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -155,11 +154,6 @@
 	import tColorPicke from '@/components/t-color-picker.vue';
 	import lFile from '@/components/l-file/l-file.vue'
 	var _self;
-	var sourceType = [
-	        ['camera'],
-	        ['album'],
-	        ['camera', 'album']
-	    ]
 	export default {
 		components: {
 			't-color-picker': tColorPicke,
@@ -168,24 +162,7 @@
 		data() {
 			return {
 				localPath: '',
-                imageList:[],//图片
-                src:"",//视频存放
-                sourceTypeIndex: 2,
-                checkedValue:true,
-                checkedIndex:0,
-                sourceType: ['拍摄', '相册', '拍摄或相册'],
-                cameraList: [{
-                        value: 'back',
-                        name: '后置摄像头',
-                        checked: 'true'
-                    },
-                    {
-                        value: 'front',
-                        name: '前置摄像头'
-                    },
-                ],
-                cameraIndex: 0,
-                VideoOfImagesShow:true,
+				sourceTypeIndex: 2,
 				submissionState: false,
 				color: {
 					r: 255,
@@ -207,6 +184,7 @@
 					cost: '', //价格
 					photo: '', //图片
 					intro: '', //商品简介
+					src:'',
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
@@ -310,7 +288,7 @@
                 // 上传视频
                 console.log('上传视频')
                 uni.chooseVideo({
-                    maxDuration:10,	
+                    maxDuration:10,
                     count: 1,
                     camera: this.cameraList[this.cameraIndex].value,
                     sourceType: sourceType[this.sourceTypeIndex],
@@ -321,38 +299,7 @@
                     }
                 })
             },
-			//-----------------------------------
-			delectVideo(){
-			    uni.showModal({
-			        title:"提示",
-			        content:"是否要删除此视频",
-			        success:(res) =>{
-			            if(res.confirm){
-			                this.src = ''
-			            }
-			        }
-			    })
-			},
-			//--------------------------------------------------
-				onOpenDoc() {
-					let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
-					/* 下载返回临时路径（退出应用失效） */
-					this.$refs.lFile.download(url)
-					.then(path=>{
-						/* 预览 */
-						this.$refs.lFile.open(path);
-					});
-				},
-				
-				/* 保存 */
-				onDown() {
-					let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
-					this.$refs.lFile.download(url,'local')
-					.then(path=>{
-						this.localPath = path;
-					}); 
-				},
-				
+			
 				/* 上传 */
 				onUpload() {
 					this.$refs.lFile.upload({
@@ -375,6 +322,45 @@
 						icon: 'none'
 					})
 				},
+			//-----------上传图片----------------------------------------
+			openCamera() {
+				uni.chooseImage({
+					count: this.imgCount,
+					sizeType: ['compressed'],
+					success: e => {
+						this.imgList = [...this.imgList, ...e.tempFiles];
+					}
+				});
+			},
+			imgInfo(i) {
+				let tempList = [];
+				this.imgList.forEach(img => {
+					tempList.push(img.path);
+				});
+				console.log(tempList);
+				console.log(this.imgList)
+				//显示图片
+				uni.previewImage({
+					current: i,
+					loop: false,
+					urls: tempList,
+					indicator: 'default'
+				});
+			},
+			delImg(i) {
+				uni.showModal({
+					content: '确定删除这张吗',
+					success: res => {
+						if (res.confirm) {
+							this.imgList.splice(i, 1);
+							this.imgCount = 1;
+							console.log(this.imgList)
+						} else if (res.cancel) {
+
+						}
+					}
+				});
+			},
 
 			submitState: function() {
 				var that = this;
@@ -613,17 +599,13 @@
 		background-color: rgb(235, 236, 238);
 	}
 	
-.uni-uploader__file,.uploader_video{
-    position: relative;
-    z-index: 1;
-    width: 200upx;
-    height: 200upx;
-}
-.video{
-    width: 100%;
-    height: 100%;
-}
-.icon-cuo {
+	.uni-uploader__file,.uploader_video{
+	    position: relative;
+	    z-index: 1;
+	    width: 200upx;
+	    height: 200upx;
+	}
+	.icon-cuo {
 	    position: absolute;
 	    right: 0;
 	    top: 5upx;
@@ -633,5 +615,4 @@
 	    border-top-right-radius: 20upx;
 	    border-bottom-left-radius: 20upx;
 	}
-	
 </style>
