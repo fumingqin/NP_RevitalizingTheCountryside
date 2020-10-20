@@ -42,21 +42,31 @@
 				</u-form-item> -->
 
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
-					<u-upload ref="uUpload" :custom-btn="true" :max-count="maxCount" :multiple="multiple" width="160" height="160"
-					 :action="action" v-model="model.src">
-						<view class="uni-uploader__file" v-if="src">
-						    <view class="uploader_video">
-						        <view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
-						        <video :src="src" class="video"></video>
-						    </view>
-						</view>
-						<view>
-							<button @tap="chooseVideo">上传</button>
-						</view>
-					</u-upload>
-				</u-form-item>
-
+				<view class="burst-wrap">
+				    <view class="burst-wrap-bg">
+				        <view>
+				            <!-- 信息提交 -->
+				            <view class="burst-info">
+				                <view class="uni-uploader-body">
+				                    <view class="uni-uploader__files">
+				                        <!-- 视频 -->
+				                        <view class="uni-uploader__file" v-if="src">
+				                            <view class="uploader_video">
+				                                <view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
+				                                <video :src="src" class="video"></video>
+				                            </view>
+				                        </view>
+				                        <view>
+											<button @tap="chooseVideo">上传</button>
+				                        </view>
+				                    </view>
+				                </view>
+				
+				
+				            </view>
+				        </view>
+				    </view>
+				</view>
 				<!-- 商品简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false" prop="intro">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -145,6 +155,11 @@
 	import tColorPicke from '@/components/t-color-picker.vue';
 	import lFile from '@/components/l-file/l-file.vue'
 	var _self;
+	var sourceType = [
+	        ['camera'],
+	        ['album'],
+	        ['camera', 'album']
+	    ]
 	export default {
 		components: {
 			't-color-picker': tColorPicke,
@@ -153,16 +168,24 @@
 		data() {
 			return {
 				localPath: '',
-				tip: `
-					纯粹是看大家对选择文件多端上传需求比较大\n
-					又得不到好的解决\n
-					所以只好自己写了一个不需要集成原生插件的上传顺便分享给大家\n
-					这里只做了“微信端、android、ios”的上传\n
-					h5及其他端自己改改(因为APP使用了plus)\n
-					希望能帮到你\n
-					不喜勿喷，不要期待更新，我很懒\n
-					`,
-				sourceTypeIndex: 2,
+                imageList:[],//图片
+                src:"",//视频存放
+                sourceTypeIndex: 2,
+                checkedValue:true,
+                checkedIndex:0,
+                sourceType: ['拍摄', '相册', '拍摄或相册'],
+                cameraList: [{
+                        value: 'back',
+                        name: '后置摄像头',
+                        checked: 'true'
+                    },
+                    {
+                        value: 'front',
+                        name: '前置摄像头'
+                    },
+                ],
+                cameraIndex: 0,
+                VideoOfImagesShow:true,
 				submissionState: false,
 				color: {
 					r: 255,
@@ -184,7 +207,6 @@
 					cost: '', //价格
 					photo: '', //图片
 					intro: '', //商品简介
-					src:'',
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
@@ -288,7 +310,7 @@
                 // 上传视频
                 console.log('上传视频')
                 uni.chooseVideo({
-                    maxDuration:10,
+                    maxDuration:10,	
                     count: 1,
                     camera: this.cameraList[this.cameraIndex].value,
                     sourceType: sourceType[this.sourceTypeIndex],
@@ -299,7 +321,19 @@
                     }
                 })
             },
-			
+			//-----------------------------------
+			delectVideo(){
+			    uni.showModal({
+			        title:"提示",
+			        content:"是否要删除此视频",
+			        success:(res) =>{
+			            if(res.confirm){
+			                this.src = ''
+			            }
+			        }
+			    })
+			},
+			//--------------------------------------------------
 				onOpenDoc() {
 					let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
 					/* 下载返回临时路径（退出应用失效） */
@@ -341,45 +375,6 @@
 						icon: 'none'
 					})
 				},
-			//-----------上传图片----------------------------------------
-			openCamera() {
-				uni.chooseImage({
-					count: this.imgCount,
-					sizeType: ['compressed'],
-					success: e => {
-						this.imgList = [...this.imgList, ...e.tempFiles];
-					}
-				});
-			},
-			imgInfo(i) {
-				let tempList = [];
-				this.imgList.forEach(img => {
-					tempList.push(img.path);
-				});
-				console.log(tempList);
-				console.log(this.imgList)
-				//显示图片
-				uni.previewImage({
-					current: i,
-					loop: false,
-					urls: tempList,
-					indicator: 'default'
-				});
-			},
-			delImg(i) {
-				uni.showModal({
-					content: '确定删除这张吗',
-					success: res => {
-						if (res.confirm) {
-							this.imgList.splice(i, 1);
-							this.imgCount = 1;
-							console.log(this.imgList)
-						} else if (res.cancel) {
-
-						}
-					}
-				});
-			},
 
 			submitState: function() {
 				var that = this;
@@ -618,13 +613,17 @@
 		background-color: rgb(235, 236, 238);
 	}
 	
-	.uni-uploader__file,.uploader_video{
-	    position: relative;
-	    z-index: 1;
-	    width: 200upx;
-	    height: 200upx;
-	}
-	.icon-cuo {
+.uni-uploader__file,.uploader_video{
+    position: relative;
+    z-index: 1;
+    width: 200upx;
+    height: 200upx;
+}
+.video{
+    width: 100%;
+    height: 100%;
+}
+.icon-cuo {
 	    position: absolute;
 	    right: 0;
 	    top: 5upx;
@@ -634,11 +633,5 @@
 	    border-top-right-radius: 20upx;
 	    border-bottom-left-radius: 20upx;
 	}
-	.padding-sm {
-		padding: 20upx;
-	}
 	
-	.padding {
-		padding: 30upx;
-	}
 </style>
