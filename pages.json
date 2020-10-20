@@ -438,10 +438,28 @@
 				    "style" : {
 						"navigationBarTitleText": "发布政策"
 					}
+				},
+				{
+				    "path" : "pages/ZCFB/policyList",
+				    "style" : {
+						"navigationBarTitleText": "政策列表"
+					}
+				},
+				{
+				    "path" : "pages/ZCFB/policyDetails",
+				    "style" : {
+						"navigationBarTitleText": ""
+					}
+				},
+				{
+				    "path" : "pages/ZCFB/myPolicyList",
+				    "style" : {
+						"navigationBarTitleText": "我的发布"
+					}
 				}
 			]
 		},
-		//---------------------------------------------第5个包：特派员服务------------------------------------------
+		//---------------------------------------------第六个包：特派员服务------------------------------------------
 		{
 			"root": "pages_PYFW/",
 			"pages": [
@@ -461,6 +479,37 @@
                     "style" : {}
                 }
             ]
+		},
+		//---------------------------------------------第七个包：政策发布------------------------------------------
+		{
+			"root": "pages_WSSC/",
+			"pages": [
+				//----------------------------------通用页面----------------------------------
+				{
+				    "path" : "pages/WSSC/issueGoods",
+				    "style" : {
+						"navigationBarTitleText": "发布商品"
+					}
+				},
+				{
+				    "path" : "pages/WSSC/goodsList",
+				    "style" : {
+						"navigationBarTitleText": "商品列表"
+					}
+				},
+				{
+				    "path" : "pages/WSSC/goodsDetails",
+				    "style" : {
+						"navigationBarTitleText": ""
+					}
+				},
+				{
+				    "path" : "pages/WSSC/myGoodsList",
+				    "style" : {
+						"navigationBarTitleText": "我的发布"
+					}
+				}
+			]
 		}
 	],
 	
