@@ -25,6 +25,19 @@ const KyInterface = {
 		method:'POST',
 	},
 	
+	//--------------------------------------接口--------------------------------------
+	getArchivesByUserID:{
+		Url:Url + '/api/village/getArchivesByUserID',
+		name:'一村一档列表接口(个人)',
+		method:'POST',
+	},
+	
+	//--------------------------------------接口--------------------------------------
+	getArchiveDetailByID:{
+		Url:Url + '/api/village/getArchiveDetailByID',
+		name:'一村一档详情',
+		method:'POST',
+	},
 }
 
 // 接口声明区

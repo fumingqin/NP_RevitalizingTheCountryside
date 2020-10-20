@@ -3,8 +3,8 @@
 		<view>
 			<view style="margin-top: 30upx;padding-left: 32upx;">
 				<scroll-view class="to_scroll" scroll-x="true" >
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == true">上架</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == false">下架</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == true">发布中</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == false">未发布</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">删除</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">添加</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">修改</u-button>
@@ -24,7 +24,7 @@
 						<view class="groupCost">
 							<view class="TitleContent">
 								<text class="contentText">{{item.title}}</text>
-								<text class="contentCost">￥{{item.cost}}</text>
+								<!-- <text class="contentCost">￥{{item.cost}}</text> -->
 							</view>
 							<view class="projectContent">{{item.content}}</view>
 							<text class="cost">{{item.updatedTime}}&nbsp;&nbsp;{{item.count}}浏览量</text>
@@ -56,66 +56,7 @@
 					color: '#161616',
 					fontSize:'17px',
 				},
-				groupTitle:[{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:1,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:2,
-					updatedTime:'2020-09-12',
-					colleagueStatus:false
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:3,
-					updatedTime:'2020-09-12',
-					colleagueStatus:false
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:4,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:5,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:6,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				}],
+				groupTitle:[],
 				selectId:'',//去出id
 				selectIndex:0,//下标
 				loadingType: 0, //加载更多状态
@@ -127,19 +68,51 @@
 				scenicListIndex:5,//列表默认数量
 			}
 		},
+		onLoad() {
+			this.userData();
+			this.ycydData();
+		},
+		
 		onReachBottom() {
 			this.getMore();
 		},
 		
 		methods: {
+			//-------------------------------乘客数据读取-------------------------------
+			userData:function() {
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.userInfo = res.data;
+						console.log('获取个人信息',this.userInfo)
+					}
+				});
+			},
+			
 			//--------------------点击列表事件------------------------------
 			selectClick:function(e){
 				//给选择的下标赋值
 				this.selectIndex = e;
 				console.log('上车点下标赋值',this.selectIndex)
 				//取出id
-				this.selectId = this.groupTitle[e].id;
-				console.log('取出id',this.selectId)
+				// this.selectId = this.groupTitle[e].id;
+				// console.log('取出id',this.selectId)
+			},
+			
+			//----------------------列表接口--------------------------------
+			ycydData:function(){
+				uni.request({
+					url:this.$ycyd.KyInterface.getArchivesByUserID.Url,
+					method:this.$ycyd.KyInterface.getArchivesByUserID.method,
+					success:(res) =>{
+						console.log('列表数据',res)
+						this.groupTitle=res.data.data;
+						// console.log('列表数据',this.groupTitle)
+					},
+					fail(res) {
+						// console.log(res)
+					}
+				})
 			},
 			
 			//----------------------加载更多--------------------------------
