@@ -50,7 +50,14 @@ const KyInterface = {
 	//--------------------------------------接口--------------------------------------
 	releaseArchives:{
 		Url:Url + '/api/village/releaseArchives',
-		name:'上传内容',
+		name:'上传浏览量',
+		method:'POST',
+	},
+	
+	//--------------------------------------接口--------------------------------------
+	addViews:{
+		Url:Url + '/api/village/addViews',
+		name:'增加浏览量接口',
 		method:'POST',
 	},
 }

@@ -381,7 +381,9 @@
 				//----------------------------------通用页面----------------------------------
 				{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_list",
-				    "style" : {}
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
 				},
 				{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_edit",
@@ -389,7 +391,9 @@
 				},
 				{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_generalList",
-				    "style" : {}
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
 				}
 				,{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_detailsPage",
