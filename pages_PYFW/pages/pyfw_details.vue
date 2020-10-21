@@ -29,6 +29,16 @@
 			<view style="padding: 0 32rpx;"><text>内容：</text>这是我的家</view>
 		</u-form-item>
 		
+		<!-- 防触底空模块 -->
+		<view style="width: 100%; height: 112upx;"></view>
+		
+		<!-- 功能按钮 -->
+		<view class="operButton">
+			<view class="buttonView1 " hover-class="btn_Click">取消申请</view>
+			<view class="buttonView2 " hover-class="btn_Click">提醒派员</view>
+		</view>
+		
+		
 	</view>
 </template>
 
@@ -66,5 +76,26 @@
 </script>
 
 <style lang="scss">
-
+	.operButton{
+		display: flex; 
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		height: 96upx;
+		text-align: center;
+		.buttonView1{
+			width: 25%; 
+			background: #F5F5F5; 
+			color: #333333;
+			font-size: 26upx; 
+			line-height: 3.5;
+		}
+		.buttonView2{
+			width: 75%; 
+			background: #18B566; 
+			color: #FFFFFF;
+			font-size: 32upx; 
+			line-height: 3;
+		}
+	}
 </style>
