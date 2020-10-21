@@ -25,6 +25,34 @@ const KyInterface = {
 		method:'POST',
 	},
 	
+	//--------------------------------------接口--------------------------------------
+	getArchivesByUserID:{
+		Url:Url + '/api/village/getArchivesByUserID',
+		name:'一村一档列表接口(个人)',
+		method:'POST',
+	},
+	
+	//--------------------------------------接口--------------------------------------
+	getArchiveDetailByID:{
+		Url:Url + '/api/village/getArchiveDetailByID',
+		name:'一村一档详情',
+		method:'POST',
+	},
+	
+	//--------------------------------------接口--------------------------------------
+	upload:{
+		Url:'http://120.24.144.6:8080/api/file/upload',
+		name:'上传图片',
+		method:'POST',
+		pages: [],
+	},
+	
+	//--------------------------------------接口--------------------------------------
+	releaseArchives:{
+		Url:Url + '/api/village/releaseArchives',
+		name:'上传内容',
+		method:'POST',
+	},
 }
 
 // 接口声明区

@@ -7,20 +7,20 @@
 			</view>
 			<view v-for="(item,index) in feedList" :key="index" :class="index==0?'':'bt'" class="mb">
 				<view class="user-talkinfo">
-					<image :src="headImg" class="user-topimage"></image>
+					<image :src="headImg ||'/static/GRZX/missing-face.png'" class="user-topimage"></image>
 					<text class="user-name">{{userName}}</text>
-					<text class="user-time">{{formateTime(item.SuggestionTime)}}</text>
+					<text class="user-time">{{formateTime(item.create_time)}}</text>
 				</view>
 				<view class="talkinfo">
-					{{item.Suggestion}}
+					{{item.content}}
 				</view>
-				<view class="huifu" v-if="item.IsReply">
+				<view class="huifu" v-if="item.reply_content != null">
 					<view class="huifu-view">
-						<text class="huifu-user">{{item.Responder}}:</text>
-						<text class="huifu-info">{{item.ReplyContent}}</text>
+						<text class="huifu-user">客服回复:</text>
+						<text class="huifu-info">{{item.reply_content}}</text>
 					</view>
 					<view class="huifu-time">
-						{{formateTime(item.ReplyTime)}}
+						{{formateTime(item.update_time)}}
 					</view>
 				</view>
 				<!-- <view class="typeInfo">
@@ -64,7 +64,7 @@
 					icon:'none',
 				});
 			}else{
-				this.userName = userInfo.nickname;
+				this.userName = userInfo.userName;
 				this.headImg = userInfo.portrait;
 				this.userId = userInfo.userId;
 			}
@@ -79,10 +79,10 @@
 					title:'加载中...'
 				})
 				uni.request({
-					url: this.$GrzxInter.Interface.GetMySuggestionList.value,
-					method: this.$GrzxInter.Interface.GetMySuggestionList.method,
+					url: this.$GrzxInter.Interface.getFeedbackList.value,
+					method: this.$GrzxInter.Interface.getFeedbackList.method,
 					data: {
-						userID : this.userId,
+						userId : this.userId,
 					},
 					success: res => {
 						console.log(res);
@@ -117,7 +117,7 @@
 }
 </script>
 
-<style>
+<style lang="scss">
 	page {
 		background-color: #F4F6F8;
 	}
@@ -315,6 +315,7 @@
 		width: 90%;
 		margin: 20upx 5%;
 		color: #FFFFFF;
+		font-size: 36upx;
 	}
 	.noneData{
 		color: #5a5a5b;

@@ -45,7 +45,7 @@
 			}
 		},
 		onLoad(options) {
-			this.loadImg();//加载图片
+			//this.loadImg();//加载图片
 			this.urlData = options.urlData;//用来判断进入该页面的地址
 			this.load();//加载页面高度
 			
@@ -168,35 +168,15 @@
 								url: that.$GrzxInter.Interface.login.value,
 								data: {
 									phoneNumber: phone,
-									systemname:that.$GrzxInter.systemConfig.appName,//应用名称
-									openidtype:that.$GrzxInter.systemConfig.openidtype,//应用类型
 								},
 								method: that.$GrzxInter.Interface.login.method,
 								success(res) {
 									console.log(res)
 									let data = res.data.data;
-									var user = new Object();
-									user = {
-										address : data.Address,
-										autograph : data.Autograph,
-										birthday : data.Birthday,
-										gender : data.Gender,
-										openId_app : data.OpenId_app,
-										openId_ios : data.OpenId_ios,
-										openId_qq : data.OpenId_qq,
-										openId_wx : data.OpenId_wx,
-										openId_xcx : data.OpenId_xcx,
-										phoneNumber : data.PhoneNumber,
-										portrait : data.Portrait,
-										userId : data.UserId,
-										nickname : data.Nickname,
-									};
-									uni.setStorageSync('userInfo', user);
+									uni.setStorageSync('userInfo', data);
 									uni.removeStorageSync('captchaCode');
-									//that.LoginLog(res.data.data.userId, res.data.data.phoneNumber);
 									uni.hideLoading();
 									that.successReturn(); //登陆成功后返回
-									//that.registerBike(res.data.data.userId, res.data.data.phoneNumber) //注册自行车用户
 								}
 							})
 						} else {
@@ -232,73 +212,6 @@
 						uni.navigateBack(); //返回上一页
 					}
 				},500);
-			},
-
-			//-------------------------------------用户注册自行车----------------------------------
-			registerBike: function(id, phone) {
-				var that = this;
-				console.log(id);
-				uni.request({
-					url: that.$GrzxInter.Interface.RegistUser.value,
-					method: that.$GrzxInter.Interface.RegistUser.method,
-					data: {
-						userID: id,
-						phone: phone,
-					},
-					success(res) {
-						console.log(res)
-						that.checkRealName(res.data.data.UserID);
-					},
-					fail() {
-
-					}
-				})
-			},
-
-			//-------------------------------------检查是否实名----------------------------------
-			checkRealName: function(id) {
-				console.log(id, 'checkRealName')
-				var that = this;
-				uni.request({
-					url: that.$GrzxInter.Interface.GetUserByUserID.value,
-					data: {
-						userID: id,
-					},
-					method: that.$GrzxInter.Interface.GetUserByUserID.method,
-					success(res) {
-						console.log(res)
-						uni.hideLoading();
-						if (res.data.data == "" || res.data.data.UserName == "" || res.data.data.UserIDNumber == "") {
-							//实名认证
-							uni.redirectTo({
-								url: that.$GrzxInter.Route.realName.url,
-							})
-						} else if (res.data.data.RealNameStatus !== 1) {
-							//上传图片
-							uni.redirectTo({
-								url: that.$GrzxInter.Route.uploadPhoto.url,
-							})
-						} else {
-							uni.setStorageSync('RealNameInfo', res.data.data)
-							uni.showToast({
-								title: "登录成功!",
-								icon: "none"
-							})
-							if (that.urlData == 1) {
-								uni.switchTab({ //返回首页
-									url: '/pages/Home/zy_zhcx',
-								})
-							} else if (that.urlData == 2) {
-								uni.switchTab({ //返回订单页
-									url: '/pages/order/OrderList',
-								})
-							} else {
-								console.log("返回上一页")
-								uni.navigateBack(); //返回上一页
-							}
-						}
-					}
-				})
 			},
 
 			//-------------------------------------微信授权登录----------------------------------

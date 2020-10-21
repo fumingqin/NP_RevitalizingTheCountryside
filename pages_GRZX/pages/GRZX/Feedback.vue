@@ -16,7 +16,7 @@
 			</view>
 			<!-- 字数 -->
 			<view class="top-view-bottomtext">
-				{{textmarn}}/500字
+				{{textmarn}}/300字
 			</view>
 		</view>
 		<!-- 下边view -->
@@ -132,10 +132,7 @@ export default {
 		addImage: function(e){
 			console.log(e)
 			for(var i=0;i<e.allImages.length;i++){
-				pathToBase64(e.allImages[i])
-				.then(base64 => {
-					this.pictureArray.push(base64);
-				})
+				this.pictureArray.push(e.allImages[i]);
 			}
 		},
 		Inputtext:function(e){ //字数
@@ -183,40 +180,78 @@ export default {
 					title:'请填写意见，谢谢'
 				})
 			}else{
-				uni.request({
-					url: this.$GrzxInter.Interface.Add_Suggestion.value,
-					method: this.$GrzxInter.Interface.Add_Suggestion.method,
-					data: {
-						userID : this.userInfo.userId,		//用户id
-						SuggestionPicture : this.pictureArray,		//反馈图片
-						Suggestion : this.ideaContent,		//反馈内容
-						Phone : this.userInfo.phoneNumber,	//用户手机号
-						SystemType : this.systemType,		//系统类型
-						SuggestionType:'',					//反馈类型
-						AppType : this.$GrzxInter.systemConfig.openidtype,	//应用类型
-						ProjectCode : this.$GrzxInter.systemConfig.applyName,		//项目名称
-					},
-					success: res => {
-						console.log(res,"反馈");
-						uni.showToast({
-							title: res.data.msg,
-							icon:'none'
-						});
-						if(res.data.status){
-							setTimeout(function(){
-								uni.navigateBack();
-							},500)
-						}
-					},
-					fail: () => {
-						uni.showToast({
-							title: '网络连接失败',
-							icon:'none'
-						});
-					},
-				});
+				uni.showLoading({
+					title:'提交中...',
+					mask:true,
+				})
+				this.success();
 			}
-		}
+		},
+		
+		success(){
+			var pathList = [];
+			if(this.pictureArray.length > 0){
+				for(var i = 0;i < this.pictureArray.length;i++){
+					uni.uploadFile({
+						url: this.$GrzxInter.Interface.upload.value, 
+						filePath: this.pictureArray[i],
+						name: 'file',
+						success: (res) => {
+							let data = JSON.parse(res.data);
+							if(data.code == 200){
+								pathList.push(data.data);
+								if(this.pictureArray.length == pathList.length){
+									console.log(214);
+									this.request(JSON.stringify(pathList));
+								}
+							}else{
+								uni.showToast({
+									title: '上传失败',
+									icon:'none'
+								});
+							}
+						}
+					});
+				}
+			}else{
+				this.request(JSON.stringify(pathList));
+			}
+		},
+		
+		//---------------------------------请求接口---------------------------------
+		request(e){
+			uni.request({
+				url: this.$GrzxInter.Interface.addFeedback.value,
+				method: this.$GrzxInter.Interface.addFeedback.method,
+				data: {
+					userId : this.userInfo.userId,
+					content : this.ideaContent,
+					image : e,
+				},
+				success: res => {
+					console.log(res,"请求完接口");
+					if(res.data.status){
+						uni.showToast({
+							title:'反馈成功',
+						})
+						setTimeout(function(){
+							uni.navigateBack();
+						},1000)
+					}
+				},
+				fail: () => {
+					uni.showToast({
+						title:'反馈失败',
+						icon:'none',
+					})
+				},
+				complete: () => {
+					setTimeout(function(){
+						uni.hideLoading();
+					},800)
+				}
+			});
+		},
 	},
 }
 </script>

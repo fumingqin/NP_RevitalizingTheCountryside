@@ -128,8 +128,21 @@
 				}]
 			}
 		},
+		onLoad() {
+			this.userData();
+		},
+		
 		methods: {
-			
+			//-------------------------------乘客数据读取-------------------------------
+			userData:function() {
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.userInfo = res.data;
+						console.log('获取个人信息',this.userInfo)
+					}
+				});
+			},
 		}
 	}
 </script>

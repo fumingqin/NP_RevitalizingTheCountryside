@@ -13,7 +13,7 @@ const Interface = {
 			Url : 'https://appdl.xmjdt.cn:18443', //南平综合出行
 			// Url : 'https://36.250.234.10:19755', //乡村振兴
 		// #endif
-		
+		xczx_Url:'http://36.250.234.10:19755',
 	},
 	
 	system:{

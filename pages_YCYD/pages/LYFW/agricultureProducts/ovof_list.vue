@@ -3,8 +3,8 @@
 		<view>
 			<view style="margin-top: 30upx;padding-left: 32upx;">
 				<scroll-view class="to_scroll" scroll-x="true" >
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == true">上架</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == false">下架</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == true">发布中</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == false">未发布</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">删除</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">添加</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">修改</u-button>
@@ -13,30 +13,35 @@
 		</view>
 		
 		<!-- 内容1 -->
-		<view>
-			<view class="content">
-				<view class="groupTour" :class="{'select':selectIndex == index}" @tap="selectClick(index)" v-for="(item,index) in groupTitle" :key="index" v-if="index < scenicListIndex">
-					<view class="groupContent">
-						<image class="contentImage" :src="item.imgUrl" mode="aspectFill"></image>
-					</view>
-					<view class="groupText">
-						<!-- <text class="contentLabel">{{item2.contentLabelS1}} | {{item2.contentLabelS2}} | {{item2.contentLabelS3}}</text> -->
-						<view class="groupCost">
-							<view class="TitleContent">
-								<text class="contentText">{{item.title}}</text>
-								<text class="contentCost">￥{{item.cost}}</text>
-							</view>
-							<view class="projectContent">{{item.content}}</view>
-							<text class="cost">{{item.updatedTime}}&nbsp;&nbsp;{{item.count}}浏览量</text>
-							<text class="sellComment" style="color: #5AD234;" v-if="item.colleagueStatus==true">发布中</text>
-							<text class="sellComment" style="color: #ff0000;" v-if="item.colleagueStatus==false">未发布</text>
+		<view class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
+			<view class="view_titleView">
+				<view class="tv_view">
+					<view style="display: flex;">
+						<view style="margin-top: 10upx;">
+							<text class="tv_label">{{item.article_type}}</text>
 						</view>
+						<view class="tv_title">{{item.title}}</view>
+					</view>
+					<!-- <text class="tv_richText">{{item.content}}</text> -->
+					<view class="tv_view2">
+						<rich-text class="tv_richText" :nodes="item.content"></rich-text>
 					</view>
 				</view>
-				<view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;">
-					<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
-				</view>
+				<image class="tv_image" :src="item.image" mode="aspectFill"></image>
 			</view>
+			
+			<view class="view_contentView">
+				<text>{{item.nick_name}}</text>
+				<text class="cont_text">{{item.count}}人看过</text>
+				<text class="cont_text">{{informationDate(item.update_time)}}</text>
+				<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
+			</view>
+			<u-gap height="4" bg-color="#f9f9f9"></u-gap>
+		</view>
+		
+		<!-- 缺省提示 -->
+		<view style="margin-top: 360upx;" :hidden="listStatusIndex !==0">
+			<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
 		</view>
 	</view>
 </template>
@@ -56,66 +61,7 @@
 					color: '#161616',
 					fontSize:'17px',
 				},
-				groupTitle:[{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:1,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:2,
-					updatedTime:'2020-09-12',
-					colleagueStatus:false
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:3,
-					updatedTime:'2020-09-12',
-					colleagueStatus:false
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:4,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:5,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../../static/LYFW/oneVillageOneFile/cun.png',
-					title:'农田基础建设项目',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:6,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				}],
+				groupTitle:[],
 				selectId:'',//去出id
 				selectIndex:0,//下标
 				loadingType: 0, //加载更多状态
@@ -125,21 +71,65 @@
 					nomore : '没有更多了',
 				},
 				scenicListIndex:5,//列表默认数量
+				userInfo:[],
 			}
 		},
+		onLoad() {
+			this.userData();
+		},
+		
 		onReachBottom() {
 			this.getMore();
 		},
 		
 		methods: {
+			//-------------------------------乘客数据读取-------------------------------
+			userData:function() {
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.userInfo = res.data;
+						console.log('获取个人信息',this.userInfo)
+						this.ycydData(this.userInfo);
+					}
+				});
+			},
+			
 			//--------------------点击列表事件------------------------------
 			selectClick:function(e){
 				//给选择的下标赋值
 				this.selectIndex = e;
 				console.log('上车点下标赋值',this.selectIndex)
 				//取出id
-				this.selectId = this.groupTitle[e].id;
-				console.log('取出id',this.selectId)
+				// this.selectId = this.groupTitle[e].id;
+				// console.log('取出id',this.selectId)
+			},
+			
+			//--------------------资讯时间-------------------------------
+			informationDate:function(e){
+				console.log(e)
+				// var tsetDate = e.replace('T',' ')
+				var a = e.substr(0,10)
+				return a;
+			},
+			
+			//----------------------列表接口--------------------------------
+			ycydData:function(e){
+				uni.request({
+					url:this.$ycyd.KyInterface.getArchivesByUserID.Url,
+					method:this.$ycyd.KyInterface.getArchivesByUserID.method,
+					data:{
+						userId:e.userId
+					},
+					success:(res) =>{
+						console.log('列表数据',res)
+						this.groupTitle=res.data.data;
+						// console.log('列表数据',this.groupTitle)
+					},
+					fail(res) {
+						// console.log(res)
+					}
+				})
 			},
 			
 			//----------------------加载更多--------------------------------
@@ -173,106 +163,82 @@
 		
 	}
 	
-	//内容1
-	.content {
-		margin: 30upx 32upx 0 32upx;
-	
-		.groupTour {
+	//资讯列表样式
+	.infor_view{
+		padding: 0 32upx; 
+		margin-top: 32upx;
+		.view_titleView{
 			display: flex;
-			background-color: #FFFFFF;
-			padding-top: 26upx;
-			padding-bottom: 26upx;
-			padding-left: 30upx;
-			padding-right: 30upx;
-			margin-bottom: 20upx;
-			border-radius: 20upx;
-	
-			.groupContent {
-	
+			.tv_view{
 				// display: flex;
-				.contentImage {
-					width: 190upx;
-					height: 100%;
-					border-radius: 12upx;
+				// padding-right: 32upx; 
+				// width: 468upx; 
+				
+				.tv_label{
+					font-size: 24upx; 
+					background: #007AFF; 
+					color: #FFFFFF; 
+					padding: 4upx 8upx; 
+					border-radius: 4upx;
 				}
-			}
-	
-			.groupText {
-				margin-left: 25upx;
+				.tv_title{
+					position: relative;
+					font-weight: bold; 
+					font-size: 34upx; 
+					margin-left: 12upx; 
+					line-height: 1.7;
+					width: 320upx;
+					white-space: nowrap;
+					overflow: hidden;
+				}
 				
-				
-				.contentLabel {
+				.tv_view2{
 					display: block;
-					font-size: 28upx;
-					color: #aba9aa;
-					margin-top: 24upx;
-				}
-	
-				.groupCost {
+					padding-top: 10upx;
 					position: relative;
 					
-					.TitleContent{
-						display: flex;
-						margin-bottom: 22upx;
-						
-						.contentText {
-							font-size: 32upx;
-							font-weight: bold;
-							font-family: Source Han Sans SC;
-							overflow: hidden; //超出溢出
-							-webkit-line-clamp: 1; //限制2行
-							text-overflow: ellipsis;
-							display: -webkit-box;
-							-webkit-box-orient: vertical;
-							text-align: justify;
-						}
-						
-						.contentCost{
-							position: absolute;
-							// font-weight: bold;
-							right: 0;
-							font-size: 30upx;
-							color: #FF5555;
-						}
-					}
-					
-					.cost {
-						display: block;
-						font-size: 28upx;
-						color: #aba9aa;
-						padding-top: 14upx;
-					}
-					
-					.projectContent {
-						font-size: 28upx;
-						color: #aba9aa;
-						text-overflow: ellipsis; //文章超出宽度隐藏并用...表示
-						white-space: nowrap;
+					.tv_richText{
+						padding-right: 16upx;
+						width: 454upx;
+						// font-weight: bold;
+						font-size: 30upx; 
+						line-height: 1.7;
+						height: 100upx;
+						text-overflow: -o-ellipsis-lastline;
 						overflow: hidden;
-						width: 420upx;
-					}
-					
-					.sellComment {
-						position: absolute;
-						font-size: 28upx;
-						right: 0;
-						bottom: 0;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;
 					}
 				}
 			}
+			
+			
+			.tv_image{
+				width: 220upx; 
+				height: 160upx; 
+				border-radius: 8upx;
+			}
 		}
-		
-		.select{
-			display: flex;
-			background-color: #FFFFFF;
-			padding-top: 40upx;
-			padding-bottom: 40upx;
-			padding-left: 30upx;
-			padding-right: 30upx;
-			margin-bottom: 20upx;
-			border-radius: 20upx;
-			border: #5AD234 solid 2rpx;
+		.view_contentView{
+			font-size: 24upx; 
+			color: #AAAAAA; 
+			padding: 19upx 0; 
+			.cont_text{
+				margin-left: 20upx;
+			}
+			.cont_icon{
+				float: right; 
+				padding: 12upx 0;
+				margin-right: 16upx;
+			}
 		}
 	}
 	
+	.select{
+		padding: 0 32upx;
+		margin-left: 18upx;
+		border-left: #007AFF solid 6rpx;
+	}
 </style>
