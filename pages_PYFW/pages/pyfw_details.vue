@@ -19,12 +19,14 @@
 			<view style="padding: 0 32rpx;"><text>擅长内容：</text>这是我的家</view>
 		</u-form-item>
 		
-		<!-- 特派员信息 -->
+		<!-- 执行结果 -->
 		<u-form-item :label-style="customStyle" :label-position="labelPosition" label="执行结果" :border-bottom="false" prop="name">
-			<view style="padding: 0 32rpx;"><text>姓名：</text>这是我的家</view>
-			<view style="padding: 0 32rpx;"><text>电话：</text>这是我的家</view>
-			<view style="padding: 0 32rpx;"><text>技术类型：</text>这是我的家</view>
-			<view style="padding: 0 32rpx;"><text>擅长内容：</text>这是我的家</view>
+			<view style="padding: 0 32rpx;"><text>内容：</text>这是我的家</view>
+		</u-form-item>
+		
+		<!-- 失败原因 -->
+		<u-form-item :label-style="customStyle" :label-position="labelPosition" label="失败原因" :border-bottom="false" prop="name">
+			<view style="padding: 0 32rpx;"><text>内容：</text>这是我的家</view>
 		</u-form-item>
 		
 	</view>

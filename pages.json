@@ -516,6 +516,10 @@
 				"text": "通知"
 			},
 			{
+				"pagePath": "pages/home/serve",
+				"text": "服务"
+			},
+			{
 				"pagePath": "pages/order/newOrderList",
 				"text": "订单"
 			},
