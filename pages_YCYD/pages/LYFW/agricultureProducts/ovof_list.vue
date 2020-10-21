@@ -1,17 +1,5 @@
 <template>
 	<view>
-		<view>
-			<view style="margin-top: 30upx;padding-left: 32upx;">
-				<scroll-view class="to_scroll" scroll-x="true" >
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == true">发布中</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].colleagueStatus == false">未发布</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">删除</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">添加</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">修改</u-button>
-				</scroll-view>
-			</view>
-		</view>
-		
 		<!-- 内容1 -->
 		<view class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
 			<view class="view_titleView">
@@ -37,6 +25,21 @@
 				<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
 			</view>
 			<u-gap height="4" bg-color="#f9f9f9"></u-gap>
+			<!-- <view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;">
+				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
+			</view> -->
+		</view>
+		
+		<view>
+			<view class="to_view">
+				<scroll-view class="to_scroll" scroll-x="true">
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">删除</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">添加</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">修改</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='未上架'">发布</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'">不发布</u-button>
+				</scroll-view>
+			</view>
 		</view>
 		
 		<!-- 缺省提示 -->
@@ -75,11 +78,21 @@
 			}
 		},
 		onLoad() {
+			uni.showLoading({
+				title: '加载列表中...',
+			})
+			this.userData();
+		},
+		
+		onPullDownRefresh: function() {
+			uni.showLoading({
+				title: '加载列表中...',
+			})
 			this.userData();
 		},
 		
 		onReachBottom() {
-			this.getMore();
+			// this.getMore();
 		},
 		
 		methods: {
@@ -115,6 +128,9 @@
 			
 			//----------------------列表接口--------------------------------
 			ycydData:function(e){
+				uni.showLoading({
+					title: '加载列表中...',
+				})
 				uni.request({
 					url:this.$ycyd.KyInterface.getArchivesByUserID.Url,
 					method:this.$ycyd.KyInterface.getArchivesByUserID.method,
@@ -123,10 +139,26 @@
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
-						this.groupTitle=res.data.data;
-						// console.log('列表数据',this.groupTitle)
+						if(res.data.status == true){
+							this.groupTitle=res.data.data;
+							// console.log('列表数据',this.groupTitle)
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+						}else{
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+							uni.showToast({
+								title: '暂无列表信息',
+								icon: 'none'
+							})
+						}
 					},
 					fail(res) {
+						uni.hideLoading();
+						uni.showToast({
+							title: '服务器异常',
+							icon: 'none'
+						})
 						// console.log(res)
 					}
 				})
@@ -155,12 +187,19 @@
 		background-color: #f6f6f6;
 	}
 	
+	.to_view{
+		margin-top: 30upx;
+		padding-left: 32upx;
+		bottom:40upx;
+		position:fixed;
+		overflow:scroll;
+		width: 100%;
+	}
+	
 	.to_scroll {
 		display: flex;
 		white-space: nowrap;
 		width: 100%;
-		
-		
 	}
 	
 	//资讯列表样式
