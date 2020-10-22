@@ -1,6 +1,7 @@
 <template>
 	<view>
-		<view class="content">
+		<view>
+			<view class="content">
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
 
 				<!-- 乡村名 -->
@@ -40,9 +41,13 @@
 					</view>
 				</u-form-item>
 			</u-form>
-			<u-button type="success" :custom-style="buttonStyle" @click="submit">申请派员</u-button>
-			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
+			</view>
+			<!-- 提交申请 -->
+			<view class="operButton">
+				<text class="buttonView2" @click="submit">提交申请</text>
+			</view>
 		</view>
+		<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 	</view>
 </template>
 
@@ -193,5 +198,22 @@
 	//自定义上传按钮颜色
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
+	}
+	
+	//派员编号
+	.operButton{
+		display: flex; 
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		height: 96upx;
+		text-align: center;
+		.buttonView2{
+			width: 100%; 
+			background: #18B566; 
+			color: #FFFFFF;
+			font-size: 32upx; 
+			line-height: 3;
+		}
 	}
 </style>

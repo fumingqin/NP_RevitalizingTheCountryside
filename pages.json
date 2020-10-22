@@ -381,7 +381,9 @@
 				//----------------------------------通用页面----------------------------------
 				{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_list",
-				    "style" : {}
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
 				},
 				{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_edit",
@@ -389,7 +391,9 @@
 				},
 				{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_generalList",
-				    "style" : {}
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
 				}
 				,{
 				    "path" : "pages/LYFW/agricultureProducts/ovof_detailsPage",
@@ -451,6 +455,14 @@
                     "path" : "pages/pyfw_details",
                     "style" : {}
                 }
+                ,{
+                    "path" : "pages/pyfw_py_list",
+                    "style" : {}
+                }
+                ,{
+                    "path" : "pages/pyfw_py_details",
+                    "style" : {}
+                }
             ]
 		},
 		//---------------------------------------------第七个包：政策发布------------------------------------------
@@ -497,7 +509,7 @@
 	},
 	"tabBar": {
 		"color": "#333333",
-		"selectedColor": "#ff9012",
+		"selectedColor": "#63C33A",
 		"backgroundColor": "#FFFFFF",
 		"borderStyle": "black",
 		//#ifdef APP-PLUS
@@ -510,6 +522,10 @@
 			{
 				"pagePath": "pages/GRZX/notice",
 				"text": "通知"
+			},
+			{
+				"pagePath": "pages/home/serve",
+				"text": "服务"
 			},
 			{
 				"pagePath": "pages/order/newOrderList",

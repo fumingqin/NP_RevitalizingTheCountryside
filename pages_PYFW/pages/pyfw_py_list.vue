@@ -9,8 +9,9 @@
 				<text class="tv_view">
 					<!-- <text class="tv_label">{{labelVariety(item.Type)}}</text> -->
 					<!-- <text class="tv_title">{{item.Title}}</text> -->
-					<text class="tv_label">申请中</text>
+					<text class="tv_label">待执行</text>
 					<text class="tv_title">科技特派员服务</text>
+					<text class="tv_content"><text style="font-weight: bold;">申请乡村：</text>东店村</text>
 					<text class="tv_content"><text style="font-weight: bold;">技术类型：</text>软件维护</text>
 					<text class="tv_content" selectable=""><text style="font-weight: bold;">技术问题：</text>软件故障了，软件故障了软件故障了软件故障了，软件故障了软件故障了软件故障了</text>
 				</text>
@@ -26,12 +27,15 @@
 		
 		<!-- 缺省提示 -->
 		<view style="margin-top: 360upx;" :hidden="listStatusIndex !==0">
-			<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
+			<u-empty text="暂时没有任务哦~" mode="news"></u-empty>
 		</view>
+		
+		<!-- 防触底空模块 -->
+		<view style="width: 100%; height: 112upx;"></view>
 		
 		<!-- 派员编号 -->
 		<view class="operButton">
-			<text class="buttonView2" @click="operClick">申请特派员</text>
+			<text class="buttonView2">您的派员编号为：X5427</text>
 		</view>
 		
 	</view>
@@ -44,9 +48,7 @@
 				headList : [{
 					name : '全部'
 				},{
-					name : '申请中' 
-				},{
-					name : '派员中'
+					name : '待执行' 
 				},{
 					name : '已结束'
 				}],//头部数组
@@ -91,7 +93,7 @@
 			
 			detailsClick:function(e){
 				uni.navigateTo({
-					url:'infor_details?AID=' +e
+					url:'pyfw_py_details?AID=' +e
 				})
 			},
 			
@@ -120,13 +122,6 @@
 			headChange:function(e){
 				this.headCurrent = e;
 				this.loadData(e);
-			},
-			
-			//申请特派员
-			operClick:function(){
-				uni.navigateTo({
-					url:'pyfw_edit'
-				})
 			}
 		}
 	}
@@ -199,5 +194,4 @@
 			line-height: 3;
 		}
 	}
-	
 </style>

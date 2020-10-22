@@ -96,6 +96,23 @@
 						ItemTitle: "检测预约",
 						style:"sv_print",
 					},
+					{
+						IsUse: true,
+						clickURL: "../../pages_PYFW/pages/pyfw_personalList",
+						ImageURL1: "../../static/home/serve/jcyuyue.png",//亮
+						ImageURL2: "../../static/home/serve/hjcyuyue.png",//暗
+						ItemTitle: "派员申请",
+						style:"sv_print",
+					},
+					{
+						IsUse: true,
+						clickURL: "../../pages_PYFW/pages/pyfw_py_list",
+						ImageURL1: "../../static/home/serve/jcyuyue.png",//亮
+						ImageURL2: "../../static/home/serve/hjcyuyue.png",//暗
+						ItemTitle: "派员任务",
+						style:"sv_print",
+					},
+					
 				],
 				ItemArr2: [{
 						IsUse: false,
