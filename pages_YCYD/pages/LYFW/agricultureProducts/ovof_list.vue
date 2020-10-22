@@ -22,7 +22,9 @@
 				<text>{{item.nick_name}}</text>
 				<text class="cont_text">{{item.count}}人看过</text>
 				<text class="cont_text">{{informationDate(item.update_time)}}</text>
-				<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
+				<text class="cont_icon" style="color: #007AFF;" v-if="item.state=='已上架'">发布中</text>
+				<text class="cont_icon" style="color: #FC4646;" v-if="item.state=='已下架'">未发布</text>
+				<!-- <u-icon class="cont_icon" name="more-dot-fill"></u-icon> -->
 			</view>
 			<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 			<!-- <view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;">
@@ -33,11 +35,12 @@
 		<view>
 			<view class="to_view">
 				<scroll-view class="to_scroll" scroll-x="true">
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">删除</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">添加</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle">修改</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='未上架'">发布</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'">不发布</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump2">添加</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete">删除</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已下架'" @click="onTheShelf(groupTitle[selectIndex].id)">发布</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'" @click="offTheShelf(groupTitle[selectIndex].id)">下架</u-button>
 				</scroll-view>
 			</view>
 		</view>
@@ -61,8 +64,10 @@
 					marginRight: '16px',
 					background: '#FFFFFF',
 					borderRadius: '10px',
-					color: '#161616',
+					color: '#007AFF',
 					fontSize:'17px',
+					border:'#007AFF solid 1rpx',
+					
 				},
 				groupTitle:[],
 				selectId:'',//去出id
@@ -75,9 +80,11 @@
 				},
 				scenicListIndex:5,//列表默认数量
 				userInfo:[],
+				state:'修改',
 			}
 		},
-		onLoad() {
+		
+		onShow() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
@@ -177,6 +184,190 @@
 					this.loadingType = 2;
 				}
 			},
+			
+			//--------------------------路由跳转------------------------------
+			routeJump:function(e){
+				uni.navigateTo({
+					url:'ovof_detailsPage?id=' +e,
+				})
+			},
+			
+			//--------------------------路由跳转(添加列表文章)------------------------------
+			routeJump2:function(e){
+				uni.navigateTo({
+					url:'./ovof_edit?id=' +e,
+				})
+			},
+			
+			//--------------------------路由跳转(修改列表文章)------------------------------
+			modifyJump:function(item){
+				uni.setStorage({
+					key: 'informationData',
+					data: item,
+					success:()=> {
+						uni.navigateTo({
+							url: './ovof_edit?jumpStatus=' +this.state
+						})
+					},
+					fail() {
+						// console.log('123');
+					}
+				});
+			},
+			
+			//-----------------------上架------------------------------------
+			onTheShelf: function(e) {
+				uni.showModal({
+					title: '你确认发布文章？',
+					success: (res) => {
+						console.log(res)
+						if (res.confirm == true) {
+							uni.showLoading({
+								title: '正在发布....'
+							})
+							uni.request({
+								url: this.$ycyd.KyInterface.upAndDownArchives.Url,
+								method: this.$ycyd.KyInterface.upAndDownArchives.method,
+								data: {
+									id: e
+								},
+								success: (res) => {
+									console.log(res)
+									if (res.data.status == true) {
+										uni.hideLoading()
+										uni.showToast({
+											title: '发布成功',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									} else {
+										uni.hideLoading()
+										uni.showToast({
+											title: '发布失败',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									}
+			
+								},
+								fail: () => {
+									uni.hideLoading()
+									uni.showToast({
+										title: '服务器异常，请重试',
+										icon: 'success'
+									})
+									uni.startPullDownRefresh();
+								}
+							})
+						} else {
+			
+						}
+					}
+				})
+			},
+			
+			//-----------------------下架------------------------------------
+			offTheShelf: function(e) {
+				uni.showModal({
+					title: '你确认下架文章？',
+					success: (res) => {
+						console.log(res)
+						if (res.confirm == true) {
+							uni.showLoading({
+								title: '正在下架....'
+							})
+							uni.request({
+								url: this.$ycyd.KyInterface.upAndDownArchives.Url,
+								method: this.$ycyd.KyInterface.upAndDownArchives.method,
+								data: {
+									id: e
+								},
+								success: (res) => {
+									console.log(res)
+									if (res.data.status == true) {
+										uni.hideLoading()
+										uni.showToast({
+											title: '下架成功',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									} else {
+										uni.hideLoading()
+										uni.showToast({
+											title: '下架失败',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									}
+			
+								},
+								fail: () => {
+									uni.hideLoading()
+									uni.showToast({
+										title: '服务器异常，请重试',
+										icon: 'success'
+									})
+									uni.startPullDownRefresh();
+								}
+							})
+						} else {
+			
+						}
+					}
+				})
+			},
+			
+			//-----------------------删除------------------------------------
+			Delete: function(e) {
+				uni.showModal({
+					title: '你确认删除文章？',
+					success: (res) => {
+						console.log(res)
+						if (res.confirm == true) {
+							uni.showLoading({
+								title: '正在删除....'
+							})
+							uni.request({
+								url: this.$ycyd.KyInterface.updateArchives.Url,
+								method: this.$ycyd.KyInterface.updateArchives.method,
+								data: {
+									id: e,
+									userId:this.userInfo.userId
+								},
+								success: (res) => {
+									console.log(res)
+									if (res.data.status == true) {
+										uni.hideLoading()
+										uni.showToast({
+											title: '删除成功',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									} else {
+										uni.hideLoading()
+										uni.showToast({
+											title: '删除失败',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									}
+			
+								},
+								fail: () => {
+									uni.hideLoading()
+									uni.showToast({
+										title: '服务器异常，请重试',
+										icon: 'success'
+									})
+									uni.startPullDownRefresh();
+								}
+							})
+						} else {
+			
+						}
+					}
+				})
+			},
 		}
 	}
 </script>
@@ -184,7 +375,7 @@
 <style lang="scss">
 	//默认背景颜色
 	page {
-		background-color: #f6f6f6;
+		background-color: #FFFFFF;
 	}
 	
 	.to_view{
@@ -269,8 +460,6 @@
 			}
 			.cont_icon{
 				float: right; 
-				padding: 12upx 0;
-				margin-right: 16upx;
 			}
 		}
 	}

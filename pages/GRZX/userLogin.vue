@@ -18,7 +18,6 @@
 			<!-- 按钮颜色和发送验证码的样式 -->
 			<view class="getCode style1" @click="getCodeClick" id="Code">{{textCode}}</view>
 			<text class="fontStyle" @click="loginClick">确定</text>
-			<!-- <text class="fontStyle" @click="checkRealName('1000067')">确定</text> -->
 		</view>
 
 		<!-- logo -->
@@ -35,8 +34,8 @@
 				captchaCode: '', //验证码
 				imgHeight: '', //背景图高度
 				urlData: '', //用来判断进入该页面的地址
-				background: '', //背景图路径
-				logo: '', //logo路径
+				background: '../../static/GRZX/back.png', //背景图路径
+				logo: '../../static/GRZX/logo.png', //logo路径
 
 				state: true, //是否允许点击
 				system: '', 	// 系统版本
@@ -203,14 +202,14 @@
 					icon: "success"
 				})
 				setTimeout(function(){
-					if (that.urlData == 1) {
-						that.$GrzxInter.navToHome();//返回首页
-					} else if (that.urlData == 2) {
-						that.$GrzxInter.navToOrderList();
-					} else {
-						console.log("返回上一页")
-						uni.navigateBack(); //返回上一页
-					}
+					// if (that.urlData == 1) {
+					// 	that.$GrzxInter.navToHome();//返回首页
+					// } else if (that.urlData == 2) {
+					// 	that.$GrzxInter.navToOrderList();
+					// } else {
+					// 	console.log("返回上一页")
+					// }
+					uni.navigateBack(); //返回上一页
 				},500);
 			},
 
@@ -594,50 +593,6 @@
 				}
 				var newDate = structDate.getFullYear() + "-" + month + "-" + day;
 			},
-
-			// ----------------------------登录时写日志--------------------------------
-			LoginLog: function(UserID, Phone) {
-				var that = this;
-				uni.getLocation({
-					type: 'gcj02',
-					geocode: true,
-					success(res) {
-						console.log(res)
-						uni.getSystemInfo({
-							success(res1) {
-								var country = res.address.country ? res.address.country : '';
-								var province = res.address.province ? res.address.province : '';
-								var city = res.address.city ? res.address.city : '';
-								var district = res.address.district ? res.address.district : '';
-								var street = res.address.street ? res.address.street : '';
-								var streetNum = res.address.streetNum ? res.address.streetNum : '';
-								var poiName = res.address.poiName ? res.address.poiName : '';
-								var Address = country + province + city + district + street + streetNum + poiName;
-								uni.request({
-									url: $DDTInterface.DDTInterface.BikeLog.Url,
-									method: $DDTInterface.DDTInterface.BikeLog.method,
-									data: {
-										UserID: UserID,
-										LogType: '登陆',
-										PhoneNumber: Phone,
-										Mac: '',
-										PhoneBrand: res1.brand,
-										Address: Address,
-										PhoneModel: res1.model,
-										SystemType: res1.platform,
-										SystemVersion: res1.system,
-									},
-									success(res) {},
-									fail(err) {
-										console.log(err)
-									}
-								})
-							}
-						})
-					}
-				})
-			},
-
 		}
 	}
 </script>
@@ -652,7 +607,7 @@
 	.content {
 		width: 100%;
 		position: relative;
-		background-color: #007AFF;
+		// background-color: #007AFF;
 	}
 
 	.backClass {
@@ -676,7 +631,7 @@
 		//logo的样式
 		width: 32.4%;
 		height: 233upx;
-		top: 200upx;
+		top: 170upx;
 		left: 33.87%;
 		position: absolute;
 	}
@@ -686,7 +641,7 @@
 		width: 26upx;
 		height: 36upx;
 		top: 58upx;
-		left: 2%;
+		left: 3%;
 		position: absolute;
 	}
 
@@ -695,7 +650,7 @@
 		width: 31upx;
 		height: 38upx;
 		top: 56upx;
-		left: 2%;
+		left: 3%;
 		position: absolute;
 	}
 
@@ -705,9 +660,9 @@
 		//height: 874upx;
 		height: 800upx;
 		position: absolute;
-		top: 324upx;
+		top: 370upx;
 		left: 4.8%;
-		background-color: white;
+		// background-color: white;
 		border-radius: 20upx;
 	}
 
@@ -815,7 +770,7 @@
 	.getCode {
 		//获取验证码
 		position: absolute;
-		top: 308upx;
+		top: 310upx;
 		left: 64%;
 		width: 30%;
 		font-size: 28upx;
@@ -827,18 +782,8 @@
 
 	.style1 {
 		//获取验证码
-		border: 1px solid #FF971E; //南平综合出行：#FF971E
-		color: #FF971E; //绿色：#65C36D
-	}
-
-	.style2 {
-		border: 1px solid #1D2087;
-		color: #1D2087;
-	}
-
-	.style3 {
-		border: 1px solid #FF971E;
-		color: #FF971E;
+		border: 1px solid #2FC700; //南平综合出行：#FF971E
+		color: #2FC700; //绿色：#65C36D
 	}
 
 	.fontStyle {
@@ -852,7 +797,6 @@
 		width: 90%;
 		padding: 25upx 0;
 		border-radius: 20upx;
-		background: linear-gradient(54deg, rgba(255, 128, 8, 1) 0%, rgba(255, 200, 55, 1) 100%); //南平综合出行
-		//background: linear-gradient(54deg, rgba(53, 199, 98, 1) 0%, rgba(6, 161, 54, 1) 100%); //漳州达达通
+		background: #2FC700;
 	}
 </style>

@@ -194,7 +194,7 @@ function navToHome(){
 	// 	})
 	// }
 	uni.switchTab({
-		url:'/pages/home/h_jtzx_home',
+		url:'/pages/home/h_xczx_home',
 	})
 }
 
