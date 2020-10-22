@@ -22,8 +22,8 @@
 				<text>{{item.nick_name}}</text>
 				<text class="cont_text">{{item.count}}人看过</text>
 				<text class="cont_text">{{informationDate(item.update_time)}}</text>
-				<text class="cont_icon" style="color: #007AFF;" v-if="groupTitle[selectIndex].state=='已上架'">发布中</text>
-				<text class="cont_icon" style="color: #FC4646;" v-if="groupTitle[selectIndex].state=='已下架'">未发布</text>
+				<text class="cont_icon" style="color: #007AFF;" v-if="item.state=='已上架'">发布中</text>
+				<text class="cont_icon" style="color: #FC4646;" v-if="item.state=='已下架'">未发布</text>
 				<!-- <u-icon class="cont_icon" name="more-dot-fill"></u-icon> -->
 			</view>
 			<u-gap height="4" bg-color="#f9f9f9"></u-gap>
@@ -39,8 +39,8 @@
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete">删除</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'" @click="onTheShelf(groupTitle[selectIndex].id)">发布</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已下架'" @click="offTheShelf(groupTitle[selectIndex].id)">下架</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已下架'" @click="onTheShelf(groupTitle[selectIndex].id)">发布</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'" @click="offTheShelf(groupTitle[selectIndex].id)">下架</u-button>
 				</scroll-view>
 			</view>
 		</view>
