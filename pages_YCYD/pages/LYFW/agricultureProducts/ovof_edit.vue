@@ -13,7 +13,8 @@
 				<!-- 类型 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="选择类型" :border-bottom="false" prop="goodsType">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="border" type="select" :select-open="selectShow" v-model="model.goodsType" placeholder="请选择选择类型" @click="selectShow = true"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="border" type="select" :select-open="selectShow" v-model="model.goodsType"
+						 placeholder="请选择选择类型" @click="selectShow = true"></u-input>
 					</view>
 				</u-form-item>
 
@@ -35,9 +36,8 @@
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
 					<view class="bottom-view-ImageUpload">
-						<robby-image-upload v-model="model.imageData" 
-						 :showUploadProgress="show" :form-data="formData" @delete="deleteImage" @add="addImage" :enable-del="enableDel"
-						 :enable-add="enableAdd" limit="3"></robby-image-upload>
+						<robby-image-upload v-model="model.imageData" :showUploadProgress="show" :form-data="formData" @delete="deleteImage"
+						 @add="addImage" :enable-del="enableDel" :enable-add="enableAdd" limit="3"></robby-image-upload>
 					</view>
 				</u-form-item>
 
@@ -128,7 +128,10 @@
 
 <script>
 	import tColorPicke from '@/components/t-color-picker.vue';
-	import { pathToBase64, base64ToPath } from '@/pages_GRZX/components/GRZX/js_sdk/gsq-image-tools/image-tools/index.js';
+	import {
+		pathToBase64,
+		base64ToPath
+	} from '@/pages_GRZX/components/GRZX/js_sdk/gsq-image-tools/image-tools/index.js';
 	import robbyImageUpload from '@/pages_YCYD/components/LYFW/robby-image-upload/robby-image-upload.vue';
 	var _self;
 	export default {
@@ -155,7 +158,7 @@
 				model: {
 					name: '', //商品名称value
 					region: '', //选择来源地value
-					goodsType:'',//选择类型value
+					goodsType: '', //选择类型value
 					// cost: '', //价格
 					intro: '', //商品简介
 					imageData: [], //图像日期
@@ -230,13 +233,11 @@
 						// 	trigger: 'change',
 						// },
 					],
-					goodsType: [
-						{
-							required: true,
-							message: '请选择商品类型',
-							trigger: 'change',
-						}
-					],
+					goodsType: [{
+						required: true,
+						message: '请选择商品类型',
+						trigger: 'change',
+					}],
 				},
 				pickerShow: false,
 				errorType: ['message'],
@@ -249,13 +250,14 @@
 				},
 				enableDel: true, //是否启动del
 				enableAdd: true, //是否启动删除
-				pictureArray:[],//存储图片base64
-				userInfo:[],//个人信息
+				pictureArray: [], //存储图片base64
+				userInfo: [], //个人信息
 				issueText: '',
 				border: false,
 				selectShow: false,
-				selectList: [
-					{
+				jumpStatus: '',
+				informationDetail: [],
+				selectList: [{
 						value: '村容村貌',
 						label: '村容村貌'
 					},
@@ -278,28 +280,43 @@
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
-		onLoad() {
+		onLoad(param) {
 			_self = this;
 			this.userData();
+			this.jumpStatus = param.jumpStatus;
+			if (this.jumpStatus == '修改') {
+				uni.getStorage({
+					key: 'informationData',
+					success: (data) => {
+						// console.log('修改信息列表',data.data)
+						this.informationDetail = data.data; //车票信息数组
+						console.log('修改信息列表', this.informationDetail)
+						this.issueText = this.informationDetail.content;
+						this.model.name = this.informationDetail.title;
+						this.model.goodsType = this.informationDetail.article_type;
+						console.log('修改信息列表', this.issueText)
+					}
+				})
+			}
 		},
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
-			userData:function() {
+			userData: function() {
 				uni.getStorage({
 					key: 'userInfo',
 					success: (res) => {
 						this.userInfo = res.data;
-						console.log('获取个人信息',this.userInfo)
+						console.log('获取个人信息', this.userInfo)
 					}
 				});
 			},
-			
+
 			//--------------------- 选择地区回调 --------------------------
 			regionConfirm(e) {
 				this.model.region = e.province.label + '-' + e.city.label + '-' + e.area.label;
 				console.log(this.model)
 			},
-			
+
 			//--------------------- 选择商品类型回调------------------------
 			selectConfirm(e) {
 				this.model.goodsType = '';
@@ -307,57 +324,57 @@
 					this.model.goodsType += this.model.goodsType == '' ? val.label : '-' + val.label;
 				})
 			},
-			
+
 			//--------------------- 上传图片 --------------------------
-			deleteImage: function(e){
+			deleteImage: function(e) {
 				console.log(e)
 				var index = this.pictureArray.findIndex(item => {
-					for(var i=0;i<e.allImages.length;i++){
-						if(item ==this.typeList[i].text) {
+					for (var i = 0; i < e.allImages.length; i++) {
+						if (item == this.typeList[i].text) {
 							return true;
 						}
 					}
 				})
-				this.pictureArray.splice(index,1);
+				this.pictureArray.splice(index, 1);
 			},
-			
-			addImage: function(e){
+
+			addImage: function(e) {
 				console.log(e)
-				for(var i=0;i<e.allImages.length;i++){
+				for (var i = 0; i < e.allImages.length; i++) {
 					this.pictureArray.push(e.allImages[i]);
 				}
 			},
-			
-			submit(){
+
+			submit() {
 				var pathList = [];
-				if(this.pictureArray.length > 0){
-					for(var i = 0;i < this.pictureArray.length;i++){
+				if (this.pictureArray.length > 0) {
+					for (var i = 0; i < this.pictureArray.length; i++) {
 						uni.uploadFile({
-							url: this.$ycyd.KyInterface.upload.Url, 
+							url: this.$ycyd.KyInterface.upload.Url,
 							filePath: this.pictureArray[i],
 							name: 'file',
 							success: (res) => {
 								let data = JSON.parse(res.data);
-								if(data.code == 200){
+								if (data.code == 200) {
 									pathList.push(data.data);
-									if(this.pictureArray.length == pathList.length){
+									if (this.pictureArray.length == pathList.length) {
 										console.log(214);
 										this.success(JSON.stringify(pathList));
 									}
-								}else{
+								} else {
 									uni.showToast({
 										title: '上传失败',
-										icon:'none'
+										icon: 'none'
 									});
 								}
 							}
 						});
 					}
-				}else{
+				} else {
 					this.success(JSON.stringify(pathList))
 				}
 			},
-			
+
 			//--------------------------------------------
 
 			cancel() {
@@ -459,27 +476,59 @@
 				});
 			},
 
+			// insertImage() {
+			// 	// const that = this;
+			// 	uni.chooseImage({
+			// 		count: 1,
+			// 		success: function(res) {
+			// 			// console.log('图片',res)
+			// 			_self.editorCtx.insertImage({
+			// 				src: res.tempFilePaths[0],
+			// 				data: {
+			// 					id: 'abcd',
+			// 					role: 'god'
+			// 				},
+			// 				width: '80%',
+			// 				success: function() {
+			// 					console.log('insert image success');
+			// 				}
+			// 			});
+			// 		}
+			// 	});
+			// },
+
 			insertImage() {
-				// const that = this;
+				let that = this;
 				uni.chooseImage({
 					count: 1,
-					success: function(res) {
-						_self.editorCtx.insertImage({
-							src: res.tempFilePaths[0],
-							data: {
-								id: 'abcd',
-								role: 'god'
-							},
-							width: '80%',
-							success: function() {
-								console.log('insert image success');
+					success: (res) => {
+						const tempFilePaths = res.tempFilePaths;
+						uni.uploadFile({
+							url: this.$ycyd.KyInterface.upload.Url,
+							filePath: tempFilePaths[0],
+							name: 'file',
+							success: (uploadFileRes) => {
+								console.log("编辑详情的时候返回照片地址", uploadFileRes)
+								const back = JSON.parse(uploadFileRes.data);
+								console.log(back)
+								that.editorCtx.insertImage({
+									src: back.data,
+									data: {
+										id: 'abcd',
+										role: 'god'
+									},
+									width: '80%',
+									success: function() {
+										console.log('insert image success');
+									}
+								})
 							}
-						});
+						})
 					}
-				});
+				})
 			},
-			
-			success:function(image) {
+
+			success: function(image) {
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -490,64 +539,66 @@
 						console.log('验证失败');
 					}
 				});
-				
+
+
+
 				this.editorCtx.getContents({
-					success: (res) =>{
+					success: (res) => {
 						console.log(res);
 						this.issueText = res.html;
 						// console.log(res.html);
 						// console.log(this.issueText);
-						this.uploadData(image,this.issueText);
+						this.uploadData(image, this.issueText);
 					}
 				});
 			},
-			
-			uploadData(e,issueText){
+
+			uploadData(e, issueText) {
 				uni.showLoading({
-					title:'提交中...',
-					mask:true,
+					title: '提交中...',
+					mask: true,
 				})
-				console.log('1',this.issueText);
-				console.log('2',this.userInfo.userId);
-				console.log('3',e);
-				console.log('4',this.model.name);
-				console.log('5',this.model.goodsType);
+				console.log('1', this.issueText);
+				console.log('2', this.userInfo.userId);
+				console.log('3', e);
+				console.log('4', this.model.name);
+				console.log('5', this.model.goodsType);
 				uni.request({
 					url: this.$ycyd.KyInterface.releaseArchives.Url,
 					method: this.$ycyd.KyInterface.releaseArchives.method,
 					data: {
-						userId : this.userInfo.userId,
-						content : issueText,
-						image : e,
-						title : this.model.name,
-						article_type : this.model.goodsType
+						userId: this.userInfo.userId,
+						content: issueText,
+						image: e,
+						title: this.model.name,
+						article_type: this.model.goodsType
 					},
-					success:(res) => {
-						console.log(res,"请求完接口");
-						if(res.data.status){
+					success: (res) => {
+						console.log(res, "请求完接口");
+						if (res.data.status) {
 							uni.showToast({
-								title:res.data.msg,
+								title: res.data.msg,
 							})
-							setTimeout(function(){
+							setTimeout(function() {
 								uni.navigateBack();
-							},1000)
-						}else{
+							}, 1000)
+						} else {
 							uni.showToast({
-								title:res.data.msg,
-								icon:'none',
+								title: res.data.msg,
+								icon: 'none',
 							})
 						}
 					},
 					fail: () => {
 						uni.showToast({
-							title:'提交失败',
-							icon:'none',
+							title: '提交失败',
+							icon: 'none',
 						})
 					},
 					complete: () => {
-						setTimeout(function(){
+						setTimeout(function() {
 							uni.hideLoading();
-						},800)
+						}, 800)
 					}
 				});
 			},

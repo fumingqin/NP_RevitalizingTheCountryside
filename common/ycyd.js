@@ -60,6 +60,27 @@ const KyInterface = {
 		name:'增加浏览量接口',
 		method:'POST',
 	},
+	
+	//--------------------------------------接口--------------------------------------
+	upAndDownArchives:{
+		Url:Url + '/api/village/upAndDownArchives',
+		name:'上下架接口',
+		method:'POST',
+	},
+	
+	//--------------------------------------接口--------------------------------------
+	deleteArchives:{
+		Url:Url + '/api/village/deleteArchives',
+		name:'删除接口',
+		method:'POST',
+	},
+	
+	//--------------------------------------接口--------------------------------------
+	updateArchives:{
+		Url:Url + '/api/village/updateArchives',
+		name:'编辑文章接口',
+		method:'POST',
+	},
 }
 
 // 接口声明区
