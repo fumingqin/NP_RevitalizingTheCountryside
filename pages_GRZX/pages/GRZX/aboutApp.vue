@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<image :src="logo" class="logoClass"></image>
+		<image src="@/static/GRZX/logo.png" class="logoClass"></image>
 		<text class="titleClass">{{title}}</text>
 		<text class="versionClass">{{versionNum}}{{version}}</text>
 		<view class="boxClass1">
@@ -52,7 +52,7 @@
 				copyright2:'Copyright©2020 Journey',
 				copyright3:'All Rights Reserved',
 				version:'',
-				logo:'../../static/GRZX/logo.png',
+				logo:'../../../../static/GRZX/logo.png',
 			}
 		},
 		onLoad(){
