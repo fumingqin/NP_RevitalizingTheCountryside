@@ -402,9 +402,13 @@
 				this.readOnly = !this.readOnly
 			},
 			onEditorReady() {
+				var that = this;
 				uni.createSelectorQuery().select('#editor').context(function(res) {
 					console.log(res);
 					_self.editorCtx = res.context;
+					that.editorCtx.setContents({    
+						html:that.issueText    //this.EditGoodsDetail.content为赋值内容。    
+					})    
 				}).exec();
 			},
 			undo() {
