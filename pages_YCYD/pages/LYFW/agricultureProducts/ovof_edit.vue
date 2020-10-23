@@ -623,7 +623,7 @@
 									},
 									success: (res) => {
 										console.log(res, "请求完接口");
-										if (res.data.status) {
+										if (res.data.status==true) {
 											uni.showToast({
 												title: res.data.msg,
 											})
