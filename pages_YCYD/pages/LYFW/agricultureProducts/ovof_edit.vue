@@ -36,7 +36,7 @@
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
 					<view class="bottom-view-ImageUpload">
-						<robby-image-upload v-model="model.imageData" :showUploadProgress="show" :form-data="formData"
+						<robby-image-upload v-model="model.imageData" :showUploadProgress="show" :form-data="formData" @delete="deleteImage"
 						 @add="addImage" :enable-del="enableDel" :enable-add="enableAdd" limit="3"></robby-image-upload>
 					</view>
 				</u-form-item>
@@ -50,7 +50,7 @@
 				</u-form-item>
 
 				<!-- 商品简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介内容" :border-bottom="false">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
@@ -269,7 +269,6 @@
 				category:'video',
 				videoData:'',
 				issueText2:'',
-				allImagesIndex:[],
 				informationDetail2:[],
 				selectList: [{
 						value: '村容村貌',
@@ -356,7 +355,9 @@
 						console.log('修改信息列表',data.data)
 						this.informationDetail = data.data;
 						this.issueText = data.data.content;
-						this.model.imageData = this.informationDetail.image;
+						this.model.imageData = data.data.image;
+						this.pictureArray = data.data.image;
+						console.log('图片',this.model.imageData)
 						this.model.name = data.data.title;
 						this.model.goodsType = data.data.article_type;
 						this.onEditorReady();
@@ -411,15 +412,20 @@
 								let data = JSON.parse(res.data);
 								if (data.code == 200) {
 									pathList.push(data.data);
-									if (this.pictureArray.length == pathList.length) {
-										console.log(214);
-										this.success(JSON.stringify(pathList));
-									}
 								} else {
 									uni.showToast({
 										title: '上传失败',
 										icon: 'none'
 									});
+								}
+							},
+							fail:()=>{
+								pathList.push(this.pictureArray[i]);
+							},
+							complete:()=>{
+								if (this.pictureArray.length == pathList.length) {
+									console.log(214);
+									this.success(JSON.stringify(pathList));
 								}
 							}
 						});
@@ -428,7 +434,7 @@
 					this.success(JSON.stringify(pathList))
 				}
 			},
-
+			
 			//--------------------------------------------
 
 			cancel() {
@@ -612,7 +618,6 @@
 										userId: this.userInfo.userId,
 										content: issueText,
 										image: e,
-										video : this.videoData,
 										title: this.model.name,
 										article_type: this.model.goodsType
 									},
@@ -659,7 +664,6 @@
 										userId: this.userInfo.userId,
 										content: issueText,
 										image: e,
-										video : this.videoData,
 										title: this.model.name,
 										article_type: this.model.goodsType
 									},
