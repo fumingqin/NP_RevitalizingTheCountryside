@@ -355,7 +355,6 @@
 						console.log('修改信息列表',data.data)
 						this.issueText = data.data.content;
 						this.model.imageData = data.data.image;
-						console.log('图片',this.model.imageData)
 						this.model.name = data.data.title;
 						this.model.goodsType = data.data.article_type;
 						this.onEditorReady();
@@ -615,7 +614,7 @@
 									},
 									success: (res) => {
 										console.log(res, "请求完接口");
-										if (res.data.status) {
+										if (res.data.status==true) {
 											uni.showToast({
 												title: res.data.msg,
 											})
