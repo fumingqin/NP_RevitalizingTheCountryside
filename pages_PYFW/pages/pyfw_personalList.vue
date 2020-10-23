@@ -78,7 +78,7 @@
 							this.informationList = res.data.data.filter(item =>{
 								return item.Type == '每日南平';
 							})
-						}else if(e == 3){
+						}else if(e == 3){      
 							this.informationList = res.data.data.filter(item =>{
 								return item.Type !== '通知公告' && item.Type !== '车站新讯' && item.Type !== '每日南平';
 							})
@@ -91,7 +91,7 @@
 			
 			detailsClick:function(e){
 				uni.navigateTo({
-					url:'infor_details?AID=' +e
+					url:'pyfw_details?AID=' +e
 				})
 			},
 			
@@ -146,7 +146,7 @@
 					background: #007AFF; 
 					color: #FFFFFF; 
 					padding: 4upx 8upx; 
-					border-radius: 4upx;
+					// border-radius: 4upx;
 				}
 				.tv_title{
 					font-weight: bold; 
@@ -164,7 +164,7 @@
 			.tv_image{
 				width: 220upx; 
 				height: 160upx; 
-				border-radius: 8upx;
+				// border-radius: 8upx;
 			}
 		}
 		.view_contentView{

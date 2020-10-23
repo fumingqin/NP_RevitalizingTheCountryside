@@ -15,7 +15,7 @@
 					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="browse"></u-count-to>
 				</view>
 				<view class="grClass">
-					<image class="txImage" src="../../../static/LYFW/agricultureProducts/touxiang.png" mode="aspectFill"></image>
+					<!-- <image class="txImage" src="../../../static/LYFW/agricultureProducts/touxiang.png" mode="aspectFill"></image> -->
 					<view class="grView">
 						<view class="name">{{name}}</view>
 						<text class="number">{{post}}</text>
