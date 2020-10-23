@@ -356,6 +356,7 @@
 						this.informationDetail = data.data;
 						this.issueText = data.data.content;
 						this.model.imageData = data.data.image;
+						this.pictureArray = data.data.image;
 						console.log('图片',this.model.imageData)
 						this.model.name = data.data.title;
 						this.model.goodsType = data.data.article_type;
@@ -411,15 +412,20 @@
 								let data = JSON.parse(res.data);
 								if (data.code == 200) {
 									pathList.push(data.data);
-									if (this.pictureArray.length == pathList.length) {
-										console.log(214);
-										this.success(JSON.stringify(pathList));
-									}
 								} else {
 									uni.showToast({
 										title: '上传失败',
 										icon: 'none'
 									});
+								}
+							},
+							fail:()=>{
+								pathList.push(this.pictureArray[i]);
+							},
+							complete:()=>{
+								if (this.pictureArray.length == pathList.length) {
+									console.log(214);
+									this.success(JSON.stringify(pathList));
 								}
 							}
 						});
@@ -428,7 +434,7 @@
 					this.success(JSON.stringify(pathList))
 				}
 			},
-
+			
 			//--------------------------------------------
 
 			cancel() {
