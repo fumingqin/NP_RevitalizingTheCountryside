@@ -353,6 +353,7 @@
 					key: 'informationData',
 					success: (data) => {
 						console.log('修改信息列表',data.data)
+						this.informationDetail = data.data;
 						this.issueText = data.data.content;
 						this.model.imageData = data.data.image;
 						this.model.name = data.data.title;
@@ -601,6 +602,7 @@
 						console.log('验证通过');
 						if(this.jumpStatus=='修改'){
 							if(issueText!=='<p><br></p>'){
+								console.log("id",this.informationDetail.id,"userId",this.userInfo.userId,"content", issueText,"image", e,"title", this.model.name,"article_type",this.model.goodsType);
 								uni.request({
 									url: this.$ycyd.KyInterface.updateArchives.Url,
 									method: this.$ycyd.KyInterface.updateArchives.method,
