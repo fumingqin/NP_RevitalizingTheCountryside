@@ -42,7 +42,7 @@
 				</u-form-item>
 				
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
 					<easy-upload
 					:dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1"
@@ -269,6 +269,7 @@
 				category:'video',
 				videoData:'',
 				issueText2:'',
+				informationDetail2:[],
 				selectList: [{
 						value: '村容村貌',
 						label: '村容村貌'
@@ -305,15 +306,20 @@
 						id : this.id
 					},
 					success: (res) => {
-						console.log('修改信息列表',res.data.data)
-						this.informationDetail = res.data.data; //车票信息数组
-						console.log('修改信息列表', this.informationDetail)
-						this.issueText = JSON.stringify(this.informationDetail.content);
-						this.model.name = this.informationDetail.title;
-						this.model.goodsType = this.informationDetail.article_type;
-						console.log('修改信息列表', this.issueText)
+						console.log(res)
+						uni.setStorage({
+							key: 'informationData',
+							data: res.data.data,
+							success: () => {
+								this.xiugaiData();
+							}
+						});
+						
 					}
 				})
+				
+				 
+				
 				// uni.getStorage({
 				// 	key: 'informationData',
 				// 	success: (data) => {
@@ -338,6 +344,24 @@
 						console.log('获取个人信息', this.userInfo)
 					}
 				});
+			},
+			
+			//-------------------------------读取修改数据缓存-------------------------------
+			xiugaiData:function(){
+				console.log('1111111111111111111111')
+				uni.getStorage({
+					key: 'informationData',
+					success: (data) => {
+						console.log('修改信息列表',data.data)
+						this.issueText = data.data.content;
+						this.model.imageData = data.data.image;
+						console.log('图片',this.model.imageData)
+						this.model.name = data.data.title;
+						this.model.goodsType = data.data.article_type;
+						this.onEditorReady();
+						console.log('修改信息列表', this.issueText)
+					}
+				})
 			},
 
 			//--------------------- 选择地区回调 --------------------------

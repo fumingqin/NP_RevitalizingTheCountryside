@@ -196,10 +196,14 @@
 				})
 			},
 			deleteImage: function(e){
+				console.log(e)
 				var imageIndex = e.currentTarget.dataset.index
+				console.log(imageIndex)
+				console.log(this.imageList)
 				var deletedImagePath = this.imageList[imageIndex]
+				console.log(deletedImagePath)
 				this.imageList.splice(imageIndex, 1) 
-				
+				console.log(this.imageList)
 				//检查删除图片的服务器地址是否设置，如果设置则调用API，在服务器端删除该图片
 				if(this.serverUrlDeleteImage){
 					uni.request({
