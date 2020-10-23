@@ -46,6 +46,10 @@
 				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
 					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 				</u-read-more>
+				
+				<!-- <view>
+					<video id="myVideo" :src="groupTitle." enable-danmu danmu-btn controls></video>
+				</view> -->
 			</view>
 		</view>
 	</view>
@@ -123,7 +127,7 @@
 								icon: 'none'
 							})
 						}
-						console.log('111111111',this.rotationChart)
+						// console.log('111111111',this.rotationChart)
 					},
 					fail: function() {
 						uni.hideLoading();

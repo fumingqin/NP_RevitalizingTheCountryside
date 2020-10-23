@@ -38,7 +38,7 @@
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump2">添加</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete">删除</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已下架'" @click="onTheShelf(groupTitle[selectIndex].id)">发布</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'" @click="offTheShelf(groupTitle[selectIndex].id)">下架</u-button>
 				</scroll-view>
@@ -206,7 +206,7 @@
 					data: item,
 					success:()=> {
 						uni.navigateTo({
-							url: './ovof_edit?jumpStatus=' +this.state
+							url: './ovof_edit?jumpStatus=' +this.state + '&id=' + item.id
 						})
 					},
 					fail() {
@@ -328,8 +328,8 @@
 								title: '正在删除....'
 							})
 							uni.request({
-								url: this.$ycyd.KyInterface.updateArchives.Url,
-								method: this.$ycyd.KyInterface.updateArchives.method,
+								url: this.$ycyd.KyInterface.deleteArchives.Url,
+								method: this.$ycyd.KyInterface.deleteArchives.method,
 								data: {
 									id: e,
 									userId:this.userInfo.userId

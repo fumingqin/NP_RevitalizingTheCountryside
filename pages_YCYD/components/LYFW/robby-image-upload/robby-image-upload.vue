@@ -342,7 +342,7 @@
 	.imageItem, .imageUpload{
 		width: 160upx;
 		height: 160upx;
-		/* margin: 10upx; */
+		margin: 0 10upx;
 	}
 	
 	.imageDel{
