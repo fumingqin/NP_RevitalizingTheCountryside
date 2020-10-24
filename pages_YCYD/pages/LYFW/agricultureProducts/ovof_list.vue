@@ -201,18 +201,9 @@
 			
 			//--------------------------路由跳转(修改列表文章)------------------------------
 			modifyJump:function(item){
-				uni.setStorage({
-					key: 'informationData',
-					data: item,
-					success:()=> {
-						uni.navigateTo({
-							url: './ovof_edit?jumpStatus=' +this.state + '&id=' + item.id
-						})
-					},
-					fail() {
-						// console.log('123');
-					}
-				});
+				uni.navigateTo({
+					url: './ovof_edit?jumpStatus=' +this.state + '&id=' + item.id
+				})
 			},
 			
 			//-----------------------上架------------------------------------

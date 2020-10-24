@@ -35,18 +35,21 @@
 
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
-					<view class="bottom-view-ImageUpload">
+					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164" height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
+						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150" >
+							<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
+						</view>
+					</u-upload>
+					<!-- <view class="bottom-view-ImageUpload">
 						<robby-image-upload v-model="model.imageData" :showUploadProgress="show" :form-data="formData" @delete="deleteImage"
 						 @add="addImage" :enable-del="enableDel" :enable-add="enableAdd" limit="3"></robby-image-upload>
-					</view>
+					</view> -->
 				</u-form-item>
-				
+
 				<!-- 上传视频 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
-					<easy-upload
-					:dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
-					deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1"
-					 @successVideo="successvideo"></easy-upload>
+					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
+					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
 
 				<!-- 商品简介 -->
@@ -127,7 +130,7 @@
 					</view>
 				</u-form-item>
 			</u-form>
-			<u-button type="success" :custom-style="buttonStyle" @click="submit">提交</u-button>
+			<u-button type="success" :custom-style="buttonStyle" @click="uploadData">提交</u-button>
 			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 			<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
 		</view>
@@ -264,12 +267,14 @@
 				border: false,
 				selectShow: false,
 				jumpStatus: '',
-				id:'',
+				id: '',
 				informationDetail: [],
-				category:'video',
-				videoData:'',
-				issueText2:'',
-				informationDetail2:[],
+				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
+				showUploadList: true,
+				lists: [],
+				fileList:[],
+				category: 'video',
+				videoData: '',
 				selectList: [{
 						value: '村容村貌',
 						label: '村容村貌'
@@ -289,10 +294,16 @@
 				],
 			}
 		},
-
+		
+		
+		onRemove:function(e){
+			console.log(e)
+		},
+		
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
+		
 		onLoad(param) {
 			_self = this;
 			this.userData();
@@ -300,10 +311,10 @@
 			this.id = param.id;
 			if (this.jumpStatus == '修改') {
 				uni.request({
-					url:this.$ycyd.KyInterface.getArchiveDetailByID.Url,
-					method:this.$ycyd.KyInterface.getArchiveDetailByID.method,
-					data:{
-						id : this.id
+					url: this.$ycyd.KyInterface.getArchiveDetailByID.Url,
+					method: this.$ycyd.KyInterface.getArchiveDetailByID.method,
+					data: {
+						id: this.id
 					},
 					success: (res) => {
 						console.log(res)
@@ -314,24 +325,10 @@
 								this.xiugaiData();
 							}
 						});
-						
+
 					}
 				})
-				
-				 
-				
-				// uni.getStorage({
-				// 	key: 'informationData',
-				// 	success: (data) => {
-				// 		// console.log('修改信息列表',data.data)
-				// 		this.informationDetail = data.data; //车票信息数组
-				// 		console.log('修改信息列表', this.informationDetail)
-				// 		this.issueText = this.informationDetail.content;
-				// 		this.model.name = this.informationDetail.title;
-				// 		this.model.goodsType = this.informationDetail.article_type;
-				// 		console.log('修改信息列表', this.issueText)
-				// 	}
-				// })
+
 			}
 		},
 		methods: {
@@ -341,27 +338,45 @@
 					key: 'userInfo',
 					success: (res) => {
 						this.userInfo = res.data;
-						console.log('获取个人信息', this.userInfo)
+						// console.log('获取个人信息', this.userInfo)
 					}
 				});
 			},
-			
+
 			//-------------------------------读取修改数据缓存-------------------------------
-			xiugaiData:function(){
+			xiugaiData: function() {
+				var that=this;
 				console.log('1111111111111111111111')
 				uni.getStorage({
 					key: 'informationData',
 					success: (data) => {
-						console.log('修改信息列表',data.data)
+						// console.log('修改信息列表', data.data)
 						this.informationDetail = data.data;
 						this.issueText = data.data.content;
-						this.model.imageData = data.data.image;
-						this.pictureArray = data.data.image;
-						console.log('图片',this.model.imageData)
 						this.model.name = data.data.title;
 						this.model.goodsType = data.data.article_type;
 						this.onEditorReady();
-						console.log('修改信息列表', this.issueText)
+						// console.log('赋值前', this.lists)
+						for(var i=0;i<this.informationDetail.image.length;i++){
+							if(this.informationDetail.image[0] !== ''){
+								var imageObj={
+									url:this.informationDetail.image[i]
+								};
+								var imageArray=[];
+								imageArray.push(imageObj)
+							}
+						}
+						this.fileList = imageArray
+						if(this.informationDetail.image[0] !== ''){
+							this.lists = this.informationDetail.image[0];
+						}
+						
+						console.log('赋值后', this.lists)
+						console.log('图片转编译', imageArray)
+						// console.log('修改信息列表', this.issueText)
+						
+						
+						
 					}
 				})
 			},
@@ -380,61 +395,6 @@
 				})
 			},
 
-			//--------------------- 上传图片 --------------------------
-			deleteImage: function(e) {
-				console.log(e)
-				var index = this.pictureArray.findIndex(item => {
-					for (var i = 0; i < e.allImages.length; i++) {
-						if (item == this.typeList[i].text) {
-							return true;
-						}
-					}
-				})
-				this.pictureArray.splice(index, 1);
-			},
-
-			addImage: function(e) {
-				console.log(e)
-				for (var i = 0; i < e.allImages.length; i++) {
-					this.pictureArray.push(e.allImages[i]);
-				}
-			},
-
-			submit() {
-				var pathList = [];
-				if (this.pictureArray.length > 0) {
-					for (var i = 0; i < this.pictureArray.length; i++) {
-						uni.uploadFile({
-							url: this.$ycyd.KyInterface.upload.Url,
-							filePath: this.pictureArray[i],
-							name: 'file',
-							success: (res) => {
-								let data = JSON.parse(res.data);
-								if (data.code == 200) {
-									pathList.push(data.data);
-								} else {
-									uni.showToast({
-										title: '上传失败',
-										icon: 'none'
-									});
-								}
-							},
-							fail:()=>{
-								pathList.push(this.pictureArray[i]);
-							},
-							complete:()=>{
-								if (this.pictureArray.length == pathList.length) {
-									console.log(214);
-									this.success(JSON.stringify(pathList));
-								}
-							}
-						});
-					}
-				} else {
-					this.success(JSON.stringify(pathList))
-				}
-			},
-			
 			//--------------------------------------------
 
 			cancel() {
@@ -464,11 +424,11 @@
 			onEditorReady() {
 				var that = this;
 				uni.createSelectorQuery().select('#editor').context(function(res) {
-					console.log(res);
+					// console.log(res);
 					_self.editorCtx = res.context;
 					that.editorCtx.setContents({
-						html:that.issueText    //this.EditGoodsDetail.content为赋值内容。    
-					})    
+						html: that.issueText //this.EditGoodsDetail.content为赋值内容。    
+					})
 				}).exec();
 			},
 			undo() {
@@ -505,7 +465,7 @@
 			insertDivider() {
 				this.editorCtx.insertDivider({
 					success: function() {
-						console.log('insert divider success');
+						// console.log('insert divider success');
 					}
 				});
 			},
@@ -570,60 +530,90 @@
 					}
 				})
 			},
-			
+
 			//---------------------------上传视频回调-------------------------------
-			successvideo:function(e){
-				console.log('视频上传成功',e)
+			successvideo: function(e) {
+				console.log('视频上传成功', e)
 				var data = JSON.parse(e.data);
 				// console.log(data)
-				this.videoData=data;
-				console.log('视频上传成功',this.videoData)
+				this.videoData = data;
+				console.log('视频上传成功', this.videoData)
 			},
-
-			success: function(image) {
+			
+			//删除图片提示
+			uploadOnRemove:function(e){
+				this.fileList = undefined;
+				this.lists = [];
+				
+			},
+			
+			//删除图片提示
+			uploadOnsuccess:function(e){
+				console.log('上传成功',e)
+				var a = {
+					response : {
+						data : e.data
+					}
+				};
+				this.lists.push(a)
+			},
+			
+			uploadData:function() {
 				this.editorCtx.getContents({
 					success: (res) => {
 						console.log(res);
 						this.issueText = res.html;
-						// console.log(res.html);
-						// console.log(this.issueText);
-						this.uploadData(image, this.issueText);
 					}
 				});
-			},
-
-			uploadData(e, issueText) {
+				
+				console.log(this.fileList)
+				console.log(this.lists)
+				
+				if(this.fileList !== undefined){
+					// console.log('我从服务器进来了')
+					this.pictureArray.push(this.fileList[0].url);
+				}else if(this.lists.length == 0){
+					// console.log('我从本低进来了1')
+					this.pictureArray.push('');
+				}else{
+					// console.log('我从本低进来了2')
+					var path = this.lists.length > 0 ? this.lists[0].response.data : "";
+					this.pictureArray.push(path);
+				}
+				
+				
 				uni.showLoading({
 					title: '提交中...',
 					mask: true,
 				})
 				// console.log('1', this.issueText);
 				// console.log('2', this.userInfo.userId);
-				// console.log('3', e);
+				// console.log('3', this.pictureArray);
 				// console.log('4', this.model.name);
 				// console.log('5', this.model.goodsType);
+				// console.log('6', this.informationDetail.id);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						// uni.hideLoading();
 						console.log('验证通过');
-						if(this.jumpStatus=='修改'){
-							if(issueText!=='<p><br></p>'){
-								console.log("id",this.informationDetail.id,"userId",this.userInfo.userId,"content", issueText,"image", e,"title", this.model.name,"article_type",this.model.goodsType);
+						if (this.jumpStatus == '修改') {
+							if (this.issueText !== '<p><br></p>') {
 								uni.request({
 									url: this.$ycyd.KyInterface.updateArchives.Url,
 									method: this.$ycyd.KyInterface.updateArchives.method,
 									data: {
 										id: this.informationDetail.id,
 										userId: this.userInfo.userId,
-										content: issueText,
-										image: e,
+										content: this.issueText,
+										image: JSON.stringify(this.pictureArray),	
 										title: this.model.name,
-										article_type: this.model.goodsType
+										article_type: this.model.goodsType,
+										video: JSON.stringify(this.videoData.data)
 									},
 									success: (res) => {
 										console.log(res, "请求完接口");
-										if (res.data.status==true) {
+										if (res.data.status == true) {
 											uni.showToast({
 												title: res.data.msg,
 											})
@@ -649,23 +639,24 @@
 										}, 800)
 									}
 								});
-							}else{
+							} else {
 								uni.showToast({
 									title: '提交失败,请编辑文章内容',
 									icon: 'none',
 								})
 							}
-						}else{
-							if(this.issueText!=='<p><br></p>'){
+						} else {
+							if (this.issueText !== '<p><br></p>') {
 								uni.request({
 									url: this.$ycyd.KyInterface.releaseArchives.Url,
 									method: this.$ycyd.KyInterface.releaseArchives.method,
 									data: {
 										userId: this.userInfo.userId,
-										content: issueText,
-										image: e,
+										content: this.issueText,
+										image: JSON.stringify(this.pictureArray),
 										title: this.model.name,
-										article_type: this.model.goodsType
+										article_type: this.model.goodsType,
+										video: JSON.stringify(this.videoData.data)
 									},
 									success: (res) => {
 										console.log(res, "请求完接口");
@@ -695,7 +686,7 @@
 										}, 800)
 									}
 								});
-							}else{
+							} else {
 								uni.showToast({
 									title: '提交失败,请编辑文章内容',
 									icon: 'none',
