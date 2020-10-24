@@ -5,7 +5,7 @@
 		</view>
 
 		<view class="sv_view2">
-			<view class="sv_title">出行</view>
+			<!-- <view class="sv_title">服务区</view> -->
 			<view style="display: flex; flex-wrap: wrap;padding: 0 14rpx;">
 				<view class="sv_view3" v-for="(item,index1) in ItemArr" :key="index1">
 					<view @click="natTo(item)">
@@ -16,7 +16,7 @@
 			</view>
 		</view>
 
-		<view class="sv_view2">
+		<!-- <view class="sv_view2">
 			<view class="sv_title">旅游</view>
 			<view style="display: flex; flex-wrap: wrap;padding: 0 14rpx;">
 				<view class="sv_view3" v-for="(item,index) in ItemArr2" :key="index">
@@ -26,7 +26,7 @@
 					</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 
 	</view>
 </template>
@@ -42,87 +42,80 @@
 				}], //首页图片
 				ItemArr: [{
 						IsUse: true,
+						clickURL: "",
+						ImageURL1: "../../static/home/serve/cct.png",//亮
+						ImageURL2: "../../static/home/serve/cct2.png",//暗
+						ItemTitle: "村村通",
+						style:"sv_print",
+					},{
+						IsUse: true,
+						clickURL: "",
+						ImageURL1: "../../static/home/serve/cpdg.png",//亮
+						ImageURL2: "../../static/home/serve/cpdg2.png",//暗
+						ItemTitle: "景区售票",
+						style:"sv_print",
+					},{
+						IsUse: true,
 						clickURL: "/pages_ZXGP/pages/ZXGP/TraditionSpecial/Home/ctkyIndex",
-						ImageURL1: "../../static/home/serve/cpdinggou.png",//亮
-						ImageURL2: "../../static/home/serve/hcpdinggou.png",//暗
-						ItemTitle: "车票订购",
+						ImageURL1: "../../static/home/serve/yh.png",//亮
+						ImageURL2: "../../static/home/serve/yh2.png",//暗
+						ItemTitle: "生态银行",
 						style:"sv_print",
-					},
-					{
-						IsUse: true,
-						clickURL: "/pages_BUS/pages/Bus/BusQuery",
-						ImageURL1: "../../static/home/serve/gjchaxun.png",//亮
-						ImageURL2: "../../static/home/serve/hgjchaxun.png",//暗
-						ItemTitle: "公交查询",
-						style:"sv_print",
-					},
-					{
-						IsUse: true,
-						clickURL: "/pages_ZXGP/pages/ZXGP/SpecialBus/Home/zxgpHomePage",
-						ImageURL1: "../../static/home/serve/xqzhuanxian.png",//亮
-						ImageURL2: "../../static/home/serve/hxqzhuanxian.png",//暗
-						ItemTitle: "武夷新区",
-						style:"sv_print",
-					},
-					{
-						IsUse: false,
-						clickURL:"",
-						ImageURL1: "../../static/home/serve/bcfuwu.png",//亮
-						ImageURL2: "../../static/home/serve/hbcfuwu.png",//暗
-						ItemTitle: "客运查询",
-						style:"sv_print",
-					},
-					{
-						IsUse: false,
-						clickURL: "",
-						ImageURL1: "../../static/home/serve/wlyueche.png",//亮
-						ImageURL2: "../../static/home/serve/hwlyueche.png",//暗
-						ItemTitle: "网络约车",
-						style:"sv_print",
-					},
-					{
-						IsUse: false,
-						clickURL: "",
-						ImageURL1: "../../static/home/serve/xjkuaidi.png",//亮
-						ImageURL2: "../../static/home/serve/hxjkuaidi.png",//暗
-						ItemTitle: "小件快递",
-						style:"sv_print",
-					},
-					{
-						IsUse: false,
-						clickURL: "",
-						ImageURL1: "../../static/home/serve/jcyuyue.png",//亮
-						ImageURL2: "../../static/home/serve/hjcyuyue.png",//暗
-						ItemTitle: "检测预约",
-						style:"sv_print",
-					},
-					{
+					},{
 						IsUse: true,
 						clickURL: "../../pages_PYFW/pages/pyfw_personalList",
-						ImageURL1: "../../static/home/serve/jcyuyue.png",//亮
-						ImageURL2: "../../static/home/serve/hjcyuyue.png",//暗
-						ItemTitle: "派员申请",
+						ImageURL1: "../../static/home/serve/kjtpy.png",//亮
+						ImageURL2: "../../static/home/serve/kjtpy2.png",//暗
+						ItemTitle: "特派服务",
 						style:"sv_print",
-					},
-					{
+					},{
 						IsUse: true,
 						clickURL: "../../pages_PYFW/pages/pyfw_py_list",
-						ImageURL1: "../../static/home/serve/jcyuyue.png",//亮
-						ImageURL2: "../../static/home/serve/hjcyuyue.png",//暗
-						ItemTitle: "派员任务",
+						ImageURL1: "../../static/home/serve/kjtpy.png",//亮
+						ImageURL2: "../../static/home/serve/kjtpy2.png",//暗
+						ItemTitle: "特派任务",
 						style:"sv_print",
-					},
-					
-				],
-				ItemArr2: [{
-						IsUse: false,
+					},{
+						IsUse: true,
+						clickURL: "/pages_BUS/pages/Bus/BusQuery",
+						ImageURL1: "../../static/home/serve/sc.png",//亮
+						ImageURL2: "../../static/home/serve/sc2.png",//暗
+						ItemTitle: "网上商城",
+						style:"sv_print",
+					},{
+						IsUse: true,
+						clickURL: "/pages_ZXGP/pages/ZXGP/SpecialBus/Home/zxgpHomePage",
+						ImageURL1: "../../static/home/serve/smjj.png",//亮
+						ImageURL2: "../../static/home/serve/smjj2.png",//暗
+						ItemTitle: "水美经济",
+						style:"sv_print",
+					},{
+						IsUse: true,
+						clickURL: "",
+						ImageURL1: "../../static/home/serve/sphy.png",//亮
+						ImageURL2: "../../static/home/serve/sphy2.png",//暗
+						ItemTitle: "视频会议",
+						style:"sv_print",
+					},{
+						IsUse: true,
 						clickURL:"",
-						ImageURL1: "../../static/home/serve/jqgoupiao.png",//亮
-						ImageURL2: "../../static/home/serve/hjqgoupiao.png",//暗
-						ItemTitle: "景区购票",
-						style:"sv_print3",
+						ImageURL1: "../../static/home/serve/xmjd.png",//亮
+						ImageURL2: "../../static/home/serve/xmjd2.png",//暗
+						ItemTitle: "项目监督",
+						style:"sv_print",
 					}
+					
+					
 				]
+				// ItemArr2: [{
+				// 		IsUse: false,
+				// 		clickURL:"",
+				// 		ImageURL1: "../../static/home/serve/jqgoupiao.png",//亮
+				// 		ImageURL2: "../../static/home/serve/hjqgoupiao.png",//暗
+				// 		ItemTitle: "景区购票",
+				// 		style:"sv_print3",
+				// 	}
+				// ]
 			}
 		},
 		onLoad: function() {
@@ -195,7 +188,7 @@
 		.sv_view {
 			width: 698upx;
 			height: 320upx;
-			border-radius: 20upx;
+			border-radius: 12upx;
 			display: flex;
 			margin-left: 26upx;
 			margin-top: 43upx;
@@ -220,15 +213,15 @@
 			margin-left: 26upx;
 			margin-top: 43upx;
 			padding-bottom: 56upx;
-			border-radius: 20upx;
+			border-radius: 12upx;
 
 			.sv_view3 {
 				width: 20%;
 				text-align: center;
 				margin-top: 45upx;
 				.sv_print {
-					width: 60upx;
-					height: 60upx;
+					width: 106upx;
+					height: 106upx;
 				}
 
 				.sv_print3 {
@@ -244,7 +237,7 @@
 				.sv_text {
 					font-size: 24upx;
 					font-weight: 400;
-					padding-top: 24upx;
+					padding-top: 4upx;
 					display: block;
 				}
 			}
