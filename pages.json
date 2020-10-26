@@ -498,6 +498,25 @@
 						"navigationBarTitleText": "我的发布"
 					}
 				}
+				
+			]
+		},
+		
+		//---------------------------------------------第八个包：乡村动态------------------------------------------
+		{
+			"root": "pages_XCDT/",
+			"pages": [
+				//----------------------------------通用页面----------------------------------
+				{
+				    "path" : "pages/ruralDynamics/rd_edit",
+				    "style" : {}
+				},
+				{
+				    "path" : "pages/ruralDynamics/rd_list",
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
+				}
 			]
 		}
 	],
