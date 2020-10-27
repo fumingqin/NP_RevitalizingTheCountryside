@@ -138,9 +138,9 @@
 								}
 							},
 							fail: (err) => {
-								uni.showModal({
-									content: JSON.stringify(err)
-								});
+								// uni.showModal({
+								// 	content: JSON.stringify(err)
+								// });
 							}
 						});
 					break;
@@ -148,10 +148,12 @@
 			},
 			delImage(index){
 				//第一个是判断app或者h5的 第二个是判断小程序的
-				if(this.uploads[index].substring(0,4) !== 'http' || this.uploads[index].substring(0,11) == 'http://tmp/'){
-					this.uploads.splice(index,1)
-					return;
-				};
+				// if(this.uploads[index].substring(0,4) !== 'http' || this.uploads[index].substring(0,11) == 'http://tmp/'){
+				// 	this.uploads.splice(index,1)
+				// 	return;
+				// };
+				this.uploads.splice(index,1)
+				return;
 				if(!this.deleteUrl) {
 					uni.showModal({
 						content: '请填写删除接口'
@@ -165,6 +167,7 @@
 						image: this.dataList[index]
 					},
 					success: res => {
+						this.$emit('delImage',res)
 						if(res.data.status == 1) {
 							uni.showToast({
 								title: '删除成功'

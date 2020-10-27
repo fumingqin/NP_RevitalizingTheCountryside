@@ -11,28 +11,13 @@
 				</u-form-item>
 
 				<!-- 类型 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="选择类型" :border-bottom="false" prop="goodsType">
+				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="选择类型" :border-bottom="false" prop="goodsType">
 					<view class="viewClass" style="padding-right: 20rpx;">
 						<u-input :custom-style="tradeNameStyle" :border="border" type="select" :select-open="selectShow" v-model="model.goodsType"
 						 placeholder="请选择选择类型" @click="selectShow = true"></u-input>
 					</view>
 				</u-form-item>
-
-				<!-- 商品来源地 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品来源地" :border-bottom="false" prop="region">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" type="select" :select-open="pickerShow" v-model="model.region"
-						 placeholder="请选择商品来源地" @click="pickerShow = true"></u-input>
-					</view>
-				</u-form-item> -->
-
-				<!-- 商品价格 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品价格" :border-bottom="false" prop="cost">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品价格" v-model="model.cost" :type="text"></u-input>
-					</view>
-				</u-form-item> -->
-
+ -->
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164" height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
@@ -40,21 +25,8 @@
 							<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
 						</view>
 					</u-upload>
-					<!-- <view class="bottom-view-ImageUpload">
-						<robby-image-upload v-model="model.imageData" :showUploadProgress="show" :form-data="formData" @delete="deleteImage"
-						 @add="addImage" :enable-del="enableDel" :enable-add="enableAdd" limit="3"></robby-image-upload>
-					</view> -->
 				</u-form-item>
 
-				<!-- 上传视频 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
-					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
-					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
-				</u-form-item>
-				<view v-if="informationDetail.video!=='' || types!==0" style="display: flex;position: relative;width: 100%;">
-					<text style="position: absolute;width: :;upx;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 28upx;">{{informationDetail.video}}</text>
-					<text style="position: absolute;right: 0;color:#007AFF;font-size: 28upx;" @click="deleteVideo(0)">删除</text>
-				</view> -->
 				<!-- 商品简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -147,7 +119,7 @@
 		pathToBase64,
 		base64ToPath
 	} from '@/pages_GRZX/components/GRZX/js_sdk/gsq-image-tools/image-tools/index.js';
-	import robbyImageUpload from '@/pages_YCYD/components/LYFW/robby-image-upload/robby-image-upload.vue';
+	import robbyImageUpload from '@/pages_XCDT/components/robby-image-upload/robby-image-upload.vue';
 	var _self;
 	export default {
 		components: {
@@ -318,8 +290,8 @@
 			this.id = param.id;
 			if (this.jumpStatus == '修改') {
 				uni.request({
-					url: this.$ycyd.KyInterface.getArchiveDetailByID.Url,
-					method: this.$ycyd.KyInterface.getArchiveDetailByID.method,
+					url:this.$xcdt.KyInterface.getDynamicDetailByID.Url,
+					method:this.$xcdt.KyInterface.getDynamicDetailByID.method,
 					data: {
 						id: this.id
 					},
@@ -332,7 +304,6 @@
 								this.xiugaiData();
 							}
 						});
-
 					}
 				})
 
@@ -374,6 +345,7 @@
 							}
 						}
 						this.fileList = imageArray
+						console.log(this.fileList)
 						if(this.informationDetail.image[0] !== ''){
 							this.lists = this.informationDetail.image[0];
 						}
@@ -521,6 +493,7 @@
 					count: 1,
 					success: (res) => {
 						const tempFilePaths = res.tempFilePaths;
+						console.log(this.$ycyd.KyInterface.upload.Url)
 						uni.uploadFile({
 							url: this.$ycyd.KyInterface.upload.Url,
 							filePath: tempFilePaths[0],
@@ -590,18 +563,18 @@
 				console.log(this.fileList)
 				console.log(this.lists)
 				
-				if(this.fileList !== undefined){
+				if(this.fileList !== undefined && this.jumpStatus == '修改'){
 					// console.log('我从服务器进来了')
 					this.pictureArray.push(this.fileList[0].url);
 				}else if(this.lists.length == 0){
 					// console.log('我从本低进来了1')
-					this.pictureArray.push('');
+					this.pictureArray.push(this.lists[0].response.data);
 				}else{
 					// console.log('我从本低进来了2')
+					// console.log(path)
 					var path = this.lists.length > 0 ? this.lists[0].response.data : "";
 					this.pictureArray.push(path);
 				}
-				
 				
 				uni.showLoading({
 					title: '提交中...',
@@ -631,15 +604,14 @@
 						if (this.jumpStatus == '修改') {
 							if (this.issueText !== '<p><br></p>') {
 								uni.request({
-									url: this.$ycyd.KyInterface.updateArchives.Url,
-									method: this.$ycyd.KyInterface.updateArchives.method,
+									url: this.$xcdt.KyInterface.editDynamic.Url,
+									method: this.$xcdt.KyInterface.editDynamic.method,
 									data: {
 										id: this.informationDetail.id,
 										userId: this.userInfo.userId,
 										content: this.issueText,
 										image: JSON.stringify(this.pictureArray),	
 										title: this.model.name,
-										article_type: this.model.goodsType,
 										// video: JSON.stringify(arr)
 									},
 									success: (res) => {
@@ -682,14 +654,13 @@
 						} else {
 							if (this.issueText !== '<p><br></p>') {
 								uni.request({
-									url: this.$ycyd.KyInterface.releaseArchives.Url,
-									method: this.$ycyd.KyInterface.releaseArchives.method,
+									url: this.$xcdt.KyInterface.releaseDynamic.Url,
+									method: this.$xcdt.KyInterface.releaseDynamic.method,
 									data: {
 										userId: this.userInfo.userId,
 										content: this.issueText,
-										image: JSON.stringify(this.pictureArray),
+										image: JSON.stringify(this.lists.response.data),
 										title: this.model.name,
-										article_type: this.model.goodsType,
 										// video: JSON.stringify(arr)
 									},
 									success: (res) => {

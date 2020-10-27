@@ -403,6 +403,10 @@
 				    "path" : "pages/LYFW/agricultureProducts/ovof_feedback",
 				    "style" : {}
 				}
+				,{
+				    "path" : "pages/LYFW/agricultureProducts/ovof_addPage",
+				    "style" : {}
+				}
 			]
 		},
 		//---------------------------------------------第五个包：政策发布------------------------------------------
@@ -496,6 +500,25 @@
 				    "path" : "pages/WSSC/myGoodsList",
 				    "style" : {
 						"navigationBarTitleText": "我的发布"
+					}
+				}
+				
+			]
+		},
+		
+		//---------------------------------------------第八个包：乡村动态------------------------------------------
+		{
+			"root": "pages_XCDT/",
+			"pages": [
+				//----------------------------------通用页面----------------------------------
+				{
+				    "path" : "pages/ruralDynamics/rd_edit",
+				    "style" : {}
+				},
+				{
+				    "path" : "pages/ruralDynamics/rd_list",
+				    "style" : {
+						"enablePullDownRefresh":true
 					}
 				}
 			]

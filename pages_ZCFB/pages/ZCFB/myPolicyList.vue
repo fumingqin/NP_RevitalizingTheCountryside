@@ -3,21 +3,18 @@
 		<!-- 内容1 -->
 		<view>
 			<view class="content">
-				<view class="groupTour" v-for="(item,index) in groupTitle" :key="index" v-if="index < scenicListIndex" @click="details">
+				<view class="groupTour" v-for="(item,index) in groupTitle" :key="index" @click="details(item.id)">
 					<view class="groupContent">
-						<image class="contentImage" :src="item.imgUrl" mode="aspectFill"></image>
+						<image class="contentImage" :src="item.image" mode="aspectFill"></image>
 					</view>
 					<view class="groupText">
-						<!-- <text class="contentLabel">{{item2.contentLabelS1}} | {{item2.contentLabelS2}} | {{item2.contentLabelS3}}</text> -->
 						<view class="groupCost">
 							<view class="TitleContent">
 								<text class="contentText">{{item.title}}</text>
-								<text class="contentCost">￥{{item.cost}}</text>
 							</view>
 							<view class="projectContent">{{item.content}}</view>
-							<text class="cost">{{item.updatedTime}}&nbsp;&nbsp;{{item.count}}浏览量</text>
-							<text class="sellComment" style="color: #42e800;" v-if="item.colleagueStatus==true">上架中</text>
-							<text class="sellComment" style="color: #ff0000;" v-if="item.colleagueStatus==false">已下架</text>
+							<text class="cost">{{gettime(item.update_time)}}</text>
+							<text class="sellComment" style="color: #42e800;">{{item.state}}</text>
 						</view>
 					</view>
 				</view>
@@ -33,99 +30,100 @@
 	export default {
 		data() {
 			return {
-				groupTitle:[{
-					imgUrl:'',
-					title:'商品名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:1,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'',
-					title:'商品名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:2,
-					updatedTime:'2020-09-12',
-					colleagueStatus:false
-				},
-				{
-					imgUrl:'',
-					title:'商品名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:3,
-					updatedTime:'2020-09-12',
-					colleagueStatus:false
-				},
-				{
-					imgUrl:'',
-					title:'商品名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:4,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'',
-					title:'商品名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:5,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'',
-					title:'商品名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:6,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				}],
-				selectId:'',//去出id
-				selectIndex:0,//下标
+				groupTitle: [{
+						imgUrl: '',
+						title: '商品名',
+						content: '农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
+						count: 122,
+						cost: 1200,
+						id: 1,
+						updatedTime: '2020-09-12',
+						colleagueStatus: true
+					},
+					{
+						imgUrl: '',
+						title: '商品名',
+						content: '农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
+						count: 122,
+						cost: 1200,
+						id: 2,
+						updatedTime: '2020-09-12',
+						colleagueStatus: false
+					},
+					{
+						imgUrl: '',
+						title: '商品名',
+						content: '农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
+						count: 122,
+						cost: 1200,
+						id: 3,
+						updatedTime: '2020-09-12',
+						colleagueStatus: false
+					},
+					{
+						imgUrl: '',
+						title: '商品名',
+						content: '农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
+						count: 122,
+						cost: 1200,
+						id: 4,
+						updatedTime: '2020-09-12',
+						colleagueStatus: true
+					},
+					{
+						imgUrl: '',
+						title: '商品名',
+						content: '农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
+						count: 122,
+						cost: 1200,
+						id: 5,
+						updatedTime: '2020-09-12',
+						colleagueStatus: true
+					},
+					{
+						imgUrl: '',
+						title: '商品名',
+						content: '农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
+						count: 122,
+						cost: 1200,
+						id: 6,
+						updatedTime: '2020-09-12',
+						colleagueStatus: true
+					}
+				],
+				selectId: '', //去出id
+				selectIndex: 0, //下标
 				loadingType: 0, //加载更多状态
-				loadingText:{
-					down :'上拉加载更多',
-					refresh : '正在加载...',
-					nomore : '没有更多了',
+				loadingText: {
+					down: '上拉加载更多',
+					refresh: '正在加载...',
+					nomore: '没有更多了',
 				},
-				scenicListIndex:5,//列表默认数量
+				scenicListIndex: 5, //列表默认数量
 			}
 		},
 		onReachBottom() {
 			this.getMore();
 		},
-		
+
 		methods: {
 			//---------------------------跳转详情页----------------------
 			details() {
 				console.log('aaa')
-					uni.navigateTo({
-						url: '../goodsDetails'
-					})
+				uni.navigateTo({
+					url: '../goodsDetails'
+				})
 			},
 			//----------------------加载更多--------------------------------
-			getMore(){
+			getMore() {
 				this.loadingType = 1;
-				
-				if(this.scenicListIndex < this.groupTitle.length){
-					var a = this.scenicListIndex +6;
+
+				if (this.scenicListIndex < this.groupTitle.length) {
+					var a = this.scenicListIndex + 6;
 					this.scenicListIndex = a;
 					this.loadingType = 0;
 				}
-				if(this.scenicListIndex >= this.groupTitle.length){
+				if (this.scenicListIndex >= this.groupTitle.length) {
 					this.loadingType = 2;
 				}
 			},
@@ -138,19 +136,19 @@
 	page {
 		background-color: #f6f6f6;
 	}
-	
+
 	.to_scroll {
 		display: flex;
 		white-space: nowrap;
 		width: 100%;
-		
-		
+
+
 	}
-	
+
 	//内容1
 	.content {
 		margin: 30upx 32upx 0 32upx;
-	
+
 		.groupTour {
 			display: flex;
 			background-color: #FFFFFF;
@@ -160,9 +158,9 @@
 			padding-right: 30upx;
 			margin-bottom: 20upx;
 			border-radius: 20upx;
-	
+
 			.groupContent {
-	
+
 				// display: flex;
 				.contentImage {
 					width: 190upx;
@@ -170,25 +168,25 @@
 					border-radius: 12upx;
 				}
 			}
-	
+
 			.groupText {
 				margin-left: 25upx;
-				
-				
+
+
 				.contentLabel {
 					display: block;
 					font-size: 28upx;
 					color: #aba9aa;
 					margin-top: 24upx;
 				}
-	
+
 				.groupCost {
 					position: relative;
-					
-					.TitleContent{
+
+					.TitleContent {
 						display: flex;
 						margin-bottom: 22upx;
-						
+
 						.contentText {
 							font-size: 36upx;
 							font-weight: bold;
@@ -200,8 +198,8 @@
 							-webkit-box-orient: vertical;
 							text-align: justify;
 						}
-						
-						.contentCost{
+
+						.contentCost {
 							position: absolute;
 							// font-weight: bold;
 							right: 0;
@@ -209,14 +207,14 @@
 							color: #FF5555;
 						}
 					}
-					
+
 					.cost {
 						display: block;
 						font-size: 28upx;
 						color: #aba9aa;
 						padding-top: 14upx;
 					}
-					
+
 					.projectContent {
 						font-size: 28upx;
 						color: #aba9aa;
@@ -225,7 +223,7 @@
 						overflow: hidden;
 						width: 420upx;
 					}
-					
+
 					.sellComment {
 						position: absolute;
 						font-size: 28upx;
@@ -235,8 +233,8 @@
 				}
 			}
 		}
-		
-		.select{
+
+		.select {
 			display: flex;
 			background-color: #FFFFFF;
 			padding-top: 40upx;
@@ -248,5 +246,4 @@
 			border: #5AD234 solid 2rpx;
 		}
 	}
-	
 </style>

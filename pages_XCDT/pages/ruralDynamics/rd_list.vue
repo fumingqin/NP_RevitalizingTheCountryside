@@ -1,13 +1,15 @@
 <template>
 	<view>
+		
+		<view v-if="groupTitle == ''" style="margin-top: 400upx;">
+			<u-empty text="暂无列表数据哦~" mode="list"></u-empty>
+		</view>
+		
 		<!-- 内容1 -->
-		<view class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
+		<view v-if="groupTitle !== ''" class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
 			<view class="view_titleView">
 				<view class="tv_view">
 					<view style="display: flex;">
-						<view style="margin-top: 10upx;">
-							<text class="tv_label">{{item.article_type}}</text>
-						</view>
 						<view class="tv_title">{{item.title}}</view>
 					</view>
 					<!-- <text class="tv_richText">{{item.content}}</text> -->
@@ -20,7 +22,7 @@
 			
 			<view class="view_contentView">
 				<text>{{item.nick_name}}</text>
-				<text class="cont_text">{{item.count}}人看过</text>
+				<text class="cont_text">{{item.view}}人看过</text>
 				<text class="cont_text">{{informationDate(item.update_time)}}</text>
 				<text class="cont_icon" style="color: #007AFF;" v-if="item.state=='已上架'">发布中</text>
 				<text class="cont_icon" style="color: #FC4646;" v-if="item.state=='已下架'">未发布</text>
@@ -31,7 +33,7 @@
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 			</view> -->
 		</view>
-		<view  style="padding-bottom: 180upx;"></view>
+		
 		<view>
 			<view class="to_view">
 				<scroll-view class="to_scroll" scroll-x="true">
@@ -139,8 +141,8 @@
 					title: '加载列表中...',
 				})
 				uni.request({
-					url:this.$ycyd.KyInterface.getArchivesByUserID.Url,
-					method:this.$ycyd.KyInterface.getArchivesByUserID.method,
+					url:this.$xcdt.KyInterface.getDynamicById.Url,
+					method:this.$xcdt.KyInterface.getDynamicById.method,
 					data:{
 						userId:e.userId
 					},
@@ -152,6 +154,7 @@
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
+							this.groupTitle=res.data.data;
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 							uni.showToast({
@@ -193,16 +196,16 @@
 			},
 			
 			//--------------------------路由跳转(添加列表文章)------------------------------
-			routeJump2:function(e){
+			routeJump2:function(){
 				uni.navigateTo({
-					url:'./ovof_addPage',
+					url:'./rd_edit'
 				})
 			},
 			
 			//--------------------------路由跳转(修改列表文章)------------------------------
 			modifyJump:function(item){
 				uni.navigateTo({
-					url: './ovof_edit?jumpStatus=' +this.state + '&id=' + item.id
+					url: './rd_edit?jumpStatus=' +this.state + '&id=' + item.id
 				})
 			},
 			
@@ -217,8 +220,8 @@
 								title: '正在发布....'
 							})
 							uni.request({
-								url: this.$ycyd.KyInterface.upAndDownArchives.Url,
-								method: this.$ycyd.KyInterface.upAndDownArchives.method,
+								url: this.$xcdt.KyInterface.upAndDown.Url,
+								method: this.$xcdt.KyInterface.upAndDown.method,
 								data: {
 									id: e
 								},
@@ -268,8 +271,8 @@
 								title: '正在下架....'
 							})
 							uni.request({
-								url: this.$ycyd.KyInterface.upAndDownArchives.Url,
-								method: this.$ycyd.KyInterface.upAndDownArchives.method,
+								url: this.$xcdt.KyInterface.upAndDown.Url,
+								method: this.$xcdt.KyInterface.upAndDown.method,
 								data: {
 									id: e
 								},
@@ -319,8 +322,8 @@
 								title: '正在删除....'
 							})
 							uni.request({
-								url: this.$ycyd.KyInterface.deleteArchives.Url,
-								method: this.$ycyd.KyInterface.deleteArchives.method,
+								url: this.$xcdt.KyInterface.deleteDynamic.Url,
+								method: this.$xcdt.KyInterface.deleteDynamic.method,
 								data: {
 									id: e,
 									userId:this.userInfo.userId
