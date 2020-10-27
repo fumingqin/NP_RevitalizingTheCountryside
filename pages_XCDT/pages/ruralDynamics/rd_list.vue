@@ -1,7 +1,12 @@
 <template>
 	<view>
+		
+		<view v-if="groupTitle == ''" style="margin-top: 400upx;">
+			<u-empty text="暂无列表数据哦~" mode="list"></u-empty>
+		</view>
+		
 		<!-- 内容1 -->
-		<view class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
+		<view v-if="groupTitle !== ''" class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
 			<view class="view_titleView">
 				<view class="tv_view">
 					<view style="display: flex;">
@@ -32,7 +37,7 @@
 		<view>
 			<view class="to_view">
 				<scroll-view class="to_scroll" scroll-x="true">
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump2(groupTitle[selectIndex].id)">添加</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump2">添加</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
@@ -149,6 +154,7 @@
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
+							this.groupTitle=res.data.data;
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 							uni.showToast({
@@ -190,9 +196,9 @@
 			},
 			
 			//--------------------------路由跳转(添加列表文章)------------------------------
-			routeJump2:function(e){
+			routeJump2:function(){
 				uni.navigateTo({
-					url:'./rd_edit?id=' +e,
+					url:'./rd_edit'
 				})
 			},
 			

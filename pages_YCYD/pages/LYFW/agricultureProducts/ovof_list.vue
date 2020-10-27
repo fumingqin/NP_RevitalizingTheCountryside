@@ -31,7 +31,7 @@
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 			</view> -->
 		</view>
-		
+		<view  style="padding-bottom: 180upx;"></view>
 		<view>
 			<view class="to_view">
 				<scroll-view class="to_scroll" scroll-x="true">
@@ -195,7 +195,7 @@
 			//--------------------------路由跳转(添加列表文章)------------------------------
 			routeJump2:function(e){
 				uni.navigateTo({
-					url:'./ovof_edit?id=' +e,
+					url:'./ovof_addPage',
 				})
 			},
 			
