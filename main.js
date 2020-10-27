@@ -11,6 +11,7 @@ import Bus from 'common/Bus.js'   //公交
 import share from 'common/share.js'//引入分享
 import ycyd from 'common/ycyd.js'//引入分享
 import xcdt from 'common/xcdt.js'//引入乡村动态
+import zcfb from 'common/zcfb.js'//引入乡村动态
 
 Vue.use(uView)
 Vue.mixin(share)
@@ -23,6 +24,7 @@ Vue.prototype.$home=home; //首页
 Vue.prototype.$Bus=Bus;
 Vue.prototype.$ycyd=ycyd;//一村一档
 Vue.prototype.$xcdt=xcdt;//乡村动态
+Vue.prototype.$zcfb=zcfb;//乡村动态
 App.mpType = 'app'
 
 const app = new Vue({

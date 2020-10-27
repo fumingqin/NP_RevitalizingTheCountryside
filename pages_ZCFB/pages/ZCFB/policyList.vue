@@ -3,21 +3,18 @@
 		<!-- 内容1 -->
 		<view>
 			<view class="content">
-				<view class="groupTour" v-for="(item,index) in groupTitle" :key="index" v-if="index < scenicListIndex">
+				<view class="groupTour" v-for="(item,index) in groupTitle" :key="index" @click="details(item.id)">
 					<view class="groupContent">
-						<image class="contentImage" :src="item.imgUrl" mode="aspectFill"></image>
+						<image class="contentImage" :src="item.image" mode="aspectFill"></image>
 					</view>
 					<view class="groupText">
-						<!-- <text class="contentLabel">{{item2.contentLabelS1}} | {{item2.contentLabelS2}} | {{item2.contentLabelS3}}</text> -->
 						<view class="groupCost">
 							<view class="TitleContent">
 								<text class="contentText">{{item.title}}</text>
-								<text class="contentCost">￥{{item.cost}}</text>
 							</view>
 							<view class="projectContent">{{item.content}}</view>
-							<text class="cost">{{item.updatedTime}}&nbsp;&nbsp;{{item.count}}浏览量</text>
-							<text class="sellComment" style="color: #42e800;" v-if="item.colleagueStatus==true">上架中</text>
-							<text class="sellComment" style="color: #ff0000;" v-if="item.colleagueStatus==false">已下架</text>
+							<text class="cost">{{gettime(item.update_time)}}</text>
+							<text class="sellComment" style="color: #42e800;">{{item.state}}</text>
 						</view>
 					</view>
 				</view>
@@ -33,66 +30,7 @@
 	export default {
 		data() {
 			return {
-				groupTitle:[{
-					imgUrl:'../../static/ZCFB/demo.png',
-					title:'政策名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:1,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../static/ZCFB/demo.png',
-					title:'政策名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:2,
-					updatedTime:'2020-09-12',
-					colleagueStatus:false
-				},
-				{
-					imgUrl:'../../static/ZCFB/demo.png',
-					title:'政策名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:3,
-					updatedTime:'2020-09-12',
-					colleagueStatus:false
-				},
-				{
-					imgUrl:'../../static/ZCFB/demo.png',
-					title:'政策名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:4,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../static/ZCFB/demo.png',
-					title:'政策名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:5,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				},
-				{
-					imgUrl:'../../static/ZCFB/demo.png',
-					title:'政策名',
-					content:'农产品流通重点设施建设，商品商品商品商品商品商品商品商品商品商品',
-					count:122,
-					cost:1200,
-					id:6,
-					updatedTime:'2020-09-12',
-					colleagueStatus:true
-				}],
+				groupTitle:'',
 				selectId:'',//去出id
 				selectIndex:0,//下标
 				loadingType: 0, //加载更多状态
@@ -107,31 +45,59 @@
 		onReachBottom() {
 			this.getMore();
 		},
+		onLoad() {
+			this.ycydData();
+		},
 		
 		methods: {
-			//--------------------点击列表事件------------------------------
-			selectClick:function(e){
-				//给选择的下标赋值
-				this.selectIndex = e;
-				console.log('上车点下标赋值',this.selectIndex)
-				//取出id
-				this.selectId = this.groupTitle[e].id;
-				console.log('取出id',this.selectId)
+			//----------------------列表接口--------------------------------
+			ycydData:function(){
+				uni.showLoading({
+					title: '加载列表中...',
+				})
+				uni.request({
+					url:this.$zcfb.KyInterface.getPolicy.Url,
+					method:this.$zcfb.KyInterface.getPolicy.method,
+					data:{
+						
+					},
+					success:(res) =>{
+						console.log('列表数据',res)
+						if(res.data.status == true){
+							this.groupTitle=res.data.data;
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+						}else{
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+							uni.showToast({
+								title: '暂无列表信息',
+								icon: 'none'
+							})
+						}
+					},
+					fail(res) {
+						uni.hideLoading();
+						uni.showToast({
+							title: '服务器异常',
+							icon: 'none'
+						})
+						// console.log(res)
+					}
+				})
 			},
-			
-			//----------------------加载更多--------------------------------
-			getMore(){
-				this.loadingType = 1;
-				
-				if(this.scenicListIndex < this.groupTitle.length){
-					var a = this.scenicListIndex +6;
-					this.scenicListIndex = a;
-					this.loadingType = 0;
-				}
-				if(this.scenicListIndex >= this.groupTitle.length){
-					this.loadingType = 2;
-				}
+			//-------------------时间切割---------------------------
+			gettime:function(param){
+					let array=param.split(' ');
+					var a=array[0];
+					return a;
 			},
+			//--------------------------路由跳转------------------------------
+			details:function(e){
+				uni.navigateTo({
+					url:'policyDetails?id=' +e,
+				})
+			}
 		}
 	}
 </script>
