@@ -198,7 +198,7 @@
 			//--------------------------路由跳转(添加列表文章)------------------------------
 			routeJump2:function(){
 				uni.navigateTo({
-					url:'./rd_edit'
+					url:'./rd_addPage'
 				})
 			},
 			
