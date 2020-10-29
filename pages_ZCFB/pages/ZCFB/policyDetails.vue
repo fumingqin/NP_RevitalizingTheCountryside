@@ -1,23 +1,23 @@
 <template>
 	<view>
 		<!-- 轮播区 -->
-		<u-swiper :list="rotationChart" :height="422" indicator-pos="bottomRight" name="ImageURL">
+		<u-swiper :list="groupTitle.image" :height="422" indicator-pos="bottomRight">
 			<u-loading slot="loading"></u-loading>
 			<view slot="error" style="font-size: 24rpx;">加载失败</view>
 		</u-swiper>
 		
 		<view class="ovof_dp_background">
+			<view style="width: 750upx;"></view>
 			<view class="ovof_dp_bg_background">
-				<view class="ovof_dp_bg_title">{{title}}</view>
+				<view class="ovof_dp_bg_title">{{groupTitle.title}}</view>
 				<view class="ovof_dp_bg_time">
-					<text class="time">{{time}}</text>
-					<text class="browse">浏览量:</text>
-					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="browse"></u-count-to>
+					<text class="time">{{groupTitle.update_time}}</text>
 				</view>
 				<view class="grClass">
-					<!-- <image class="txImage" src="../../../static/LYFW/agricultureProducts/touxiang.png" mode="aspectFill"></image> -->
+					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.avatar" mode="aspectFill"></image>
+					<image v-if="groupTitle.avatar==''" class="txImage" src="../../static/missing-face.png" mode="aspectFill"></image>
 					<view class="grView">
-						<view class="name">{{name}}</view>
+						<view class="name">{{groupTitle.nick_name}}</view>
 						<text class="number">{{post}}</text>
 					</view>
 				</view>
@@ -38,12 +38,30 @@
 				</view>
 				
 				<u-read-more v-if="type==0" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 				</u-read-more>
 				
 				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+					<view v-if="groupTitle.video!=''">
+						<view class="uploader_video">
+						    <video :src="groupTitle.video[0]" class="video"></video>
+						</view>
+					</view>
+					<view style="width: 600upx;">{{groupTitle.pdfName}}</view>
+					<view>
+						<l-file ref="lFile" @up-success="onSuccess"></l-file>
+						<view class="text-center">
+							<view class="padding" style="display: flex;">
+								<button style="width: 200upx;font-size: 24upx;" @tap="onOpenDoc(groupTitle.pdfFile[0])">预览</button>
+								<button style="width: 200upx;font-size: 24upx;" @tap="onDown(groupTitle.pdfFile[0])">下载到本地</button>
+							</view>
+						</view>
+					</view>
 				</u-read-more>
+				
+				<!-- <view>
+					<video id="myVideo" :src="groupTitle." enable-danmu danmu-btn controls></video>
+				</view> -->
 			</view>
 		</view>
 	</view>
@@ -53,25 +71,30 @@
 	export default {
 		data() {
 			return {
-				rotationChart: ['', ''], //轮播图
+				rotationChart: [], //轮播图
+				groupTitle:[],
 				title:'农田基础建设项目',
 				time:'2020-02-10',
 				browse:'122',
 				showHeight:600,
 				toggle: false,
-				name:'张三丰',
 				post:'市级职责人员',
 				type: 0,
+				id:'',
 				// 字符串的形式
 				style: {
 					p: 'letter-spacing: 4rpx;text-align: justify;line-height: 48rpx;font-size:30rpx;text-justify: inter-ideograph; text-indent: 2em;padding-bottom: 20rpx;padding-top: 20rpx;',
 					span: 'font-size: 30rpx'
 				},
-				content:'<p>露从今夜白，月是故乡明,露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明</p><img src="https://cdn.uviewui.com/uview/swiper/2.jpg" /><p>露从今夜白，月是故乡明,露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明</p><img src="https://cdn.uviewui.com/uview/swiper/2.jpg" /><p>露从今夜白，月是故乡明,露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明</p><img src="https://cdn.uviewui.com/uview/swiper/2.jpg" /><p>露从今夜白，月是故乡明,露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明</p><img src="https://cdn.uviewui.com/uview/swiper/2.jpg" />'
 			}
 		},
 		
-		onLoad:function() {
+		onLoad:function(param) {
+			uni.showLoading({
+				title: '加载详情中...',
+			})
+			this.id = param.id;
+			console.log(this.id)
 			this.loadData();
 		},
 		
@@ -79,25 +102,60 @@
 			//加载数据
 			loadData: function() {
 				uni.request({
-					url: this.$home.KyInterface.GetRotationChart.Url,
-					method: this.$home.KyInterface.GetRotationChart.method,
+					url:this.$zcfb.KyInterface.getPolicyDetailByID.Url,
+					method:this.$zcfb.KyInterface.getPolicyDetailByID.method,
+					data:{
+						id : this.id
+					},
 					success: (res) => {
-						console.log('轮播区', res)
-						this.rotationChart = res.data.data.filter(item => {
-							return item.Type == '首页轮播图';
-						})
-						// console.log(this.rotationChart)
+						console.log('详情', res)
+						if(res.data.status == true){
+							this.groupTitle=res.data.data;
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+						}else{
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+							uni.showToast({
+								title: '暂无列表信息',
+								icon: 'none'
+							})
+						}
+						// console.log('111111111',this.rotationChart)
 					},
 					fail: function() {
+						uni.hideLoading();
 						uni.showToast({
-							title: '首页轮播图网络加载异常',
+							title: '服务器异常',
 							icon: 'none'
 						})
 					}
 				})
 			},
-			
-			
+			//-------------------时间切割---------------------------
+			gettime:function(param){
+					let array=param.split(' ');
+					var a=array[0];
+					return a;
+			},
+			//----------------预览--------------------
+			onOpenDoc(e) {
+				let url = e;
+				/* 下载返回临时路径（退出应用失效） */
+				this.$refs.lFile.download(url)
+				.then(path=>{
+					/* 预览 */
+					this.$refs.lFile.open(path);
+				});
+			},
+			//--------------下载---------------------
+				onDown(e) {
+					let url = e;
+					this.$refs.lFile.download(url,'local')
+					.then(path=>{
+						console.log(path);
+					}); 
+				},
 			tabClick(e) {
 				if (e == 0) {
 					this.type = 0;
@@ -157,6 +215,7 @@
 		background: #FFFFFF;
 		padding-left: 15upx;
 		padding-right: 15upx;
+		width: 100%;
 	}
 	
 	.grClass {
@@ -215,6 +274,7 @@
 		position: sticky;
 		top: 0;
 		z-index: 1;
+		background: #FFFFFF;
 
 		.screenView {
 			left: 0;
@@ -256,5 +316,15 @@
 				}
 			}
 		}
+	}
+	.uploader_video{
+	    position: relative;
+	    z-index: 1;
+	    width: 200upx;
+	    height: 200upx;
+	}
+	.video{
+	    width: 100%;
+	    height: 100%;
 	}
 </style>
