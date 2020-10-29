@@ -35,6 +35,12 @@
 			}
 		},
 		{
+			"path": "pages/GRZX/selectVillage",
+			"style": {
+				"navigationBarTitleText": "选择村庄"
+			}
+		},
+		{
 			"path": "pages/GRZX/userLogin",
 			"style": {
 				"navigationStyle": "custom"
@@ -374,7 +380,7 @@
 				}
 			]
 		},
-		//---------------------------------------------第四个包：旅游服务------------------------------------------
+		//---------------------------------------------第四个包：一村一档------------------------------------------
 		{
 			"root": "pages_YCYD/",
 			"pages": [
@@ -520,6 +526,10 @@
 				    "style" : {
 						"enablePullDownRefresh":true
 					}
+				}
+				,{
+				    "path" : "pages/ruralDynamics/rd_addPage",
+				    "style" : {}
 				}
 			]
 		}

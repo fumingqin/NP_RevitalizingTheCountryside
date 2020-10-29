@@ -172,10 +172,16 @@
 								success(res) {
 									console.log(res)
 									let data = res.data.data;
-									uni.setStorageSync('userInfo', data);
-									uni.removeStorageSync('captchaCode');
 									uni.hideLoading();
-									that.successReturn(); //登陆成功后返回
+									if(data.rId == "" || data.rId == null){
+										uni.navigateTo({
+											url:'./selectVillage?phoneNumber='+phone,
+										})
+									}else{
+										uni.setStorageSync('userInfo', data);
+										uni.removeStorageSync('captchaCode');
+										that.successReturn(); //登陆成功后返回
+									}
 								}
 							})
 						} else {
