@@ -668,7 +668,7 @@
 		//height: 874upx;
 		height: 800upx;
 		position: absolute;
-		top: 370upx;
+		top: 450upx;
 		left: 4.8%;
 		// background-color: white;
 		border-radius: 20upx;
