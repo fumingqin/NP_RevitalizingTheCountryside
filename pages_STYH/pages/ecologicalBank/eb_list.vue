@@ -69,7 +69,6 @@
 					color: '#007AFF',
 					fontSize:'17px',
 					border:'#007AFF solid 1rpx',
-					
 				},
 				groupTitle:[],
 				selectId:'',//去出id
@@ -141,8 +140,8 @@
 					title: '加载列表中...',
 				})
 				uni.request({
-					url:this.$xcdt.KyInterface.getDynamicById.Url,
-					method:this.$xcdt.KyInterface.getDynamicById.method,
+					url:this.$styh.KyInterface.getEcologyByUserID.Url,
+					method:this.$styh.KyInterface.getEcologyByUserID.method,
 					data:{
 						userId:e.userId
 					},
@@ -191,21 +190,21 @@
 			//--------------------------路由跳转------------------------------
 			routeJump:function(e){
 				uni.navigateTo({
-					url:'rd_detailsPage?id=' +e,
+					url:'eb_detailsPage?id=' +e,
 				})
 			},
 			
 			//--------------------------路由跳转(添加列表文章)------------------------------
 			routeJump2:function(){
 				uni.navigateTo({
-					url:'./rd_addPage'
+					url:'./eb_addPage'
 				})
 			},
 			
 			//--------------------------路由跳转(修改列表文章)------------------------------
 			modifyJump:function(item){
 				uni.navigateTo({
-					url: './rd_edit?jumpStatus=' +this.state + '&id=' + item.id
+					url: './eb_edit?jumpStatus=' +this.state + '&id=' + item.id
 				})
 			},
 			
@@ -220,8 +219,8 @@
 								title: '正在发布....'
 							})
 							uni.request({
-								url: this.$xcdt.KyInterface.upAndDown.Url,
-								method: this.$xcdt.KyInterface.upAndDown.method,
+								url: this.$styh.KyInterface.upAndDownEcology.Url,
+								method: this.$styh.KyInterface.upAndDownEcology.method,
 								data: {
 									id: e
 								},
@@ -271,8 +270,8 @@
 								title: '正在下架....'
 							})
 							uni.request({
-								url: this.$xcdt.KyInterface.upAndDown.Url,
-								method: this.$xcdt.KyInterface.upAndDown.method,
+								url: this.$styh.KyInterface.upAndDownEcology.Url,
+								method: this.$styh.KyInterface.upAndDownEcology.method,
 								data: {
 									id: e
 								},
@@ -322,8 +321,8 @@
 								title: '正在删除....'
 							})
 							uni.request({
-								url: this.$xcdt.KyInterface.deleteDynamic.Url,
-								method: this.$xcdt.KyInterface.deleteDynamic.method,
+								url: this.$styh.KyInterface.deleteEcology.Url,
+								method: this.$styh.KyInterface.deleteEcology.method,
 								data: {
 									id: e,
 									userId:this.userInfo.userId

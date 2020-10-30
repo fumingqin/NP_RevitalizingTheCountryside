@@ -54,6 +54,18 @@ const KyInterface = {
 		name:'修改乡村动态列表',
 		method:'POST',
 	},
+	
+	addViews:{
+		Url:Url + '/api/ruralDynamic/addViews',
+		name:'增加浏览量',
+		method:'POST',
+	},
+	
+	getDynamic:{
+		Url:Url + '/api/ruralDynamic/getDynamic',
+		name:'获取所有列表数据',
+		method:'POST',
+	},
 }
 
 // 接口声明区
