@@ -15,8 +15,14 @@ import $oSit from '@/common/overallSituation.js'; //引入公共js文件
 const KyInterface = {
 	//GET-POST
 	//--------------------------------------列表接口--------------------------------------
+	releasePolicy:{
+		Url:Url + '/api/policy/releasePolicy',
+		name:'发布政策列表接口',
+		method:'POST',
+	},
+	//--------------------------------------列表接口--------------------------------------
 	getPolicy:{
-		Url:Url + '/api/policy/getPolicy ',
+		Url:Url + '/api/policy/getPolicy',
 		name:'政策发布列表接口',
 		method:'POST',
 	},
@@ -45,7 +51,7 @@ const KyInterface = {
 	
 	//--------------------------------------上下架接口--------------------------------------
 	upAndDownArchives:{
-		Url:Url + '/api/village/upAndDownArchives',
+		Url:Url + '/api/policy/upAndDownArchives',
 		name:'上下架接口',
 		method:'POST',
 	},
@@ -57,7 +63,7 @@ const KyInterface = {
 		method:'POST',
 	},
 	
-	//--------------------------------------接口--------------------------------------
+	//--------------------------------------编辑接口--------------------------------------
 	updatePolicy:{
 		Url:Url + '/api/policy/updatePolicy',
 		name:'编辑政策接口',
