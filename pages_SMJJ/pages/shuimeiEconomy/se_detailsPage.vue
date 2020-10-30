@@ -17,7 +17,7 @@
 				</view>
 				<view class="grClass">
 					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.avatar" mode="aspectFill"></image>
-					<image v-if="groupTitle.avatar==''" class="txImage" src="../../../../static/GRZX/missing-face.png" mode="aspectFill"></image>
+					<image v-if="groupTitle.avatar==''" class="txImage" src="../../../static/GRZX/missing-face.png" mode="aspectFill"></image>
 					<view class="grView">
 						<view class="name">{{groupTitle.nick_name}}</view>
 						<text class="number">{{post}}</text>
@@ -90,8 +90,8 @@
 			//加载数据
 			loadData: function() {
 				uni.request({
-					url:this.$ycyd.KyInterface.addViews.Url,
-					method:this.$ycyd.KyInterface.addViews.method,
+					url:this.$smjj.KyInterface.addViews.Url,
+					method:this.$smjj.KyInterface.addViews.method,
 					data:{
 						id : this.id
 					},
@@ -107,8 +107,8 @@
 				})
 				
 				uni.request({
-					url:this.$ycyd.KyInterface.getArchiveDetailByID.Url,
-					method:this.$ycyd.KyInterface.getArchiveDetailByID.method,
+					url: this.$smjj.KyInterface.getEconomyDetailByID.Url,
+					method: this.$smjj.KyInterface.getEconomyDetailByID.method,
 					data:{
 						id : this.id
 					},

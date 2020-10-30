@@ -10,18 +10,11 @@
 					</view>
 				</u-form-item>
 
-				<!-- 类型 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="选择类型" :border-bottom="false" prop="goodsType">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="border" type="select" :select-open="selectShow" v-model="model.goodsType"
-						 placeholder="请选择选择类型" @click="selectShow = true"></u-input>
-					</view>
-				</u-form-item>
-
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
-					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164" height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
-						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150" >
+					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
+					 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
+						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
 						</view>
 					</u-upload>
@@ -43,7 +36,7 @@
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
 							 :placeholder="placeholder" @statuschange="onStatusChange" @ready="onEditorReady">
 							</editor>
-							
+
 						</view>
 
 						<view class="toolbar" @touchend.stop="format" :style="'bottom: ' + (isIOS ? keyboardHeight : 0) + 'px'">
@@ -115,7 +108,6 @@
 					</view>
 				</u-form-item>
 			</u-form>
-			<view  style="padding-bottom: 120upx;"></view>
 			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
 			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 			<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
@@ -129,7 +121,7 @@
 		pathToBase64,
 		base64ToPath
 	} from '@/pages_GRZX/components/GRZX/js_sdk/gsq-image-tools/image-tools/index.js';
-	import robbyImageUpload from '@/pages_YCYD/components/LYFW/robby-image-upload/robby-image-upload.vue';
+	import robbyImageUpload from '@/pages_SMJJ/components/robby-image-upload/robby-image-upload.vue';
 	var _self;
 	export default {
 		components: {
@@ -159,12 +151,21 @@
 					// cost: '', //价格
 					intro: '', //商品简介
 					imageData: [], //图像日期
+					phone: '',
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
 					fontWeight: 'bold',
 					fontSize: '17px',
 					paddingTop: '8px',
+				},
+				customStyle2: {
+					fontWeight: 'bold',
+					fontSize: '17px',
+					paddingTop: '8px',
+					width: '100%',
+					background: '#FFFFFF',
+					borderRadius: '6px',
 				},
 				buttonStyle: {
 					marginTop: '20px',
@@ -235,6 +236,22 @@
 						message: '请选择商品类型',
 						trigger: 'change',
 					}],
+
+					phone: [{
+							required: true,
+							message: '请输入手机号',
+							trigger: ['change', 'blur'],
+						},
+						{
+							validator: (rule, value, callback) => {
+								// 调用uView自带的js验证规则，详见：https://www.uviewui.com/js/test.html
+								return this.$u.test.mobile(value);
+							},
+							message: '手机号码不正确',
+							// 触发器可以同时用blur和change，二者之间用英文逗号隔开
+							trigger: ['change', 'blur'],
+						}
+					],
 				},
 				pickerShow: false,
 				errorType: ['message'],
@@ -245,8 +262,8 @@
 				formData: { //表格数据
 					userId: 2
 				},
-				types:'',
-				imageList:[],
+				types: '',
+				imageList: [],
 				enableDel: true, //是否启动del
 				enableAdd: true, //是否启动删除
 				pictureArray: [], //存储图片base64
@@ -260,10 +277,10 @@
 				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
 				showUploadList: true,
 				lists: [],
-				fileList:[],
+				fileList: [],
 				category: 'video',
 				videoData: '',
-				videoArray:[],
+				videoArray: [],
 				selectList: [{
 						value: '村容村貌',
 						label: '村容村貌'
@@ -283,16 +300,16 @@
 				],
 			}
 		},
-		
-		
-		onRemove:function(e){
+
+
+		onRemove: function(e) {
 			console.log(e)
 		},
-		
+
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
-		
+
 		onLoad(param) {
 			_self = this;
 			this.userData();
@@ -468,44 +485,44 @@
 				this.videoData = data;
 				console.log('视频上传成功', this.videoData)
 			},
-			
+
 			//删除图片提示
-			uploadOnRemove:function(e){
+			uploadOnRemove: function(e) {
 				this.fileList = undefined;
 				this.lists = [];
-				
+
 			},
-			
-			deleteVideo:function(e){
-				this.types=e
-				if(this.types==0){
-					var videoArray=[];
+
+			deleteVideo: function(e) {
+				this.types = e
+				if (this.types == 0) {
+					var videoArray = [];
 				}
 			},
-			
+
 			//删除图片提示
-			uploadOnsuccess:function(e){
-				console.log('上传成功',e)
+			uploadOnsuccess: function(e) {
+				console.log('上传成功', e)
 				var a = {
-					data : e.data
+					data: e.data
 				};
 				this.lists.push(a.data)
 				console.log(this.lists)
 			},
-			
-			successData:function(){
+
+			successData: function() {
 				this.editorCtx.getContents({
 					success: (res) => {
 						console.log(res);
 						this.issueText = res.html;
-						
+
 						this.uploadData(this.issueText);
 					}
 				});
-				
+
 			},
-			
-			uploadData:function(e) {
+
+			uploadData: function(e) {
 				uni.showLoading({
 					title: '提交中...',
 					mask: true,
@@ -516,14 +533,14 @@
 				// console.log('4', this.model.name);
 				// console.log('5', this.model.goodsType);
 				// console.log('6', this.informationDetail.id);
-				if(this.informationDetail.video!==""){
-					var arr=[];
+				if (this.informationDetail.video !== "") {
+					var arr = [];
 					arr.push(this.informationDetail.video);
-				}else if(this.videoData.data!==this.informationDetail.video){
-					var arr=[];
+				} else if (this.videoData.data !== this.informationDetail.video) {
+					var arr = [];
 					arr.push(this.videoData.data);
-				}else if(this.types==0){
-					var arr=[];
+				} else if (this.types == 0) {
+					var arr = [];
 				}
 				arr.push(this.videoData.data);
 				//-----------------提交表单数据-----------------------
@@ -533,14 +550,13 @@
 						console.log('验证通过');
 						if (this.issueText !== '<p><br></p>') {
 							uni.request({
-								url: this.$styh.KyInterface.releaseEcology.Url,
-								method: this.$styh.KyInterface.releaseEcology.method,
+								url: this.$smjj.KyInterface.releaseEconomy.Url,
+								method: this.$smjj.KyInterface.releaseEconomy.method,
 								data: {
 									userId: this.userInfo.userId,
 									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,
-									article_type: this.model.goodsType,
 									// video: JSON.stringify(arr)
 								},
 								success: (res) => {

@@ -116,7 +116,7 @@
 				</u-form-item>
 			</u-form>
 			<view  style="padding-bottom: 120upx;"></view>
-			<u-button type="success" :custom-style="buttonStyle" @click="uploadData">提交</u-button>
+			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
 			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 			<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
 		</view>
@@ -493,13 +493,19 @@
 				console.log(this.lists)
 			},
 			
-			uploadData:function() {
+			successData:function(){
 				this.editorCtx.getContents({
 					success: (res) => {
 						console.log(res);
 						this.issueText = res.html;
+						
+						this.uploadData(this.issueText);
 					}
 				});
+				
+			},
+			
+			uploadData:function(e) {
 				
 				uni.showLoading({
 					title: '提交中...',
@@ -532,7 +538,7 @@
 								method: this.$xcdt.KyInterface.releaseDynamic.method,
 								data: {
 									userId: this.userInfo.userId,
-									content: this.issueText,
+									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,
 									// video: JSON.stringify(arr)
