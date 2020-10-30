@@ -6,7 +6,7 @@
 					<image class="userinfo-avatar u-skeleton-circle" :src="port ||'/static/GRZX/missing-face.png'"></image>
 					<view class="boxClass1">
 						<text class="u-skeleton-fillet fontStyle1">{{nickname}}</text>
-						<text v-if="nickname != '立即登录'" class="u-skeleton-fillet fontStyle2">{{duty}}</text>
+						<text v-if="nickname != '立即登录'" class="u-skeleton-fillet fontStyle2" :class="duty=='普通用户'?'width':''">{{duty}}</text>
 					</view>
 				</block>
 			</view>
@@ -261,19 +261,6 @@
 				uni.makePhoneCall({
 					phoneNumber:'15888888888', //仅为示例
 				});
-				// uni.request({
-				// 	url:that.$GrzxInter.Interface.SearchCustomerService.value,
-				// 	data:{
-				// 		region:'泉州',
-				// 	},
-				// 	method:that.$GrzxInter.Interface.SearchCustomerService.method,
-				// 	success(res){
-				// 		console.log(res)
-				// 		uni.makePhoneCall({
-				// 		    phoneNumber: res.data.data.phone, 
-				// 		});
-				// 	}
-				// })
 			},
 			
 			// ---------------------------QQ客服--------------------------
@@ -330,7 +317,7 @@
 			color: #333333;
 		}
 		.fontStyle2{
-			width: 150upx;
+			width: 170upx;
 			height: 44upx;
 			line-height: 44upx;
 			text-align: center;
@@ -340,6 +327,9 @@
 			background-color: #333333;
 			opacity: 0.3;
 			border-radius: 8upx;
+		}
+		.width{
+			width: 145upx;
 		}
 	
 		.lists {

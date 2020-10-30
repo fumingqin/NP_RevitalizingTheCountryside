@@ -12,17 +12,22 @@
 				<!-- 文件上传 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false" prop="name">
 					<view class="viewClass" style="padding-right: 20rpx;">
-							<view class="padding">
-								<button @tap="onUpload">上传</button>
+							<view>
+								<l-file ref="lFile" @up-success="onSuccess"></l-file>
+								<view class="padding text-center">
+									<view class="padding">
+										<button @tap="onUpload">上传</button>
+									</view>
+									<view>{{localPath}}</view>
+								</view>
 							</view>
 					</view>
 				</u-form-item>
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
-					<u-upload ref="uUpload" :custom-btn="true" :max-count="maxCount" :multiple="multiple" width="160" height="160"
-					 :action="action" v-model="model.photo">
-						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
-							<u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
+					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164" height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
+						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150" >
+							<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
 						</view>
 					</u-upload>
 				</u-form-item>
@@ -145,7 +150,7 @@
 					</view>
 				</u-form-item>
 			</u-form>
-			<u-button type="success" :custom-style="buttonStyle" @click="submit">提交</u-button>
+			<u-button type="success" :custom-style="buttonStyle" @click="submitState">提交</u-button>
 			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 		</view>
 	</view>
@@ -168,8 +173,14 @@
 		data() {
 			return {
 				localPath: '',
-                imageList:[],//图片
-                src:"",//视频存放
+				filename:[],
+                pictureArray:[],//图片
+				lists: [],
+				fileList:[],
+				policyId:'',
+				issueText: '',
+                src:'',//视频存放
+				showUploadList: true,
                 sourceTypeIndex: 2,
                 checkedValue:true,
                 checkedIndex:0,
@@ -200,12 +211,12 @@
 				placeholder: '开始输入...',
 				editorHeight: 300,
 				keyboardHeight: 0,
+				
 				isIOS: false,
 				model: {
 					name: '', //商品名称value
 					region: '', //选择来源地value
 					cost: '', //价格
-					photo: '', //图片
 					intro: '', //商品简介
 				},
 				//----------------uview样式--------------------------
@@ -232,59 +243,19 @@
 					paddingRight: '10px',
 					borderRadius: "6px",
 				},
-				//----------------uview表单验证--------------------------
-				rules: {
-					name: [{
-							required: true,
-							message: '请输入政策标题',
-							trigger: 'blur',
-						},
-						{
-							min: 1,
-							message: '请输入政策标题',
-							trigger: ['change', 'blur'],
-						},
-					],
-					region: [{
-						required: true,
-						message: '请选择商品来源地',
-						trigger: 'change',
-					}],
-					cost: [{
-							required: true,
-							message: '请输入价格',
-							trigger: ['change', 'blur'],
-						},
-						{
-							type: 'number',
-							message: '价格只能为数字',
-							trigger: ['change', 'blur'],
-						}
-					],
-					intro: [{
-							required: true,
-							message: '请填写简介'
-						},
-						{
-							min: 5,
-							message: '简介不能少于5个字',
-							trigger: 'change',
-						},
-					],
-				},
 				pickerShow: false,
 				errorType: ['message'],
 				labelPosition: 'right',
 				maxCount: 3,
 				multiple: true,
-				action: 'http://www.example.com/upload',
+				action: 'http://120.24.144.6:8080/api/file/upload',
 				autoHeight: true,
 			}
 		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
-		onLoad() {
+		onLoad(option) {
 			uni.getStorage({
 				key: 'userInfo',
 				fail() {
@@ -294,16 +265,19 @@
 					})
 					setTimeout(function() {
 						uni.navigateTo({
-							//loginType=1,泉运登录界面
-							//loginType=2,今点通登录界面
-							//loginType=3,武夷股份登录界面
 							url: '/pages/GRZX/userLogin?loginType=4'
 						})
 					}, 500);
 				}
 			});
 			_self = this;
+			console.log(option)
+			if(option.id>0){
+				this.policyId=option.id;
+				this.Update();
+			}
 		},
+		
 		methods: {
 			//---------------上传视频--------------
 			chooseVideo(){
@@ -315,9 +289,18 @@
                     camera: this.cameraList[this.cameraIndex].value,
                     sourceType: sourceType[this.sourceTypeIndex],
                     success: (res) => {
-                        console.log(JSON.stringify(res.tempFilePath),'视频')
-                        this.src = res.tempFilePath;
-                        console.log(this.src)
+								const tempFilePaths = res.tempFilePath;
+								console.log(tempFilePaths)
+								uni.uploadFile({
+									url: this.$zcfb.KyInterface.upload.Url,
+									filePath: tempFilePaths,
+									name: 'file',
+									success: (uploadFileRes) => {
+										console.log("编辑详情的时候返回照片地址", uploadFileRes)
+										const back = JSON.parse(uploadFileRes.data);
+										this.src=back.data;
+									}
+								});  
                     }
                 })
             },
@@ -354,34 +337,58 @@
 				},
 				
 				/* 上传 */
-				onUpload() {
+				onUpload() { 
+					this.localPath='';
+					this.filename=[];
 					this.$refs.lFile.upload({
 						// #ifdef APP-PLUS
 						// nvue页面使用时请查阅nvue获取当前webview的api，当前示例为vue窗口
 						currentWebview: this.$mp.page.$getAppWebview(),
 						// #endif
 						//非真实地址，记得更换,调试时ios有跨域，需要后端开启跨域并且接口地址不要使用http://localhost/
-						url: 'https://www.example.com/upload',
+						url: 'http://120.24.144.6:8080/api/file/upload',
 						//默认file,上传文件的key
-						name: 'myFile',
+						name: 'file',
 						// header: {'Authorization':'token'},
 						//...其他参数
 					});
 				},
 				onSuccess(res) {
 					console.log('上传成功回调',JSON.stringify(res));
-					uni.showToast({
-						title: JSON.stringify(res),
-						icon: 'none'
-					})
+					this.localPath = JSON.stringify(res.fileName);
+					this.filename.push(res.data.data);
+				},
+				//删除图片提示
+				uploadOnRemove:function(e){
+					this.fileList = undefined;
+					this.lists = [];
+					
+				},
+				//------------上传图片----------------
+				uploadOnsuccess:function(e){
+					console.log('上传成功',e)
+					var a = {
+						data : e.data
+					};
+					this.lists.push(a.data)
+					console.log(this.lists)
 				},
 
 			submitState: function() {
 				var that = this;
-
+				that.editorCtx.getContents({
+					success: (res) => {
+						console.log(res);
+						that.issueText = res.html;
+						if(that.policyId!=''){
+							this.updateSubmit(that.issueText);
+						}else{
+							this.submit(that.issueText);
+						}
+					}
+				});
 				if (this.submissionState == false) {
 					this.submissionState = true;
-					this.submit();
 				} else if (this.submissionState == true) {
 					uni.showToast({
 						title: '请勿重复点击提交',
@@ -391,33 +398,37 @@
 				}
 			},
 
-			submit: function() {
+			submit: function(e) {
+				var that = this;
 				uni.showLoading({
 					title: '提交数据中...'
 				});
-				var that = this;
-				console.log(that.issueimage);
 				uni.getStorage({
 					key: 'userInfo',
 					success: (res) => {
 						console.log(res)
+						var array=[];
+						array.push(that.src);
+						console.log(that.localPath);
+						console.log(JSON.stringify(that.filename));
+						console.log(array);
+						console.log(e);
+						console.log(that.model.name);
 						uni.request({
-							url: 'http://218.67.107.93:9210/api/app/publish-strategy',
-							method: 'POST',
+							url: that.$zcfb.KyInterface.releasePolicy.Url,
+							method: that.$zcfb.KyInterface.releasePolicy.method,
 							data: {
-								title: that.title,
-								content: that.issueText,
-								imgUrl: that.issueimage,
-								publisher: res.data.username,
-								publisherTel: res.data.phoneNumber,
-								colleagueNum: that.people_number,
-								cost: that.people_cost,
-								startPlayTime: that.range[0],
-								endPlayTime: that.range[1],
+								title: that.model.name,
+								content: e,
+								image:  JSON.stringify(that.lists),
+								video: JSON.stringify(array),
+								pdfName:that.localPath,
+								pdfFile:JSON.stringify(that.filename),
+								userId: res.data.userId,
 							},
 							success: (res) => {
 								console.log(res)
-								if (res.data.msg == '发布攻略成功，待后台审核！') {
+								if (res.data.status) {
 									uni.hideLoading()
 									uni.showToast({
 										title: '提交成功',
@@ -426,12 +437,6 @@
 												url: './pictureList'
 											})
 										}
-									})
-								} else if (res.data.msg == '提交失败2分钟内请勿重复发表照片') {
-									uni.hideLoading()
-									uni.showToast({
-										title: '每次提交请间隔两分钟',
-										icon: 'none'
 									})
 								} else {
 									uni.hideLoading()
@@ -450,6 +455,66 @@
 								})
 							}
 						})
+						
+					}
+				})
+			},
+			//------------提交修改-----------------
+			updateSubmit: function(e) {
+				var that = this;
+				uni.showLoading({
+					title: '提交数据中...'
+				});
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						console.log(res)
+						var array=[];
+						array.push(that.src);
+						console.log(array)
+						uni.request({
+							url: that.$zcfb.KyInterface.updatePolicy.Url,
+							method: that.$zcfb.KyInterface.updatePolicy.method,
+							data: {
+								id:that.policyId,
+								title: that.model.name,
+								content: e,
+								image:  JSON.stringify(that.lists),
+								video: JSON.stringify(array),
+								pdfFile:JSON.stringify(that.filename),
+								pdfName:that.localPath,
+								userId: res.data.userId,
+							},
+							success: (res) => {
+								console.log(res)
+								if (res.data.status) {
+									uni.hideLoading()
+									uni.showToast({
+										title: '提交成功',
+										success() {
+											uni.navigateBack({
+												url: './pictureList'
+											})
+										}
+									})
+								} else {
+									uni.hideLoading()
+									uni.showToast({
+										title: '提交失败',
+										icon: 'none'
+									})
+								}
+							},
+							fail: (res) => {
+								console.log(res)
+								uni.hideLoading()
+								uni.showToast({
+									title: '提交失败',
+									icon: 'none'
+								})
+							}
+						})
+						
 					}
 				})
 			},
@@ -559,22 +624,76 @@
 				// const that = this;
 				uni.chooseImage({
 					count: 1,
-					success: function(res) {
-						_self.editorCtx.insertImage({
-							src: res.tempFilePaths[0],
-							data: {
-								id: 'abcd',
-								role: 'god'
-							},
-							width: '80%',
-							success: function() {
-								console.log('insert image success');
+					success: (res) =>  {
+						const tempFilePaths = res.tempFilePaths;
+						uni.uploadFile({
+							url: this.$zcfb.KyInterface.upload.Url,
+							filePath: tempFilePaths[0],
+							name: 'file',
+							success: (uploadFileRes) => {
+								console.log("编辑详情的时候返回照片地址", uploadFileRes)
+								const back = JSON.parse(uploadFileRes.data);
+								console.log(back)
+								this.editorCtx.insertImage({
+									src: back.data,
+									data: {
+										id: 'abcd',
+										role: 'god'
+									},
+									width: '80%',
+									success: function() {
+										console.log('insert image success');
+									}
+								})
 							}
-						});
+						})
 					}
 				});
+			},
+			Update:function(){
+				var that=this;
+				uni.request({
+					url:this.$zcfb.KyInterface.getPolicyDetailByID.Url,
+					method:this.$zcfb.KyInterface.getPolicyDetailByID.method,
+					data:{
+						id:that.policyId,
+					},
+					success:(res) =>{
+						console.log(res)
+						if(res.data.status){
+							that.model.name=res.data.data.title;
+							console.log(that.model.name);
+							that.issueText=res.data.data.content;
+							console.log(that.issueText);
+							that.localPath=res.data.data.pdfName;
+							console.log(that.localPath);
+							var imageObj={
+								url:res.data.data.image[0]
+							};
+							that.fileList.push(imageObj);
+							console.log(that.fileList);
+							that.lists=res.data.data.image;
+							console.log(that.lists);
+							that.filename=res.data.data.pdfFile;
+							console.log(that.filename);
+							that.src=res.data.data.video[0];
+							console.log(that.src);
+						}else{
+							uni.showToast({
+								title: '加载失败',
+								icon: 'none'
+							})
+						}
+					},
+					fail(res) {
+						uni.showToast({
+							title: '服务器异常',
+							icon: 'none'
+						}) 
+						// console.log(res)
+					}
+				})
 			}
-
 		}
 	}
 </script>

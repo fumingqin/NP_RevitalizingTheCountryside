@@ -491,6 +491,7 @@
 				};
 				this.lists.push(a.data)
 				console.log(this.lists)
+				console.log(this.fileList)
 			},
 			
 			successData:function(){

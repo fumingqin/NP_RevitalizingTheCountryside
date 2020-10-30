@@ -35,6 +35,12 @@
 			}
 		},
 		{
+			"path": "pages/GRZX/selectVillage",
+			"style": {
+				"navigationBarTitleText": "选择村庄"
+			}
+		},
+		{
 			"path": "pages/GRZX/userLogin",
 			"style": {
 				"navigationStyle": "custom"
@@ -438,7 +444,7 @@
 						"navigationBarTitleText": "我的发布"
 					}
 				}
-			]
+            ]
 		},
 		//---------------------------------------------第六个包：特派员服务------------------------------------------
 		{

@@ -15,7 +15,6 @@ const systemConfig={
 	openidtype:$oSit.Interface.system.openidtype,	//应用类型：app，小程序，公众号
 }
 
-const newApplyName = '定制客运';
 
 const appConfig={
 	local:{
@@ -59,6 +58,31 @@ const Interface={
 	addFeedback:{
 		value:Url+'/api/user/addFeedback',
 		name:'添加反馈',
+		method:'POST',
+		pages: [],
+	},
+	changUserInfo:{
+		value:Url+'/api/user/changUserInfo',
+		name:'修改用户信息',
+		method:'POST',
+		pages: [],
+	},
+	updateRuralId:{
+		value:Url+'/api/user/updateRuralId',
+		name:'绑定村庄',
+		method:'POST',
+		pages: [],
+	},
+	
+	getVillageList:{
+		value:Url+'/api/commissioner/getVillageList',
+		name:'修改用户信息',
+		method:'POST',
+		pages: [],
+	},
+	getVillageListByName:{
+		value:Url+'/api/commissioner/getVillageListByName',
+		name:'修改用户信息',
 		method:'POST',
 		pages: [],
 	},
@@ -221,6 +245,5 @@ export default {
 	systemConfig,
 	navToHome,
 	navToOrderList,
-	newApplyName,
 	downloadAPP
 }
