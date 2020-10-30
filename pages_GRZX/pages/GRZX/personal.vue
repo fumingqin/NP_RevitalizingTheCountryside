@@ -19,7 +19,7 @@
 			<!-- 姓名 -->
 			<view class="boxClass">
 				<text class="bz">姓&nbsp;名：</text>
-				<input class="slk" maxlength="10"  name="userName"  placeholder="请输入" v-model="userName" />
+				<input class="slk" maxlength="15"  name="userName"  placeholder="请输入" v-model="userName" />
 			</view>
 			
 			<!-- 职位 -->

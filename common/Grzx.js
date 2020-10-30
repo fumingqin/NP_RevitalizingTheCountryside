@@ -67,6 +67,12 @@ const Interface={
 		method:'POST',
 		pages: [],
 	},
+	updateRuralId:{
+		value:Url+'/api/user/updateRuralId',
+		name:'绑定村庄',
+		method:'POST',
+		pages: [],
+	},
 	
 	getVillageList:{
 		value:Url+'/api/commissioner/getVillageList',

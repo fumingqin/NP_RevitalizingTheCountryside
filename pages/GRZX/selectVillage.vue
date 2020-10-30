@@ -38,12 +38,28 @@
 				SearchStatus: false, //搜索框显示状态
 				
 				scrollHeight:1000,
+				userId:0,
 			}
+		},
+		onLoad(pam) {
+			// uni.showToast({
+			// 	title:'首次登录需要选择村庄，否则可能导致部分功能无法使用',
+			// 	icon:'none',
+			// })
+			this.userId = pam.id;
+			uni.showModal({
+				title:'温馨提示',
+				content: '首次登录需要选择村庄，否则可能导致部分功能无法正常使用',
+				success: (e)=>{
+					if(e.confirm){
+					}
+				}
+			});
 		},
 		onShow(){
 			uni.request({
-				url: this.$Grzx.Interface.getVillageList.value,
-				method: this.$Grzx.Interface.getVillageList.method,
+				url: this.$GrzxInter.Interface.getVillageList.value,
+				method: this.$GrzxInter.Interface.getVillageList.method,
 				success: (res) => {
 					uni.hideLoading();
 					console.log('乡村列表', res);
@@ -63,8 +79,8 @@
 
 				uni.showLoading();
 				uni.request({
-					url: this.$Grzx.Interface.getVillageListByName.value,
-					method: this.$Grzx.Interface.getVillageListByName.method,
+					url: this.$GrzxInter.Interface.getVillageListByName.value,
+					method: this.$GrzxInter.Interface.getVillageListByName.method,
 					data: {
 						keyName: e.detail.value
 					},
@@ -80,6 +96,34 @@
 			},
 
 			Listclick: function(e) {
+				uni.request({
+					url: this.$GrzxInter.Interface.updateRuralId.value,
+					method: this.$GrzxInter.Interface.updateRuralId.method,
+					data: {
+						userId : this.userId,
+						ruralId: e.id,
+					},
+					success: (res) => {
+						if(res.data.status){
+							uni.setStorageSync('userInfo', res.data.data);
+							uni.removeStorageSync('captchaCode');
+							uni.switchTab({
+								url:'/pages/home/h_xczx_home',
+							})
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon:'none'
+							});
+						}
+					},
+					fail(res) {
+						uni.showToast({
+							title: '网络连接失败',
+							icon:'none'
+						});
+					}
+				});
 				
 			},
 			

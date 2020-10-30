@@ -8,12 +8,12 @@
 			<!-- 手机号 -->
 			<view class="inputItem phoneNum">
 				<image src="../../static/GRZX/shouji.png" class="iconClass1"></image>
-				<input type="number" placeholder="手机号码" maxlength="11" class="inputClass" data-key="phoneNumber" @input="inputChange1" />
+				<input type="number" placeholder="手机号码" maxlength="11" class="inputClass" v-model="phoneNumber" @input="inputChange1" />
 			</view>
 			<!-- 验证码 -->
 			<view class="inputItem Captcha">
 				<image src="../../static/GRZX/yanzhengma.png" class="iconClass2"></image>
-				<input type="number" placeholder="输入验证码" maxlength="4" class="inputClass" data-key="captchaCode" @input="inputChange2" />
+				<input type="number" placeholder="输入验证码" maxlength="4" class="inputClass" v-model="captchaCode" @input="inputChange2" />
 			</view>
 			<!-- 按钮颜色和发送验证码的样式 -->
 			<view class="getCode style1" @click="getCodeClick" id="Code">{{textCode}}</view>
@@ -59,6 +59,8 @@
 			})
 		},
 		onShow() {
+			this.phoneNumber = "";
+			this.captchaCode = "";
 			this.whetherClick=true;
 		},
 		onUnload() {
@@ -175,7 +177,7 @@
 									uni.hideLoading();
 									if(data.rId == "" || data.rId == null){
 										uni.navigateTo({
-											url:'./selectVillage?phoneNumber='+phone,
+											url:'./selectVillage?id='+data.userId,
 										})
 									}else{
 										uni.setStorageSync('userInfo', data);
