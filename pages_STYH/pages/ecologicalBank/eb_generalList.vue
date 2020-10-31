@@ -1,36 +1,37 @@
 <template>
 	<view>
-			<!-- 内容1 -->
-			<view>
-				<view class="infor_view" v-for="(item,index) in groupTitle" :key="index" @click="details(item.id)">
-					<view class="view_titleView">
-						<view class="tv_view">
-							<view style="display: flex;">
-								<view style="margin-top: 10upx;">
-									<text class="tv_label">{{item.id}}</text>
-								</view>
-								<view class="tv_title">{{item.title}}</view>
-							</view>
-							<!-- <text class="tv_richText">{{item.content}}</text> -->
-							<view class="tv_view2">
-								<rich-text class="tv_richText" :nodes="item.content"></rich-text>
-							</view>
+		<!-- 内容1 -->
+		<view>
+			<view class="infor_view" v-for="(item,index) in groupTitle" :key="index" @click="routeJump(item.id)">
+				<view class="view_titleView">
+					<view class="tv_view">
+						<view style="display: flex;">
+							<!-- <view style="margin-top: 10upx;">
+								<text class="tv_label">{{item.article_type}}</text>
+							</view> -->
+							<view class="tv_title">{{item.title}}</view>
 						</view>
-						<image class="tv_image" :src="item.image" mode="aspectFill"></image>
+						<!-- <text class="tv_richText">{{item.content}}</text> -->
+						<view class="tv_view2">
+							<rich-text class="tv_richText" :nodes="item.content"></rich-text>
+						</view>
 					</view>
-					
-					<view class="view_contentView">
-						<text>{{item.state}}</text>
-						<text class="cont_text">{{gettime(item.update_time)}}</text>
-					</view>
-					<u-gap height="4" bg-color="#f9f9f9"></u-gap>
+					<image class="tv_image" :src="item.image" mode="aspectFill"></image>
 				</view>
-				<!-- <view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
-					<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
-				</view> -->
+				
+				<view class="view_contentView">
+					<text>{{item.nick_name}}</text>
+					<text class="cont_text">{{item.count}}人看过</text>
+					<text class="cont_text">{{informationDate(item.update_time)}}</text>
+					<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
+				</view>
+				<u-gap height="4" bg-color="#f9f9f9"></u-gap>
+			</view>
+			<view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
+				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 			</view>
 		</view>
-	</template>
+	</view>
 </template>
 
 <script>
@@ -46,21 +47,22 @@
 					refresh : '正在加载...',
 					nomore : '没有更多了',
 				},
-				scenicListIndex:5,//列表默认数量}
-				}
+				scenicListIndex:5,//列表默认数量
+			}
 		},
+		
 		onLoad() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
-			this.zcfbData();
+			this.ycydData();
 		},
 		
 		onPullDownRefresh: function() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
-			this.zcfbData();
+			this.ycydData();
 		},
 		
 		onReachBottom() {
@@ -68,21 +70,40 @@
 		},
 		
 		methods: {
+			//--------------------点击列表事件------------------------------
+			selectClick:function(e){
+				//给选择的下标赋值
+				this.selectIndex = e;
+				console.log('上车点下标赋值',this.selectIndex)
+				//取出id
+				this.selectId = this.groupTitle[e].id;
+				console.log('取出id',this.selectId)
+			},
+			
+			//----------------------加载更多--------------------------------
+			getMore(){
+				this.loadingType = 1;
+				
+				if(this.scenicListIndex < this.groupTitle.length){
+					var a = this.scenicListIndex +6;
+					this.scenicListIndex = a;
+					this.loadingType = 0;
+				}
+				if(this.scenicListIndex >= this.groupTitle.length){
+					this.loadingType = 2;
+				}
+			},
+			
 			//----------------------列表接口--------------------------------
-			zcfbData:function(){
-				uni.showLoading({
-					title: '加载列表中...',
-				})
+			ycydData:function(){
 				uni.request({
-					url:this.$zcfb.KyInterface.getPolicy.Url,
-					method:this.$zcfb.KyInterface.getPolicy.method,
-					data:{
-						
-					},
+					url:this.$styh.KyInterface.getEcology.Url,
+					method:this.$styh.KyInterface.getEcology.method,
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
 							this.groupTitle=res.data.data;
+							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
@@ -104,30 +125,19 @@
 					}
 				})
 			},
-			//-------------加载更多----------------
-			getMore(){
-				this.loadingType = 1;
-				
-				if(this.scenicListIndex < this.groupTitle.length){
-					var a = this.scenicListIndex +6;
-					this.scenicListIndex = a;
-					this.loadingType = 0;
-				}
-				if(this.scenicListIndex >= this.groupTitle.length){
-					this.loadingType = 2;
-				}
+			
+			//--------------------资讯时间-------------------------------
+			informationDate:function(e){
+				console.log(e)
+				// var tsetDate = e.replace('T',' ')
+				var a = e.substr(0,10)
+				return a;
 			},
 			
-			//-------------------时间切割---------------------------
-			gettime:function(param){
-					let array=param.split(' ');
-					var a=array[0];
-					return a;
-			},
 			//--------------------------路由跳转------------------------------
-			details:function(e){
+			routeJump:function(e){
 				uni.navigateTo({
-					url:'policyDetails?id=' +e,
+					url:'eb_detailsPage?id=' +e,
 				})
 			}
 		}
@@ -220,4 +230,5 @@
 			}
 		}
 	}
+	
 </style>

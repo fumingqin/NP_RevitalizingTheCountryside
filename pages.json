@@ -35,6 +35,12 @@
 			}
 		},
 		{
+			"path": "pages/GRZX/selectVillage",
+			"style": {
+				"navigationBarTitleText": "选择村庄"
+			}
+		},
+		{
 			"path": "pages/GRZX/userLogin",
 			"style": {
 				"navigationStyle": "custom"
@@ -374,7 +380,7 @@
 				}
 			]
 		},
-		//---------------------------------------------第四个包：旅游服务------------------------------------------
+		//---------------------------------------------第四个包：一村一档------------------------------------------
 		{
 			"root": "pages_YCYD/",
 			"pages": [
@@ -438,7 +444,7 @@
 						"navigationBarTitleText": "我的发布"
 					}
 				}
-			]
+            ]
 		},
 		//---------------------------------------------第六个包：特派员服务------------------------------------------
 		{
@@ -541,6 +547,96 @@
 						"enablePullDownRefresh":true
 					}
 				}
+				,{
+				    "path" : "pages/ruralDynamics/rd_addPage",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/ruralDynamics/rd_detailsPage",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/ruralDynamics/rd_generalList",
+				    "style" : {}
+				}
+			]
+		},
+		
+		//---------------------------------------------第九个包：乡村动态------------------------------------------
+		{
+			"root": "pages_STYH/",
+			"pages": [
+				//----------------------------------通用页面----------------------------------
+				{
+				    "path" : "pages/ecologicalBank/eb_list",
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
+				}
+				,{
+				    "path" : "pages/ecologicalBank/eb_edit",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/ecologicalBank/eb_addPage",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/ecologicalBank/eb_detailsPage",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/ecologicalBank/eb_generalList",
+				    "style" : {}
+				}
+			]
+		},
+		
+		//---------------------------------------------第十个包：乡村动态------------------------------------------
+		{
+			"root": "pages_SMJJ/",
+			"pages": [
+				//----------------------------------通用页面----------------------------------
+				{
+				    "path" : "pages/shuimeiEconomy/se_list",
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
+				}
+				,{
+				    "path" : "pages/shuimeiEconomy/se_addPage",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/shuimeiEconomy/se_edit",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/shuimeiEconomy/se_detailsPage",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/shuimeiEconomy/se_generalList",
+				    "style" : {}
+				}
+			]
+		},
+		
+		//---------------------------------------------第十个包：乡村动态------------------------------------------
+		{
+			"root": "pages_MQFK/",
+			"pages": [
+				//----------------------------------通用页面----------------------------------
+				{
+				    "path" : "pages/publicFeedback/pf_list",
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
+				}
+				,{
+				    "path" : "pages/publicFeedback/pf_addPage",
+				    "style" : {}
+				}
 			]
 		}
 	],
@@ -581,6 +677,7 @@
 				"pagePath": "pages/GRZX/user",
 				"text": "我的"
 			}
+			
 		]
 	},
 

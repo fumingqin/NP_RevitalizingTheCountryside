@@ -106,7 +106,7 @@
 					</view>
 				</u-form-item>
 			</u-form>
-			<u-button type="success" :custom-style="buttonStyle" @click="uploadData">提交</u-button>
+			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
 			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 			<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
 		</view>
@@ -242,6 +242,7 @@
 				pictureArray: [], //存储图片base64
 				userInfo: [], //个人信息
 				issueText: '',
+				issueText2: '',
 				border: false,
 				selectShow: false,
 				jumpStatus: '',
@@ -330,7 +331,7 @@
 					success: (data) => {
 						// console.log('修改信息列表', data.data)
 						this.informationDetail = data.data;
-						this.issueText = data.data.content;
+						this.issueText2 = data.data.content;
 						this.model.name = data.data.title;
 						this.model.goodsType = data.data.article_type;
 						this.onEditorReady();
@@ -414,7 +415,7 @@
 					// console.log(res);
 					_self.editorCtx = res.context;
 					that.editorCtx.setContents({
-						html: that.issueText //this.EditGoodsDetail.content为赋值内容。    
+						html: that.issueText2 //this.EditGoodsDetail.content为赋值内容。    
 					})
 				}).exec();
 			},
@@ -552,16 +553,22 @@
 				this.lists.push(a)
 			},
 			
-			uploadData:function() {
+			successData:function(){
 				this.editorCtx.getContents({
 					success: (res) => {
 						console.log(res);
 						this.issueText = res.html;
+						
+						this.uploadData(this.issueText);
 					}
 				});
 				
-				console.log(this.fileList)
-				console.log(this.lists)
+			},
+			
+			uploadData:function(e) {
+				
+				// console.log(this.fileList)
+				// console.log(this.lists)
 				
 				if(this.fileList !== undefined && this.jumpStatus == '修改'){
 					// console.log('我从服务器进来了')
@@ -586,6 +593,7 @@
 				// console.log('4', this.model.name);
 				// console.log('5', this.model.goodsType);
 				// console.log('6', this.informationDetail.id);
+				// console.log('7', this.issueText);
 				if(this.informationDetail.video!==""){
 					var arr=[];
 					arr.push(this.informationDetail.video);
@@ -609,7 +617,7 @@
 									data: {
 										id: this.informationDetail.id,
 										userId: this.userInfo.userId,
-										content: this.issueText,
+										content: e,
 										image: JSON.stringify(this.pictureArray),	
 										title: this.model.name,
 										// video: JSON.stringify(arr)

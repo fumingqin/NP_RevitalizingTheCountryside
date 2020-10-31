@@ -10,28 +10,12 @@
 					</view>
 				</u-form-item>
 
-				<!-- 类型 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="选择类型" :border-bottom="false" prop="goodsType">
+				<!-- 手机号 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="手机号码" prop="phone" :border-bottom="false" label-width="150">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="border" type="select" :select-open="selectShow" v-model="model.goodsType"
-						 placeholder="请选择选择类型" @click="selectShow = true"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="border" placeholder="请输入手机号" v-model="model.phone" type="number"></u-input>
 					</view>
 				</u-form-item>
-
-				<!-- 商品来源地 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品来源地" :border-bottom="false" prop="region">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" type="select" :select-open="pickerShow" v-model="model.region"
-						 placeholder="请选择商品来源地" @click="pickerShow = true"></u-input>
-					</view>
-				</u-form-item> -->
-
-				<!-- 商品价格 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品价格" :border-bottom="false" prop="cost">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品价格" v-model="model.cost" :type="text"></u-input>
-					</view>
-				</u-form-item> -->
 
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
@@ -147,7 +131,7 @@
 		pathToBase64,
 		base64ToPath
 	} from '@/pages_GRZX/components/GRZX/js_sdk/gsq-image-tools/image-tools/index.js';
-	import robbyImageUpload from '@/pages_YCYD/components/LYFW/robby-image-upload/robby-image-upload.vue';
+	import robbyImageUpload from '@/pages_STYH/components/robby-image-upload/robby-image-upload.vue';
 	var _self;
 	export default {
 		components: {
@@ -177,6 +161,7 @@
 					// cost: '', //价格
 					intro: '', //商品简介
 					imageData: [], //图像日期
+					phone: '',
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
@@ -253,6 +238,22 @@
 						message: '请选择商品类型',
 						trigger: 'change',
 					}],
+					
+					phone: [{
+							required: true,
+							message: '请输入手机号',
+							trigger: ['change', 'blur'],
+						},
+						{
+							validator: (rule, value, callback) => {
+								// 调用uView自带的js验证规则，详见：https://www.uviewui.com/js/test.html
+								return this.$u.test.mobile(value);
+							},
+							message: '手机号码不正确',
+							// 触发器可以同时用blur和change，二者之间用英文逗号隔开
+							trigger: ['change', 'blur'],
+						}
+					],
 				},
 				pickerShow: false,
 				errorType: ['message'],
@@ -319,8 +320,8 @@
 			this.id = param.id;
 			if (this.jumpStatus == '修改') {
 				uni.request({
-					url: this.$ycyd.KyInterface.getArchiveDetailByID.Url,
-					method: this.$ycyd.KyInterface.getArchiveDetailByID.method,
+					url: this.$styh.KyInterface.getEcologyDetailByID.Url,
+					method: this.$styh.KyInterface.getEcologyDetailByID.method,
 					data: {
 						id: this.id
 					},
@@ -362,7 +363,7 @@
 						this.informationDetail = data.data;
 						this.issueText2 = data.data.content;
 						this.model.name = data.data.title;
-						this.model.goodsType = data.data.article_type;
+						this.model.phone=data.data.telphone;
 						this.onEditorReady();
 						// console.log('赋值前', this.lists)
 						for(var i=0;i<this.informationDetail.image.length;i++){
@@ -638,15 +639,15 @@
 						if (this.jumpStatus == '修改') {
 							if (this.issueText !== '<p><br></p>') {
 								uni.request({
-									url: this.$ycyd.KyInterface.updateArchives.Url,
-									method: this.$ycyd.KyInterface.updateArchives.method,
+									url: this.$styh.KyInterface.updateEcology.Url,
+									method: this.$styh.KyInterface.updateEcology.method,
 									data: {
 										id: this.informationDetail.id,
 										userId: this.userInfo.userId,
 										content: this.issueText,
-										image: JSON.stringify(this.pictureArray),	
+										image: JSON.stringify(this.pictureArray),
 										title: this.model.name,
-										article_type: this.model.goodsType,
+										telphone: this.model.phone,
 										// video: JSON.stringify(arr)
 									},
 									success: (res) => {
@@ -689,14 +690,14 @@
 						} else {
 							if (this.issueText !== '<p><br></p>') {
 								uni.request({
-									url: this.$ycyd.KyInterface.releaseArchives.Url,
-									method: this.$ycyd.KyInterface.releaseArchives.method,
+									url: this.$styh.KyInterface.releaseEcology.Url,
+									method: this.$styh.KyInterface.releaseEcology.method,
 									data: {
 										userId: this.userInfo.userId,
 										content: this.issueText,
 										image: JSON.stringify(this.pictureArray),
 										title: this.model.name,
-										article_type: this.model.goodsType,
+										telphone: this.model.phone,
 										// video: JSON.stringify(arr)
 									},
 									success: (res) => {

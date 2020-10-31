@@ -15,46 +15,28 @@
 			<button class="xgbg"  plain="" @click="reviseBackground">修改背景</button>
 			<!-- #endif -->
 			
+			
 			<!-- 姓名 -->
-			<view class="Cr_slk1">
+			<view class="boxClass">
 				<text class="bz">姓&nbsp;名：</text>
-				<input class="slk" maxlength="10"  name="nickname"  placeholder="请输入" v-model="nickname" adjust-position="" />
+				<input class="slk" maxlength="15"  name="userName"  placeholder="请输入" v-model="userName" />
+			</view>
+			
+			<!-- 职位 -->
+			<view class="boxClass">
+				<text class="bz">职&nbsp;位：</text>
+				<input class="slk" name="duty" placeholder="你想要说的话"  v-model="duty" disabled='true'/>
 			</view>
 			
 			<!-- 性别 -->
-			<view class="Cr_slk2">
+			<view class="boxClass">
 				<text class="bz">性&nbsp;别：</text>
 				<picker class="slk1" name="gender"  mode="selector" @change="genderChange" :range="genderSex" :value="gender">
 					{{selector}}
 				</picker>
 			</view>
 			
-			<!-- 生日 -->
-			<view class="Cr_slk2"> 
-				<text class="bz">生&nbsp;日：</text>
-				<picker class="slk1" name="birthday"  mode="date" @change="dateChange" v-model="birthday"  :start="startDate" :end="endDate" placeholder="请选择"  >
-					{{birthday}}
-				</picker>
-			</view>
 			
-			<!-- 地址 -->
-			<view class="Cr_slk2">
-				<text class="bz">地&nbsp;址：</text>
-				<input class="slk" name="address"  disabled="disabled" @tap="toggleTab"  placeholder="你的常住地" v-model="address" />
-				<w-picker
-					mode="region"
-					:areaCode="['35', '3507', '350782']"
-					:hideArea="false"
-					@confirm="onConfirm" 
-					ref="region"
-					:timeout="true"
-				></w-picker>
-			</view>
-			
-			<!-- <view class="Cr_slk2">
-				<text class="bz">签&nbsp;名：</text>
-				<input class="slk" name="autograph" placeholder="你想要说的话"  v-model="autograph" />
-			</view> -->
 			
 			<!-- 保存按钮 -->
 			<button class="an btn_background btn_fontColor" form-type="submit">保存</button>
@@ -69,25 +51,17 @@
 		data() {
 			return {
 				mode:"region",
-				genderSex:['','男','女'], 
+				genderSex:['男','女'], 
 				selector:'请选择',
 				/* 载入数据 */
 				portrait : '',
 				backImg:'',
-				nickname : '',
-				gender:'',
-				birthday : '请选择',
-				address : '请选择',
-				autograph : '',
+				userName : '',
+				gender:0,
 				userId:'',
-				openId_qq:'',
-				openId_wx:'',
-				openId_xcx:'',
-				openId_ios:'',
-				openId_app:'',
 				phoneNumber:'',
 				port:'',
-				
+				duty:'',
 			};
 		},
 		components:{
@@ -121,65 +95,21 @@
 					key:'userInfo',
 					success(res){
 						let data = res.data;
+						that.userId = data.userId;
 						// ------------1.头像-------------
-						var base64=data.portrait;
 						that.port=data.portrait;
-						if(that.isBase64(base64)){
-							base64ToPath(base64)
-							  .then(path => {
-							    that.portrait=path;
-							  })
-							  .catch(error => {
-							  })
-						}else{
-							that.portrait=base64;
-						}
+						that.portrait = data.portrait
 						// ------------2.昵称-------------
-						if(data.nickname==null||data.nickname==""){
-							that.nickname="";
-						}else{
-							that.nickname =data.nickname;
-						}
+						that.userName =data.userName;
 						// ------------3.性别-------------
-						that.gender=data.gender;
-						if(data.gender==null||data.gender==""){
-							that.selector="请选择";
+						that.gender=parseInt(data.sex);
+						that.selector=that.genderSex[that.gender];
+						// ------------4.职位-------------
+						if(data.duty==null||data.duty==""){
+							that.duty="暂无";
 						}else{
-							that.selector=that.genderSex[data.gender];
+							that.duty =data.duty;
 						}
-						// ------------4.生日-------------
-						if(data.birthday==null||data.birthday==""){
-							that.birthday="请选择";
-						}else{
-							var list = data.birthday.split(" ");
-							that.birthday =list[0];
-						}
-						// ------------5.地址-------------
-						if(data.address==null||data.address==""){
-							that.address="";
-						}else{
-							that.address =data.address;
-						}
-						// ------------6.签名-------------
-						if(data.autograph==null||data.autograph==""){
-							that.autograph="";
-						}else{
-							that.autograph =data.autograph;
-						}
-						// ------------7.用户Id-------------
-						that.userId=data.userId;
-						// ------------8.openId_qq-------------
-						that.openId_qq=data.openId_qq;
-						// ------------9.openId_wx-------------
-						that.openId_wx=data.openId_wx;
-						// ------------10.openId_wx-------------
-						that.openId_xcx=data.openId_xcx;
-						// ------------11.openId_ios-------------
-						that.openId_ios=data.openId_ios;
-						// ------------12.openId_app-------------
-						that.openId_app=data.openId_app;
-						// ------------13.手机号-------------
-						that.phoneNumber=data.phoneNumber;
 						uni.hideLoading();
 					}
 				})	
@@ -187,11 +117,7 @@
 			
 			// --------------------------------------2.性别------------------------------------
 			genderChange : function(e){
-				if(e.detail.value==0){
-					this.selector="请选择";
-				}else{
-					this.selector =this.genderSex[e.detail.value]; 
-				}
+				this.selector =this.genderSex[e.detail.value]; 
 				this.gender=e.detail.value;
 			},
 			
@@ -253,103 +179,80 @@
 			
 			// --------------------------------------7.提交数据------------------------------------
 			formSubmit: function(e) {
-				var openid = '';
-				// #ifdef MP-WEIXIN
-					openid = this.openId_xcx;
-				//#endif
-				// #ifdef H5
-					openid = this.openId_wx;
-				//#endif
-				// #ifdef APP-PLUS
-					openid = this.openId_app;
-				//#endif
 				uni.showLoading({
 					title:'保存中...'
 				})
-				var that=this;
-				if(that.selector=='男'){
-					that.gender=1;
-				}
-				if(that.selector=='女'){
-					that.gender=2;
-				}
-				if(that.nickname==""){
+				if(this.userName==""){
 					uni.showToast({
 						title:'请输入姓名',
 						icon:'none'
 					})
-				}else if(that.selector=='请选择'){
+				}else if(this.selector=='请选择'){
 					uni.showToast({
 						title:'请选择性别',
 						icon:'none'
 					})
-				}else if(that.address==''){
-					uni.showToast({
-						title:'请选择地址',
-						icon:'none'
-					})
 				}else{
-					uni.request({
-						url:that.$GrzxInter.Interface.changeInfo.value,
-						data:{
-							userId:that.userId,
-							gender:that.gender,
-							openId:openid,
-							address:that.address,
-							nickname:that.nickname,
-							birthday:that.birthday,
-							autograph:that.autograph,
-							phoneNumber:that.phoneNumber,
-							systemname:that.$GrzxInter.systemConfig.appName,//应用名称
-							openidtype:that.$GrzxInter.systemConfig.openidtype,//应用类型
-						},
-						method:that.$GrzxInter.Interface.changeInfo.method,
-						success(res) {
-							console.log(res,"286")
-							if(res.data.status){
-								that.changePortrait();
-							}else{
+					if(this.port.indexOf("http://120.24.144.6") != -1 || this.port == ""){
+						this.changeInfo(this.port);
+					}else{
+						console.log(this.port,"111");
+						uni.uploadFile({
+							url: this.$GrzxInter.Interface.upload.value, 
+							filePath: this.port,
+							name: 'file',
+							success: (res) => {
+								let data = JSON.parse(res.data);
+								if(data.code == 200){
+									this.changeInfo(data.data);
+								}else{
+									uni.showToast({
+										title: '上传失败',
+										icon:'none'
+									});
+								}
+							},
+							fail:(err)=>{
+								console.log(err);
 								uni.showToast({
-									title: res.data.msg,
-									icon:'none',
+									title: '网络错误',
+									icon:'none'
 								});
 							}
-						},
-						fail() {
-							uni.showToast({
-								title:'网络连接失败',
-								icon:'none'
-							})
-						}
-					})
+						});
+					}
 				}
 			},
 			
-			// --------------------------------------8.修改头像------------------------------------
-			changePortrait(){
-				var that=this;
+			// --------------------------------------8.修改用户信息------------------------------------
+			changeInfo(e){
+				console.log("id",this.userId);
+				console.log("性别",this.gender);
+				console.log("头像",e);
+				console.log("姓名",this.userName);
 				uni.request({
-					url:that.$GrzxInter.Interface.changeInfoPortrait.value,
+					url:this.$GrzxInter.Interface.changUserInfo.value,
 					data:{
-						portrait:that.port,
-						userId:that.userId,
+						userId:this.userId,
+						sex:this.gender,
+						portrait: e,
+						userName:this.userName,
 					},
-					method:that.$GrzxInter.Interface.changeInfoPortrait.method,
-					success(res1) {
-						console.log(res1,"290")
-						if(res1.data.status){
+					method:this.$GrzxInter.Interface.changUserInfo.method,
+					success:(res)=> {
+						console.log(res,"286")
+						if(res.data.status){
 							uni.showToast({
-								title:'信息保存成功！',
-								icon:'success'
-							})
+								title: '修改成功',
+							});
 							setTimeout(function(){
 								uni.navigateBack();
-							},500);
+							},800)
 						}else{
 							uni.showToast({
-								title:res1.data.msg,
-								icon:'none'
-							})
+								title: res.data.msg,
+								icon:'none',
+							});
 						}
 					},
 					fail() {
@@ -357,6 +260,9 @@
 							title:'网络连接失败',
 							icon:'none'
 						})
+					},
+					complete: () => {
+						uni.hideLoading();
 					}
 				})
 			},
@@ -368,17 +274,13 @@
 					count:1,
 					//sourceType:['album'],
 					success(res) {
-						var tempFilePaths = res.tempFilePaths;
+						var tempFilePaths = res.tempFilePaths;;
 						uni.saveFile({
-						  tempFilePath: tempFilePaths[0],
-						  success: function (res1) {
-							 that.portrait=res1.savedFilePath;
-							 // console.log(that.portrait)
-							 pathToBase64(res1.savedFilePath)
-							 .then(base64 => {
-								 that.port=base64;
-							 })
-						  }
+							tempFilePath: tempFilePaths[0],
+							success: function (res1) {
+								that.portrait=res1.savedFilePath;
+								that.port = res1.savedFilePath;
+							}
 						}); 
 					}
 				})	
@@ -445,7 +347,7 @@
 			height: 104upx;
 			left: 36upx;
 			text-align: right;
-			border-bottom:#F5F5F5 1px solid;
+			// border-bottom:#F5F5F5 1px solid;
 			border-left-width:0px;
 			border-right-width:0px;
 			border-top-width:0px;
@@ -458,34 +360,29 @@
 			text-align: right;
 			padding-top: 24upx;
 			padding-bottom: 4upx;
-			border-bottom:#F5F5F5 1px solid;
+			// border-bottom:#F5F5F5 1px solid;
 			border-left-width:0px;
 			border-right-width:0px;
 			border-top-width:0px;
 		}
 		.an{
 			width: 90%;
-			height: 104upx;
-			line-height: 104upx;
-			font-size: 40upx;
+			height: 95upx;
+			line-height: 95upx;
+			font-size: 36upx;
 			margin-top: 48upx; 
 			margin-bottom: 48upx;
-		}
-		.addressClass{
-			position: relative;
-			width: 90%;
-			height: 104upx;
-			left: 36upx;
-			text-align: right;
-			border-bottom:#F5F5F5 1px solid;
-			border-left-width:0px;
-			border-right-width:0px;
-			border-top-width:0px;
 		}
 		.txtClass{
 			position: relative;
 			top: 25rpx;
 		}
+	}
+	
+	.boxClass{
+		width: 90%;
+		margin-left: 5%;
+		border-bottom:2upx solid  #F5F5F5;
 	}
 
 </style>

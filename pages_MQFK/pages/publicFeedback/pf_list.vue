@@ -39,7 +39,7 @@
 				<scroll-view class="to_scroll" scroll-x="true">
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump2">添加</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
+					<!-- <u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button> -->
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已下架'" @click="onTheShelf(groupTitle[selectIndex].id)">发布</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'" @click="offTheShelf(groupTitle[selectIndex].id)">下架</u-button>
@@ -69,7 +69,6 @@
 					color: '#007AFF',
 					fontSize:'17px',
 					border:'#007AFF solid 1rpx',
-					
 				},
 				groupTitle:[],
 				selectId:'',//去出id
@@ -141,8 +140,8 @@
 					title: '加载列表中...',
 				})
 				uni.request({
-					url:this.$xcdt.KyInterface.getDynamicById.Url,
-					method:this.$xcdt.KyInterface.getDynamicById.method,
+					url:this.$mqfk.KyInterface.getFeedbackByUserID.Url,
+					method:this.$mqfk.KyInterface.getFeedbackByUserID.method,
 					data:{
 						userId:e.userId
 					},
@@ -191,25 +190,25 @@
 			//--------------------------路由跳转------------------------------
 			routeJump:function(e){
 				uni.navigateTo({
-					url:'rd_detailsPage?id=' +e,
+					url:'se_detailsPage?id=' +e,
 				})
 			},
 			
 			//--------------------------路由跳转(添加列表文章)------------------------------
 			routeJump2:function(){
 				uni.navigateTo({
-					url:'./rd_addPage'
+					url:'./pf_addPage'
 				})
 			},
 			
 			//--------------------------路由跳转(修改列表文章)------------------------------
 			modifyJump:function(item){
 				uni.navigateTo({
-					url: './rd_edit?jumpStatus=' +this.state + '&id=' + item.id
+					url: './se_edit?jumpStatus=' +this.state + '&id=' + item.id
 				})
 			},
 			
-			//-----------------------上架------------------------------------
+			//----------------------------------上架---------------------------------------
 			onTheShelf: function(e) {
 				uni.showModal({
 					title: '你确认发布文章？',
@@ -220,8 +219,8 @@
 								title: '正在发布....'
 							})
 							uni.request({
-								url: this.$xcdt.KyInterface.upAndDown.Url,
-								method: this.$xcdt.KyInterface.upAndDown.method,
+								url: this.$smjj.KyInterface.upAndDownEconomy.Url,
+								method: this.$smjj.KyInterface.upAndDownEconomy.method,
 								data: {
 									id: e
 								},
@@ -271,8 +270,8 @@
 								title: '正在下架....'
 							})
 							uni.request({
-								url: this.$xcdt.KyInterface.upAndDown.Url,
-								method: this.$xcdt.KyInterface.upAndDown.method,
+								url: this.$smjj.KyInterface.upAndDownEconomy.Url,
+								method: this.$smjj.KyInterface.upAndDownEconomy.method,
 								data: {
 									id: e
 								},
@@ -322,8 +321,8 @@
 								title: '正在删除....'
 							})
 							uni.request({
-								url: this.$xcdt.KyInterface.deleteDynamic.Url,
-								method: this.$xcdt.KyInterface.deleteDynamic.method,
+								url: this.$smjj.KyInterface.deleteEconomy.Url,
+								method: this.$smjj.KyInterface.deleteEconomy.method,
 								data: {
 									id: e,
 									userId:this.userInfo.userId

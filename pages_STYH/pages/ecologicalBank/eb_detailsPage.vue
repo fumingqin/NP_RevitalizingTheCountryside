@@ -12,10 +12,12 @@
 				<view class="ovof_dp_bg_title">{{groupTitle.title}}</view>
 				<view class="ovof_dp_bg_time">
 					<text class="time">{{groupTitle.update_time}}</text>
+					<text class="browse">浏览量:</text>
+					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="groupTitle.view"></u-count-to>
 				</view>
 				<view class="grClass">
 					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.avatar" mode="aspectFill"></image>
-					<image v-if="groupTitle.avatar==''" class="txImage" src="../../static/missing-face.png" mode="aspectFill"></image>
+					<image v-if="groupTitle.avatar==''" class="txImage" src="../../../static/GRZX/missing-face.png" mode="aspectFill"></image>
 					<view class="grView">
 						<view class="name">{{groupTitle.nick_name}}</view>
 						<text class="number">{{post}}</text>
@@ -42,21 +44,7 @@
 				</u-read-more>
 				
 				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
-					<view v-if="groupTitle.video!=''">
-						<view class="uploader_video">
-						    <video :src="groupTitle.video[0]" class="video"></video>
-						</view>
-					</view>
-					<view style="width: 600upx;">{{groupTitle.pdfName}}</view>
-					<view>
-						<l-file ref="lFile" @up-success="onSuccess"></l-file>
-						<view class="text-center">
-							<view class="padding" style="display: flex;">
-								<button style="width: 200upx;font-size: 24upx;" @tap="onOpenDoc(groupTitle.pdfFile[0])">预览</button>
-								<button style="width: 200upx;font-size: 24upx;" @tap="onDown(groupTitle.pdfFile[0])">下载到本地</button>
-							</view>
-						</view>
-					</view>
+					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 				</u-read-more>
 				
 				<!-- <view>
@@ -102,8 +90,25 @@
 			//加载数据
 			loadData: function() {
 				uni.request({
-					url:this.$zcfb.KyInterface.getPolicyDetailByID.Url,
-					method:this.$zcfb.KyInterface.getPolicyDetailByID.method,
+					url:this.$styh.KyInterface.addViews.Url,
+					method:this.$styh.KyInterface.addViews.method,
+					data:{
+						id : this.id
+					},
+					success: (res) => {
+						console.log('浏览量+1', res)
+					},
+					fail: function() {
+						uni.showToast({
+							title: '服务器异常',
+							icon: 'none'
+						})
+					}
+				})
+				
+				uni.request({
+					url:this.$styh.KyInterface.getEcologyDetailByID.Url,
+					method:this.$styh.KyInterface.getEcologyDetailByID.method,
 					data:{
 						id : this.id
 					},
@@ -111,6 +116,7 @@
 						console.log('详情', res)
 						if(res.data.status == true){
 							this.groupTitle=res.data.data;
+							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
@@ -132,30 +138,8 @@
 					}
 				})
 			},
-			//-------------------时间切割---------------------------
-			gettime:function(param){
-					let array=param.split(' ');
-					var a=array[0];
-					return a;
-			},
-			//----------------预览--------------------
-			onOpenDoc(e) {
-				let url = e;
-				/* 下载返回临时路径（退出应用失效） */
-				this.$refs.lFile.download(url)
-				.then(path=>{
-					/* 预览 */
-					this.$refs.lFile.open(path);
-				});
-			},
-			//--------------下载---------------------
-				onDown(e) {
-					let url = e;
-					this.$refs.lFile.download(url,'local')
-					.then(path=>{
-						console.log(path);
-					}); 
-				},
+			
+			
 			tabClick(e) {
 				if (e == 0) {
 					this.type = 0;
@@ -316,15 +300,5 @@
 				}
 			}
 		}
-	}
-	.uploader_video{
-	    position: relative;
-	    z-index: 1;
-	    width: 200upx;
-	    height: 200upx;
-	}
-	.video{
-	    width: 100%;
-	    height: 100%;
 	}
 </style>

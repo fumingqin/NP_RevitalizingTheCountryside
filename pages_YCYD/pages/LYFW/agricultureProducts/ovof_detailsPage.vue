@@ -13,7 +13,7 @@
 				<view class="ovof_dp_bg_time">
 					<text class="time">{{groupTitle.update_time}}</text>
 					<text class="browse">浏览量:</text>
-					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="groupTitle.count"></u-count-to>
+					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="groupTitle.view"></u-count-to>
 				</view>
 				<view class="grClass">
 					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.avatar" mode="aspectFill"></image>

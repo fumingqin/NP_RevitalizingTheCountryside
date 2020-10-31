@@ -116,7 +116,7 @@
 				</u-form-item>
 			</u-form>
 			<view  style="padding-bottom: 120upx;"></view>
-			<u-button type="success" :custom-style="buttonStyle" @click="uploadData">提交</u-button>
+			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
 			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 			<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
 		</view>
@@ -491,16 +491,22 @@
 				};
 				this.lists.push(a.data)
 				console.log(this.lists)
+				console.log(this.fileList)
 			},
 			
-			uploadData:function() {
+			successData:function(){
 				this.editorCtx.getContents({
 					success: (res) => {
 						console.log(res);
 						this.issueText = res.html;
+						
+						this.uploadData(this.issueText);
 					}
 				});
 				
+			},
+			
+			uploadData:function(e) {
 				uni.showLoading({
 					title: '提交中...',
 					mask: true,
@@ -528,11 +534,11 @@
 						console.log('验证通过');
 						if (this.issueText !== '<p><br></p>') {
 							uni.request({
-								url: this.$ycyd.KyInterface.releaseArchives.Url,
-								method: this.$ycyd.KyInterface.releaseArchives.method,
+								url: this.$styh.KyInterface.releaseEcology.Url,
+								method: this.$styh.KyInterface.releaseEcology.method,
 								data: {
 									userId: this.userInfo.userId,
-									content: this.issueText,
+									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,
 									article_type: this.model.goodsType,

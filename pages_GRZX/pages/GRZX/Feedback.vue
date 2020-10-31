@@ -134,6 +134,7 @@ export default {
 			for(var i=0;i<e.allImages.length;i++){
 				this.pictureArray.push(e.allImages[i]);
 			}
+			console.log(this.pictureArray)
 		},
 		Inputtext:function(e){ //字数
 			var that = this;
@@ -322,9 +323,9 @@ export default {
 		left: 4%;
 		width: 92%;
 		text-align: center;
-		font-size: 34upx;
+		font-size: 36upx;
 		border-radius: 20upx;
-		padding: 30upx 0;
+		padding: 20upx 0;
 	}
 	.changecolor1{
 		background-color: #FFFFFF;

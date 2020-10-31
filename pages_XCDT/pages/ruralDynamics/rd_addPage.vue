@@ -11,25 +11,10 @@
 				</u-form-item>
 
 				<!-- 类型 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="选择类型" :border-bottom="false" prop="goodsType">
+<!-- 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="选择类型" :border-bottom="false" prop="goodsType">
 					<view class="viewClass" style="padding-right: 20rpx;">
 						<u-input :custom-style="tradeNameStyle" :border="border" type="select" :select-open="selectShow" v-model="model.goodsType"
 						 placeholder="请选择选择类型" @click="selectShow = true"></u-input>
-					</view>
-				</u-form-item>
-
-				<!-- 商品来源地 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品来源地" :border-bottom="false" prop="region">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" type="select" :select-open="pickerShow" v-model="model.region"
-						 placeholder="请选择商品来源地" @click="pickerShow = true"></u-input>
-					</view>
-				</u-form-item> -->
-
-				<!-- 商品价格 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品价格" :border-bottom="false" prop="cost">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品价格" v-model="model.cost" :type="text"></u-input>
 					</view>
 				</u-form-item> -->
 
@@ -40,10 +25,6 @@
 							<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
 						</view>
 					</u-upload>
-					<!-- <view class="bottom-view-ImageUpload">
-						<robby-image-upload v-model="model.imageData" :showUploadProgress="show" :form-data="formData" @delete="deleteImage"
-						 @add="addImage" :enable-del="enableDel" :enable-add="enableAdd" limit="3"></robby-image-upload>
-					</view> -->
 				</u-form-item>
 
 				<!-- 上传视频 -->
@@ -134,6 +115,7 @@
 					</view>
 				</u-form-item>
 			</u-form>
+			<view  style="padding-bottom: 120upx;"></view>
 			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
 			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 			<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
@@ -147,7 +129,7 @@
 		pathToBase64,
 		base64ToPath
 	} from '@/pages_GRZX/components/GRZX/js_sdk/gsq-image-tools/image-tools/index.js';
-	import robbyImageUpload from '@/pages_YCYD/components/LYFW/robby-image-upload/robby-image-upload.vue';
+	import robbyImageUpload from '@/pages_XCDT/components/robby-image-upload/robby-image-upload.vue';
 	var _self;
 	export default {
 		components: {
@@ -270,7 +252,6 @@
 				pictureArray: [], //存储图片base64
 				userInfo: [], //个人信息
 				issueText: '',
-				issueText2: '',
 				border: false,
 				selectShow: false,
 				jumpStatus: '',
@@ -317,27 +298,6 @@
 			this.userData();
 			this.jumpStatus = param.jumpStatus;
 			this.id = param.id;
-			if (this.jumpStatus == '修改') {
-				uni.request({
-					url: this.$ycyd.KyInterface.getArchiveDetailByID.Url,
-					method: this.$ycyd.KyInterface.getArchiveDetailByID.method,
-					data: {
-						id: this.id
-					},
-					success: (res) => {
-						console.log(res)
-						uni.setStorage({
-							key: 'informationData',
-							data: res.data.data,
-							success: () => {
-								this.xiugaiData();
-							}
-						});
-
-					}
-				})
-
-			}
 		},
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
@@ -349,52 +309,6 @@
 						// console.log('获取个人信息', this.userInfo)
 					}
 				});
-			},
-
-			//-------------------------------读取修改数据缓存-------------------------------
-			xiugaiData: function() {
-				var that=this;
-				console.log('1111111111111111111111')
-				uni.getStorage({
-					key: 'informationData',
-					success: (data) => {
-						// console.log('修改信息列表', data.data)
-						this.informationDetail = data.data;
-						this.issueText2 = data.data.content;
-						this.model.name = data.data.title;
-						this.model.goodsType = data.data.article_type;
-						this.onEditorReady();
-						// console.log('赋值前', this.lists)
-						for(var i=0;i<this.informationDetail.image.length;i++){
-							if(this.informationDetail.image[0] !== ''){
-								var imageObj={
-									url:this.informationDetail.image[i]
-								};
-								var imageArray=[];
-								imageArray.push(imageObj)
-							}
-						}
-						this.fileList = imageArray
-						if(this.informationDetail.image[0] !== ''){
-							this.lists = this.informationDetail.image[0];
-						}
-						
-						
-						if(this.informationDetail.video!==""){
-							console.log('视频转编译', this.videoData.data)
-							console.log('6', this.informationDetail.video);
-							var b=[];
-							var a=JSON.stringify(b);
-							this.videoArray=a;
-						}
-						// console.log('赋值后', this.lists)
-						// console.log('图片转编译', imageArray)
-						// console.log('修改信息列表', this.issueText)
-						
-						
-						
-					}
-				})
 			},
 
 			//--------------------- 选择地区回调 --------------------------
@@ -443,7 +357,7 @@
 					// console.log(res);
 					_self.editorCtx = res.context;
 					that.editorCtx.setContents({
-						html: that.issueText2 //this.EditGoodsDetail.content为赋值内容。    
+						html: that.issueText //this.EditGoodsDetail.content为赋值内容。    
 					})
 				}).exec();
 			},
@@ -573,11 +487,10 @@
 			uploadOnsuccess:function(e){
 				console.log('上传成功',e)
 				var a = {
-					response : {
-						data : e.data
-					}
+					data : e.data
 				};
-				this.lists.push(a)
+				this.lists.push(a.data)
+				console.log(this.lists)
 			},
 			
 			successData:function(){
@@ -594,32 +507,16 @@
 			
 			uploadData:function(e) {
 				
-				console.log(this.fileList)
-				console.log(this.lists)
-				
-				if(this.fileList !== undefined){
-					// console.log('我从服务器进来了')
-					this.pictureArray.push(this.fileList[0].url);
-				}else if(this.lists.length == 0){
-					// console.log('我从本低进来了1')
-					this.pictureArray.push('');
-				}else{
-					// console.log('我从本低进来了2')
-					var path = this.lists.length > 0 ? this.lists[0].response.data : "";
-					this.pictureArray.push(path);
-				}
-				
-				
 				uni.showLoading({
 					title: '提交中...',
 					mask: true,
 				})
-				console.log('1', e);
-				console.log('2', this.userInfo.userId);
-				console.log('3', this.pictureArray);
-				console.log('4', this.model.name);
-				console.log('5', this.model.goodsType);
-				console.log('6', this.informationDetail.id);
+				// console.log('1', this.issueText);
+				// console.log('2', this.userInfo.userId);
+				// console.log('3', this.pictureArray);
+				// console.log('4', this.model.name);
+				// console.log('5', this.model.goodsType);
+				// console.log('6', this.informationDetail.id);
 				if(this.informationDetail.video!==""){
 					var arr=[];
 					arr.push(this.informationDetail.video);
@@ -635,104 +532,50 @@
 					if (valid) {
 						// uni.hideLoading();
 						console.log('验证通过');
-						if (this.jumpStatus == '修改') {
-							if (this.issueText !== '<p><br></p>') {
-								uni.request({
-									url: this.$ycyd.KyInterface.updateArchives.Url,
-									method: this.$ycyd.KyInterface.updateArchives.method,
-									data: {
-										id: this.informationDetail.id,
-										userId: this.userInfo.userId,
-										content: this.issueText,
-										image: JSON.stringify(this.pictureArray),	
-										title: this.model.name,
-										article_type: this.model.goodsType,
-										// video: JSON.stringify(arr)
-									},
-									success: (res) => {
-										console.log(res, "请求完接口");
-										if (res.data.status == true) {
-											uni.showToast({
-												title: res.data.msg,
-											})
-											setTimeout(function() {
-												uni.navigateBack();
-												this.pictureArray=[];
-												this.fileList = [];
-												this.lists = [];
-											}, 1000)
-										} else {
-											uni.showToast({
-												title: res.data.msg,
-												icon: 'none',
-											})
-										}
-									},
-									fail: () => {
+						if (this.issueText !== '<p><br></p>') {
+							uni.request({
+								url: this.$xcdt.KyInterface.releaseDynamic.Url,
+								method: this.$xcdt.KyInterface.releaseDynamic.method,
+								data: {
+									userId: this.userInfo.userId,
+									content: e,
+									image: JSON.stringify(this.lists),
+									title: this.model.name,
+									// video: JSON.stringify(arr)
+								},
+								success: (res) => {
+									console.log(res, "请求完接口");
+									if (res.data.status) {
 										uni.showToast({
-											title: '提交失败',
+											title: res.data.msg,
+										})
+										setTimeout(function() {
+											uni.navigateBack();
+										}, 1000)
+									} else {
+										uni.showToast({
+											title: res.data.msg,
 											icon: 'none',
 										})
-									},
-									complete: () => {
-										setTimeout(function() {
-											uni.hideLoading();
-										}, 800)
 									}
-								});
-							} else {
-								uni.showToast({
-									title: '提交失败,请编辑文章内容',
-									icon: 'none',
-								})
-							}
+								},
+								fail: () => {
+									uni.showToast({
+										title: '提交失败',
+										icon: 'none',
+									})
+								},
+								complete: () => {
+									setTimeout(function() {
+										uni.hideLoading();
+									}, 800)
+								}
+							});
 						} else {
-							if (this.issueText !== '<p><br></p>') {
-								uni.request({
-									url: this.$ycyd.KyInterface.releaseArchives.Url,
-									method: this.$ycyd.KyInterface.releaseArchives.method,
-									data: {
-										userId: this.userInfo.userId,
-										content: this.issueText,
-										image: JSON.stringify(this.pictureArray),
-										title: this.model.name,
-										article_type: this.model.goodsType,
-										// video: JSON.stringify(arr)
-									},
-									success: (res) => {
-										console.log(res, "请求完接口");
-										if (res.data.status) {
-											uni.showToast({
-												title: res.data.msg,
-											})
-											setTimeout(function() {
-												uni.navigateBack();
-											}, 1000)
-										} else {
-											uni.showToast({
-												title: res.data.msg,
-												icon: 'none',
-											})
-										}
-									},
-									fail: () => {
-										uni.showToast({
-											title: '提交失败',
-											icon: 'none',
-										})
-									},
-									complete: () => {
-										setTimeout(function() {
-											uni.hideLoading();
-										}, 800)
-									}
-								});
-							} else {
-								uni.showToast({
-									title: '提交失败,请编辑文章内容',
-									icon: 'none',
-								})
-							}
+							uni.showToast({
+								title: '提交失败,请编辑文章内容',
+								icon: 'none',
+							})
 						}
 					} else {
 						uni.hideLoading();

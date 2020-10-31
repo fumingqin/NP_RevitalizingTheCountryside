@@ -8,12 +8,12 @@
 			<!-- 手机号 -->
 			<view class="inputItem phoneNum">
 				<image src="../../static/GRZX/shouji.png" class="iconClass1"></image>
-				<input type="number" placeholder="手机号码" maxlength="11" class="inputClass" data-key="phoneNumber" @input="inputChange1" />
+				<input type="number" placeholder="手机号码" maxlength="11" class="inputClass" v-model="phoneNumber" @input="inputChange1" />
 			</view>
 			<!-- 验证码 -->
 			<view class="inputItem Captcha">
 				<image src="../../static/GRZX/yanzhengma.png" class="iconClass2"></image>
-				<input type="number" placeholder="输入验证码" maxlength="4" class="inputClass" data-key="captchaCode" @input="inputChange2" />
+				<input type="number" placeholder="输入验证码" maxlength="4" class="inputClass" v-model="captchaCode" @input="inputChange2" />
 			</view>
 			<!-- 按钮颜色和发送验证码的样式 -->
 			<view class="getCode style1" @click="getCodeClick" id="Code">{{textCode}}</view>
@@ -59,6 +59,8 @@
 			})
 		},
 		onShow() {
+			this.phoneNumber = "";
+			this.captchaCode = "";
 			this.whetherClick=true;
 		},
 		onUnload() {
@@ -172,10 +174,16 @@
 								success(res) {
 									console.log(res)
 									let data = res.data.data;
-									uni.setStorageSync('userInfo', data);
-									uni.removeStorageSync('captchaCode');
 									uni.hideLoading();
-									that.successReturn(); //登陆成功后返回
+									if(data.rId == "" || data.rId == null){
+										uni.navigateTo({
+											url:'./selectVillage?id='+data.userId,
+										})
+									}else{
+										uni.setStorageSync('userInfo', data);
+										uni.removeStorageSync('captchaCode');
+										that.successReturn(); //登陆成功后返回
+									}
 								}
 							})
 						} else {
@@ -660,7 +668,7 @@
 		//height: 874upx;
 		height: 800upx;
 		position: absolute;
-		top: 370upx;
+		top: 450upx;
 		left: 4.8%;
 		// background-color: white;
 		border-radius: 20upx;
