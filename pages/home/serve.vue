@@ -70,6 +70,13 @@
 						style:"sv_print",
 					},{
 						IsUse: true,
+						clickURL: "../../pages_PYFW/pages/pyfw_gl_list",
+						ImageURL1: "../../static/home/serve/kjtpy.png",//亮
+						ImageURL2: "../../static/home/serve/kjtpy2.png",//暗
+						ItemTitle: "特派审批",
+						style:"sv_print",
+					},{
+						IsUse: true,
 						clickURL: "../../pages_PYFW/pages/pyfw_py_list",
 						ImageURL1: "../../static/home/serve/kjtpy.png",//亮
 						ImageURL2: "../../static/home/serve/kjtpy2.png",//暗

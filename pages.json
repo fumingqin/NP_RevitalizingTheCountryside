@@ -453,24 +453,44 @@
                 }
                 ,{
                     "path" : "pages/pyfw_personalList",
-                    "style" : {}
+                    "style" : {
+						"enablePullDownRefresh":true,
+						"navigationBarTitleText": "申请列表"
+					}
                 }
                 ,{
                     "path" : "pages/pyfw_details",
-                    "style" : {}
+                    "style" : {
+						"enablePullDownRefresh":true,
+						"navigationBarTitleText": "申请详情"
+					}
                 }
                 ,{
                     "path" : "pages/pyfw_py_list",
-                    "style" : {}
+                    "style" : {
+						"navigationBarTitleText": "特派员任务"
+					}
                 }
                 ,{
                     "path" : "pages/pyfw_py_details",
-                    "style" : {}
+                    "style" : {
+						"navigationBarTitleText": "任务详情"
+					}
                 }
                 ,{
-                    "path" : "pages/pyfw_countrySearch",
-                    "style" : {}
-                }
+                    "path" : "pages/pyfw_gl_list",
+                    "style" : {
+						"enablePullDownRefresh":true,
+						"navigationBarTitleText": "特派员申请审批"
+					}
+                },
+				{
+				    "path" : "pages/pyfw_gl_details",
+				    "style" : {
+						"enablePullDownRefresh":true,
+						"navigationBarTitleText": "申请详情"
+					}
+				}
             ]
 		},
 		//---------------------------------------------第七个包：政策发布------------------------------------------

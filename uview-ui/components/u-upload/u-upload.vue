@@ -571,7 +571,7 @@ export default {
 	height: 200rpx;
 	overflow: hidden;
 	margin: 10rpx;
-	background: rgb(244, 245, 246);
+	background: #FFFFFF;
 	position: relative;
 	border-radius: 10rpx;
 	/* #ifndef APP-NVUE */
