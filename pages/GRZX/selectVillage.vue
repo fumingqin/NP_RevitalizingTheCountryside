@@ -1,12 +1,14 @@
 <template>
 	<view class="content">
 		<!-- 顶部搜索框 -->
-		<view class="topSerchView">
+		<!-- <view class="topSerchView">
 			<view class="SearchBar" elevation='5px'>
 				<input class="addressInput" @input="onInput" placeholder="请输入关键字搜索" />
 			</view>
+		</view> -->
+		<view class="topSerchClass">
+			<u-search placeholder="请输入关键字" v-model="keyword" :show-action="false" @input="onInput" :clearabled="true"></u-search>
 		</view>
-
 
 		<!-- 搜索列表 -->
 		<view class="stationList" :style="{ 'height':scrollHeight }" v-if="SearchStatus">
@@ -39,13 +41,10 @@
 				
 				scrollHeight:1000,
 				userId:0,
+				keyword:"",
 			}
 		},
 		onLoad(pam) {
-			// uni.showToast({
-			// 	title:'首次登录需要选择村庄，否则可能导致部分功能无法使用',
-			// 	icon:'none',
-			// })
 			this.userId = pam.id;
 			uni.showModal({
 				title:'温馨提示',
@@ -74,15 +73,15 @@
 			onInput: function(e) {
 				console.log('监听输入', e)
 				
-				this.VillageStatus = e.detail.value != '' ? false : true;
-				this.SearchStatus = e.detail.value != '' ? true : false;
+				this.VillageStatus = e != '' ? false : true;
+				this.SearchStatus = e != '' ? true : false;
 
 				uni.showLoading();
 				uni.request({
 					url: this.$GrzxInter.Interface.getVillageListByName.value,
 					method: this.$GrzxInter.Interface.getVillageListByName.method,
 					data: {
-						keyName: e.detail.value
+						keyName: e
 					},
 					success: (res) => {
 						uni.hideLoading();
@@ -127,6 +126,9 @@
 				
 			},
 			
+			clear(){
+				this.keyword = "";
+			},
 		}
 	}
 </script>
@@ -158,6 +160,11 @@
 		}
 	}
 	
+	.topSerchClass{
+		width: 90%;
+		margin: 15upx 5%;
+	}
+	
 	.stationList {
 		background-color: #FFFFFF;
 		line-height: 80rpx;
@@ -166,7 +173,7 @@
 		height: 800rpx;
 	
 		.listItem {
-			margin-left: 20rpx;
+			margin:0 5%;
 			border-bottom: 1rpx solid #eeeeee;
 		}
 	}
