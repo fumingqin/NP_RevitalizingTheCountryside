@@ -108,6 +108,12 @@ const Interface={
 		method:'POST',
 		pages: [],
 	},
+	GetAggrement:{
+		value: Url1 + '/api/ShowContent/GetAggrement',
+		name:'获取乘车须知',
+		method:'POST',//GET-POST
+		pages:[]
+	},
 	//乘车人信息结束
 }
 
