@@ -6,6 +6,8 @@ import $oSit from '@/common/overallSituation.js';
 //接口域名
 const Url=$oSit.Interface.address.xczx_Url;
 
+const Url1=$oSit.Interface.address.Url;
+
 //APP下载地址
 const downloadAPP = "http://27.148.155.9:9248/LoadAppWebsite/泉运出行综合平台.apk"; 
 
@@ -86,6 +88,27 @@ const Interface={
 		method:'POST',
 		pages: [],
 	},
+	
+	//乘车人信息开始
+	userInfoList:{
+		value:Url1+'/api/person/userInfoList',
+		name:'获取乘车人信息',
+		method:'POST',
+		pages: [],
+	},
+	changeUserInfo:{
+		value:Url1+'/api/person/changeUserInfo',
+		name:'修改乘车人信息',
+		method:'POST',
+		pages: [],
+	},
+	deletuserInfoList:{
+		value:Url1+'/api/person/deletuserInfoList',
+		name:'删除乘车人信息',
+		method:'POST',
+		pages: [],
+	},
+	//乘车人信息结束
 }
 
 const MainPackage='/pages/GRZX';   //主包
