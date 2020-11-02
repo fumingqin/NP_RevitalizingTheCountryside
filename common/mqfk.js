@@ -30,6 +30,30 @@ const KyInterface = {
 		name:'发布民情反馈接口',
 		method:'POST',
 	},
+	
+	deleteFeedback:{
+		Url:Url + '/api/feedback/deleteFeedback',
+		name:'删除民情反馈接口',
+		method:'POST',
+	},
+	
+	getFeedback:{
+		Url:Url + '/api/feedback/getFeedback',
+		name:'获得所有反馈的列表',
+		method:'POST',
+	},
+	
+	getFeedbackDemo:{
+		Url:Url + '/api/feedback/getFeedbackDemo',
+		name:'获取反馈示例列表',
+		method:'POST',
+	},
+	
+	getFeedbackByKeyword:{
+		Url:Url + '/api/feedback/getFeedbackByKeyword',
+		name:'模糊查询',
+		method:'POST',
+	},
 }
 
 // 接口声明区

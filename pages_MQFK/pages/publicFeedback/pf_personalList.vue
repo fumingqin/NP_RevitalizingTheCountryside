@@ -164,8 +164,8 @@
 					title: '加载列表中...',
 				})
 				uni.request({
-					url:this.$mqfk.KyInterface.getFeedback.Url,
-					method:this.$mqfk.KyInterface.getFeedback.method,
+					url:this.$mqfk.KyInterface.getFeedbackByUserID.Url,
+					method:this.$mqfk.KyInterface.getFeedbackByUserID.method,
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
