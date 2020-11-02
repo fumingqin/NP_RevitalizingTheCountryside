@@ -110,7 +110,22 @@
 						ImageURL2: "../../static/home/serve/xmjd2.png",//暗
 						ItemTitle: "项目监督",
 						style:"sv_print",
+					},{
+						IsUse: true,
+						clickURL:"../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_generalList",
+						ImageURL1: "../../static/home/serve/xmjd.png",//亮
+						ImageURL2: "../../static/home/serve/xmjd2.png",//暗
+						ItemTitle: "一村一档",
+						style:"sv_print",
+					},{
+						IsUse: true,
+						clickURL:"../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_list",
+						ImageURL1: "../../static/home/serve/xmjd.png",//亮
+						ImageURL2: "../../static/home/serve/xmjd2.png",//暗
+						ItemTitle: "村档管理",
+						style:"sv_print",
 					}
+					
 					
 					
 				]

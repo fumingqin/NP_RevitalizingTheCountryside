@@ -26,9 +26,15 @@
 						</view>
 					</u-upload>
 				</u-form-item>
+				
+				<!-- 上传视频 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
+					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo" ></easy-upload>
+				</u-form-item>
 
-				<!-- 商品简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
+				<!-- 动态简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="动态简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
@@ -179,12 +185,12 @@
 				rules: {
 					name: [{
 							required: true,
-							message: '请输入商品名称',
+							message: '请输入标题内容',
 							trigger: 'blur',
 						},
 						{
 							min: 1,
-							message: '请输入商品名称',
+							message: '请输入标题内容',
 							trigger: ['change', 'blur'],
 						},
 					],
@@ -331,6 +337,11 @@
 					success: (data) => {
 						// console.log('修改信息列表', data.data)
 						this.informationDetail = data.data;
+						if(data.data.video !==null){
+							this.imageList.push(data.data.video)
+						}
+						
+						console.log(this.videoData)
 						this.issueText2 = data.data.content;
 						this.model.name = data.data.title;
 						this.model.goodsType = data.data.article_type;
@@ -350,21 +361,6 @@
 						if(this.informationDetail.image[0] !== ''){
 							this.lists = this.informationDetail.image[0];
 						}
-						
-						
-						if(this.informationDetail.video!==""){
-							console.log('视频转编译', this.videoData.data)
-							console.log('6', this.informationDetail.video);
-							var b=[];
-							var a=JSON.stringify(b);
-							this.videoArray=a;
-						}
-						// console.log('赋值后', this.lists)
-						// console.log('图片转编译', imageArray)
-						// console.log('修改信息列表', this.issueText)
-						
-						
-						
 					}
 				})
 			},
@@ -522,11 +518,23 @@
 
 			//---------------------------上传视频回调-------------------------------
 			successvideo: function(e) {
+				console.log(e)
+				// console.log('未插入',this.imageList)
+				// var a = [{
+				// 	data : ''
+				// }];
+				// var data = JSON.parse(e.data);
+				// a[0].data = data.data;
+				// this.imageList = a
+				// console.log('已插入', this.imageList)
+				console.log('未插入',this.imageList)
+				var a = [];
 				var data = JSON.parse(e.data);
-				// console.log(data)
-				this.videoData = data;
-				console.log('视频上传成功', this.videoData)
+				a.push(data.data);
+				this.imageList = a
+				console.log('已插入', this.imageList)
 			},
+			
 			
 			//删除图片提示
 			uploadOnRemove:function(e){
@@ -587,23 +595,30 @@
 					title: '提交中...',
 					mask: true,
 				})
-				// console.log('1', this.issueText);
+				
+				console.log(this.imageList)	
+				
+				// if(this.videoData.data !== this.informationDetail.video){
+				// 	var arr = [];
+				// 	arr.push(this.videoData.data);
+					
+				// }else if(this.informationDetail.video!=='null'){
+					
+				// 	var arr = this.informationDetail.video;
+					
+				// }
+				// console.log('6', this.informationDetail.video);
+				// console.log('7', arr);
+				
+				
+				// console.log('1', e);
 				// console.log('2', this.userInfo.userId);
 				// console.log('3', this.pictureArray);
 				// console.log('4', this.model.name);
 				// console.log('5', this.model.goodsType);
-				// console.log('6', this.informationDetail.id);
-				// console.log('7', this.issueText);
-				if(this.informationDetail.video!==""){
-					var arr=[];
-					arr.push(this.informationDetail.video);
-				}else if(this.videoData.data!==this.informationDetail.video){
-					var arr=[];
-					arr.push(this.videoData.data);
-				}else if(this.types==0){
-					var arr=[];
-				}
-				arr.push(this.videoData.data);
+				// console.log('6', this.informationDetail.video);
+				// console.log('7', arr);
+				// console.log('7', this.informationDetail.video);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -620,7 +635,7 @@
 										content: e,
 										image: JSON.stringify(this.pictureArray),	
 										title: this.model.name,
-										// video: JSON.stringify(arr)
+										video: JSON.stringify(this.imageList)
 									},
 									success: (res) => {
 										console.log(res, "请求完接口");
@@ -669,7 +684,7 @@
 										content: this.issueText,
 										image: JSON.stringify(this.lists.response.data),
 										title: this.model.name,
-										// video: JSON.stringify(arr)
+										video: JSON.stringify(this.imageList)
 									},
 									success: (res) => {
 										console.log(res, "请求完接口");
