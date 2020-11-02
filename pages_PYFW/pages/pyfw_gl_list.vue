@@ -7,8 +7,8 @@
 		<view class="infor_view" v-for="(item,index) in informationList" :key="index" @click="detailsClick(item.id)">
 			<view class="view_titleView">
 				<text class="tv_view">
-					<text class="tv_label" style="background: #007AFF;" v-if="item.order_state !== '申请失败' && item.order_state !== '已取消'">{{item.order_state}}</text>
-					<text class="tv_label" style="background: #FA3534;" v-if="item.order_state == '申请失败' || item.order_state == '已取消'">{{item.order_state}}</text>
+					<text class="tv_label" style="background: #007AFF;" v-if="item.order_state !== '申请失败' && item.order_state !== '已取消' ">{{statusMethod(item.order_state)}}</text>
+					<text class="tv_label" style="background: #FA3534;" v-if="item.order_state == '申请失败' || item.order_state == '已取消'">{{statusMethod(item.order_state)}}</text>
 					<text class="tv_title">科技特派员服务</text>
 					<text class="tv_content"><text style="font-weight: bold;">乡村名：</text>{{item.villageName}}</text>
 					<text class="tv_content"><text style="font-weight: bold;">技术类型：</text>{{item.apply_type}}</text>
@@ -33,9 +33,9 @@
 		</view>
 
 		<!-- 派员编号 -->
-		<view class="operButton">
+		<!-- <view class="operButton">
 			<text class="buttonView2" @click="operClick">申请特派员</text>
-		</view>
+		</view> -->
 
 	</view>
 </template>
@@ -45,13 +45,13 @@
 		data() {
 			return {
 				headList: [{
-					name: '全部'
-				}, {
-					name: '申请中'
-				}, {
-					name: '已派员'
-				}, {
-					name: '已结束'
+					name: '待审批'
+				},{
+					name: '审批成功'
+				},{
+					name: '审批失败'
+				},{
+					name: '其他'
 				}], //头部数组
 				headCurrent: 0, //头部tabs下标
 				informationList: '', //资讯列表
@@ -63,9 +63,6 @@
 			
 		},
 		onShow: function() {
-			uni.showLoading({
-				title: '加载信息中...'
-			})
 			this.userData();
 		},
 		onPullDownRefresh: function() {
@@ -79,51 +76,60 @@
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
 			userData: function() {
+				uni.showLoading({
+					title: '加载信息中...'
+				})
 				uni.getStorage({
 					key: 'userInfo',
 					success: (res) => {
 						this.userInfo = res.data;
 						this.loadData();
 						console.log('获取个人信息', this.userInfo)
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'加载个人信息失败',
+							icon:'none'
+						})
 					}
 				});
 			},
 			//加载接口数据
 			loadData: function() {
 				uni.request({
-					url: this.$pyfw.KyInterface.getCommissioneryById.Url,
-					method: this.$pyfw.KyInterface.getCommissioneryById.method,
-					data: {
-						userId: this.userInfo.userId
-					},
+					url: this.$pyfw.KyInterface.getCommissionery.Url,
+					method: this.$pyfw.KyInterface.getCommissionery.method,
 					success: (res) => {
 						console.log(res)
 						this.informationList = '';
 						if (this.headCurrent == 0) {
-							this.informationList = res.data.data
-						} else if (this.headCurrent == 1) {
 							this.informationList = res.data.data.filter(item => {
 								return item.order_state == '申请中';
 							})
-						} else if (this.headCurrent == 2) {
+						}else if (this.headCurrent == 1){
 							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '已派员';
+								return item.order_state == '已派员'
 							})
-						} else if (this.headCurrent == 3) {
+						}else if (this.headCurrent == 2){
 							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '已完成' || item.order_state == '申请失败' || item.order_state == '已取消'
+								return item.order_state == '申请失败'
+							})
+						} else if (this.headCurrent == 3){
+							this.informationList = res.data.data.filter(item => {
+								return item.order_state == '已完成' || item.order_state == '已取消'
 							})
 						}
 						// console.log(this.informationList.length)
 						this.listStatusIndex = this.informationList.length;
-						uni.stopPullDownRefresh()
 						uni.hideLoading()
+						uni.stopPullDownRefresh()
 					},
 					fail: (err) => {
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title:'加载数据失败，刷下拉刷新重试',
+							title:'加载信息失败',
 							icon:'none'
 						})
 					}
@@ -133,7 +139,7 @@
 			detailsClick: function(e) {
 				console.log(e)
 				uni.navigateTo({
-					url: 'pyfw_details?id=' + e
+					url: 'pyfw_gl_details?id=' + e
 				})
 			},
 
@@ -160,6 +166,19 @@
 				uni.navigateTo({
 					url: 'pyfw_edit'
 				})
+			},
+			
+			//状态转编译
+			statusMethod:function(e){
+				if(e == '申请中'){
+					return '待审核'
+				}else if(e == '已派员'){
+					return '审核成功'
+				}else if(e == '申请失败'){
+					return '审核失败'
+				}else{
+					return e
+				}
 			}
 		}
 	}
@@ -185,6 +204,7 @@
 				}
 
 				.tv_title {
+					padding-top: 12upx;
 					font-weight: bold;
 					font-size: 34upx;
 					margin-left: 12upx;

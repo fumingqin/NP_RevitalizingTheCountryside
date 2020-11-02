@@ -351,7 +351,7 @@
 	.u-form-item {
 		@include vue-flex;
 		// align-items: flex-start;
-		padding: 20rpx 0;
+		// padding: 20rpx 0;
 		font-size: 28rpx;
 		color: $u-main-color;
 		box-sizing: border-box;

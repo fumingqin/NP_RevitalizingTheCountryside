@@ -62,21 +62,33 @@
 			//---------------------------提交修改---------------------------
 			submit(){
 				// this.changeDuty();
-				uni.getStorageSync({
+				uni.getStorage({
 					key : 'Code',
 					success:res=>{
-						if(this.captchaCode == res.data.code){
+						console.log(res);
+						if(this.captchaCode =="" || this.captchaCode == null){
+							uni.showToast({
+								title: "请输入验证码",
+								icon: "none"
+							})
+						}else if(this.checkcode =="" || this.checkcode == null){
+							uni.showToast({
+								title: "请输入校验码",
+								icon: "none"
+							})
+						}
+						else if(this.captchaCode == res.data.code){
 							this.changeDuty();
 						}else{
 							uni.showToast({
-								title: "验证码输入错误!",
+								title: "验证码输入错误",
 								icon: "none"
 							})
 						}
 					},
 					fail: err =>{
 						uni.showToast({
-							title: "验证码已过期!",
+							title: "验证码已过期",
 							icon: "none"
 						})
 					}
@@ -97,16 +109,18 @@
 						checkCode : this.checkcode,
 					},
 					success: res => {
+						console.log(res);
 						if(res.data.status){
 							uni.showToast({
 								title: '修改成功',
 							});
+							uni.removeStorageSync('Code');
 							setTimeout(function(){
 								uni.navigateBack();
 							},1000)
 						}else{
 							uni.showToast({
-								title: res.data.msg,
+								title: '修改失败',
 								icon:'none'
 							});
 						}

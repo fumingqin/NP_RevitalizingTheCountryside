@@ -139,7 +139,7 @@ export default {
 		save(e) {
 			var _this = this;
 			var src = this.imgs[this.index];
-			src = 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png';
+			// src = 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png';
 			//#ifdef MP-WEIXIN
 			//提前向用户发起授权请求
 			uni.authorize({
