@@ -128,7 +128,7 @@
 			detailsClick: function(e) {
 				console.log(e)
 				uni.navigateTo({
-					url: 'pyfw_details?id=' + e
+					url: 'pyfw_py_details?id=' + e
 				})
 			},
 

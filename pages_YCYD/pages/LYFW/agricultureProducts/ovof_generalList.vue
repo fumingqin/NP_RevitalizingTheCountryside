@@ -1,5 +1,8 @@
 <template>
 	<view>
+		<!-- 头部切换栏 -->
+		<u-tabs :list="headList" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
+		
 		<!-- 内容1 -->
 		<view>
 			<view class="infor_view" v-for="(item,index) in groupTitle" :key="index" @click="routeJump(item.id)">
@@ -27,9 +30,13 @@
 				</view>
 				<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 			</view>
-			<view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
-				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
+			<!-- 缺省提示 -->
+			<view style="margin-top: 250upx;" v-if="groupTitle.length ==0">
+				<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
 			</view>
+			<!-- <view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
+				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -38,15 +45,27 @@
 	export default {
 		data() {
 			return {
+				headList: [{
+					name: '全部'
+				},{
+					name: '村容村貌'
+				},{
+					name: '环境整治'
+				},{
+					name: '企业帮扶'
+				},{
+					name: '三化管理'
+				}], //头部数组
+				headCurrent: 0, //头部tabs下标
 				groupTitle:[],
 				selectId:'',//去出id
 				selectIndex:0,//下标
 				loadingType: 0, //加载更多状态
-				loadingText:{
-					down :'上拉加载更多',
-					refresh : '正在加载...',
-					nomore : '没有更多了',
-				},
+				// loadingText:{
+				// 	down :'上拉加载更多',
+				// 	refresh : '正在加载...',
+				// 	nomore : '没有更多了',
+				// },
 				scenicListIndex:5,//列表默认数量
 			}
 		},
@@ -65,9 +84,9 @@
 			this.ycydData();
 		},
 		
-		onReachBottom() {
-			this.getMore();
-		},
+		// onReachBottom() {
+		// 	this.getMore();
+		// },
 		
 		methods: {
 			//--------------------点击列表事件------------------------------
@@ -81,17 +100,26 @@
 			},
 			
 			//----------------------加载更多--------------------------------
-			getMore(){
-				this.loadingType = 1;
+			// getMore(){
+			// 	this.loadingType = 1;
 				
-				if(this.scenicListIndex < this.groupTitle.length){
-					var a = this.scenicListIndex +6;
-					this.scenicListIndex = a;
-					this.loadingType = 0;
-				}
-				if(this.scenicListIndex >= this.groupTitle.length){
-					this.loadingType = 2;
-				}
+			// 	if(this.scenicListIndex < this.groupTitle.length){
+			// 		var a = this.scenicListIndex +5;
+			// 		this.scenicListIndex = a;
+			// 		this.loadingType = 0;
+			// 	}
+			// 	if(this.scenicListIndex >= this.groupTitle.length){
+			// 		this.loadingType = 2;
+			// 	}
+			// },
+			
+			//----------------------点击tab切换----------------------------
+			headChange: function(e) {
+				this.headCurrent = e;
+				uni.showLoading({
+					title: '加载信息中...'
+				})
+				this.ycydData(e);
 			},
 			
 			//----------------------列表接口--------------------------------
@@ -102,7 +130,26 @@
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.groupTitle=res.data.data;
+							this.informationList = '';
+							if (this.headCurrent == 0) {
+								this.groupTitle = res.data.data
+							}else if (this.headCurrent == 1){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.article_type == '村容村貌';
+								})
+							}else if (this.headCurrent == 2){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.article_type == '环境整治'
+								})
+							} else if (this.headCurrent == 3){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.article_type == '企业帮扶'
+								})
+							} else if (this.headCurrent == 4){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.article_type == '三化管理'
+								})
+							}
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();

@@ -17,7 +17,11 @@ import styh from 'common/styh.js'//引入生态银行
 import smjj from 'common/smjj.js'//引入水美经济
 import mqfk from 'common/mqfk.js'//引入民情反馈
 import fbrcp from 'common/FBRCP.js'//引入民情反馈
-import wssc from 'common/wssc.js'//引入民情反馈
+import wssc from 'common/wssc.js'//引入网上商城
+import Lyfwcwd from 'common/LYFW/LyfwCwd.js' //旅游服务-蔡伟达
+import Sceniclist from 'common/scenicSpotDistribution.js' //旅游服务-景区目录
+
+
 Vue.use(uView)
 Vue.mixin(share)
 Vue.config.productionTip = false
@@ -50,6 +54,22 @@ const ctky = type=>{
 		}, 500)
 	})
 }
+//模拟异步请求数据 - 旅游服务
+const lyfwcwd = type=>{
+	return new Promise(resolve=>{
+		setTimeout(()=>{
+			resolve(Lyfwcwd[type]);
+		}, 500)
+	})
+}
+//模拟异步请求数据 - 旅游服务
+const sceniclist = type=>{
+	return new Promise(resolve=>{
+		setTimeout(()=>{
+			resolve(Sceniclist[type]);
+		}, 500)
+	})
+}
 
-Vue.prototype.$api = {ctky};
+Vue.prototype.$api = {ctky,lyfwcwd,sceniclist};
 app.$mount()
