@@ -25,13 +25,9 @@
 					<view class="view_contentView">
 						<text>{{item.state}}</text>
 						<text class="cont_text">{{gettime(item.update_time)}}</text>
-						<text class="cont_text">浏览量：{{item.view}}</text>
 						<view class="at_buttonView">
-						<view class="at_button at_btDelete" @tap="Update(item.id)">修改</view>
-						<view class="at_button at_btDelete" @tap="Delete(item.id)">删除</view>
-						<view class="at_button at_btDelete"v-if="item.state=='已下架'" @tap="updatestate(item.id)">上架</view>
-						<view class="at_button at_btDelete"v-if="item.state=='已上架'" @tap="updatestate(item.id)">下架</view>
-						<view class="at_button at_btDelete" @tap="details(item.id)">详情</view>
+						<view class="at_button at_btDelete" @tap="Check(item.id,0)">审核通过</view>
+						<view class="at_button at_btDelete" @tap="Check(item.id,1)">审核不通过</view>
 						</view>
 					</view>
 					<u-gap height="4" bg-color="#f9f9f9"></u-gap>
@@ -60,21 +56,18 @@
 				scenicListIndex:5,//列表默认数量}
 				}
 		},
-		onLoad() {
+		onShow() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
-			this.zcfbData();
-		},
-		onShow() {
-			this.zcfbData();
+			this.wsscData();
 		},
 		
 		onPullDownRefresh: function() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
-			this.zcfbData();
+			this.wsscData();
 		},
 		
 		onReachBottom() {
@@ -83,7 +76,8 @@
 		
 		methods: {
 			//----------------------列表接口--------------------------------
-			zcfbData:function(){
+			wsscData:function(){
+				this.groupTitle=[];
 				uni.showLoading({
 					title: '加载列表中...',
 				})
@@ -92,10 +86,10 @@
 					success: (res) => {
 						console.log(res);
 				uni.request({
-					url:this.$wssc.KyInterface.getProductByUserID.Url,
-					method:this.$wssc.KyInterface.getProductByUserID.method,
+					url:this.$wssc.KyInterface.getAuditProduct.Url,
+					method:this.$wssc.KyInterface.getAuditProduct.method,
 					data:{
-						userId:res.data.userId,
+						userId:100000,
 						},
 					success:(res) =>{
 						console.log('列表数据',res)
@@ -124,13 +118,6 @@
 				}
 				})
 			},
-			//----------------修改------------------
-			Update:function(e){
-				uni.navigateTo({
-					url:'issueGoods?id=' +e,
-				})
-				
-			},
 			//-------------加载更多----------------
 			getMore(){
 				this.loadingType = 1;
@@ -144,68 +131,31 @@
 					this.loadingType = 2;
 				}
 			},
-			//--------------上下架--------------
-			updatestate:function(e){
+			//--------------审核--------------
+			Check:function(e,a){
 				uni.showLoading({
-					title: '修改中...',
+					title: '审核中...',
 				})
-			
+			uni.getStorage({
+				key: 'userInfo',
+				success: (res) => {
+					console.log(res);
 				uni.request({
-					url:this.$wssc.KyInterface.upAndDownProduct.Url,
-					method:this.$wssc.KyInterface.upAndDownProduct.method,
+					url:this.$wssc.KyInterface.auditProduct.Url,
+					method:this.$wssc.KyInterface.auditProduct.method,
 					data:{
 						id:e,
+						state:a,
+						userId:100000,
 					},
 					success:(res) =>{
 						console.log(res)
 						if(res.data.status){
 							uni.hideLoading();
-							this.zcfbData();
+							this.wsscData();
 						}else{
 							uni.showToast({
 								title: '修改失败',
-								icon: 'none'
-							})
-						}
-					},
-					fail(res) {
-						uni.hideLoading();
-						uni.showToast({
-							title: '服务器异常',
-							icon: 'none'
-						})
-						// console.log(res)
-					}
-				})
-			},
-			//--------------删除--------------
-			Delete:function(e){
-				uni.showLoading({
-					title: '删除中...',
-				})
-				uni.getStorage({
-					key: 'userInfo',
-					success: (res) => {
-						console.log(res);
-				uni.request({
-					url:this.$wssc.KyInterface.deleteProduct.Url,
-					method:this.$wssc.KyInterface.deleteProduct.method,
-					data:{
-						id:e,
-						userId:res.data.userId,
-					},
-					success:(res) =>{
-						console.log(res)
-						if(res.data.status){
-							uni.showToast({
-								title: '删除成功',
-								icon: 'none'
-							})
-							uni.hideLoading();
-							this.zcfbData();
-						}else{
-							uni.showToast({
-								title: '删除失败',
 								icon: 'none'
 							})
 						}
