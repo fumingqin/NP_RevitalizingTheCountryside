@@ -378,21 +378,6 @@
 						if(this.informationDetail.image[0] !== ''){
 							this.lists = this.informationDetail.image[0];
 						}
-						
-						
-						if(this.informationDetail.video!==""){
-							console.log('视频转编译', this.videoData.data)
-							console.log('6', this.informationDetail.video);
-							var b=[];
-							var a=JSON.stringify(b);
-							this.videoArray=a;
-						}
-						// console.log('赋值后', this.lists)
-						// console.log('图片转编译', imageArray)
-						// console.log('修改信息列表', this.issueText)
-						
-						
-						
 					}
 				})
 			},
@@ -549,10 +534,11 @@
 
 			//---------------------------上传视频回调-------------------------------
 			successvideo: function(e) {
+				console.log(e)
 				var data = JSON.parse(e.data);
-				// console.log(data)
+				console.log(data)
 				this.videoData = data;
-				console.log('视频上传成功', this.videoData)
+				console.log('视频上传成功', this.videoData.data)
 			},
 			
 			//删除图片提示
@@ -560,13 +546,6 @@
 				this.fileList = undefined;
 				this.lists = [];
 				
-			},
-			
-			deleteVideo:function(e){
-				this.types=e
-				if(this.types==0){
-					var videoArray=[];
-				}
 			},
 			
 			//删除图片提示
@@ -622,6 +601,7 @@
 				console.log('6', this.informationDetail.id);
 				var arr=[];
 				arr.push(this.videoData.data);
+				console.log('7', arr);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
