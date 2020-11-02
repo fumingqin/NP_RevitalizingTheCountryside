@@ -17,6 +17,7 @@ import styh from 'common/styh.js'//引入生态银行
 import smjj from 'common/smjj.js'//引入水美经济
 import mqfk from 'common/mqfk.js'//引入民情反馈
 import fbrcp from 'common/FBRCP.js'//引入民情反馈
+import wssc from 'common/wssc.js'//引入民情反馈
 Vue.use(uView)
 Vue.mixin(share)
 Vue.config.productionTip = false
@@ -34,6 +35,7 @@ Vue.prototype.$styh=styh;//乡村动态
 Vue.prototype.$smjj=smjj;//乡村动态
 Vue.prototype.$mqfk=mqfk;//乡村动态
 Vue.prototype.$fbrcp=fbrcp;//发布农产品
+Vue.prototype.$wssc=wssc;//网上商城
 App.mpType = 'app'
 
 const app = new Vue({

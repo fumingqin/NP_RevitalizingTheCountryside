@@ -1,23 +1,27 @@
 <template>
 	<view>
 		<!-- 轮播区 -->
-		<u-swiper :list="rotationChart" :height="422" indicator-pos="bottomRight" name="ImageURL">
+		<u-swiper :list="groupTitle.image" :height="422" indicator-pos="bottomRight">
 			<u-loading slot="loading"></u-loading>
 			<view slot="error" style="font-size: 24rpx;">加载失败</view>
 		</u-swiper>
 		
 		<view class="ovof_dp_background">
+			<view style="width: 750upx;"></view>
 			<view class="ovof_dp_bg_background">
-				<view class="ovof_dp_bg_title">{{title}}</view>
+				<view class="ovof_dp_bg_title">{{groupTitle.name}}</view>
 				<view class="ovof_dp_bg_time">
-					<text class="time">{{time}}</text>
+					<text class="time">{{groupTitle.update_time}}</text>
 					<text class="browse">浏览量:</text>
-					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="browse"></u-count-to>
+					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="groupTitle.count"></u-count-to>
+					<text class="browse">价格:</text>
+					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="groupTitle.prince"></u-count-to>
 				</view>
 				<view class="grClass">
-					<!-- <image class="txImage" src="../../../static/LYFW/agricultureProducts/touxiang.png" mode="aspectFill"></image> -->
+					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.avatar" mode="aspectFill"></image>
+					<image v-if="groupTitle.avatar==''" class="txImage" src="../../../static/GRZX/missing-face.png" mode="aspectFill"></image>
 					<view class="grView">
-						<view class="name">{{name}}</view>
+						<view class="name">{{groupTitle.nick_name}}</view>
 						<text class="number">{{post}}</text>
 					</view>
 				</view>
@@ -29,21 +33,25 @@
 				<view class="screen">
 					<view class="screenView">
 						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)"> 
-							项目介绍
+							商品介绍
 						</view>
 						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
-							相关文件
+							商品地址
 						</view>
 					</view>
 				</view>
 				
 				<u-read-more v-if="type==0" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 				</u-read-more>
 				
 				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+					<u-parse :html="groupTitle.taobaoUrl" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 				</u-read-more>
+				
+				<!-- <view>
+					<video id="myVideo" :src="groupTitle." enable-danmu danmu-btn controls></video>
+				</view> -->
 			</view>
 		</view>
 	</view>
@@ -53,25 +61,30 @@
 	export default {
 		data() {
 			return {
-				rotationChart: ['', ''], //轮播图
+				rotationChart: [], //轮播图
+				groupTitle:[],
 				title:'农田基础建设项目',
 				time:'2020-02-10',
 				browse:'122',
 				showHeight:600,
 				toggle: false,
-				name:'张三丰',
 				post:'市级职责人员',
 				type: 0,
+				id:'',
 				// 字符串的形式
 				style: {
 					p: 'letter-spacing: 4rpx;text-align: justify;line-height: 48rpx;font-size:30rpx;text-justify: inter-ideograph; text-indent: 2em;padding-bottom: 20rpx;padding-top: 20rpx;',
 					span: 'font-size: 30rpx'
 				},
-				content:'<p>露从今夜白，月是故乡明,露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明</p><img src="https://cdn.uviewui.com/uview/swiper/2.jpg" /><p>露从今夜白，月是故乡明,露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明</p><img src="https://cdn.uviewui.com/uview/swiper/2.jpg" /><p>露从今夜白，月是故乡明,露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明</p><img src="https://cdn.uviewui.com/uview/swiper/2.jpg" /><p>露从今夜白，月是故乡明,露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明露从今夜白，月是故乡明</p><img src="https://cdn.uviewui.com/uview/swiper/2.jpg" />'
 			}
 		},
 		
-		onLoad:function() {
+		onLoad:function(param) {
+			uni.showLoading({
+				title: '加载详情中...',
+			})
+			this.id = param.id;
+			console.log(this.id)
 			this.loadData();
 		},
 		
@@ -79,18 +92,47 @@
 			//加载数据
 			loadData: function() {
 				uni.request({
-					url: this.$home.KyInterface.GetRotationChart.Url,
-					method: this.$home.KyInterface.GetRotationChart.method,
+					url:this.$wssc.KyInterface.addViews.Url,
+					method:this.$wssc.KyInterface.addViews.method,
+					data:{
+						id : this.id
+					},
 					success: (res) => {
-						console.log('轮播区', res)
-						this.rotationChart = res.data.data.filter(item => {
-							return item.Type == '首页轮播图';
-						})
-						// console.log(this.rotationChart)
 					},
 					fail: function() {
 						uni.showToast({
-							title: '首页轮播图网络加载异常',
+							title: '服务器异常',
+							icon: 'none'
+						})
+					}
+				})
+				
+				uni.request({
+					url:this.$wssc.KyInterface.getProductByID.Url,
+					method:this.$wssc.KyInterface.getProductByID.method,
+					data:{
+						id : this.id
+					},
+					success: (res) => {
+						console.log('详情', res)
+						if(res.data.status == true){
+							this.groupTitle=res.data.data;
+							// console.log('列表数据',this.groupTitle)
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+						}else{
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+							uni.showToast({
+								title: '暂无列表信息',
+								icon: 'none'
+							})
+						}
+					},
+					fail: function() {
+						uni.hideLoading();
+						uni.showToast({
+							title: '服务器异常',
 							icon: 'none'
 						})
 					}
@@ -157,6 +199,7 @@
 		background: #FFFFFF;
 		padding-left: 15upx;
 		padding-right: 15upx;
+		width: 100%;
 	}
 	
 	.grClass {
@@ -215,6 +258,7 @@
 		position: sticky;
 		top: 0;
 		z-index: 1;
+		background: #FFFFFF;
 
 		.screenView {
 			left: 0;
