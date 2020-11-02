@@ -1,5 +1,8 @@
 <template>
 	<view>
+		<!-- 头部切换栏 -->
+		<u-tabs :list="headList" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
+		
 		<!-- 内容1 -->
 		<view class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
 			<view class="view_titleView">
@@ -46,16 +49,28 @@
 		</view>
 		
 		<!-- 缺省提示 -->
-		<view style="margin-top: 360upx;" :hidden="listStatusIndex !==0">
+		<view style="margin-top: 250upx;" v-if="groupTitle.length ==0">
 			<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
 		</view>
-	</view>
+	</view>	
 </template>
 
 <script>
 	export default {
 		data() {
 			return {
+				headList: [{
+					name: '全部'
+				},{
+					name: '村容村貌'
+				},{
+					name: '环境整治'
+				},{
+					name: '企业帮扶'
+				},{
+					name: '三化管理'
+				}], //头部数组
+				headCurrent: 0, //头部tabs下标
 				customStyle: { //button样式
 					paddingTop: '25px',
 					paddingBottom: '25px',
@@ -110,7 +125,7 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						console.log('获取个人信息',this.userInfo)
-						this.ycydData(this.userInfo);
+						this.ycydData();
 					}
 				});
 			},
@@ -133,6 +148,16 @@
 				return a;
 			},
 			
+			//----------------------点击tab切换----------------------------
+			headChange: function(e) {
+				this.headCurrent = e;
+				uni.showLoading({
+					title: '加载信息中...'
+				})
+				this.ycydData(e);
+			},
+			
+			
 			//----------------------列表接口--------------------------------
 			ycydData:function(e){
 				uni.showLoading({
@@ -142,12 +167,32 @@
 					url:this.$ycyd.KyInterface.getArchivesByUserID.Url,
 					method:this.$ycyd.KyInterface.getArchivesByUserID.method,
 					data:{
-						userId:e.userId
+						userId:this.userInfo.userId
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.groupTitle=res.data.data;
+							this.informationList = '';
+							if (this.headCurrent == 0) {
+								this.groupTitle = res.data.data
+							}else if (this.headCurrent == 1){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.article_type == '村容村貌';
+								})
+							}else if (this.headCurrent == 2){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.article_type == '环境整治'
+								})
+							} else if (this.headCurrent == 3){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.article_type == '企业帮扶'
+								})
+							} else if (this.headCurrent == 4){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.article_type == '三化管理'
+								})
+							}
+							this.listStatusIndex = this.groupTitle.length;
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
