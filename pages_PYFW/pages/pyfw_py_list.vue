@@ -7,8 +7,8 @@
 		<view class="infor_view" v-for="(item,index) in informationList" :key="index" @click="detailsClick(item.id)">
 			<view class="view_titleView">
 				<text class="tv_view">
-					<text class="tv_label" style="background: #007AFF;" v-if="item.order_state !== '申请失败'">{{item.order_state}}</text>
-					<text class="tv_label" style="background: #FA3534;" v-if="item.order_state == '申请失败'">{{item.order_state}}</text>
+					<text class="tv_label" style="background: #007AFF;" v-if="item.order_state !== '已取消' ">{{statusMethod(item.order_state)}}</text>
+					<text class="tv_label" style="background: #FA3534;" v-if="item.order_state == '申请失败' || item.order_state == '已取消'">{{statusMethod(item.order_state)}}</text>
 					<text class="tv_title">科技特派员服务</text>
 					<text class="tv_content"><text style="font-weight: bold;">乡村名：</text>{{item.villageName}}</text>
 					<text class="tv_content"><text style="font-weight: bold;">技术类型：</text>{{item.apply_type}}</text>
@@ -28,14 +28,21 @@
 		<view style="width: 100%; height: 112upx;"></view>
 
 		<!-- 缺省提示 -->
-		<view style="margin-top: 360upx;" :hidden="listStatusIndex !==0">
-			<u-empty text="该分类暂无信息哦~" mode="news"></u-empty>
+		<view style="margin-top: 240upx;" v-if="informationList.length == 0">
+			<u-empty text="您暂时没有任务哦~" mode="news"></u-empty>
 		</view>
 
 		<!-- 派员编号 -->
 		<view class="operButton">
-			<text class="buttonView2" @click="operClick">申请特派员</text>
+			<text class="buttonView2">您的特派员编号：{{commissionerID}}</text>
 		</view>
+
+		<!-- 压屏弹框 -->
+		<u-modal v-model="modalStatus"  confirm-text="确认" title="检测到您不是特派员"  @confirm="modalConfirm" >
+			<view class="u-update-content">
+				<rich-text :nodes="modalContent"></rich-text>
+			</view>
+		</u-modal>
 
 	</view>
 </template>
@@ -45,24 +52,23 @@
 		data() {
 			return {
 				headList: [{
-					name: '全部'
-				},{
-					name: '待审批'
-				},{
-					name: '审批成功'
-				},{
-					name: '审批失败'
-				},{
+					name: '待处理'
+				}, {
+					name: '已处理'
+				}, {
 					name: '其他'
 				}], //头部数组
 				headCurrent: 0, //头部tabs下标
-				informationList: '', //资讯列表
+				informationList: [], //资讯列表
 				listStatusIndex: '', //资讯缺省提示初始值
 				userInfo: '', //用户信息
+				modalStatus: false, //压屏弹框
+				modalContent :  `您需与相关村级/县市级职责管理人员添加您的特派员资质信息`,
+				commissionerID : '',
 			}
 		},
 		onLoad: function() {
-			
+
 		},
 		onShow: function() {
 			uni.showLoading({
@@ -90,37 +96,43 @@
 					}
 				});
 			},
+			
+			
 			//加载接口数据
 			loadData: function() {
+				console.log(this.userInfo.phoneNumber)
 				uni.request({
-					url: this.$pyfw.KyInterface.getCommissionery.Url,
-					method: this.$pyfw.KyInterface.getCommissionery.method,
+					url: this.$pyfw.KyInterface.getListByPhone.Url,
+					method: this.$pyfw.KyInterface.getListByPhone.method,
+					data: {
+						telephone : this.userInfo.phoneNumber
+					},
 					success: (res) => {
 						console.log(res)
-						this.informationList = '';
-						if (this.headCurrent == 0) {
-							this.informationList = res.data.data
-						}else if (this.headCurrent == 1){
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '申请中';
-							})
-						}else if (this.headCurrent == 2){
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '已派员'
-							})
-						} else if (this.headCurrent == 3){
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '申请失败'
-							})
-						} else if (this.headCurrent == 4){
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '已完成' || item.order_state == '已取消'
-							})
+						if(res.data.msg == "您当前不是特派员" && res.data.status == false ){
+							uni.stopPullDownRefresh()
+							uni.hideLoading()
+							this.modalStatus = true;
+						}else{
+							if (this.headCurrent == 0) {
+								this.informationList = res.data.data.filter(item => {
+									return item.order_state == '已派员';
+								})
+								this.commissionerID = res.data.data[0].number;
+							}else if (this.headCurrent == 1){
+								this.informationList = res.data.data.filter(item => {
+									return item.order_state == '已完成'
+								})
+								this.commissionerID = res.data.data[0].number;
+							}else if (this.headCurrent == 2){
+								this.informationList = res.data.data.filter(item => {
+									return item.order_state == '已取消'
+								})
+								this.commissionerID = res.data.data[0].number;
+							}
+							uni.stopPullDownRefresh()
+							uni.hideLoading()
 						}
-						// console.log(this.informationList.length)
-						this.listStatusIndex = this.informationList.length;
-						uni.stopPullDownRefresh()
-						uni.hideLoading()
 					}
 				})
 			},
@@ -150,11 +162,22 @@
 				this.loadData(e);
 			},
 
-			//申请特派员
-			operClick: function() {
-				uni.navigateTo({
-					url: 'pyfw_edit'
-				})
+			
+			//点击压屏框返回上页面
+			modalConfirm:function(e){
+				console.log(e)
+				uni.navigateBack()
+			},
+			
+			//状态转编译
+			statusMethod:function(e){
+				if(e == '已派员'){
+					return '待处理'
+				}else if(e == '已完成'){
+					return '已处理'
+				}else{
+					return e
+				}
 			}
 		}
 	}
@@ -236,4 +259,13 @@
 			line-height: 3;
 		}
 	}
+	
+	//压屏弹框文本样式
+	.u-update-content {
+			font-size: 26rpx;
+			color: $u-content-color;
+			line-height: 1.7;
+			padding: 30rpx;
+		}
+	
 </style>

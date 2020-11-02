@@ -9,8 +9,7 @@
 			<view class="deta_text">
 				<text>相关图片：</text><text v-if="stepsData.image == null">未上传</text>
 				<view class="imageView">
-					<image class="imageS" v-if="stepsData.image !== null" v-for="(item,index) in stepsData.image" :key="index" :src="item"
-					 mode="aspectFill" @click="previewOpen(index)"></image>
+					<image class="imageS" v-if="stepsData.image !== null" v-for="(item,index) in stepsData.image" :key="index" :src="item" mode="aspectFill" @click="previewOpen(index)"></image>
 				</view>
 			</view>
 			<view class="deta_text"><text>问题内容：</text>{{stepsData.content}}</view>
@@ -92,16 +91,17 @@
 				<!-- 滑动区域 -->
 				<scroll-view  style="margin: 32upx 0;" scroll-x>  
 					<view style="display: flex;">
-						<view style="margin:40upx 0; white-space: nowrap;" v-for="(item,index) in contentList" :key="index" @click="choiseListData(index)">
-							<text style="margin-left:24upx; padding: 16upx 32upx; font-size: 28upx;  color: #AAAAAA; border: 1upx solid #AAAAAA; border-radius: 8upx;">{{item}}</text>
+						<view class="box_scrollView" v-for="(item,index) in contentList" :key="index" @click="choiseListData(index)">
+							<text class="scrollView_text">{{item}}</text>
 						</view>
 					</view>
 				</scroll-view>
 				
 				<!-- 输入框 -->
-				<view style="width: 100%; background: #EEEEEE; border-radius: 60upx;">
-					<input style="height: 96upx; padding:0 44upx; font-size: 30upx;" v-model="contentInputData" type="text" placeholder="填写/选择失败原因"/>
+				<view class="box_inputView" >
+					<input class="inputStyle" v-model="contentInputData" type="text" placeholder="填写/选择失败原因"/>
 				</view>
+				
 				<!-- 确认按钮 -->
 				<view class="box_refundButtonView">
 					<text class="box_refundButton" @click="approvalFailed(1)">确认</text>
@@ -302,8 +302,8 @@
 					},
 					success: (res) => {
 						console.log(res)
-						uni.hideLoading()
-						if(res.data.data.status){
+						if(res.data.status){
+							uni.hideLoading()
 							uni.showToast({
 								title:'审核成功',
 								success: () => {
@@ -312,6 +312,7 @@
 								}
 							})
 						}else{
+							uni.hideLoading()
 							uni.showToast({
 								title:res.data.msg,
 								icon:'none'
@@ -469,25 +470,12 @@
 		}
 	}
 	
-	//须知弹框
+	//审核弹框
 	.box_Vlew {
 		padding: 16upx 40upx;
 		padding-bottom: 24upx;
 		background: #FFFFFF;
-		
-	
-		.box_titleView {
-			margin: 24upx 0;
-			//弹框标题
-			.box_title {
-				position: relative;
-				font-size: 38upx;
-				font-weight: bold;
-				top: 8upx;
-				margin-bottom: 16upx;
-			}
-		}
-		// 确认按钮
+		//标题样式
 		.box_refundView {
 			margin: 24upx 0upx;
 			//确认
@@ -501,7 +489,32 @@
 				}
 			}
 		}
+		//滑动区域
+		.box_scrollView{
+			margin:40upx 0; 
+			white-space: nowrap;
+			.scrollView_text{
+				margin-left:24upx; 
+				padding: 16upx 32upx; 
+				font-size: 28upx;  
+				color: #AAAAAA; 
+				border: 1upx solid #AAAAAA; 
+				border-radius: 8upx;
+			}
+		}
+		//输入区域
+		.box_inputView{
+			width: 100%; 
+			background: #EEEEEE; 
+			border-radius: 60upx;
+			.inputStyle{
+				height: 96upx; 
+				padding:0 44upx; 
+				font-size: 30upx;
+			}
+		}
 		
+		//确认按钮
 		.box_refundButtonView {
 			text-align: center;
 			margin: 56upx 0;

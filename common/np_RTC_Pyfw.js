@@ -66,6 +66,18 @@ const KyInterface = {
 		name: '请求特派员列表',
 		method: 'POST',
 	},
+	//--------------------------------------通过手机号码获取特派员任务--------------------------------------
+	getListByPhone: {
+		Url: Url + '/api/commissioner/getListByPhone',
+		name: '通过手机号码获取特派员任务',
+		method: 'POST',
+	},
+	//--------------------------------------特派员提交结果--------------------------------------
+	uploadResult: {
+		Url: Url + '/api/commissioner/uploadResult',
+		name: '特派员提交结果 ',
+		method: 'POST',
+	},
 }
 
 export default {
