@@ -3,47 +3,55 @@
 		<view class="content">
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
 
-				<!-- 商品名称 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品名称" :border-bottom="false" prop="name">
+				<!-- 产品名称 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="产品名称" :border-bottom="false" prop="name">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品名称" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入产品名称" v-model="model.name" :type="text"></u-input>
+					</view>
+				</u-form-item>
+				
+				<!-- 来源地 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="来源地" :border-bottom="false" prop="name">
+					<view class="viewClass" style="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入来源地" v-model="model.origin_region" :type="text"></u-input>
 					</view>
 				</u-form-item>
 
-				<!-- 商品来源地 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品来源地" :border-bottom="false" prop="region">
+				<!-- 价格 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="价格" prop="cost" :border-bottom="false"
+				 label-width="150">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" type="select" :select-open="pickerShow" v-model="model.region" placeholder="请选择商品来源地" @click="getvillage"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="border" placeholder="请输入价格" v-model="model.cost" type="number"></u-input>
 					</view>
 				</u-form-item>
 
-				<!-- 商品价格 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品价格" :border-bottom="false" prop="cost">
-					<view class="viewClass" s1tyle="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品价格" v-model="model.cost" :type="text"></u-input>
-					</view>
-				</u-form-item>
-				<!-- 淘宝url -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="淘宝Url" :border-bottom="false" prop="cost">
-					<view class="viewClass" s1tyle="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入淘宝Url" v-model="model.taobaoUrl" :type="text"></u-input>
-					</view>
-				</u-form-item>
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
-					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164" height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
-						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150" >
+					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
+					 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
+						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
 						</view>
 					</u-upload>
 				</u-form-item>
+
+				<!-- 上传视频 -->
+				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
+					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+				</u-form-item>
+				<view v-if="informationDetail.video!=='' || types!==0" style="display: flex;position: relative;width: 100%;">
+					<text style="position: absolute;width: :;upx;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 28upx;">{{informationDetail.video}}</text>
+					<text style="position: absolute;right: 0;color:#007AFF;font-size: 28upx;" @click="deleteVideo(0)">删除</text>
+				</view> -->
 				<!-- 商品简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false" prop="intro">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
 							 :placeholder="placeholder" @statuschange="onStatusChange" @ready="onEditorReady">
 							</editor>
+
 						</view>
 
 						<view class="toolbar" @touchend.stop="format" :style="'bottom: ' + (isIOS ? keyboardHeight : 0) + 'px'">
@@ -115,32 +123,28 @@
 					</view>
 				</u-form-item>
 			</u-form>
-			<u-button type="success" :custom-style="buttonStyle" @click="submitState">提交</u-button>
+			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
+			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
+			<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
 		</view>
 	</view>
 </template>
 
 <script>
 	import tColorPicke from '@/components/t-color-picker.vue';
-	import lFile from '@/components/l-file/l-file.vue'
+	import {
+		pathToBase64,
+		base64ToPath
+	} from '@/pages_GRZX/components/GRZX/js_sdk/gsq-image-tools/image-tools/index.js';
+	import robbyImageUpload from '@/pages_FBRCP/compontents/robby-image-upload/robby-image-upload.vue';
 	var _self;
 	export default {
 		components: {
 			't-color-picker': tColorPicke,
-			lFile,
+			robbyImageUpload, // 导入图片上传
 		},
 		data() {
 			return {
-				lists: [],
-				fileList:[],
-				villageName:'',
-				villageId:0,
-				issueText:'',
-				goodsId:'',
-				selectShow: false,
-				showUploadList: true,
-				sourceTypeIndex: 2,
-				submissionState: false,
 				color: {
 					r: 255,
 					g: 0,
@@ -158,15 +162,24 @@
 				model: {
 					name: '', //商品名称value
 					region: '', //选择来源地value
-					cost: '', //价格
-					photo: '', //图片
+					// cost: '', //价格
 					intro: '', //商品简介
-					taobaoUrl:'',
+					cost: '',//价格
+					origin_region:'',//来源地
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
 					fontWeight: 'bold',
 					fontSize: '17px',
+					paddingTop: '8px',
+				},
+				customStyle2: {
+					fontWeight: 'bold',
+					fontSize: '17px',
+					paddingTop: '8px',
+					width: '100%',
+					background: '#FFFFFF',
+					borderRadius: '6px',
 				},
 				buttonStyle: {
 					marginTop: '20px',
@@ -187,256 +200,148 @@
 					paddingRight: '10px',
 					borderRadius: "6px",
 				},
+				//----------------uview表单验证--------------------------
+				rules: {
+					name: [{
+							required: true,
+							message: '请输入商品名称',
+							trigger: 'blur',
+						},
+						{
+							min: 1,
+							message: '请输入商品名称',
+							trigger: ['change', 'blur'],
+						},
+					],
+					region: [{
+						required: true,
+						message: '请选择商品来源地',
+						trigger: 'change',
+					}],
+					cost: [{
+							required: true,
+							message: '请输入价格',
+							trigger: ['change', 'blur'],
+						},
+						{
+							type: 'number',
+							message: '价格只能为数字',
+							trigger: ['change', 'blur'],
+						}
+					],
+					intro: [{
+							required: true,
+							message: '请填写简介'
+						},
+						{
+							min: 5,
+							message: '简介不能少于5个字',
+							trigger: 'change',
+						},
+						// 正则校验示例，此处用正则校验是否中文，此处仅为示例，因为uView有this.$u.test.chinese可以判断是否中文
+						// {
+						// 	pattern: /^[\u4e00-\u9fa5]+$/gi,
+						// 	message: '简介只能为中文',
+						// 	trigger: 'change',
+						// },
+					],
+					goodsType: [{
+						required: true,
+						message: '请选择商品类型',
+						trigger: 'change',
+					}],
+				},
 				pickerShow: false,
 				errorType: ['message'],
 				labelPosition: 'right',
 				maxCount: 3,
 				multiple: true,
-				action: 'http://120.24.144.6:8080/api/file/upload',
-				autoHeight: true,
+				show: true, //是否显示
+				formData: { //表格数据
+					userId: 2
+				},
+				types: '',
+				imageList: [],
+				enableDel: true, //是否启动del
+				enableAdd: true, //是否启动删除
+				pictureArray: [], //存储图片base64
+				userInfo: [], //个人信息
+				issueText: '',
+				border: false,
+				selectShow: false,
+				jumpStatus: '',
+				id: '',
+				informationDetail: [],
+				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
+				showUploadList: true,
+				lists: [],
+				fileList: [],
+				category: 'video',
+				videoData: '',
+				videoArray: [],
+				selectList: [{
+						value: '村容村貌',
+						label: '村容村貌'
+					},
+					{
+						value: '环境整治',
+						label: '环境整治'
+					},
+					{
+						value: '企业帮扶',
+						label: '企业帮扶'
+					},
+					{
+						value: '三化管理',
+						label: '三化管理'
+					}
+				],
 			}
 		},
+
+
+		onRemove: function(e) {
+			console.log(e)
+		},
+
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
-		onLoad(options) {
-			uni.getStorage({
-				key: 'userInfo',
-				fail() {
-					uni.showToast({
-						icon: 'none',
-						title: '暂未登录,请登录后查看'
-					})
-					setTimeout(function() {
-						uni.navigateTo({
-							//loginType=1,泉运登录界面
-							//loginType=2,今点通登录界面
-							//loginType=3,武夷股份登录界面
-							url: '/pages/GRZX/userLogin?loginType=4'
-						})
-					}, 500);
-				}
-			});
+
+		onLoad(param) {
 			_self = this;
-			console.log(options);
-			if(options.id>0){
-				this.goodsId=options.id;
-				this.Update();
-			}
+			this.userData();
+			this.jumpStatus = param.jumpStatus;
+			this.id = param.id;
 		},
 		methods: {
-			//---------------------------------点击获取村名---------------------------------
-			getvillage: function() {
-				var that=this;
-				uni.$on('village', function(data) {
-					// data即为传过来的值，给上车点赋值
-					that.villageId = 0;
-					that.villageId = data.data.id;
-					that.model.region = data.data.village_name;
-					//清除监听，不清除会消耗资源
-					uni.$off('village');
-				});
-				uni.navigateTo({
-					url: './village'
-				})
-			},
-			//------------上传图片----------------
-			uploadOnsuccess:function(e){
-				console.log('上传成功',e)
-				var a = {
-					data : e.data
-				};
-				this.lists.push(a.data)
-				console.log(this.lists)
-			},
-			//删除图片提示
-			uploadOnRemove:function(e){
-				this.fileList = undefined;
-				this.lists = [];
-				
-			},
-
-			submitState: function() {
-				var that = this;
-
-				if (this.submissionState == false) {
-					this.submissionState = true;
-					that.editorCtx.getContents({
-						success: (res) => {
-							console.log(res);
-							that.issueText = res.html;
-							if(that.goodId!=''){
-								this.updateSubmit(that.issueText);
-							}else{
-								this.submit(that.issueText);
-							}
-						}
-					});
-				} else if (this.submissionState == true) {
-					uni.showToast({
-						title: '请勿重复点击提交',
-						icon: 'none',
-						duration: 2000
-					})
-				}
-			},
-
-			submit: function(e) {
-				uni.showLoading({
-					title: '提交数据中...'
-				});
-				var that = this;
+			//-------------------------------乘客数据读取-------------------------------
+			userData: function() {
 				uni.getStorage({
 					key: 'userInfo',
 					success: (res) => {
-						console.log(res)
-						console.log(that.villageId)
-						uni.request({
-							url:this.$wssc.KyInterface.releaseProduct.Url,
-							method:this.$wssc.KyInterface.releaseProduct.method,
-							data: {
-								ruralId:that.villageId,
-								name: that.model.name,
-								image:JSON.stringify(that.lists),
-								content:e,
-								taobaoUrl: '',
-								userId:res.data.userId,
-								price:that.model.cost,
-							},
-							success: (res) => {
-								console.log(res)
-								if (res.data.status) {
-									uni.hideLoading()
-									uni.showToast({
-										title: '提交成功',
-										success() {
-											uni.navigateBack({
-												url: './pictureList'
-											})
-										}
-									})
-								} else {
-									uni.hideLoading()
-									uni.showToast({
-										title: '提交失败',
-										icon: 'none'
-									})
-								}
-							},
-							fail: (res) => {
-								console.log(res)
-								uni.hideLoading()
-								uni.showToast({
-									title: '提交失败',
-									icon: 'none'
-								})
-							}
-						})
+						this.userInfo = res.data;
+						// console.log('获取个人信息', this.userInfo)
 					}
-				})
-			},
-			//------------提交修改-----------------
-			updateSubmit: function(e) {
-				var that = this;
-				uni.showLoading({
-					title: '提交数据中...'
 				});
-				uni.getStorage({
-					key: 'userInfo',
-					success: (res) => {
-						console.log(res)
-						var array=[];
-						array.push(that.src);
-						console.log(array)
-						uni.request({
-							url: that.$wssc.KyInterface.updateProduct.Url,
-							method: that.$wssc.KyInterface.updateProduct.method,
-							data: {
-								id:that.goodsId,
-								ruralId:that.villageId,
-								name: that.model.name,
-								image:JSON.stringify(that.lists),
-								content:e,
-								taobaoUrl: '',
-								userId:res.data.userId,
-								price:that.model.cost,
-							},
-							success: (res) => {
-								console.log(res)
-								if (res.data.status) {
-									uni.hideLoading()
-									uni.showToast({
-										title: '修改成功',
-										success() {
-											uni.navigateBack({
-												url: './pictureList'
-											})
-										}
-									})
-								} else {
-									uni.hideLoading()
-									uni.showToast({
-										title: '修改失败',
-										icon: 'none'
-									})
-								}
-							},
-							fail: (res) => {
-								console.log(res)
-								uni.hideLoading()
-								uni.showToast({
-									title: '提交失败',
-									icon: 'none'
-								})
-							}
-						})
-						
-					}
+			},
+
+			//--------------------- 选择地区回调 --------------------------
+			regionConfirm(e) {
+				this.model.region = e.province.label + '-' + e.city.label + '-' + e.area.label;
+				console.log(this.model)
+			},
+
+			//--------------------- 选择商品类型回调------------------------
+			selectConfirm(e) {
+				this.model.goodsType = '';
+				e.map((val, index) => {
+					this.model.goodsType += this.model.goodsType == '' ? val.label : '-' + val.label;
 				})
 			},
-			//-----------------------------------
-			Update:function(){
-				var that=this;
-				uni.request({
-					url:this.$wssc.KyInterface.getProductByID.Url,
-					method:this.$wssc.KyInterface.getProductByID.method,
-					data:{
-						id:that.goodsId,
-					},
-					success:(res) =>{
-						console.log(res)
-						if(res.data.status){
-							that.model.name=res.data.data.name;
-							that.model.cost=res.data.data.price;
-							that.model.region=res.data.data.villageName;
-							that.villageId=res.data.data.ruralId;
-							that.model.taobaoUrl=res.data.data.taobaoUrl;
-							that.issueText=res.data.data.content;
-							var imageObj={
-								url:res.data.data.image[0]
-							};
-							that.fileList.push(imageObj);
-							console.log(that.fileList);
-							that.lists=res.data.data.image;
-							console.log(that.lists);
-						}else{
-							uni.showToast({
-								title: '加载失败',
-								icon: 'none'
-							})
-						}
-					},
-					fail(res) {
-						uni.showToast({
-							title: '服务器异常',
-							icon: 'none'
-						}) 
-						// console.log(res)
-					}
-				})
-			},
-			//------------------富文本--------------
-			
+
+			//--------------------------------------------
+
 			cancel() {
 				this.isEdit = false;
 			},
@@ -462,60 +367,64 @@
 				this.readOnly = !this.readOnly
 			},
 			onEditorReady() {
+				var that = this;
 				uni.createSelectorQuery().select('#editor').context(function(res) {
+					// console.log(res);
 					_self.editorCtx = res.context;
+					that.editorCtx.setContents({
+						html: that.issueText //this.EditGoodsDetail.content为赋值内容。    
+					})
 				}).exec();
 			},
 			undo() {
 				this.editorCtx.undo();
 			},
-			
+
 			redo() {
 				this.editorCtx.redo();
 			},
-			
+
 			blur() {
 				this.editorCtx.blur();
 			},
-			
+
 			format(e) {
-				var that = this;
 				// this.hideKey();
 				let {
 					name,
 					value
 				} = e.target.dataset;
-				console.log(name);
-				console.log(value);
-				console.log(e.target.dataset);
+				// console.log(name);
+				// console.log(value);
+				// console.log(e.target.dataset);
 				if (!name) return; // console.log('format', name, value)
-				that.editorCtx.format(name, value);
+				// console.log(this.editorCtx);
+				this.editorCtx.format(name, value);
+				// console.log(this.editorCtx);
 			},
-			
+
 			onStatusChange(e) {
 				this.formats = e.detail;
 			},
-			
+
 			insertDivider() {
 				this.editorCtx.insertDivider({
 					success: function() {
-						console.log('insert divider success');
+						// console.log('insert divider success');
 					}
 				});
 			},
-			
+
 			store(e) {
-			
 				this.editorCtx.getContents({
 					success: function(res) {
-						console.log(res);
 						e.currentTarget.id == 1 ? console.log('保存内容:', res.html) : uni.navigateTo({
 							url: `../preview/preview?rich=${encodeURIComponent(res.html)}`
 						});
 					}
 				});
 			},
-			
+
 			clear() {
 				this.editorCtx.clear({
 					success: function(res) {
@@ -523,11 +432,11 @@
 					}
 				});
 			},
-			
+
 			removeFormat() {
 				this.editorCtx.removeFormat();
 			},
-			
+
 			insertDate() {
 				const date = new Date();
 				const formatDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
@@ -535,22 +444,22 @@
 					text: formatDate
 				});
 			},
-			
+
 			insertImage() {
-				// const that = this;
+				let that = this;
 				uni.chooseImage({
 					count: 1,
-					success: (res) =>  {
+					success: (res) => {
 						const tempFilePaths = res.tempFilePaths;
 						uni.uploadFile({
-							url: this.$zcfb.KyInterface.upload.Url,
+							url: this.$ycyd.KyInterface.upload.Url,
 							filePath: tempFilePaths[0],
 							name: 'file',
 							success: (uploadFileRes) => {
 								console.log("编辑详情的时候返回照片地址", uploadFileRes)
 								const back = JSON.parse(uploadFileRes.data);
 								console.log(back)
-								this.editorCtx.insertImage({
+								that.editorCtx.insertImage({
 									src: back.data,
 									data: {
 										id: 'abcd',
@@ -564,9 +473,132 @@
 							}
 						})
 					}
-				});
+				})
 			},
 
+			//---------------------------上传视频回调-------------------------------
+			successvideo: function(e) {
+				var data = JSON.parse(e.data);
+				// console.log(data)
+				this.videoData = data;
+				console.log('视频上传成功', this.videoData)
+			},
+
+			//删除图片提示
+			uploadOnRemove: function(e) {
+				this.fileList = undefined;
+				this.lists = [];
+
+			},
+
+			deleteVideo: function(e) {
+				this.types = e
+				if (this.types == 0) {
+					var videoArray = [];
+				}
+			},
+
+			//删除图片提示
+			uploadOnsuccess: function(e) {
+				console.log('上传成功', e)
+				var a = {
+					data: e.data
+				};
+				this.lists.push(a.data)
+				console.log(this.lists)
+			},
+
+			successData: function() {
+				this.editorCtx.getContents({
+					success: (res) => {
+						console.log(res);
+						this.issueText = res.html;
+
+						this.uploadData(this.issueText);
+					}
+				});
+
+			},
+
+			uploadData: function(e) {
+				uni.showLoading({
+					title: '提交中...',
+					mask: true,
+				})
+				// console.log('1', this.issueText);
+				// console.log('2', this.userInfo.userId);
+				// console.log('3', this.pictureArray);
+				// console.log('4', this.model.name);
+				// console.log('5', this.model.goodsType);
+				// console.log('6', this.informationDetail.id);
+				if (this.informationDetail.video !== "") {
+					var arr = [];
+					arr.push(this.informationDetail.video);
+				} else if (this.videoData.data !== this.informationDetail.video) {
+					var arr = [];
+					arr.push(this.videoData.data);
+				} else if (this.types == 0) {
+					var arr = [];
+				}
+				arr.push(this.videoData.data);
+				//-----------------提交表单数据-----------------------
+				this.$refs.uForm.validate(valid => {
+					if (valid) {
+						// uni.hideLoading();
+						console.log('验证通过');
+						if (this.issueText !== '<p><br></p>') {
+							uni.request({
+								url: this.$fbrcp.KyInterface.releaseProduct.Url,
+								method: this.$fbrcp.KyInterface.releaseProduct.method,
+								data: {
+									userId: this.userInfo.userId,
+									content: e,
+									image: JSON.stringify(this.lists),
+									name: this.model.name,
+									price: this.model.cost,//价格
+									origin_region: this.model.origin_region,//产地
+									// video: JSON.stringify(arr)
+								},
+								success: (res) => {
+									console.log(res, "请求完接口");
+									if (res.data.status) {
+										uni.showToast({
+											title: res.data.msg,
+										})
+										setTimeout(function() {
+											uni.navigateBack();
+										}, 1000)
+									} else {
+										uni.showToast({
+											title: res.data.msg,
+											icon: 'none',
+										})
+									}
+								},
+								fail: () => {
+									uni.showToast({
+										title: '提交失败',
+										icon: 'none',
+									})
+								},
+								complete: () => {
+									setTimeout(function() {
+										uni.hideLoading();
+									}, 800)
+								}
+							});
+						} else {
+							uni.showToast({
+								title: '提交失败,请编辑文章内容',
+								icon: 'none',
+							})
+						}
+					} else {
+						uni.hideLoading();
+						console.log('验证失败');
+					}
+				});
+			},
 		}
 	}
 </script>
@@ -584,6 +616,7 @@
 	}
 
 	.viewClass {
+		width: 100%;
 		background: #FFFFFF;
 		border-radius: 6px;
 	}
@@ -603,22 +636,5 @@
 	//自定义上传按钮颜色
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
-	}
-	
-	.uni-uploader__file,.uploader_video{
-	    position: relative;
-	    z-index: 1;
-	    width: 200upx;
-	    height: 200upx;
-	}
-	.icon-cuo {
-	    position: absolute;
-	    right: 0;
-	    top: 5upx;
-	    background: linear-gradient(90deg,rgba(251,91,80,1) 0%,rgba(240,45,51,1) 100%);
-	    color: #FFFFFF;
-	    z-index: 999;
-	    border-top-right-radius: 20upx;
-	    border-bottom-left-radius: 20upx;
 	}
 </style>

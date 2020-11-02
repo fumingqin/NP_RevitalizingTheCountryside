@@ -1,87 +1,94 @@
 <template>
-	<view>
+	<view class="content">
 		<!-- 顶部搜索框 -->
 		<view class="topSerchView">
-			<view class="SearchBar" elevation='5px' >
+			<view class="SearchBar" elevation='5px'>
 				<input class="addressInput" @input="onInput" placeholder="请输入关键字搜索" />
 			</view>
 		</view>
-		
+
+
 		<!-- 搜索列表 -->
-		<!-- <view class="stationList" :style="{ 'height':scrollHeight }" v-if="isShowList">
-			<block v-for="(item,index) in keywordList" :key="index">
-				<view class="listItem" @click="itemClick(index)">
-					<rich-text :nodes="item.htmlStr"></rich-text>
+		<view class="stationList" :style="{ 'height':scrollHeight }" v-if="SearchStatus">
+			<block v-for="(item,index) in VillageSearchList" :key="index">
+				<view class="listItem" @click="Listclick(item)">
+					<rich-text :nodes="item.village_name"></rich-text>
 				</view>
 			</block>
-		</view> -->
-		
-		
-		<!-- <view class="list_box">
-			<view class="main">
-				<swiper class="swiper" :style="{ 'height':scrollHeight }" vertical="true" duration="300">
-					<swiper-item>
-						<scroll-view scroll-y="true" :style="{ 'height':scrollHeight }">
-							<view class="item">
-								<view class="goods" v-for="(item,index) in mainArray" :key="index" @click="detailStationTap(item)">
-									<view>
-										<view>{{item.LineName}}</view>
-									</view>
-								</view>
-							</view>
-						</scroll-view>
-					</swiper-item>
-				</swiper>
-			</view>
-		</view> -->
-		
-		
-		
-		
+		</view>
+
+		<!-- 原列表 -->
+		<view class="stationList" :style="{ 'height':scrollHeight }" v-if="VillageStatus">
+			<block v-for="(item,index) in VillageList" :key="index">
+				<view class="listItem" @click="Listclick(item)">
+					<rich-text :nodes="item.village_name"></rich-text>
+				</view>
+			</block>
+		</view>
 	</view>
 </template>
 
 <script>
 	export default {
-		data() {
+		data(){
 			return {
-
+				VillageSearchList: [], //关键字查询的乡村
+				VillageList: [], //乡村列表
+				VillageStatus: true, //原列表显示状态
+				SearchStatus: false, //搜索框显示状态
+				
+				scrollHeight:1000,
+				userId:0,
 			}
 		},
+		onLoad(pam) {
+			
+		},
+		onShow(){
+			uni.request({
+				url: this.$GrzxInter.Interface.getVillageList.value,
+				method: this.$GrzxInter.Interface.getVillageList.method,
+				success: (res) => {
+					uni.hideLoading();
+					console.log('乡村列表', res);
+					this.VillageList = res.data.data;
+				},
+				fail(res) {
+					uni.hideLoading();
+				}
+			})
+		},
 		methods: {
-			//-------------------------监听输入-------------------------
-			onInput(event){
-				console.log('监听输入',event)
-				// var keyword = event.detail ? event.detail.value : event;
-				// if (!keyword) {
-				// 	this.keywordList = [];
-				// 	this.isShowList = false;
-				// 	this.isShowAllList = true;
-				// 	return;
-				// }
-				// this.isShowList = true;
-				// this.isShowAllList = false;
-				//以下示例截取淘宝的关键字，请替换成你的接口
-				// uni.showLoading();
-				// uni.request({
-				// 	url:$KyInterface.KyInterface.GetLineNameByKey.Url,
-				// 	method:$KyInterface.KyInterface.GetLineNameByKey.method,
-				// 	data:{
-				// 		AppSystemName:this.type,
-				// 		key:keyword
-				// 	},
-				// 	success: (res) => {
-				// 		uni.hideLoading();
-				// 		console.log('模糊搜索',res);
-				// 		this.keywordList = [];
-				// 		this.keywordList = this.drawCorrelativeKeyword(res.data.data, keyword);	
-				// 	},
-				// 	fail(res) {
-				// 		uni.hideLoading();
-				// 	}
-				// });
+			onInput: function(e) {
+				console.log('监听输入', e)
 				
+				this.VillageStatus = e.detail.value != '' ? false : true;
+				this.SearchStatus = e.detail.value != '' ? true : false;
+
+				uni.showLoading();
+				uni.request({
+					url: this.$GrzxInter.Interface.getVillageListByName.value,
+					method: this.$GrzxInter.Interface.getVillageListByName.method,
+					data: {
+						keyName: e.detail.value
+					},
+					success: (res) => {
+						uni.hideLoading();
+						console.log('模糊搜索', res);
+						this.VillageSearchList = res.data.data;
+					},
+					fail(res) {
+						uni.hideLoading();
+					}
+				});
 			},
+			Listclick: function(e) {
+					uni.$emit('village', {
+					    data: e
+					});
+					uni.navigateBack({ });
+			}
+			
 		}
 	}
 </script>
@@ -91,6 +98,7 @@
 		background-color: #DBDBDB;
 		padding-top: 20rpx;
 		padding-bottom: 20rpx;
+		width: 750upx;
 
 		.SearchBar {
 			background-color: #FFFFFF;
@@ -111,15 +119,14 @@
 			font-weight: 300;
 		}
 	}
-
-	//站点列表
+	
 	.stationList {
 		background-color: #FFFFFF;
 		line-height: 80rpx;
 		box-sizing: border-box;
 		font-size: 28rpx;
-		height: 100rpx;
-
+		height: 800rpx;
+	
 		.listItem {
 			margin-left: 20rpx;
 			border-bottom: 1rpx solid #eeeeee;

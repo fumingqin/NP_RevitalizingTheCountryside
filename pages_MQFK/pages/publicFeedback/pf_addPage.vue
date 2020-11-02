@@ -3,13 +3,6 @@
 		<view class="content">
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
 
-				<!-- 商品名称 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="标题内容" :border-bottom="false" prop="name">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入标题内容" v-model="model.name" :type="text"></u-input>
-					</view>
-				</u-form-item>
-
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
@@ -354,7 +347,6 @@
 									userId: this.userInfo.userId,
 									content: this.model.intro,
 									image: JSON.stringify(this.lists),
-									title: this.model.name,
 									// video: JSON.stringify(arr)
 								},
 								success: (res) => {

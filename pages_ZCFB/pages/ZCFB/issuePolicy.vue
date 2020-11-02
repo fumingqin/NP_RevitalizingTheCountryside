@@ -174,7 +174,6 @@
 			return {
 				localPath: '',
 				filename:[],
-                pictureArray:[],//图片
 				lists: [],
 				fileList:[],
 				policyId:'',

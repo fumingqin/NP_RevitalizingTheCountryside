@@ -9,13 +9,11 @@
 		<view class="ovof_dp_background">
 			<view style="width: 750upx;"></view>
 			<view class="ovof_dp_bg_background">
-				<view class="ovof_dp_bg_title">{{groupTitle.name}}</view>
+				<view class="ovof_dp_bg_title">{{groupTitle.title}}</view>
 				<view class="ovof_dp_bg_time">
 					<text class="time">{{groupTitle.update_time}}</text>
 					<text class="browse">浏览量:</text>
-					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="groupTitle.count"></u-count-to>
-					<text class="browse">价格:</text>
-					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="groupTitle.prince"></u-count-to>
+					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="groupTitle.view"></u-count-to>
 				</view>
 				<view class="grClass">
 					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.avatar" mode="aspectFill"></image>
@@ -33,10 +31,10 @@
 				<view class="screen">
 					<view class="screenView">
 						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)"> 
-							商品介绍
+							项目介绍
 						</view>
 						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
-							商品地址
+							相关文件
 						</view>
 					</view>
 				</view>
@@ -46,7 +44,7 @@
 				</u-read-more>
 				
 				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="groupTitle.taobaoUrl" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 				</u-read-more>
 				
 				<!-- <view>
@@ -92,12 +90,13 @@
 			//加载数据
 			loadData: function() {
 				uni.request({
-					url:this.$wssc.KyInterface.addViews.Url,
-					method:this.$wssc.KyInterface.addViews.method,
+					url:this.$fbrcp.KyInterface.addViews.Url,
+					method:this.$fbrcp.KyInterface.addViews.method,
 					data:{
 						id : this.id
 					},
 					success: (res) => {
+						console.log('浏览量+1', res)
 					},
 					fail: function() {
 						uni.showToast({
@@ -108,8 +107,8 @@
 				})
 				
 				uni.request({
-					url:this.$wssc.KyInterface.getProductByID.Url,
-					method:this.$wssc.KyInterface.getProductByID.method,
+					url: this.$fbrcp.KyInterface.getProductByID.Url,
+					method: this.$fbrcp.KyInterface.getProductByID.method,
 					data:{
 						id : this.id
 					},
@@ -128,6 +127,7 @@
 								icon: 'none'
 							})
 						}
+						// console.log('111111111',this.rotationChart)
 					},
 					fail: function() {
 						uni.hideLoading();

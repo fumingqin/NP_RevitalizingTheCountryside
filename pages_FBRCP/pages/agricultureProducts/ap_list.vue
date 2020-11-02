@@ -1,17 +1,25 @@
 <template>
 	<view>
-		<!-- 头部切换栏 -->
-		<u-tabs :list="headList" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
+		
+		<view v-if="groupTitle == ''" style="margin-top: 400upx;">
+			<u-empty text="暂无列表数据哦~" mode="list"></u-empty>
+		</view>
 		
 		<!-- 内容1 -->
-		<view class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
+		<view v-if="groupTitle !== ''" class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
 			<view class="view_titleView">
 				<view class="tv_view">
 					<view style="display: flex;">
-						<view style="margin-top: 10upx;">
-							<text class="tv_label">{{item.article_type}}</text>
+						<view style="margin-top: 10upx;" v-if="item.state=='已上架'">
+							<text class="tv_label" style="background: #007AFF;">发布中</text>
 						</view>
-						<view class="tv_title">{{item.title}}</view>
+						<view style="margin-top: 10upx;" v-if="item.state=='已下架'">
+							<text class="tv_label" style="background: #FC4646;">未发布</text>
+						</view>
+						<view style="margin-top: 10upx;" v-if="item.state=='审核中'">
+							<text class="tv_label" style="background: #FC4646;">待审核</text>
+						</view>
+						<view class="tv_title">{{item.name}}</view>
 					</view>
 					<!-- <text class="tv_richText">{{item.content}}</text> -->
 					<view class="tv_view2">
@@ -23,10 +31,9 @@
 			
 			<view class="view_contentView">
 				<text>{{item.nick_name}}</text>
-				<text class="cont_text">{{item.count}}人看过</text>
+				<text class="cont_text">{{item.view}}人看过</text>
 				<text class="cont_text">{{informationDate(item.update_time)}}</text>
-				<text class="cont_icon" style="color: #007AFF;" v-if="item.state=='已上架'">发布中</text>
-				<text class="cont_icon" style="color: #FC4646;" v-if="item.state=='已下架'">未发布</text>
+				<text class="cont_icon" style="color: #FC4646;">￥{{item.price}}</text>
 				<!-- <u-icon class="cont_icon" name="more-dot-fill"></u-icon> -->
 			</view>
 			<u-gap height="4" bg-color="#f9f9f9"></u-gap>
@@ -34,7 +41,7 @@
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 			</view> -->
 		</view>
-		<view  style="padding-bottom: 180upx;"></view>
+		
 		<view>
 			<view class="to_view">
 				<scroll-view class="to_scroll" scroll-x="true">
@@ -42,6 +49,8 @@
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='审核中'" @click="underReview(groupTitle[selectIndex],0)">审核通过</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='审核中'" @click="underReview(groupTitle[selectIndex],1)">审核失败</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已下架'" @click="onTheShelf(groupTitle[selectIndex].id)">发布</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'" @click="offTheShelf(groupTitle[selectIndex].id)">下架</u-button>
 				</scroll-view>
@@ -49,28 +58,16 @@
 		</view>
 		
 		<!-- 缺省提示 -->
-		<view style="margin-top: 250upx;" v-if="groupTitle.length ==0">
+		<view style="margin-top: 360upx;" :hidden="listStatusIndex !==0">
 			<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
 		</view>
-	</view>	
+	</view>
 </template>
 
 <script>
 	export default {
 		data() {
 			return {
-				headList: [{
-					name: '全部'
-				},{
-					name: '村容村貌'
-				},{
-					name: '环境整治'
-				},{
-					name: '企业帮扶'
-				},{
-					name: '三化管理'
-				}], //头部数组
-				headCurrent: 0, //头部tabs下标
 				customStyle: { //button样式
 					paddingTop: '25px',
 					paddingBottom: '25px',
@@ -82,7 +79,6 @@
 					color: '#007AFF',
 					fontSize:'17px',
 					border:'#007AFF solid 1rpx',
-					
 				},
 				groupTitle:[],
 				selectId:'',//去出id
@@ -125,7 +121,7 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						console.log('获取个人信息',this.userInfo)
-						this.ycydData();
+						this.ycydData(this.userInfo);
 					}
 				});
 			},
@@ -148,55 +144,26 @@
 				return a;
 			},
 			
-			//----------------------点击tab切换----------------------------
-			headChange: function(e) {
-				this.headCurrent = e;
-				uni.showLoading({
-					title: '加载信息中...'
-				})
-				this.ycydData(e);
-			},
-			
-			
 			//----------------------列表接口--------------------------------
 			ycydData:function(e){
 				uni.showLoading({
 					title: '加载列表中...',
 				})
 				uni.request({
-					url:this.$ycyd.KyInterface.getArchivesByUserID.Url,
-					method:this.$ycyd.KyInterface.getArchivesByUserID.method,
+					url:this.$fbrcp.KyInterface.getProductByUserID.Url,
+					method:this.$fbrcp.KyInterface.getProductByUserID.method,
 					data:{
-						userId:this.userInfo.userId
+						userId:e.userId
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.informationList = '';
-							if (this.headCurrent == 0) {
-								this.groupTitle = res.data.data
-							}else if (this.headCurrent == 1){
-								this.groupTitle = res.data.data.filter(item => {
-									return item.article_type == '村容村貌';
-								})
-							}else if (this.headCurrent == 2){
-								this.groupTitle = res.data.data.filter(item => {
-									return item.article_type == '环境整治'
-								})
-							} else if (this.headCurrent == 3){
-								this.groupTitle = res.data.data.filter(item => {
-									return item.article_type == '企业帮扶'
-								})
-							} else if (this.headCurrent == 4){
-								this.groupTitle = res.data.data.filter(item => {
-									return item.article_type == '三化管理'
-								})
-							}
-							this.listStatusIndex = this.groupTitle.length;
+							this.groupTitle=res.data.data;
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
+							this.groupTitle=res.data.data;
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 							uni.showToast({
@@ -233,21 +200,75 @@
 			//--------------------------路由跳转------------------------------
 			routeJump:function(e){
 				uni.navigateTo({
-					url:'ovof_detailsPage?id=' +e,
+					url:'ap_details?id=' +e,
 				})
 			},
 			
 			//--------------------------路由跳转(添加列表文章)------------------------------
-			routeJump2:function(e){
+			routeJump2:function(){
 				uni.navigateTo({
-					url:'./ovof_addPage',
+					url:'./ap_addPage'
 				})
 			},
 			
 			//--------------------------路由跳转(修改列表文章)------------------------------
 			modifyJump:function(item){
 				uni.navigateTo({
-					url: './ovof_edit?jumpStatus=' +this.state + '&id=' + item.id
+					url: './ap_edit?jumpStatus=' +this.state + '&id=' + item.id
+				})
+			},
+			
+			//-----------------------上架------------------------------------
+			underReview: function(item,e) {
+				console.log('111',item)
+				console.log('222',e)
+				uni.showModal({
+					title: '你确认发布文章？',
+					success: (res) => {
+						console.log(res)
+						if (res.confirm == true) {
+							uni.showLoading({
+								title: '正在发布....'
+							})
+							uni.request({
+								url: this.$fbrcp.KyInterface.auditProduct.Url,
+								method: this.$fbrcp.KyInterface.auditProduct.method,
+								data: {
+									id: item.id,
+									userId:item.user_id,
+									state:e
+								},
+								success: (res) => {
+									console.log("审核",res)
+									if (res.data.status == true) {
+										uni.hideLoading()
+										uni.showToast({
+											title: '审核成功',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									} else {
+										uni.hideLoading()
+										uni.showToast({
+											title: '审核失败',
+										})
+										uni.startPullDownRefresh();
+									}
+			
+								},
+								fail: () => {
+									uni.hideLoading()
+									uni.showToast({
+										title: '服务器异常，请重试',
+										icon: 'success'
+									})
+									uni.startPullDownRefresh();
+								}
+							})
+						} else {
+			
+						}
+					}
 				})
 			},
 			
@@ -262,8 +283,8 @@
 								title: '正在发布....'
 							})
 							uni.request({
-								url: this.$ycyd.KyInterface.upAndDownArchives.Url,
-								method: this.$ycyd.KyInterface.upAndDownArchives.method,
+								url: this.$fbrcp.KyInterface.upAndDownProduct.Url,
+								method: this.$fbrcp.KyInterface.upAndDownProduct.method,
 								data: {
 									id: e
 								},
@@ -313,8 +334,8 @@
 								title: '正在下架....'
 							})
 							uni.request({
-								url: this.$ycyd.KyInterface.upAndDownArchives.Url,
-								method: this.$ycyd.KyInterface.upAndDownArchives.method,
+								url: this.$fbrcp.KyInterface.upAndDownProduct.Url,
+								method: this.$fbrcp.KyInterface.upAndDownProduct.method,
 								data: {
 									id: e
 								},
@@ -364,8 +385,8 @@
 								title: '正在删除....'
 							})
 							uni.request({
-								url: this.$ycyd.KyInterface.deleteArchives.Url,
-								method: this.$ycyd.KyInterface.deleteArchives.method,
+								url: this.$fbrcp.KyInterface.deleteProduct.Url,
+								method: this.$fbrcp.KyInterface.deleteProduct.method,
 								data: {
 									id: e,
 									userId:this.userInfo.userId
@@ -442,7 +463,6 @@
 				
 				.tv_label{
 					font-size: 24upx; 
-					background: #007AFF; 
 					color: #FFFFFF; 
 					padding: 4upx 8upx; 
 					border-radius: 4upx;
@@ -495,7 +515,8 @@
 				margin-left: 20upx;
 			}
 			.cont_icon{
-				float: right; 
+				float: right;
+				font-size: 28upx;
 			}
 		}
 	}

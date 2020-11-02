@@ -41,7 +41,7 @@
 			<view class="buttonView2 " hover-class="btn_Click">提交结果</view>
 		</view>
 		
-		<previewImage ref="previewImage" :opacity="0.8"  :imgs="imageList" :descs="descs" @longPress="longPress"></previewImage>
+		<previewImage ref="previewImage" :opacity="0.8"  :imgs="imageList" ></previewImage>
 	</view>
 </template>
 

@@ -459,24 +459,44 @@
                 }
                 ,{
                     "path" : "pages/pyfw_personalList",
-                    "style" : {}
+                    "style" : {
+						"enablePullDownRefresh":true,
+						"navigationBarTitleText": "申请列表"
+					}
                 }
                 ,{
                     "path" : "pages/pyfw_details",
-                    "style" : {}
+                    "style" : {
+						"enablePullDownRefresh":true,
+						"navigationBarTitleText": "申请详情"
+					}
                 }
                 ,{
                     "path" : "pages/pyfw_py_list",
-                    "style" : {}
+                    "style" : {
+						"navigationBarTitleText": "特派员任务"
+					}
                 }
                 ,{
                     "path" : "pages/pyfw_py_details",
-                    "style" : {}
+                    "style" : {
+						"navigationBarTitleText": "任务详情"
+					}
                 }
                 ,{
-                    "path" : "pages/pyfw_countrySearch",
-                    "style" : {}
-                }
+                    "path" : "pages/pyfw_gl_list",
+                    "style" : {
+						"enablePullDownRefresh":true,
+						"navigationBarTitleText": "特派员申请审批"
+					}
+                },
+				{
+				    "path" : "pages/pyfw_gl_details",
+				    "style" : {
+						"enablePullDownRefresh":true,
+						"navigationBarTitleText": "申请详情"
+					}
+				}
             ]
 		},
 		//---------------------------------------------第七个包：政策发布------------------------------------------
@@ -615,6 +635,44 @@
 				}
 				,{
 				    "path" : "pages/publicFeedback/pf_addPage",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/publicFeedback/pf_personalList",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/publicFeedback/pf_details",
+				    "style" : {}
+				}
+			]
+		},
+		
+		//---------------------------------------------第十一个包：发布农产品------------------------------------------
+		{
+			"root": "pages_FBRCP/",
+			"pages": [
+				//----------------------------------通用页面----------------------------------
+				{
+				    "path" : "pages/agricultureProducts/ap_list",
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
+				}
+				,{
+				    "path" : "pages/agricultureProducts/ap_addPage",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/agricultureProducts/ap_edit",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/agricultureProducts/ap_details",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/agricultureProducts/ap_personalList",
 				    "style" : {}
 				}
 			]

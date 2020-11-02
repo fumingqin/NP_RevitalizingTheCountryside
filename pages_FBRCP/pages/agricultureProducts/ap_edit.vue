@@ -10,28 +10,20 @@
 					</view>
 				</u-form-item>
 
-				<!-- 类型 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="选择类型" :border-bottom="false" prop="goodsType">
+				<!-- 来源地 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="来源地" :border-bottom="false" prop="name">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="border" type="select" :select-open="selectShow" v-model="model.goodsType"
-						 placeholder="请选择选择类型" @click="selectShow = true"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入来源地" v-model="model.origin_region" :type="text"></u-input>
 					</view>
 				</u-form-item>
-
-				<!-- 商品来源地 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品来源地" :border-bottom="false" prop="region">
+				
+				<!-- 价格 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="价格" prop="cost" :border-bottom="false"
+				 label-width="150">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" type="select" :select-open="pickerShow" v-model="model.region"
-						 placeholder="请选择商品来源地" @click="pickerShow = true"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="border" placeholder="请输入价格" v-model="model.cost" type="number"></u-input>
 					</view>
-				</u-form-item> -->
-
-				<!-- 商品价格 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品价格" :border-bottom="false" prop="cost">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品价格" v-model="model.cost" :type="text"></u-input>
-					</view>
-				</u-form-item> -->
+				</u-form-item>
 
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
@@ -47,11 +39,11 @@
 				</u-form-item>
 
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
-				<!-- <view v-if="informationDetail.video!=='' || types!==0" style="display: flex;position: relative;width: 100%;">
+				<view v-if="informationDetail.video!=='' || types!==0" style="display: flex;position: relative;width: 100%;">
 					<text style="position: absolute;width: :;upx;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 28upx;">{{informationDetail.video}}</text>
 					<text style="position: absolute;right: 0;color:#007AFF;font-size: 28upx;" @click="deleteVideo(0)">删除</text>
 				</view> -->
@@ -147,7 +139,7 @@
 		pathToBase64,
 		base64ToPath
 	} from '@/pages_GRZX/components/GRZX/js_sdk/gsq-image-tools/image-tools/index.js';
-	import robbyImageUpload from '@/pages_YCYD/components/LYFW/robby-image-upload/robby-image-upload.vue';
+	import robbyImageUpload from '@/pages_FBRCP/compontents/robby-image-upload/robby-image-upload.vue';
 	var _self;
 	export default {
 		components: {
@@ -173,10 +165,10 @@
 				model: {
 					name: '', //商品名称value
 					region: '', //选择来源地value
-					goodsType: '', //选择类型value
 					// cost: '', //价格
 					intro: '', //商品简介
-					imageData: [], //图像日期
+					cost: '',//价格
+					origin_region:'',//来源地
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
@@ -319,8 +311,8 @@
 			this.id = param.id;
 			if (this.jumpStatus == '修改') {
 				uni.request({
-					url: this.$ycyd.KyInterface.getArchiveDetailByID.Url,
-					method: this.$ycyd.KyInterface.getArchiveDetailByID.method,
+					url: this.$fbrcp.KyInterface.getProductByID.Url,
+					method: this.$fbrcp.KyInterface.getProductByID.method,
 					data: {
 						id: this.id
 					},
@@ -361,8 +353,10 @@
 						// console.log('修改信息列表', data.data)
 						this.informationDetail = data.data;
 						this.issueText2 = data.data.content;
-						this.model.name = data.data.title;
+						this.model.name = data.data.name;
 						this.model.goodsType = data.data.article_type;
+						this.model.origin_region=data.data.origin_region;
+						this.model.cost=data.data.price;
 						this.onEditorReady();
 						// console.log('赋值前', this.lists)
 						for(var i=0;i<this.informationDetail.image.length;i++){
@@ -620,7 +614,15 @@
 				console.log('4', this.model.name);
 				console.log('5', this.model.goodsType);
 				console.log('6', this.informationDetail.id);
-				var arr=[];
+				if(this.informationDetail.video!==""){
+					var arr=[];
+					arr.push(this.informationDetail.video);
+				}else if(this.videoData.data!==this.informationDetail.video){
+					var arr=[];
+					arr.push(this.videoData.data);
+				}else if(this.types==0){
+					var arr=[];
+				}
 				arr.push(this.videoData.data);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
@@ -630,16 +632,17 @@
 						if (this.jumpStatus == '修改') {
 							if (this.issueText !== '<p><br></p>') {
 								uni.request({
-									url: this.$ycyd.KyInterface.updateArchives.Url,
-									method: this.$ycyd.KyInterface.updateArchives.method,
+									url: this.$fbrcp.KyInterface.updateProduct.Url,
+									method: this.$fbrcp.KyInterface.updateProduct.method,
 									data: {
 										id: this.informationDetail.id,
 										userId: this.userInfo.userId,
-										content: this.issueText,
-										image: JSON.stringify(this.pictureArray),	
-										title: this.model.name,
-										article_type: this.model.goodsType,
-										video: JSON.stringify(arr)
+										content: e,
+										image: JSON.stringify(this.pictureArray),
+										name: this.model.name,
+										price: this.model.cost,//价格
+										origin_region: this.model.origin_region,//产地
+										// video: JSON.stringify(arr)
 									},
 									success: (res) => {
 										console.log(res, "请求完接口");
@@ -681,15 +684,16 @@
 						} else {
 							if (this.issueText !== '<p><br></p>') {
 								uni.request({
-									url: this.$ycyd.KyInterface.releaseArchives.Url,
-									method: this.$ycyd.KyInterface.releaseArchives.method,
+									url: this.$fbrcp.KyInterface.releaseProduct.Url,
+									method: this.$fbrcp.KyInterface.releaseProduct.method,
 									data: {
 										userId: this.userInfo.userId,
-										content: this.issueText,
+										userId: this.userInfo.userId,
+										content: e,
 										image: JSON.stringify(this.pictureArray),
-										title: this.model.name,
-										article_type: this.model.goodsType,
-										video: JSON.stringify(arr)
+										name: this.model.name,
+										price: this.model.cost,//价格
+										origin_region: this.model.origin_region,//产地
 									},
 									success: (res) => {
 										console.log(res, "请求完接口");
