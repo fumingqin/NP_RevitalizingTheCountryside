@@ -132,7 +132,7 @@
 						name: '政策发布',
 						image: '../../static/home/vajra/fabudongtai.png',
 						display: true,
-						entrance: '../../pages_ZCFB/pages/ZCFB/issuePolicy',
+						entrance: '../../pages_ZCFB/pages/ZCFB/policyList',
 					}, {
 						name: '季度考核',
 						image: '../../static/home/vajra/jidukaohe.png',

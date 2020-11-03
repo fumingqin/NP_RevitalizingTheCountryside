@@ -55,66 +55,87 @@
 				//普通用户管理区
 				ItemArr: [{
 					IsUse: true,
-					clickURL: "",
+					clickURL: "../../pages/home/ChooseSite",
 					ImageURL1: "../../static/home/serve/cct.png", //亮
 					ImageURL2: "../../static/home/serve/cct2.png", //暗
 					ItemTitle: "村村通",
 					style: "sv_print",
-				}, {
+				},{
 					IsUse: true,
-					clickURL: "",
+					clickURL: "../../pages_LYFW/pages/LYFW/currency/ho_zhly",
 					ImageURL1: "../../static/home/serve/cpdg.png", //亮
 					ImageURL2: "../../static/home/serve/cpdg2.png", //暗
 					ItemTitle: "景区售票",
 					style: "sv_print",
-				}, {
+				},{
 					IsUse: true,
 					clickURL: "/pages_ZXGP/pages/ZXGP/TraditionSpecial/Home/ctkyIndex",
 					ImageURL1: "../../static/home/serve/yh.png", //亮
 					ImageURL2: "../../static/home/serve/yh2.png", //暗
 					ItemTitle: "生态银行",
 					style: "sv_print",
-				}, {
+				},{
 					IsUse: true,
 					clickURL: "../../pages_PYFW/pages/pyfw_py_list",
 					ImageURL1: "../../static/home/serve/kjtpy.png", //亮
 					ImageURL2: "../../static/home/serve/kjtpy2.png", //暗
 					ItemTitle: "特派任务",
 					style: "sv_print",
-				}, {
+				},{
 					IsUse: true,
-					clickURL: "/pages_BUS/pages/Bus/BusQuery",
+					clickURL: "../../pages_WSSC/pages/WSSC/goodsList",
 					ImageURL1: "../../static/home/serve/sc.png", //亮
 					ImageURL2: "../../static/home/serve/sc2.png", //暗
 					ItemTitle: "网上商城",
 					style: "sv_print",
-				}, {
+				},{
 					IsUse: true,
 					clickURL: "/pages_ZXGP/pages/ZXGP/SpecialBus/Home/zxgpHomePage",
 					ImageURL1: "../../static/home/serve/smjj.png", //亮
 					ImageURL2: "../../static/home/serve/smjj2.png", //暗
 					ItemTitle: "水美经济",
 					style: "sv_print",
-				}, {
+				},{
 					IsUse: true,
 					clickURL: "",
 					ImageURL1: "../../static/home/serve/xmjd.png", //亮
 					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
 					ItemTitle: "项目监督",
 					style: "sv_print",
-				}, {
+				},{
 					IsUse: true,
 					clickURL: "../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_generalList",
 					ImageURL1: "../../static/home/serve/xmjd.png", //亮
 					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
 					ItemTitle: "一村一档",
 					style: "sv_print",
-				}, {
+				},{
 					IsUse: true,
-					clickURL: "../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_list",
+					clickURL: "../../pages_XCDT/pages/ruralDynamics/rd_generalList",
 					ImageURL1: "../../static/home/serve/xmjd.png", //亮
 					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
-					ItemTitle: "村档管理",
+					ItemTitle: "乡村动态",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_MQFK/pages/publicFeedback/pf_list",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "民情反馈",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_SMJJ/pages/shuimeiEconomy/se_generalList",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "水美经济",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_STYH/pages/ecologicalBank/eb_generalList",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "生态银行",
 					style: "sv_print",
 				}],
 
@@ -133,6 +154,49 @@
 					ImageURL2: "../../static/home/serve/sphy2.png", //暗
 					ItemTitle: "视频会议",
 					style: "sv_print",
+				},
+				{
+					IsUse: true,
+					clickURL: "../../pages_WSSC/pages/WSSC/checkGoods",
+					ImageURL1: "../../static/home/serve/sphy.png", //亮
+					ImageURL2: "../../static/home/serve/sphy2.png", //暗
+					ItemTitle: "审核商品",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_list",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "村档管理",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_XCDT/pages/ruralDynamics/rd_generalList",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "动态管理",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_MQFK/pages/publicFeedback/pf_personalList",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "所有反馈",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_SMJJ/pages/shuimeiEconomy/se_list",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "水美管理",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_STYH/pages/ecologicalBank/eb_list",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "生态管理",
+					style: "sv_print",
 				}],
 
 				//县市级管理区
@@ -143,13 +207,21 @@
 					ImageURL2: "../../static/home/serve/kjtpy2.png", //暗
 					ItemTitle: "特派审批",
 					style: "sv_print",
+				},
+				{
+					IsUse: true,
+					clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
+					ImageURL1: "../../static/home/serve/sphy.png", //亮
+					ImageURL2: "../../static/home/serve/sphy2.png", //暗
+					ItemTitle: "发布政策",
+					style: "sv_print",
 				}]
 
 			}
 		},
 		onLoad: function() {
 			this.loadData();
-			this.userData();
+			// this.userData();
 		},
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
