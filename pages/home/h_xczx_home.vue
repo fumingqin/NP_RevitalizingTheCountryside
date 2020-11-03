@@ -127,7 +127,7 @@
 						name: '乡村动态',
 						image: '../../static/home/vajra/xiangcundongtai.png',
 						display: true,
-						entrance: '../../pages_ZXGP/pages/ZXGP/SpecialBus/Home/zxgpHomePage',
+						entrance: '../../pages_XCDT/pages/ruralDynamics/rd_generalList',
 					}, {
 						name: '政策发布',
 						image: '../../static/home/vajra/fabudongtai.png',
@@ -142,7 +142,7 @@
 						name: '民情反馈',
 						image: '../../static/home/vajra/minqingfankui.png',
 						display: true,
-						entrance: '',
+						entrance: '../../pages_MQFK/pages/publicFeedback/pf_list',
 					}]
 				}], //功能数组
 			}
