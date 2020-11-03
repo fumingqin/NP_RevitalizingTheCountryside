@@ -27,9 +27,9 @@
 				</view>
 				<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 			</view>
-			<view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
+			<!-- <view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -41,21 +41,25 @@
 				groupTitle:[],
 				selectId:'',//去出id
 				selectIndex:0,//下标
-				loadingType: 0, //加载更多状态
-				loadingText:{
-					down :'上拉加载更多',
-					refresh : '正在加载...',
-					nomore : '没有更多了',
-				},
-				scenicListIndex:5,//列表默认数量
+				// loadingType: 0, //加载更多状态
+				// loadingText:{
+				// 	down :'上拉加载更多',
+				// 	refresh : '正在加载...',
+				// 	nomore : '没有更多了',
+				// },
+				// scenicListIndex:5,//列表默认数量
 			}
 		},
 		
-		onLoad() {
+		onShow() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
 			this.ycydData();
+		},
+		
+		onUnload() {
+			uni.hideLoading();
 		},
 		
 		onPullDownRefresh: function() {
@@ -70,29 +74,19 @@
 		},
 		
 		methods: {
-			//--------------------点击列表事件------------------------------
-			selectClick:function(e){
-				//给选择的下标赋值
-				this.selectIndex = e;
-				console.log('上车点下标赋值',this.selectIndex)
-				//取出id
-				this.selectId = this.groupTitle[e].id;
-				console.log('取出id',this.selectId)
-			},
-			
 			//----------------------加载更多--------------------------------
-			getMore(){
-				this.loadingType = 1;
+			// getMore(){
+			// 	this.loadingType = 1;
 				
-				if(this.scenicListIndex < this.groupTitle.length){
-					var a = this.scenicListIndex +6;
-					this.scenicListIndex = a;
-					this.loadingType = 0;
-				}
-				if(this.scenicListIndex >= this.groupTitle.length){
-					this.loadingType = 2;
-				}
-			},
+			// 	if(this.scenicListIndex < this.groupTitle.length){
+			// 		var a = this.scenicListIndex +6;
+			// 		this.scenicListIndex = a;
+			// 		this.loadingType = 0;
+			// 	}
+			// 	if(this.scenicListIndex >= this.groupTitle.length){
+			// 		this.loadingType = 2;
+			// 	}
+			// },
 			
 			//----------------------列表接口--------------------------------
 			ycydData:function(){
