@@ -1,13 +1,13 @@
 <template>
 	<view class="se_view">
-		<view v-if="applyName=='南平综合出行'" class="sv_view">
-			<image class="sv_image" :src="imageIndex.imageUrl" lazy-load="true"></image>
+		<view class="sv_view">
+			<image class="sv_image" :src="imageIndex" lazy-load="true"></image>
 		</view>
 
 		<view class="sv_view2">
-			<!-- <view class="sv_title">服务区</view> -->
+			<view class="sv_title">服务区</view>
 			<view style="display: flex; flex-wrap: wrap;padding: 0 14rpx;">
-				<view class="sv_view3" v-for="(item,index1) in ItemArr" :key="index1">
+				<view class="sv_view3" v-for="(item,index) in ItemArr" :key="index">
 					<view @click="natTo(item)">
 						<image :class="item.style" :src="item.IsUse?item.ImageURL1:item.ImageURL2" lazy-load="true"></image>
 						<text class="sv_text">{{item.ItemTitle}}</text>
@@ -16,17 +16,29 @@
 			</view>
 		</view>
 
-		<!-- <view class="sv_view2">
-			<view class="sv_title">旅游</view>
+		<view class="sv_view2" v-if="level == 1 || level == 2">
+			<view class="sv_title">村级管理</view>
 			<view style="display: flex; flex-wrap: wrap;padding: 0 14rpx;">
-				<view class="sv_view3" v-for="(item,index) in ItemArr2" :key="index">
+				<view class="sv_view3" v-for="(item,index) in ItemArr2" :key="index" >
 					<view @click="natTo(item.clickURL)">
 						<image :class="item.style" :src="item.IsUse?item.ImageURL1:item.ImageURL2" lazy-load="true"></image>
 						<text class="sv_text">{{item.ItemTitle}}</text>
 					</view>
 				</view>
 			</view>
-		</view> -->
+		</view>
+
+		<view class="sv_view2" v-if="level == 2">
+			<view class="sv_title">县市级管理</view>
+			<view style="display: flex; flex-wrap: wrap;padding: 0 14rpx;">
+				<view class="sv_view3" v-for="(item,index) in ItemArr3" :key="index" >
+					<view @click="natTo(item.clickURL)">
+						<image :class="item.style" :src="item.IsUse?item.ImageURL1:item.ImageURL2" lazy-load="true"></image>
+						<text class="sv_text">{{item.ItemTitle}}</text>
+					</view>
+				</view>
+			</view>
+		</view>
 
 	</view>
 </template>
@@ -36,130 +48,158 @@
 	export default {
 		data() {
 			return {
-				applyName:'',
-				imageIndex: [{
-					imageUrl: '',
-				}], //首页图片
+				imageIndex: '', //首页图片
+				level: 0, //0为普通用户，1为村级职责人员，2位县市级职责人员
+				userInfo : '',//用户数据
+				
+				//普通用户管理区
 				ItemArr: [{
-						IsUse: true,
-						clickURL: "",
-						ImageURL1: "../../static/home/serve/cct.png",//亮
-						ImageURL2: "../../static/home/serve/cct2.png",//暗
-						ItemTitle: "村村通",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL: "",
-						ImageURL1: "../../static/home/serve/cpdg.png",//亮
-						ImageURL2: "../../static/home/serve/cpdg2.png",//暗
-						ItemTitle: "景区售票",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL: "/pages_ZXGP/pages/ZXGP/TraditionSpecial/Home/ctkyIndex",
-						ImageURL1: "../../static/home/serve/yh.png",//亮
-						ImageURL2: "../../static/home/serve/yh2.png",//暗
-						ItemTitle: "生态银行",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL: "../../pages_PYFW/pages/pyfw_personalList",
-						ImageURL1: "../../static/home/serve/kjtpy.png",//亮
-						ImageURL2: "../../static/home/serve/kjtpy2.png",//暗
-						ItemTitle: "特派服务",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL: "../../pages_PYFW/pages/pyfw_gl_list",
-						ImageURL1: "../../static/home/serve/kjtpy.png",//亮
-						ImageURL2: "../../static/home/serve/kjtpy2.png",//暗
-						ItemTitle: "特派审批",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL: "../../pages_PYFW/pages/pyfw_py_list",
-						ImageURL1: "../../static/home/serve/kjtpy.png",//亮
-						ImageURL2: "../../static/home/serve/kjtpy2.png",//暗
-						ItemTitle: "特派任务",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL: "/pages_BUS/pages/Bus/BusQuery",
-						ImageURL1: "../../static/home/serve/sc.png",//亮
-						ImageURL2: "../../static/home/serve/sc2.png",//暗
-						ItemTitle: "网上商城",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL: "/pages_ZXGP/pages/ZXGP/SpecialBus/Home/zxgpHomePage",
-						ImageURL1: "../../static/home/serve/smjj.png",//亮
-						ImageURL2: "../../static/home/serve/smjj2.png",//暗
-						ItemTitle: "水美经济",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL: "",
-						ImageURL1: "../../static/home/serve/sphy.png",//亮
-						ImageURL2: "../../static/home/serve/sphy2.png",//暗
-						ItemTitle: "视频会议",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL:"",
-						ImageURL1: "../../static/home/serve/xmjd.png",//亮
-						ImageURL2: "../../static/home/serve/xmjd2.png",//暗
-						ItemTitle: "项目监督",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL:"../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_generalList",
-						ImageURL1: "../../static/home/serve/xmjd.png",//亮
-						ImageURL2: "../../static/home/serve/xmjd2.png",//暗
-						ItemTitle: "一村一档",
-						style:"sv_print",
-					},{
-						IsUse: true,
-						clickURL:"../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_list",
-						ImageURL1: "../../static/home/serve/xmjd.png",//亮
-						ImageURL2: "../../static/home/serve/xmjd2.png",//暗
-						ItemTitle: "村档管理",
-						style:"sv_print",
-					}
-					
-					
-					
-				]
-				// ItemArr2: [{
-				// 		IsUse: false,
-				// 		clickURL:"",
-				// 		ImageURL1: "../../static/home/serve/jqgoupiao.png",//亮
-				// 		ImageURL2: "../../static/home/serve/hjqgoupiao.png",//暗
-				// 		ItemTitle: "景区购票",
-				// 		style:"sv_print3",
-				// 	}
-				// ]
+					IsUse: true,
+					clickURL: "",
+					ImageURL1: "../../static/home/serve/cct.png", //亮
+					ImageURL2: "../../static/home/serve/cct2.png", //暗
+					ItemTitle: "村村通",
+					style: "sv_print",
+				}, {
+					IsUse: true,
+					clickURL: "",
+					ImageURL1: "../../static/home/serve/cpdg.png", //亮
+					ImageURL2: "../../static/home/serve/cpdg2.png", //暗
+					ItemTitle: "景区售票",
+					style: "sv_print",
+				}, {
+					IsUse: true,
+					clickURL: "/pages_ZXGP/pages/ZXGP/TraditionSpecial/Home/ctkyIndex",
+					ImageURL1: "../../static/home/serve/yh.png", //亮
+					ImageURL2: "../../static/home/serve/yh2.png", //暗
+					ItemTitle: "生态银行",
+					style: "sv_print",
+				}, {
+					IsUse: true,
+					clickURL: "../../pages_PYFW/pages/pyfw_py_list",
+					ImageURL1: "../../static/home/serve/kjtpy.png", //亮
+					ImageURL2: "../../static/home/serve/kjtpy2.png", //暗
+					ItemTitle: "特派任务",
+					style: "sv_print",
+				}, {
+					IsUse: true,
+					clickURL: "/pages_BUS/pages/Bus/BusQuery",
+					ImageURL1: "../../static/home/serve/sc.png", //亮
+					ImageURL2: "../../static/home/serve/sc2.png", //暗
+					ItemTitle: "网上商城",
+					style: "sv_print",
+				}, {
+					IsUse: true,
+					clickURL: "/pages_ZXGP/pages/ZXGP/SpecialBus/Home/zxgpHomePage",
+					ImageURL1: "../../static/home/serve/smjj.png", //亮
+					ImageURL2: "../../static/home/serve/smjj2.png", //暗
+					ItemTitle: "水美经济",
+					style: "sv_print",
+				}, {
+					IsUse: true,
+					clickURL: "",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "项目监督",
+					style: "sv_print",
+				}, {
+					IsUse: true,
+					clickURL: "../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_generalList",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "一村一档",
+					style: "sv_print",
+				}, {
+					IsUse: true,
+					clickURL: "../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_list",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "村档管理",
+					style: "sv_print",
+				}],
+				
+				//村级管理区
+				ItemArr2: [{
+					IsUse: true,
+					clickURL: "../../pages_PYFW/pages/pyfw_personalList",
+					ImageURL1: "../../static/home/serve/kjtpy.png", //亮
+					ImageURL2: "../../static/home/serve/kjtpy2.png", //暗
+					ItemTitle: "特派服务",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "",
+					ImageURL1: "../../static/home/serve/sphy.png", //亮
+					ImageURL2: "../../static/home/serve/sphy2.png", //暗
+					ItemTitle: "视频会议",
+					style: "sv_print",
+				}],
+				
+				//县市级管理区
+				ItemArr3: [{
+					IsUse: true,
+					clickURL: "../../pages_PYFW/pages/pyfw_gl_list",
+					ImageURL1: "../../static/home/serve/kjtpy.png", //亮
+					ImageURL2: "../../static/home/serve/kjtpy2.png", //暗
+					ItemTitle: "特派审批",
+					style: "sv_print",
+				}]
+
 			}
 		},
 		onLoad: function() {
-			this.applyName=this.$oSit.Interface.system.applyName;
-			console.log(this.applyName)
-			uni.request({
-				url: $lyfw.Interface.qg_GetImage.value,
-				method: $lyfw.Interface.qg_GetImage.method,
-				data: {
-					model: 6,
-					type: '服务banner',
-					systemtype: 'XCX',//APP,XCX,H5
-					companyid: '南平综合出行',//公司名
-				},
-				success: (res) => {
-					console.log(res)
-					this.imageIndex = res.data.data
-
-				},
-			})
+			this.loadData();
+			this.userData();
 		},
 		methods: {
+			//-------------------------------乘客数据读取-------------------------------
+			userData: function() {
+				uni.showLoading({
+					title: '加载信息中...'
+				})
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.userInfo = res.data;
+						if(this.userInfo.duty == '村级职责人员'){
+							this.level = 1;
+						}else if(this.userInfo.duty == '县级职责人员' || this.userInfo.duty == '市级职责人员'){
+							this.level = 2;
+						}
+						uni.hideLoading()
+						console.log('获取个人信息', this.userInfo)
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'加载个人信息失败',
+							icon:'none'
+						})
+					}
+				});
+			},
+			// 加载数据
+			loadData: function() {
+				uni.request({
+					url: this.$home.KyInterface.getImage.Url,
+					method: this.$home.KyInterface.getImage.method,
+					data: {
+						type: '3'
+					},
+					success: (res) => {
+						console.log('轮播区', res)
+						this.imageIndex = res.data.data.image
+						console.log(this.imageIndex)
+					},
+					fail: function() {
+						uni.showToast({
+							title: 'banner图片加载异常',
+							icon: 'none'
+						})
+					}
+				})
+			},
+
 			natTo: function(item) {
 				if (!item.IsUse) {
 					uni.showToast({
@@ -241,6 +281,7 @@
 				width: 20%;
 				text-align: center;
 				margin-top: 45upx;
+
 				.sv_print {
 					width: 106upx;
 					height: 106upx;
@@ -248,7 +289,7 @@
 
 				.sv_print3 {
 					height: 60upx;
-					width:52upx;
+					width: 52upx;
 				}
 
 				.sv_print2 {
