@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 轮播区 -->
-		<u-swiper :list="rotationChart" :height="422" indicator-pos="bottomRight" name="ImageURL"></u-swiper>
+		<u-swiper :list="rotationChart" :height="422" indicator-pos="bottomRight"></u-swiper>
 
 		<!-- 金刚区 -->
 		<swiper class="h_vajraDistrict">
@@ -58,16 +58,15 @@
 				</u-col>
 			</u-row>
 		</view> -->
-		<!-- 乡村特产 -->
+		<!-- 乡村美景 -->
 		<view class="h_quickEntry">
 			<view class="qui_titleView">乡村美景</view>
 			<view class="sixBackground">
-				<view v-for="(item,index) in quickEntryData" :key="index">
+				<view v-for="(item,index) in quickEntryData" :key="index" v-if="index < 6" @click="navigateToClick(0,item.id)">
 					<view class="darkCurtain"></view>
 					<image :src="item.image"></image>
 					<view class="sixView">
 						<text class="sixText1">{{item.title}}</text>
-						<text class="sixText2" :hidden="item.ticketEnglish==''">{{item.ticketEnglish}}</text>
 					</view>
 				</view>
 			</view>
@@ -79,7 +78,7 @@
 		<!-- 公示项目 -->
 		<view class="gs_view">
 			<view class="gs_title">公示项目</view>
-			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" name="ShowImageURL" bg-color="#ffffff"></u-swiper>
+			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" bg-color="#ffffff" @click="navigateToClick"></u-swiper>
 		</view>
 
 
@@ -110,9 +109,9 @@
 	export default {
 		data() {
 			return {
-				rotationChart: ['', ''], //轮播图
-				advertisingMap: ['', '', ''], //广告图
-				information: ['振兴乡村来啦！11月1日试运行！快来体验吧！'], //新闻列表
+				rotationChart: [], //轮播图
+				advertisingMap: [], //公开项目
+				information: [], //新闻列表
 				protocolStatus: false, //隐藏弹出层，f为不弹，t为弹
 				upgradeStatus: false, //升级弹出层，f为不弹，t为弹
 				currentDate: '', //当前时间
@@ -122,31 +121,7 @@
 								3. 新增压窗屏组件，可以在APP上以弹窗的形式遮盖导航栏和底部tabbar<br>
 								4. 修复键盘组件在微信小程序上遮罩无效的问题
 								`,
-				quickEntryData: [{
-					title: '武夷山',
-					ticketEnglish : 'Wuyishan',
-					image: '../../static/home/temporary/xianlu.png'
-				}, {
-					title: '芒荡山',
-					ticketEnglish : 'Mangdangshan',
-					image: '../../static/home/temporary/xianlu.png'
-				},{
-					title: '华阳山',
-					ticketEnglish : 'Huayangshan',
-					image: '../../static/home/temporary/xianlu.png'
-				},{
-					title: '青龙瀑布',
-					ticketEnglish : 'Qinglongpubu',
-					image: '../../static/home/temporary/xianlu.png'
-				},{
-					title: '溪源峡谷',
-					ticketEnglish : 'Xiyuanxiagu',
-					image: '../../static/home/temporary/xianlu.png'
-				},{
-					title: '花花世界',
-					ticketEnglish : 'Huahuashijie',
-					image: '../../static/home/temporary/xianlu.png'
-				}], //快捷入口数据
+				quickEntryData: [], //乡村美景数组
 				
 				functionArray: [{
 					array: [{
@@ -194,16 +169,24 @@
 		},
 
 		methods: {
-			//加载数据
+			//加载数据  
 			loadData: function() {
+				//轮播图
 				uni.request({
-					url: this.$home.KyInterface.GetRotationChart.Url,
-					method: this.$home.KyInterface.GetRotationChart.method,
+					url: this.$home.KyInterface.getImage.Url,
+					method: this.$home.KyInterface.getImage.method,
+					data:{
+						type : '1' 
+					},
 					success: (res) => {
-						console.log('轮播区', res)
-						this.rotationChart = res.data.data.filter(item => {
-							return item.Type == '首页轮播图';
-						})
+						// console.log('轮播区', res)
+						if(res.data.data.length >= 2){
+							for(var i =0; i<res.data.data.length; i++){
+								this.rotationChart.push(res.data.data[i].image)
+							}
+						}else{
+							this.rotationChart.push(res.data.data.image)
+						}
 						// console.log(this.rotationChart)
 					},
 					fail: function() {
@@ -213,27 +196,55 @@
 						})
 					}
 				})
-
-
+				
+				//跑马灯
 				uni.request({
-					url: this.$home.KyInterface.GetHomeStyle.Url,
-					method: this.$home.KyInterface.GetHomeStyle.method,
+					url: this.$home.KyInterface.getMarquee.Url,
+					method: this.$home.KyInterface.getMarquee.method,
+					data:{
+						location : '首页'
+					},
 					success: (res) => {
-						// console.log('广告区',res)
-						this.advertisingMap = [];
-						for (let i = 0; i < res.data.data.length; i++) {
-							var a = {
-								AID: res.data.data[i].AID,
-								ShowImageURL: res.data.data[i].ShowImageURL,
-								title: res.data.data[i].Title,
-							}
-							this.advertisingMap.push(a);
-						}
+						console.log('跑马灯',res)
+						this.information = [];
+						this.information.push(res.data.data.content)
 						// console.log(this.rotationChart)
 					},
 					fail: function() {
 						uni.showToast({
-							title: '首页广告图网络加载异常',
+							title: '跑马灯内容加载异常',
+							icon: 'none'
+						})
+					}
+				})
+				
+				//乡村美景
+				uni.request({
+					url: this.$home.KyInterface.getEconomy.Url,
+					method: this.$home.KyInterface.getEconomy.method,
+					success: (res) => {
+						console.log('乡村美景',res)
+						this.quickEntryData = res.data.data;
+					},
+					fail: function() {
+						uni.showToast({
+							title: '乡村美景网络加载异常',
+							icon: 'none'
+						})
+					}
+				})
+				
+				//乡村美景
+				uni.request({
+					url: this.$home.KyInterface.getProject.Url,
+					method: this.$home.KyInterface.getProject.method,
+					success: (res) => {
+						console.log('公开项目',res)
+						this.advertisingMap = res.data.data;;
+					},
+					fail: function() {
+						uni.showToast({
+							title: '乡村美景网络加载异常',
 							icon: 'none'
 						})
 					}
@@ -295,7 +306,22 @@
 					url: this.$GrzxInter.Route.privacyService.url + '?title=隐私政策',
 				})
 			},
-
+			
+			//页面跳转
+			navigateToClick:function(index,e){
+				console.log(index)
+				console.log(e)
+				if(index == 0){
+					uni.navigateTo({
+						url:'../../pages_SMJJ/pages/shuimeiEconomy/se_detailsPage?id=' +e,
+					})
+				}else if(index == 1){
+					uni.navigateTo({
+						url: 'pages_FBRCP/pages/agricultureProducts/ap_details?id=' +e,
+					})
+				}
+				
+			},
 			// #ifdef MP-WEIXIN
 			getLoginState() {
 				uni.getStorage({
@@ -501,16 +527,11 @@
 			color: #fff;
 			max-width: 192upx;
 			margin-left: 24upx;
-			margin-top: -106upx;
+			margin-top: -74upx;
 	
 			.sixText1 {
 				font-weight: bold;
 				font-size: 30upx;
-			}
-	
-			.sixText2 {
-				display: block;
-				font-size: 24upx;
 			}
 		}
 	}

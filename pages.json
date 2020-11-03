@@ -599,7 +599,9 @@
 					"style": {}
 				}, {
 					"path": "pages/shuimeiEconomy/se_detailsPage",
-					"style": {}
+					"style": {
+						"navigationStyle": "custom"
+					}
 				}, {
 					"path": "pages/shuimeiEconomy/se_generalList",
 					"style": {}
