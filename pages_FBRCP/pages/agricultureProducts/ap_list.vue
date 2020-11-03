@@ -1,9 +1,7 @@
 <template>
 	<view>
-		
-		<view v-if="groupTitle == ''" style="margin-top: 400upx;">
-			<u-empty text="暂无列表数据哦~" mode="list"></u-empty>
-		</view>
+		<!-- 头部切换栏 -->
+		<u-tabs :list="headList" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
 		
 		<!-- 内容1 -->
 		<view v-if="groupTitle !== ''" class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
@@ -33,7 +31,7 @@
 				<text>{{item.nick_name}}</text>
 				<text class="cont_text">{{item.view}}人看过</text>
 				<text class="cont_text">{{informationDate(item.update_time)}}</text>
-				<text class="cont_icon" style="color: #FC4646;">￥{{item.price}}</text>
+				<text class="cont_icon" style="color: #FF9012;">￥{{item.price}}</text>
 				<!-- <u-icon class="cont_icon" name="more-dot-fill"></u-icon> -->
 			</view>
 			<u-gap height="4" bg-color="#f9f9f9"></u-gap>
@@ -58,7 +56,7 @@
 		</view>
 		
 		<!-- 缺省提示 -->
-		<view style="margin-top: 360upx;" :hidden="listStatusIndex !==0">
+		<view style="margin-top: 360upx;" v-if="groupTitle.length==0">
 			<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
 		</view>
 	</view>
@@ -68,6 +66,16 @@
 	export default {
 		data() {
 			return {
+				headList: [{
+					name: '全部'
+				},{
+					name: '发布中'
+				},{
+					name: '未发布'
+				},{
+					name: '待审核'
+				}], //头部数组
+				headCurrent: 0, //头部tabs下标
 				customStyle: { //button样式
 					paddingTop: '25px',
 					paddingBottom: '25px',
@@ -121,7 +129,7 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						console.log('获取个人信息',this.userInfo)
-						this.ycydData(this.userInfo);
+						this.ycydData();
 					}
 				});
 			},
@@ -144,8 +152,17 @@
 				return a;
 			},
 			
+			//----------------------点击tab切换----------------------------
+			headChange: function(e) {
+				this.headCurrent = e;
+				uni.showLoading({
+					title: '加载信息中...'
+				})
+				this.ycydData(e);
+			},
+			
 			//----------------------列表接口--------------------------------
-			ycydData:function(e){
+			ycydData:function(){
 				uni.showLoading({
 					title: '加载列表中...',
 				})
@@ -153,12 +170,27 @@
 					url:this.$fbrcp.KyInterface.getProductByUserID.Url,
 					method:this.$fbrcp.KyInterface.getProductByUserID.method,
 					data:{
-						userId:e.userId
+						userId:this.userInfo.userId
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.groupTitle=res.data.data;
+							this.informationList = '';
+							if (this.headCurrent == 0) {
+								this.groupTitle = res.data.data
+							}else if (this.headCurrent == 1){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.state == '已上架';
+								})
+							}else if (this.headCurrent == 2){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.state == '已下架'
+								})
+							}else if (this.headCurrent == 3){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.state == '审核中'
+								})
+							}
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
@@ -223,19 +255,20 @@
 				console.log('111',item)
 				console.log('222',e)
 				uni.showModal({
-					title: '你确认发布文章？',
+					title: '确认审核？',
 					success: (res) => {
 						console.log(res)
 						if (res.confirm == true) {
 							uni.showLoading({
-								title: '正在发布....'
+								title: '审核中....'
 							})
 							uni.request({
 								url: this.$fbrcp.KyInterface.auditProduct.Url,
 								method: this.$fbrcp.KyInterface.auditProduct.method,
 								data: {
 									id: item.id,
-									userId:item.user_id,
+									userId: 100006,
+									// userId:item.user_id,
 									state:e
 								},
 								success: (res) => {
@@ -498,19 +531,23 @@
 						-webkit-box-orient: vertical;
 					}
 				}
+				
+				.tv_view3{
+					font-size: 28upx;
+				}
 			}
 			
 			
 			.tv_image{
 				width: 220upx; 
-				height: 160upx; 
+				height: 150upx; 
 				border-radius: 8upx;
 			}
 		}
 		.view_contentView{
 			font-size: 24upx; 
 			color: #AAAAAA; 
-			padding: 19upx 0; 
+			padding: 10upx 0 19upx 0; 
 			.cont_text{
 				margin-left: 20upx;
 			}

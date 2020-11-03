@@ -24,7 +24,7 @@
 			<view class="view_contentView">
 				<text>{{item.nick_name}}</text>
 				<text class="cont_text">{{item.count}}人看过</text>
-				<text class="cont_text">{{informationDate(item.update_time)}}</text>
+				<text class="cont_text">{{informationDate(item.create_time)}}</text>
 				<text class="cont_icon" style="color: #007AFF;" v-if="item.state=='已上架'">发布中</text>
 				<text class="cont_icon" style="color: #FC4646;" v-if="item.state=='已下架'">未发布</text>
 				<!-- <u-icon class="cont_icon" name="more-dot-fill"></u-icon> -->
@@ -163,6 +163,7 @@
 				uni.showLoading({
 					title: '加载列表中...',
 				})
+				this.groupTitle = [];
 				uni.request({
 					url:this.$ycyd.KyInterface.getArchivesByUserID.Url,
 					method:this.$ycyd.KyInterface.getArchivesByUserID.method,
@@ -172,7 +173,6 @@
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.informationList = '';
 							if (this.headCurrent == 0) {
 								this.groupTitle = res.data.data
 							}else if (this.headCurrent == 1){

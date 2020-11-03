@@ -25,7 +25,7 @@
 				<view class="view_contentView">
 					<text>{{item.nick_name}}</text>
 					<text class="cont_text">{{item.count}}人看过</text>
-					<text class="cont_text">{{informationDate(item.update_time)}}</text>
+					<text class="cont_text">{{informationDate(item.create_time)}}</text>
 					<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
 				</view>
 				<u-gap height="4" bg-color="#f9f9f9"></u-gap>
@@ -124,13 +124,16 @@
 			
 			//----------------------列表接口--------------------------------
 			ycydData:function(){
+				uni.showLoading({
+					title: '加载列表中...',
+				})
+				this.groupTitle = [];
 				uni.request({
 					url:this.$ycyd.KyInterface.getArchives.Url,
 					method:this.$ycyd.KyInterface.getArchives.method,
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.informationList = '';
 							if (this.headCurrent == 0) {
 								this.groupTitle = res.data.data
 							}else if (this.headCurrent == 1){

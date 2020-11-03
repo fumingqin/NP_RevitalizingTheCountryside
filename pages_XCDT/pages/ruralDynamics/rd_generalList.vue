@@ -27,8 +27,12 @@
 				</view>
 				<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 			</view>
-			<view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
+			<!-- <view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
+			</view> -->
+			<!-- 缺省提示 -->
+			<view style="margin-top: 360upx;" v-if="groupTitle.length==0">
+				<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
 			</view>
 		</view>
 	</view>
@@ -41,13 +45,13 @@
 				groupTitle:[],
 				selectId:'',//去出id
 				selectIndex:0,//下标
-				loadingType: 0, //加载更多状态
-				loadingText:{
-					down :'上拉加载更多',
-					refresh : '正在加载...',
-					nomore : '没有更多了',
-				},
-				scenicListIndex:5,//列表默认数量
+				// loadingType: 0, //加载更多状态
+				// loadingText:{
+				// 	down :'上拉加载更多',
+				// 	refresh : '正在加载...',
+				// 	nomore : '没有更多了',
+				// },
+				// scenicListIndex:5,//列表默认数量
 			}
 		},
 		
@@ -65,9 +69,9 @@
 			this.ycydData();
 		},
 		
-		onReachBottom() {
-			this.getMore();
-		},
+		// onReachBottom() {
+		// 	this.getMore();
+		// },
 		
 		methods: {
 			//--------------------点击列表事件------------------------------
@@ -81,17 +85,26 @@
 			},
 			
 			//----------------------加载更多--------------------------------
-			getMore(){
-				this.loadingType = 1;
+			// getMore(){
+			// 	this.loadingType = 1;
 				
-				if(this.scenicListIndex < this.groupTitle.length){
-					var a = this.scenicListIndex +6;
-					this.scenicListIndex = a;
-					this.loadingType = 0;
-				}
-				if(this.scenicListIndex >= this.groupTitle.length){
-					this.loadingType = 2;
-				}
+			// 	if(this.scenicListIndex < this.groupTitle.length){
+			// 		var a = this.scenicListIndex +6;
+			// 		this.scenicListIndex = a;
+			// 		this.loadingType = 0;
+			// 	}
+			// 	if(this.scenicListIndex >= this.groupTitle.length){
+			// 		this.loadingType = 2;
+			// 	}
+			// },
+			
+			//----------------------点击tab切换----------------------------
+			headChange: function(e) {
+				this.headCurrent = e;
+				uni.showLoading({
+					title: '加载信息中...'
+				})
+				this.ycydData(e);
 			},
 			
 			//----------------------列表接口--------------------------------
@@ -102,7 +115,7 @@
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.groupTitle=res.data.data;
+							this.groupTitle = res.data.data
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
