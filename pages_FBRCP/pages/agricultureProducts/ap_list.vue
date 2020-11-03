@@ -49,8 +49,7 @@
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='审核中'" @click="underReview(groupTitle[selectIndex],0)">审核通过</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='审核中'" @click="underReview(groupTitle[selectIndex],1)">审核失败</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已下架'" @click="onTheShelf(groupTitle[selectIndex].id)">发布</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'" @click="offTheShelf(groupTitle[selectIndex].id)">下架</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">{{release}}</u-button>
 				</scroll-view>
 			</view>
 		</view>
@@ -100,6 +99,7 @@
 				scenicListIndex:5,//列表默认数量
 				userInfo:[],
 				state:'修改',
+				release:'',
 			}
 		},
 		
@@ -138,6 +138,7 @@
 			selectClick:function(e){
 				//给选择的下标赋值
 				this.selectIndex = e;
+				this.release=this.groupTitle[e].state=='已上架'?'下架':'发布';
 				console.log('上车点下标赋值',this.selectIndex)
 				//取出id
 				// this.selectId = this.groupTitle[e].id;
@@ -191,6 +192,7 @@
 									return item.state == '审核中'
 								})
 							}
+							this.release=this.groupTitle[0].state=='已上架'?'下架':'发布';
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();

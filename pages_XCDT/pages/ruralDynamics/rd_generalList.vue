@@ -55,11 +55,15 @@
 			}
 		},
 		
-		onLoad() {
+		onShow() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
 			this.ycydData();
+		},
+		
+		onUnload() {
+			uni.hideLoading();
 		},
 		
 		onPullDownRefresh: function() {

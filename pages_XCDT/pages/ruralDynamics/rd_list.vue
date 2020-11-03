@@ -39,8 +39,7 @@
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已下架'" @click="onTheShelf(groupTitle[selectIndex].id)">发布</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'" @click="offTheShelf(groupTitle[selectIndex].id)">下架</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">{{release}}</u-button>
 				</scroll-view>
 			</view>
 		</view>
@@ -89,6 +88,7 @@
 				scenicListIndex:5,//列表默认数量
 				userInfo:[],
 				state:'修改',
+				release:'',
 			}
 		},
 		
@@ -97,6 +97,10 @@
 				title: '加载列表中...',
 			})
 			this.userData();
+		},
+		
+		onUnload() {
+			uni.hideLoading();
 		},
 		
 		onPullDownRefresh: function() {
@@ -127,6 +131,7 @@
 			selectClick:function(e){
 				//给选择的下标赋值
 				this.selectIndex = e;
+				this.release=this.groupTitle[e].state=='已上架'?'下架':'发布';
 				console.log('上车点下标赋值',this.selectIndex)
 				//取出id
 				// this.selectId = this.groupTitle[e].id;
@@ -177,6 +182,7 @@
 									return item.state == '已下架'
 								})
 							}
+							this.release=this.groupTitle[0].state=='已上架'?'下架':'发布';
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
@@ -265,57 +271,6 @@
 										uni.hideLoading()
 										uni.showToast({
 											title: '发布失败',
-											icon: 'success'
-										})
-										uni.startPullDownRefresh();
-									}
-			
-								},
-								fail: () => {
-									uni.hideLoading()
-									uni.showToast({
-										title: '服务器异常，请重试',
-										icon: 'success'
-									})
-									uni.startPullDownRefresh();
-								}
-							})
-						} else {
-			
-						}
-					}
-				})
-			},
-			
-			//-----------------------下架------------------------------------
-			offTheShelf: function(e) {
-				uni.showModal({
-					title: '你确认下架文章？',
-					success: (res) => {
-						console.log(res)
-						if (res.confirm == true) {
-							uni.showLoading({
-								title: '正在下架....'
-							})
-							uni.request({
-								url: this.$xcdt.KyInterface.upAndDown.Url,
-								method: this.$xcdt.KyInterface.upAndDown.method,
-								data: {
-									id: e
-								},
-								success: (res) => {
-									console.log(res)
-									if (res.data.status == true) {
-										uni.hideLoading()
-										uni.showToast({
-											title: '下架成功',
-											icon: 'success'
-										})
-										uni.startPullDownRefresh();
-									} else {
-										uni.hideLoading()
-										uni.showToast({
-											title: '下架失败',
 											icon: 'success'
 										})
 										uni.startPullDownRefresh();

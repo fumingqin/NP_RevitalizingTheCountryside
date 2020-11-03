@@ -106,6 +106,10 @@
 			this.userData();
 		},
 		
+		onUnload() {
+			uni.hideLoading();
+		},
+		
 		onPullDownRefresh: function() {
 			uni.showLoading({
 				title: '加载列表中...',

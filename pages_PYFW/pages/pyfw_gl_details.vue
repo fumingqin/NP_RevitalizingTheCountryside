@@ -20,7 +20,7 @@
 		<view class="deta_view">
 			<view class="deta_title">特派员信息</view>
 			<view class="deta_text"><text>姓名：</text>{{managerData(stepsData.manager_name)}}</view>
-			<view class="deta_text"><text>电话：</text>{{managerData(stepsData.manager_number)}}</view>
+			<view class="deta_text"><text>电话：</text>{{managerData(stepsData.manager_telephone)}}</view>
 			<view class="deta_text"><text>技术类型：</text>{{managerData(stepsData.manager_technologyType)}}</view>
 			<view class="deta_text"><text>擅长内容：</text>{{managerData(stepsData.manager_goodType)}}</view>
 		</view>

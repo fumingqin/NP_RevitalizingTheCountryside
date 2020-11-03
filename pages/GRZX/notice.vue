@@ -1,13 +1,13 @@
 <template>
 	<view> 
 		<view v-for="(item, index) in tweetArticle" :key="index" class="boxClass">
-			<view class="timeClass">{{formatTime(item.CreateTime)}}</view>
+			<view class="timeClass">{{item.create_time}}</view>
 			<view class="boxClass1" @click="selete(item)">
-				<view class="titleClass generalStyle">{{item.Title}}</view>
+				<view class="titleClass generalStyle">{{item.title}}</view>
 				<view class="imgClass generalStyle">
-					<image :src="item.ImageUrl" style="width: 100%;" mode="widthFix" role="img"></image>
+					<image :src="item.image" style="width: 100%;" mode="widthFix" role="img"></image>
 				</view>
-				<!-- <view class="textClass generalStyle">{{item.ContentDetail}}</view> -->
+				<!-- <rich-text class="textClass generalStyle" :nodes="item.content"></rich-text> -->
 				<view class="detailClass generalStyle">
 					<text class="detailText">查看详情</text>
 					<text class="more-icon jdticon icon-you"></text>
@@ -35,19 +35,17 @@
 			loadData:function(){
 				var that = this;
 				uni.request({
-					url:this.$home.KyInterface.GetNews.Url,
-					method:this.$home.KyInterface.GetNews.method,
+					url:this.$home.KyInterface.getNotice.Url,
+					method:this.$home.KyInterface.getNotice.method,
 					success:(res)=>{
-						// console.log('新闻资讯',res)
-						this.tweetArticle = res.data.data.filter(item =>{
-							return item.Type == '通知公告';
-						})
-						console.log(this.tweetArticle)
+						// console.log('公告通知',res)
+						this.tweetArticle = res.data.data;
+						// console.log(this.tweetArticle)
 					},
 					fail:function(err){
 						console.log(err)
 						uni.showToast({
-							title:'新闻资讯加载异常',
+							title:'公告通知',
 							icon:'none'
 						})
 					}
@@ -65,15 +63,6 @@
 				})
 			},
 			
-			//--------------------时间格式化--------------------
-			formatTime: function(time) {
-				var dateTime = time.replace('T', ' ').slice(0,16);
-				if (dateTime.indexOf('1900') > -1) {
-					return '';
-				} else {
-					return dateTime;
-				}
-			},
 		}
 		
 	}
