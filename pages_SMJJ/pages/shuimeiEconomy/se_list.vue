@@ -1,5 +1,7 @@
 <template>
 	<view>
+		<!-- 头部切换栏 -->
+		<u-tabs :list="headList" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
 		
 		<view v-if="groupTitle == ''" style="margin-top: 400upx;">
 			<u-empty text="暂无列表数据哦~" mode="list"></u-empty>
@@ -58,6 +60,14 @@
 	export default {
 		data() {
 			return {
+				headList: [{
+					name: '全部'
+				},{
+					name: '发布中'
+				},{
+					name: '未发布'
+				}], //头部数组
+				headCurrent: 0, //头部tabs下标
 				customStyle: { //button样式
 					paddingTop: '25px',
 					paddingBottom: '25px',
@@ -111,7 +121,7 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						console.log('获取个人信息',this.userInfo)
-						this.ycydData(this.userInfo);
+						this.ycydData();
 					}
 				});
 			},
@@ -134,6 +144,15 @@
 				return a;
 			},
 			
+			//----------------------点击tab切换----------------------------
+			headChange: function(e) {
+				this.headCurrent = e;
+				uni.showLoading({
+					title: '加载信息中...'
+				})
+				this.ycydData(e);
+			},
+			
 			//----------------------列表接口--------------------------------
 			ycydData:function(e){
 				uni.showLoading({
@@ -143,12 +162,23 @@
 					url:this.$smjj.KyInterface.getEconomyByUserID.Url,
 					method:this.$smjj.KyInterface.getEconomyByUserID.method,
 					data:{
-						userId:e.userId
+						userId:this.userInfo.userId
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.groupTitle=res.data.data;
+							this.informationList = '';
+							if (this.headCurrent == 0) {
+								this.groupTitle = res.data.data
+							}else if (this.headCurrent == 1){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.state == '已上架';
+								})
+							}else if (this.headCurrent == 2){
+								this.groupTitle = res.data.data.filter(item => {
+									return item.state == '已下架'
+								})
+							}
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();

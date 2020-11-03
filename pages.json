@@ -557,7 +557,9 @@
 				}
 				,{
 				    "path" : "pages/ruralDynamics/rd_generalList",
-				    "style" : {}
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
 				}
 			]
 		},
@@ -587,7 +589,9 @@
 				}
 				,{
 				    "path" : "pages/ecologicalBank/eb_generalList",
-				    "style" : {}
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
 				}
 			]
 		},
@@ -617,7 +621,9 @@
 				}
 				,{
 				    "path" : "pages/shuimeiEconomy/se_generalList",
-				    "style" : {}
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
 				}
 			]
 		},
@@ -639,7 +645,9 @@
 				}
 				,{
 				    "path" : "pages/publicFeedback/pf_personalList",
-				    "style" : {}
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
 				}
 				,{
 				    "path" : "pages/publicFeedback/pf_details",
@@ -673,7 +681,9 @@
 				}
 				,{
 				    "path" : "pages/agricultureProducts/ap_personalList",
-				    "style" : {}
+				    "style" : {
+						"enablePullDownRefresh":true
+					}
 				}
 			]
 		},

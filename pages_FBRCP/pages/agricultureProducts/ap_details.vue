@@ -26,30 +26,10 @@
 			</view>
 			
 			<view class="u-content">
-				
-				<!-- 顶部滑动 -->
-				<view class="screen">
-					<view class="screenView">
-						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)"> 
-							项目介绍
-						</view>
-						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
-							相关文件
-						</view>
-					</view>
-				</view>
-				
-				<u-read-more v-if="type==0" :toggle="toggle" :show-height="showHeight">
+				<view style="font-size: 30upx;padding-left: 20upx;padding-top: 50upx;">来源地：{{groupTitle.origin_region}}</view>
+				<u-read-more>
 					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 				</u-read-more>
-				
-				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
-				</u-read-more>
-				
-				<!-- <view>
-					<video id="myVideo" :src="groupTitle." enable-danmu danmu-btn controls></video>
-				</view> -->
 			</view>
 		</view>
 	</view>

@@ -259,7 +259,6 @@
 				lists: [],
 				fileList:[],
 				category: 'video',
-				videoData: '',
 				videoArray:[],
 				selectList: [{
 						value: '村容村貌',
@@ -313,7 +312,6 @@
 						});
 					}
 				})
-
 			}
 		},
 		methods: {
@@ -337,10 +335,9 @@
 					success: (data) => {
 						// console.log('修改信息列表', data.data)
 						this.informationDetail = data.data;
-						if(data.data.video !==null){
-							this.imageList.push(data.data.video)
+						if(data.data.video !== null){
+							this.imageList.push(data.data.video[0])	
 						}
-						
 						console.log(this.videoData)
 						this.issueText2 = data.data.content;
 						this.model.name = data.data.title;
@@ -519,14 +516,6 @@
 			//---------------------------上传视频回调-------------------------------
 			successvideo: function(e) {
 				console.log(e)
-				// console.log('未插入',this.imageList)
-				// var a = [{
-				// 	data : ''
-				// }];
-				// var data = JSON.parse(e.data);
-				// a[0].data = data.data;
-				// this.imageList = a
-				// console.log('已插入', this.imageList)
 				console.log('未插入',this.imageList)
 				var a = [];
 				var data = JSON.parse(e.data);
@@ -597,20 +586,6 @@
 				})
 				
 				console.log(this.imageList)	
-				
-				// if(this.videoData.data !== this.informationDetail.video){
-				// 	var arr = [];
-				// 	arr.push(this.videoData.data);
-					
-				// }else if(this.informationDetail.video!=='null'){
-					
-				// 	var arr = this.informationDetail.video;
-					
-				// }
-				// console.log('6', this.informationDetail.video);
-				// console.log('7', arr);
-				
-				
 				// console.log('1', e);
 				// console.log('2', this.userInfo.userId);
 				// console.log('3', this.pictureArray);
@@ -624,102 +599,54 @@
 					if (valid) {
 						// uni.hideLoading();
 						console.log('验证通过');
-						if (this.jumpStatus == '修改') {
-							if (this.issueText !== '<p><br></p>') {
-								uni.request({
-									url: this.$xcdt.KyInterface.editDynamic.Url,
-									method: this.$xcdt.KyInterface.editDynamic.method,
-									data: {
-										id: this.informationDetail.id,
-										userId: this.userInfo.userId,
-										content: e,
-										image: JSON.stringify(this.pictureArray),	
-										title: this.model.name,
-										video: JSON.stringify(this.imageList)
-									},
-									success: (res) => {
-										console.log(res, "请求完接口");
-										if (res.data.status == true) {
-											uni.showToast({
-												title: res.data.msg,
-											})
-											setTimeout(function() {
-												uni.navigateBack();
-												this.pictureArray=[];
-												this.fileList = [];
-												this.lists = [];
-											}, 1000)
-										} else {
-											uni.showToast({
-												title: res.data.msg,
-												icon: 'none',
-											})
-										}
-									},
-									fail: () => {
+						if (this.issueText !== '<p><br></p>') {
+							uni.request({
+								url: this.$xcdt.KyInterface.editDynamic.Url,
+								method: this.$xcdt.KyInterface.editDynamic.method,
+								data: {
+									id: this.informationDetail.id,
+									userId: this.userInfo.userId,
+									content: e,
+									image: JSON.stringify(this.pictureArray),	
+									title: this.model.name,
+									video: JSON.stringify(this.imageList)
+								},
+								success: (res) => {
+									console.log(res, "请求完接口");
+									if (res.data.status == true) {
 										uni.showToast({
-											title: '提交失败',
+											title: res.data.msg,
+										})
+										setTimeout(function() {
+											uni.navigateBack();
+											this.pictureArray=[];
+											this.fileList = [];
+											this.lists = [];
+										}, 1000)
+									} else {
+										uni.showToast({
+											title: res.data.msg,
 											icon: 'none',
 										})
-									},
-									complete: () => {
-										setTimeout(function() {
-											uni.hideLoading();
-										}, 800)
 									}
-								});
-							} else {
-								uni.showToast({
-									title: '提交失败,请编辑文章内容',
-									icon: 'none',
-								})
-							}
+								},
+								fail: () => {
+									uni.showToast({
+										title: '提交失败',
+										icon: 'none',
+									})
+								},
+								complete: () => {
+									setTimeout(function() {
+										uni.hideLoading();
+									}, 800)
+								}
+							});
 						} else {
-							if (this.issueText !== '<p><br></p>') {
-								uni.request({
-									url: this.$xcdt.KyInterface.releaseDynamic.Url,
-									method: this.$xcdt.KyInterface.releaseDynamic.method,
-									data: {
-										userId: this.userInfo.userId,
-										content: this.issueText,
-										image: JSON.stringify(this.lists.response.data),
-										title: this.model.name,
-										video: JSON.stringify(this.imageList)
-									},
-									success: (res) => {
-										console.log(res, "请求完接口");
-										if (res.data.status) {
-											uni.showToast({
-												title: res.data.msg,
-											})
-											setTimeout(function() {
-												uni.navigateBack();
-											}, 1000)
-										} else {
-											uni.showToast({
-												title: res.data.msg,
-												icon: 'none',
-											})
-										}
-									},
-									fail: () => {
-										uni.showToast({
-											title: '提交失败',
-											icon: 'none',
-										})
-									},
-									complete: () => {
-										setTimeout(function() {
-											uni.hideLoading();
-										}, 800)
-									}
-								});
-							} else {
-								uni.showToast({
-									title: '提交失败,请编辑文章内容',
-									icon: 'none',
-								})
-							}
+							uni.showToast({
+								title: '提交失败,请编辑文章内容',
+								icon: 'none',
+							})
 						}
 					} else {
 						uni.hideLoading();

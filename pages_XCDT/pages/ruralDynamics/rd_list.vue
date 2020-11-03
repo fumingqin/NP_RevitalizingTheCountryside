@@ -46,7 +46,7 @@
 		</view>
 		
 		<!-- 缺省提示 -->
-		<view style="margin-top: 360upx;" v-if="groupTitle.length==0">
+		<view style="margin-top: 360upx;" v-if="groupTitle.length==0 || groupTitle ==''">
 			<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
 		</view>
 	</view>

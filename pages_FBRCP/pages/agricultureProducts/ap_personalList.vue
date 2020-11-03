@@ -4,42 +4,32 @@
 		<view>
 			<view class="infor_view" v-for="(item,index) in groupTitle" :key="index" @click="routeJump(item.id)">
 				<view class="view_titleView">
+					<image class="tv_image" :src="item.image" mode="aspectFill"></image>
 					<view class="tv_view">
 						<view style="display: flex;">
 							<view style="display: flex;">
-								<view style="margin-top: 10upx;" v-if="item.state=='已上架'">
-									<text class="tv_label" style="background: #007AFF;">发布中</text>
-								</view>
-								<view style="margin-top: 10upx;" v-if="item.state=='已下架'">
-									<text class="tv_label" style="background: #FC4646;">未发布</text>
-								</view>
-								<view style="margin-top: 10upx;" v-if="item.state=='审核中'">
-									<text class="tv_label" style="background: #FC4646;">待审核</text>
-								</view>
 								<view class="tv_title">{{item.name}}</view>
 							</view>
-							<!-- <view class="tv_title">{{item.title}}</view> -->
 						</view>
-						<!-- <text class="tv_richText">{{item.content}}</text> -->
 						<view class="tv_view2">
 							<rich-text class="tv_richText" :nodes="item.content"></rich-text>
+							<view class="view_contentView2">
+								<text class="tv_view3">来源地:{{item.origin_region}}</text>
+								<text class="cont_icon" style="color: #FF9012;">￥{{item.price}}</text>
+							</view>
 						</view>
 					</view>
-					<image class="tv_image" :src="item.image" mode="aspectFill"></image>
 				</view>
-				
 				<view class="view_contentView">
 					<text>{{item.nick_name}}</text>
 					<text class="cont_text">{{item.view}}人看过</text>
 					<text class="cont_text">{{informationDate(item.update_time)}}</text>
-					<text class="cont_icon" style="color: #FC4646;">￥{{item.price}}</text>
-					<!-- <u-icon class="cont_icon" name="more-dot-fill"></u-icon> -->
 				</view>
 				<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 			</view>
-			<view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
+			<!-- <view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -174,6 +164,12 @@
 		margin-top: 32upx;
 		.view_titleView{
 			display: flex;
+			
+			.tv_image{
+				width: 220upx; 
+				height: 192upx; 
+				border-radius: 8upx;
+			}
 			.tv_view{
 				// display: flex;
 				// padding-right: 32upx; 
@@ -189,24 +185,24 @@
 				.tv_title{
 					position: relative;
 					font-weight: bold; 
-					font-size: 34upx; 
-					margin-left: 12upx; 
+					font-size: 32upx; 
 					line-height: 1.7;
 					width: 320upx;
+					padding-left: 16upx;
 					white-space: nowrap;
 					overflow: hidden;
 				}
 				
 				.tv_view2{
 					display: block;
-					padding-top: 10upx;
 					position: relative;
 					
 					.tv_richText{
-						padding-right: 16upx;
+						padding-left: 16upx;
+						color: #2C2D2D;
 						width: 454upx;
 						// font-weight: bold;
-						font-size: 30upx; 
+						font-size: 28upx; 
 						line-height: 1.7;
 						height: 100upx;
 						text-overflow: -o-ellipsis-lastline;
@@ -217,26 +213,33 @@
 						-webkit-box-orient: vertical;
 					}
 				}
-			}
-			
-			
-			.tv_image{
-				width: 220upx; 
-				height: 160upx; 
-				border-radius: 8upx;
+				
 			}
 		}
-		.view_contentView{
-			font-size: 24upx; 
-			color: #AAAAAA; 
-			padding: 22upx 0; 
-			.cont_text{
-				margin-left: 20upx;
-			}
-			.cont_icon{
-				float: right;
-				font-size: 28upx;
-			}
+	}
+	
+	.view_contentView{
+		font-size: 28upx; 
+		color: #AAAAAA; 
+		padding: 16upx 0 16upx 0; 
+		.cont_text{
+			margin-left: 20upx;
+		}
+	}
+	
+	.view_contentView2{
+		padding: 0 0 0 16upx; 
+		
+		.tv_view3{
+			font-size: 24upx;
+			background: #007AFF;
+			color: #FFFFFF; 
+			border-radius: 4upx;
+			padding: 4upx 10upx;
+		}
+		.cont_icon{
+			padding-left: 16upx;
+			font-size: 28upx;
 		}
 	}
 	

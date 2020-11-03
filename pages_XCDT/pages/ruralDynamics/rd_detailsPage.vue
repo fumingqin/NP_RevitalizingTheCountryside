@@ -44,12 +44,10 @@
 				</u-read-more>
 				
 				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+					<view>
+						<video id="myVideo" :src="groupTitle.video[0]" enable-danmu danmu-btn controls></video>
+					</view>
 				</u-read-more>
-				
-				<!-- <view>
-					<video id="myVideo" :src="groupTitle." enable-danmu danmu-btn controls></video>
-				</view> -->
 			</view>
 		</view>
 	</view>

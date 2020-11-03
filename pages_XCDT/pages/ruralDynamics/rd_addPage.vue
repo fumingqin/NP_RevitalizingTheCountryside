@@ -28,14 +28,11 @@
 				</u-form-item>
 
 				<!-- 上传视频 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
-				<view v-if="informationDetail.video!=='' || types!==0" style="display: flex;position: relative;width: 100%;">
-					<text style="position: absolute;width: :;upx;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 28upx;">{{informationDetail.video}}</text>
-					<text style="position: absolute;right: 0;color:#007AFF;font-size: 28upx;" @click="deleteVideo(0)">删除</text>
-				</view> -->
+				
 				<!-- 商品简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -43,7 +40,6 @@
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
 							 :placeholder="placeholder" @statuschange="onStatusChange" @ready="onEditorReady">
 							</editor>
-							
 						</view>
 
 						<view class="toolbar" @touchend.stop="format" :style="'bottom: ' + (isIOS ? keyboardHeight : 0) + 'px'">
@@ -511,22 +507,15 @@
 					title: '提交中...',
 					mask: true,
 				})
-				// console.log('1', this.issueText);
-				// console.log('2', this.userInfo.userId);
-				// console.log('3', this.pictureArray);
-				// console.log('4', this.model.name);
-				// console.log('5', this.model.goodsType);
-				// console.log('6', this.informationDetail.id);
-				if(this.informationDetail.video!==""){
-					var arr=[];
-					arr.push(this.informationDetail.video);
-				}else if(this.videoData.data!==this.informationDetail.video){
-					var arr=[];
-					arr.push(this.videoData.data);
-				}else if(this.types==0){
-					var arr=[];
-				}
+				var arr=[];
 				arr.push(this.videoData.data);
+				console.log('1', this.issueText);
+				console.log('2', this.userInfo.userId);
+				console.log('3', this.pictureArray);
+				console.log('4', this.model.name);
+				console.log('5', this.model.goodsType);
+				console.log('6', this.informationDetail.id);
+				console.log('7', arr);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -541,7 +530,7 @@
 									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,
-									// video: JSON.stringify(arr)
+									video: JSON.stringify(arr)
 								},
 								success: (res) => {
 									console.log(res, "请求完接口");
