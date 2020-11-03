@@ -29,7 +29,7 @@
 
 		<!-- banner区 -->
 		<view>
-			<image style="width: 100%; height: 164upx;" src="../../static/home/temporary/banner.png" mode="aspectFit"></image>
+			<image style="width: 100%; height: 164upx;" :src="bannerImage" mode="aspectFit"></image>
 		</view>
 
 		<!-- 小功能引导区 -->
@@ -71,18 +71,12 @@
 				</view>
 			</view>
 		</view>
-		
-		
-		
 
 		<!-- 公示项目 -->
 		<view class="gs_view">
 			<view class="gs_title">公示项目</view>
 			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" bg-color="#ffffff" @click="navigateToClick"></u-swiper>
 		</view>
-
-
-
 
 		<!-- 隐藏协议弹出 -->
 		<u-modal v-model="protocolStatus" :show-cancel-button="true" confirm-text="同意" title="服务协议和隐私政策" @confirm="agreeProtocol">
@@ -101,7 +95,6 @@
 				<rich-text :nodes="upgradeContent"></rich-text>
 			</view>
 		</u-modal>
-
 	</view>
 </template>
 
@@ -122,6 +115,7 @@
 								4. 修复键盘组件在微信小程序上遮罩无效的问题
 								`,
 				quickEntryData: [], //乡村美景数组
+				bannerImage : '',//首页banner图片
 				
 				functionArray: [{
 					array: [{
@@ -161,7 +155,7 @@
 				// this.protocolStatus = true;
 			}
 			this.loadData();
-			this.getTodayDate();
+			// this.getTodayDate();
 			// #ifdef MP-WEIXIN
 			// 校验小程序登录
 			// this.getLoginState();
@@ -192,6 +186,26 @@
 					fail: function() {
 						uni.showToast({
 							title: '首页轮播图网络加载异常',
+							icon: 'none'
+						})
+					}
+				})
+				
+				//banner图
+				uni.request({
+					url: this.$home.KyInterface.getImage.Url,
+					method: this.$home.KyInterface.getImage.method,
+					data:{
+						type : '2' 
+					},
+					success: (res) => {
+						console.log('banner', res)
+						this.bannerImage = res.data.data.image
+						// console.log(this.rotationChart)
+					},
+					fail: function() {
+						uni.showToast({
+							title: '首页banner加载异常',
 							icon: 'none'
 						})
 					}
