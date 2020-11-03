@@ -2,7 +2,7 @@
 	<view>
 		<!-- 顶部图片 -->
 		<view class="zl_topPicture">
-			<image class="zl_image" :src="imageIndex[0].imageUrl" mode="aspectFill"></image>
+			<!-- <image class="zl_image" :src="imageIndex[0].imageUrl" mode="aspectFill"></image> -->
 		</view>
 
 		<!-- 顶部点击跳转栏 -->
@@ -161,7 +161,7 @@
 					type:'旅游服务banner'
 				},
 				success:(res) => { 
-					// console.log(res)
+					console.log(res)
 					this.imageIndex = res.data.data
 					
 				},

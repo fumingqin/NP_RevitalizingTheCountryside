@@ -209,7 +209,7 @@
 			if(options.type=="edit"){
 				this.loadData(type);
 			}
-			this.loadText();//加载乘车人须知
+			//this.loadText();//加载乘车人须知
 		},
 		onUnload() {  //页面关闭时执行
 			//------------------清除editPassenger缓存----------------

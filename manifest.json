@@ -83,7 +83,8 @@
                         "UniversalLinks" : "https://zntc.145u.net/ulink/"
                     }
                 },
-                "geolocation" : {}
+                "geolocation" : {},
+                "ad" : {}
             },
             "icons" : {
                 "android" : {

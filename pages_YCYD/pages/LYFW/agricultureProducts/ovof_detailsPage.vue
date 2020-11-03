@@ -87,6 +87,10 @@
 			console.log(this.id)
 			this.loadData();
 		},
+		
+		onUnload() {
+			uni.hideLoading();
+		},
 
 		methods: {
 			//加载数据
