@@ -29,7 +29,7 @@
 
 		<!-- banner区 -->
 		<view>
-			<image style="width: 100%; height: 164upx;" :src="bannerImage" mode="aspectFit"></image>
+			<image style="width: 100%; height: 164upx;" :src="bannerImage" mode="aspectFill"></image>
 		</view>
 
 		<!-- 小功能引导区 -->
