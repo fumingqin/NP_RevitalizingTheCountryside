@@ -49,20 +49,20 @@
 		data() {
 			return {
 				imageIndex: '', //首页图片
-				level: 0, //0为普通用户，1为村级职责人员，2位县市级职责人员
+				level: 2, //0为普通用户，1为村级职责人员，2位县市级职责人员
 				userInfo: '', //用户数据
 
 				//普通用户管理区
 				ItemArr: [{
 					IsUse: true,
-					clickURL: "",
+					clickURL: "../../pages/home/ChooseSite",
 					ImageURL1: "../../static/home/serve/cct.png", //亮
 					ImageURL2: "../../static/home/serve/cct2.png", //暗
 					ItemTitle: "村村通",
 					style: "sv_print",
 				}, {
 					IsUse: true,
-					clickURL: "",
+					clickURL: "../../pages_LYFW/pages/LYFW/currency/ho_zhly",
 					ImageURL1: "../../static/home/serve/cpdg.png", //亮
 					ImageURL2: "../../static/home/serve/cpdg2.png", //暗
 					ItemTitle: "景区售票",
@@ -83,7 +83,7 @@
 					style: "sv_print",
 				}, {
 					IsUse: true,
-					clickURL: "/pages_BUS/pages/Bus/BusQuery",
+					clickURL: "../../pages_WSSC/pages/WSSC/goodsList",
 					ImageURL1: "../../static/home/serve/sc.png", //亮
 					ImageURL2: "../../static/home/serve/sc2.png", //暗
 					ItemTitle: "网上商城",
@@ -133,6 +133,14 @@
 					ImageURL2: "../../static/home/serve/sphy2.png", //暗
 					ItemTitle: "视频会议",
 					style: "sv_print",
+				},
+				{
+					IsUse: true,
+					clickURL: "../../pages_WSSC/pages/WSSC/checkGoods",
+					ImageURL1: "../../static/home/serve/sphy.png", //亮
+					ImageURL2: "../../static/home/serve/sphy2.png", //暗
+					ItemTitle: "审核商品",
+					style: "sv_print",
 				}],
 
 				//县市级管理区
@@ -143,13 +151,21 @@
 					ImageURL2: "../../static/home/serve/kjtpy2.png", //暗
 					ItemTitle: "特派审批",
 					style: "sv_print",
+				},
+				{
+					IsUse: true,
+					clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
+					ImageURL1: "../../static/home/serve/sphy.png", //亮
+					ImageURL2: "../../static/home/serve/sphy2.png", //暗
+					ItemTitle: "发布政策",
+					style: "sv_print",
 				}]
 
 			}
 		},
 		onLoad: function() {
 			this.loadData();
-			this.userData();
+			// this.userData();
 		},
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
