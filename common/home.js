@@ -39,10 +39,10 @@ const KyInterface = {
 		method:'POST',
 	}, 
 	
-	//--------------------------------------根据AID获取资讯--------------------------------------
-	GetNewsByAID:{
-		Url: Url + '/api/News/GetNewsByAID',
-		name:'AID获取资讯',
+	//--------------------------------------公告资讯--------------------------------------
+	getNotice:{
+		Url: Url + '/api/manage/getNotice',
+		name:'公告资讯',
 		method:'POST',
 	}, 
 }

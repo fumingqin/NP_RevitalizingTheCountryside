@@ -19,8 +19,8 @@
 		<view class="sv_view2" v-if="level == 1 || level == 2">
 			<view class="sv_title">村级管理</view>
 			<view style="display: flex; flex-wrap: wrap;padding: 0 14rpx;">
-				<view class="sv_view3" v-for="(item,index) in ItemArr2" :key="index" >
-					<view @click="natTo(item.clickURL)">
+				<view class="sv_view3" v-for="(item,index) in ItemArr2" :key="index">
+					<view @click="natTo(item)">
 						<image :class="item.style" :src="item.IsUse?item.ImageURL1:item.ImageURL2" lazy-load="true"></image>
 						<text class="sv_text">{{item.ItemTitle}}</text>
 					</view>
@@ -31,8 +31,8 @@
 		<view class="sv_view2" v-if="level == 2">
 			<view class="sv_title">县市级管理</view>
 			<view style="display: flex; flex-wrap: wrap;padding: 0 14rpx;">
-				<view class="sv_view3" v-for="(item,index) in ItemArr3" :key="index" >
-					<view @click="natTo(item.clickURL)">
+				<view class="sv_view3" v-for="(item,index) in ItemArr3" :key="index">
+					<view @click="natTo(item)">
 						<image :class="item.style" :src="item.IsUse?item.ImageURL1:item.ImageURL2" lazy-load="true"></image>
 						<text class="sv_text">{{item.ItemTitle}}</text>
 					</view>
@@ -50,8 +50,8 @@
 			return {
 				imageIndex: '', //首页图片
 				level: 0, //0为普通用户，1为村级职责人员，2位县市级职责人员
-				userInfo : '',//用户数据
-				
+				userInfo: '', //用户数据
+
 				//普通用户管理区
 				ItemArr: [{
 					IsUse: true,
@@ -117,7 +117,7 @@
 					ItemTitle: "村档管理",
 					style: "sv_print",
 				}],
-				
+
 				//村级管理区
 				ItemArr2: [{
 					IsUse: true,
@@ -126,7 +126,7 @@
 					ImageURL2: "../../static/home/serve/kjtpy2.png", //暗
 					ItemTitle: "特派服务",
 					style: "sv_print",
-				},{
+				}, {
 					IsUse: true,
 					clickURL: "",
 					ImageURL1: "../../static/home/serve/sphy.png", //亮
@@ -134,7 +134,7 @@
 					ItemTitle: "视频会议",
 					style: "sv_print",
 				}],
-				
+
 				//县市级管理区
 				ItemArr3: [{
 					IsUse: true,
@@ -161,9 +161,9 @@
 					key: 'userInfo',
 					success: (res) => {
 						this.userInfo = res.data;
-						if(this.userInfo.duty == '村级职责人员'){
+						if (this.userInfo.duty == '村级职责人员') {
 							this.level = 1;
-						}else if(this.userInfo.duty == '县级职责人员' || this.userInfo.duty == '市级职责人员'){
+						} else if (this.userInfo.duty == '县级职责人员' || this.userInfo.duty == '市级职责人员') {
 							this.level = 2;
 						}
 						uni.hideLoading()
@@ -172,8 +172,8 @@
 					fail: (err) => {
 						uni.hideLoading()
 						uni.showToast({
-							title:'加载个人信息失败',
-							icon:'none'
+							title: '加载个人信息失败',
+							icon: 'none'
 						})
 					}
 				});
@@ -206,34 +206,17 @@
 						title: '敬请期待',
 						icon: 'none'
 					})
+				} else if (item.clickURL == '') {
+					uni.showToast({
+						title: '敬请期待',
+						icon: 'none'
+					})
 				} else {
 					uni.navigateTo({
 						url: item.clickURL,
 					});
 				}
-
-			},
-			natTo2: function(url) {
-				// #ifdef H5
-				uni.showToast({
-					title: '网络约车仅支持小程序或APP!',
-					icon: 'none'
-				})
-				// #endif
-				// #ifndef H5
-				uni.navigateTo({
-					url
-				})
-				// #endif
-
-			},
-			natTo3: function(url) {
-				uni.showToast({
-					title: '正在开发中，尽情期待..',
-					icon: 'none'
-				})
-
-			},
+			}
 		}
 	}
 </script>
