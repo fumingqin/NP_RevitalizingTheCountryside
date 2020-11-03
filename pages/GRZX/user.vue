@@ -90,6 +90,13 @@
 					{
 						IsUse: true,
 						clickURL: "",
+						ImageURL: "../../static/GRZX/ServiceIcon/tb_XXGL.png",
+						ItemTitle: "乘客管理",
+						style:"CKGLicon",
+					},
+					{
+						IsUse: true,
+						clickURL: "",
 						ImageURL: "../../static/GRZX/icon/kf.png",
 						ItemTitle: "QQ客服",
 						style:"DHKFicon",
@@ -186,6 +193,11 @@
 				switch(e) {
 					case '修改职责':
 						this.changeDuty();
+						break;
+					case '乘客管理':
+						uni.navigateTo({
+							url: this.$GrzxInter.Route.infoList.url,
+						})
 						break;
 					case 'QQ客服':
 						this.QQClick();
@@ -426,8 +438,7 @@
 		
 		.serviceBox {
 			width: 94%;
-			margin-left: 3%;
-			margin-top: 20upx;
+			margin: 20upx 3%;
 			background-color: #FFFFFF;
 			// box-shadow: 0px 7px 38px 8px rgba(97, 97, 97, 0.1);
 			border-radius: 20upx;
@@ -450,6 +461,11 @@
 				width: 40upx;
 				height: 39upx;
 				margin: 40upx 20upx;
+			}
+			.CKGLicon{
+				width: 40upx;
+				height: 44upx;
+				margin: 38upx 20upx;
 			}
 			.DHKFicon{
 				width: 40upx;

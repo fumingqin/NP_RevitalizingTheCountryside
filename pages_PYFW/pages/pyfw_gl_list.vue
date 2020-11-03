@@ -28,8 +28,8 @@
 		<view style="width: 100%; height: 112upx;"></view>
 
 		<!-- 缺省提示 -->
-		<view style="margin-top: 360upx;" :hidden="listStatusIndex !==0">
-			<u-empty text="该分类暂无信息哦~" mode="news"></u-empty>
+		<view style="margin-top: 360upx;" v-if="informationList.length == 0">
+			<u-empty text="您暂无可审信息哦~" mode="news"></u-empty>
 		</view>
 
 		<!-- 派员编号 -->
@@ -54,8 +54,7 @@
 					name: '其他'
 				}], //头部数组
 				headCurrent: 0, //头部tabs下标
-				informationList: '', //资讯列表
-				listStatusIndex: '', //资讯缺省提示初始值
+				informationList: [], //资讯列表
 				userInfo: '', //用户信息
 			}
 		},
@@ -120,8 +119,6 @@
 								return item.order_state == '已完成' || item.order_state == '已取消'
 							})
 						}
-						// console.log(this.informationList.length)
-						this.listStatusIndex = this.informationList.length;
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
 					},
