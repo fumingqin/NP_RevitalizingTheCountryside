@@ -19,7 +19,7 @@
 		<view :hidden="searchIndex==0" v-for="(item,index) in searchData" :key="index">
 			<view class="Tk_scrollview" @click="godetail(item.ticketId)">
 				<view class="Tk_item">
-					<image class="Tk_image" :src="item.ticketImage[0]" />
+					<!-- <image class="Tk_image" :src="item.ticketImage[0]" /> -->
 					<view class="Tk_bacg">
 						<text class="Tk_text1">{{item.ticketTitle}}</text>
 						<view style="display: flex;">

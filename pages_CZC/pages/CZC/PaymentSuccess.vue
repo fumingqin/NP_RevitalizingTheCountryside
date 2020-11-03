@@ -2,12 +2,11 @@
 	<view>
 		<!-- 顶部背景 -->
 		<view class="ob_background">
-			<image src="../../../static/LYFW/scenicSpotTickets/addOrder/orderBackground.png" mode="aspectFill"></image>
 		</view>
 
 		<view class="cover-container">
-			<image class="okImage" mode="aspectFill" src="../../../static/LYFW/scenicSpotTickets/successfulPayment/ok.png"></image>
-			<text class="title">购票成功</text>
+			<image class="okImage" mode="aspectFill" src='../../static/CZC/Success.png'></image>
+			<text class="title">行程已结束</text>
 			<text class="content">无选择操作，将在10秒后自动返回首页</text>
 			<view class="buttonView">
 				<view class="orderButton" @click="godetail(0)">查看订单</view>
@@ -21,6 +20,7 @@
 	export default {
 		data() {
 			return {
+				timeout:"",
 			}
 		},
 		onReady() {
@@ -28,51 +28,24 @@
 		},
 		methods: {
 			//路由统一事件
-			//页面跳转定时器
-			backHome(){
-				setTimeout(() => {
-					uni.getStorage({
-						key:'ticketsGodetailIndex',
-						success:function(){
-							uni.removeStorage({
-								key:'ticketsGodetailIndex'
-							})
-						},
-						fail:function(){
-							uni.switchTab({
-								url: '../../../../pages/Home/zy_zhcx'
-							});
-						}
-					})
-				}, 10000)
-				
-			},
-			
-			//路由统一事件
 			godetail: function(e) {
-				if(e==0){ 
-					uni.setStorage({
-						key:'ticketsGodetailIndex',
-						data:0,
-						success:function(){
-							uni.switchTab({
-								url: '../../../../pages/order/OrderList'	
-							});
-						}
-					})
-					
+				clearTimeout(this.timeout)
+				if(e==0){
+					uni.switchTab({
+						url:'../../../pages/order/OrderList'
+					});
 				}else if(e==1){
-					uni.setStorage({
-						key:'ticketsGodetailIndex',
-						data:1,
-						success:function(){
-							uni.switchTab({
-								url: '../../../../pages/home/h_xczx_home'
-							});
-						}
-					})
-					
+					uni.switchTab({
+						url:'../../../pages/Home/zy_zhcx'
+					});
 				}
+			},
+			backHome : function() {
+				this.timeout=setTimeout(() => { 
+					uni.switchTab({
+						url:'../../../pages/Home/zy_zhcx'
+					});
+				}, 10000)
 			}
 
 		}
@@ -90,23 +63,18 @@
 		position: absolute;
 		width: 100%;
 		height: 320upx;
-
-		image {
-			width: 100%;
-			height: 100%;
-		}
+		background-color: #FC4646;
+	
 	}
-	
-	
-	
+
 	//整体容器样式
 	.cover-container {
 		position: absolute;
 		margin: 0 24upx;
-		margin-top: 180upx;
+		margin-top: 88upx;
 		margin-bottom: 52upx;
 		width: 702upx;
-		height: 85%;
+		height: 90%;
 		background: #FFFFFF;
 		box-shadow: 0px 0.2px 0px #aaa;
 		border-radius: 16upx;
@@ -142,7 +110,7 @@
 				width: 280upx;
 				height: 104upx;
 				font-size: 34upx;
-				background: #3EABFC;
+				background: #FC4646;
 				border-radius: 16upx;
 				color: #fff;
 			}
@@ -153,17 +121,10 @@
 				height: 104upx;
 				font-size: 34upx;
 				border-radius: 16upx;
-				color: #3EABFC;
-				border: 1px solid #3EABFC;
+				color: #FC4646;
+				border: 1px solid #FC4646;
 			}
 		}
 
 	}
-	
-	/* #ifdef MP-WEIXIN */
-	//整体容器样式 -微信版
-	.cover-container {
-		margin-top: 64upx;
-	}
-	/* #endif */
 </style>
