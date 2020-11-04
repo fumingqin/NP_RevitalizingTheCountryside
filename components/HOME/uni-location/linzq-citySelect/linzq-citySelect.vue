@@ -104,7 +104,7 @@
 				markersData:{
 				        latitude: '',//纬度
 				        longitude: '',//经度
-				        key: "db69a778b86b57c2d8d16af164f185b5"//申请的高德地图key（申请的web key）
+				        key: "eb06b78edba8039ed8721c590492a679"//申请的高德地图key（申请的web key）
 				      },
 				      gpsCode:'',
 			}

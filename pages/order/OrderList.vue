@@ -30,13 +30,13 @@
 							<view style="background-color: #FFF;border-radius: 12rpx;margin:20rpx 0;padding: 20rpx 42rpx;box-shadow: 0 0 5rpx 0rpx #aaa;">
 								<view style="display: flex;justify-content: space-between;">
 									<view style="display: flex;">
-										<image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image>
+										<!-- <image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image> -->
 										<view style="color: #2C2D2D; font-size: 34rpx;font-weight: bold;padding-left: 20rpx;">{{item.title}}</view>
 									</view>
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image>
+									<!-- <image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image> -->
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -70,13 +70,13 @@
 							<view style="background-color: #FFF;border-radius: 12rpx;margin:20rpx 0;padding: 20rpx 42rpx;box-shadow: 0 0 5rpx 0rpx #aaa;">
 								<view style="display: flex;justify-content: space-between;">
 									<view style="display: flex;">
-										<image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image>
+										<!-- <image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image> -->
 										<view style="color: #2C2D2D; font-size: 34rpx;font-weight: bold;padding-left: 20rpx;">{{item.title}}</view>
 									</view>
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image>
+									<!-- <image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image> -->
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -108,13 +108,13 @@
 						</view>
 						<view class="CZCwhiteBg">
 							<view style="display: flex; margin-top: -40rpx;">
-								<image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/order/Car1.png"></image>
+								<!-- <image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/order/Car1.png"></image> -->
 								<view style="width: 600rpx; height: 44rpx;color: #2C2D2D; font-size: 34rpx;margin: 48rpx -28rpx;font-weight: bold;">{{item.vehicleType}}</view>
 								<view style="width: 160rpx; height: 44rpx;color: #666666; font-size: 28rpx;margin: 48rpx 0rpx;">{{taxiOrderState(item.state)}}</view>
 							</view>
 
 							<view style="display: flex; margin-top: -72rpx;">
-								<image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/order/time.png"></image>
+								<!-- <image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/order/time.png"></image> -->
 								<view style="width: 540rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx -76rpx;">{{changeTime(item.orderTime)}}</view>
 								<!-- <view style="width: 160rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx 0rpx;">{{item.money}}</view> -->
 							</view>
@@ -148,7 +148,7 @@
 						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/menpiao.png" mode="aspectFill"></image>
+								<!-- <image class="at_icon" src="../../static/order/menpiao.png" mode="aspectFill"></image> -->
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -220,7 +220,7 @@
 						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image>
+								<!-- <image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image> -->
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -300,7 +300,7 @@
 						<view class="pd_view">{{item.or_date}}</view>
 						<view class="cm_view">
 							<view class="cm_titleView">
-								<image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image>
+								<!-- <image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image> -->
 								<text class="cm_title">{{item.or_class}}</text>
 								<text class="cm_status">{{getBCstate(item.or_Type)}}</text>
 							</view>
@@ -361,7 +361,7 @@
 							<view class="pd_view">下单时间：{{item.bookTime}}</view>
 							<view class="at_view">
 								<view class="at_titleView">
-									<image class="at_icon" src="../../static/order/keche.png" mode="aspectFill"></image>
+									<!-- <image class="at_icon" src="../../static/order/keche.png" mode="aspectFill"></image> -->
 									<view class="at_textView"><text class="at_title">{{item.startSiteName}}-{{item.endSiteName}}</text></view>
 									<text class="at_status">{{getCtkyOrderStatus(item.state)}}</text>
 								</view>
@@ -412,13 +412,13 @@
 							<view style="background-color: #FFF;border-radius: 12rpx;margin:20rpx 0;padding: 20rpx 42rpx;box-shadow: 0 0 5rpx 0rpx #aaa;">
 								<view style="display: flex;justify-content: space-between;">
 									<view style="display: flex;">
-										<image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image>
+										<!-- <image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image> -->
 										<view style="color: #2C2D2D; font-size: 34rpx;font-weight: bold;padding-left: 20rpx;">{{item.title}}</view>
 									</view>
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image>
+									<!-- <image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image> -->
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -453,13 +453,13 @@
 							<view style="background-color: #FFF;border-radius: 12rpx;margin:20rpx 0;padding: 20rpx 42rpx;box-shadow: 0 0 5rpx 0rpx #aaa;">
 								<view style="display: flex;justify-content: space-between;">
 									<view style="display: flex;">
-										<image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image>
+										<!-- <image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image> -->
 										<view style="color: #2C2D2D; font-size: 34rpx;font-weight: bold;padding-left: 20rpx;">{{item.title}}</view>
 									</view>
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image>
+									<!-- <image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image> -->
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -492,13 +492,13 @@
 						</view>
 						<view class="CZCwhiteBg">
 							<view style="display: flex; margin-top: -40rpx;">
-								<image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/order/Car1.png"></image>
+								<!-- <image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/order/Car1.png"></image> -->
 								<view style="width: 600rpx; height: 44rpx;color: #2C2D2D; font-size: 34rpx;margin: 48rpx -28rpx;font-weight: bold;">{{item.vehicleType}}</view>
 								<view style="width: 160rpx; height: 44rpx;color: #666666; font-size: 28rpx;margin: 48rpx 0rpx;">{{taxiOrderState(item.state)}}</view>
 							</view>
 
 							<view style="display: flex; margin-top: -72rpx;">
-								<image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/order/time.png"></image>
+								<!-- <image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/order/time.png"></image> -->
 								<view style="width: 540rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx -76rpx;">{{changeTime(item.orderTime)}}</view>
 								<!-- <view style="width: 160rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx 0rpx;">{{item.money}}</view> -->
 							</view>
@@ -531,7 +531,7 @@
 						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/menpiao.png" mode="aspectFill"></image>
+								<!-- <image class="at_icon" src="../../static/order/menpiao.png" mode="aspectFill"></image> -->
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -561,7 +561,7 @@
 						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image>
+								<!-- <image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image> -->
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -593,7 +593,7 @@
 						<view class="pd_view">{{item.or_date}}</view>
 						<view class="cm_view">
 							<view class="cm_titleView">
-								<image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image>
+								<!-- <image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image> -->
 								<text class="cm_title">{{item.or_class}}</text>
 								<text class="cm_status">{{getBCstate(item.or_Type)}}</text>
 							</view>
@@ -622,7 +622,7 @@
 								<view class="pd_view">下单时间：{{item.bookTime}}</view>
 								<view class="at_view">
 									<view class="at_titleView">
-										<image class="at_icon" src="../../static/order/keche.png" mode="aspectFill"></image>
+										<!-- <image class="at_icon" src="../../static/order/keche.png" mode="aspectFill"></image> -->
 										<view class="at_textView"><text class="at_title">{{item.startSiteName}}-{{item.endSiteName}}</text></view>
 										<text class="at_status">{{getCtkyOrderStatus(item.state)}}</text>
 									</view>
@@ -664,13 +664,13 @@
 							<view style="background-color: #FFF;border-radius: 12rpx;margin:20rpx 0;padding: 20rpx 42rpx;box-shadow: 0 0 5rpx 0rpx #aaa;">
 								<view style="display: flex;justify-content: space-between;">
 									<view style="display: flex;">
-										<image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image>
+										<!-- <image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image> -->
 										<view style="color: #2C2D2D; font-size: 34rpx;font-weight: bold;padding-left: 20rpx;">{{item.title}}</view>
 									</view>
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image>
+									<!-- <image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image> -->
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -705,13 +705,13 @@
 							<view style="background-color: #FFF;border-radius: 12rpx;margin:20rpx 0;padding: 20rpx 42rpx;box-shadow: 0 0 5rpx 0rpx #aaa;">
 								<view style="display: flex;justify-content: space-between;">
 									<view style="display: flex;">
-										<image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image>
+										<!-- <image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image> -->
 										<view style="color: #2C2D2D; font-size: 34rpx;font-weight: bold;padding-left: 20rpx;">{{item.title}}</view>
 									</view>
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image>
+									<!-- <image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image> -->
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -744,13 +744,13 @@
 						</view>
 						<view class="CZCwhiteBg">
 							<view style="display: flex; margin-top: -40rpx;">
-								<image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/order/Car1.png"></image>
+								<!-- <image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/order/Car1.png"></image> -->
 								<view style="width: 600rpx; height: 44rpx;color: #2C2D2D; font-size: 34rpx;margin: 48rpx -28rpx;font-weight: bold;">{{item.vehicleType}}</view>
 								<view style="width: 160rpx; height: 44rpx;color: #666666; font-size: 28rpx;margin: 48rpx 0rpx;">{{taxiOrderState(item.state)}}</view>
 							</view>
 
 							<view style="display: flex; margin-top: -72rpx;">
-								<image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/order/time.png"></image>
+								<!-- <image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/order/time.png"></image> -->
 								<view style="width: 540rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx -76rpx;">{{changeTime(item.orderTime)}}</view>
 								<!-- <view style="width: 160rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx 0rpx;">{{item.money}}</view> -->
 							</view>
@@ -784,7 +784,7 @@
 						<view class="pd_view">下单时间：{{item.orderDate}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/menpiao.png" mode="aspectFill"></image>
+								<!-- <image class="at_icon" src="../../static/order/menpiao.png" mode="aspectFill"></image> -->
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -817,7 +817,7 @@
 						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image>
+								<!-- <image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image> -->
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -861,7 +861,7 @@
 						<view class="pd_view">{{item.or_date}}</view>
 						<view class="cm_view">
 							<view class="cm_titleView">
-								<image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image>
+								<!-- <image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image> -->
 								<text class="cm_title">{{item.or_class}}</text>
 								<text class="cm_status">{{getBCstate(item.or_Type)}}</text>
 							</view>
@@ -905,7 +905,7 @@
 								<view class="pd_view">下单时间：{{item.bookTime}}</view>
 								<view class="at_view">
 									<view class="at_titleView">
-										<image class="at_icon" src="../../static/order/keche.png" mode="aspectFill"></image>
+										<!-- <image class="at_icon" src="../../static/order/keche.png" mode="aspectFill"></image> -->
 										<view class="at_textView"><text class="at_title">{{item.startSiteName}}-{{item.endSiteName}}</text></view>
 										<text class="at_status">{{getCtkyOrderStatus(item.state)}}</text>
 									</view>
@@ -952,13 +952,13 @@
 							<view style="background-color: #FFF;border-radius: 12rpx;margin:20rpx 0;padding: 20rpx 42rpx;box-shadow: 0 0 5rpx 0rpx #aaa;">
 								<view style="display: flex;justify-content: space-between;">
 									<view style="display: flex;">
-										<image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image>
+										<!-- <image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image> -->
 										<view style="color: #2C2D2D; font-size: 34rpx;font-weight: bold;padding-left: 20rpx;">{{item.title}}</view>
 									</view>
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image>
+									<!-- <image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image> -->
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -993,13 +993,13 @@
 							<view style="background-color: #FFF;border-radius: 12rpx;margin:20rpx 0;padding: 20rpx 42rpx;box-shadow: 0 0 5rpx 0rpx #aaa;">
 								<view style="display: flex;justify-content: space-between;">
 									<view style="display: flex;">
-										<image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image>
+										<!-- <image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image> -->
 										<view style="color: #2C2D2D; font-size: 34rpx;font-weight: bold;padding-left: 20rpx;">{{item.title}}</view>
 									</view>
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image>
+									<!-- <image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image> -->
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -1032,13 +1032,13 @@
 						</view>
 						<view class="CZCwhiteBg">
 							<view style="display: flex; margin-top: -40rpx;">
-								<image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/order/Car1.png"></image>
+								<!-- <image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/order/Car1.png"></image> -->
 								<view style="width: 600rpx; height: 44rpx;color: #2C2D2D; font-size: 34rpx;margin: 48rpx -28rpx;font-weight: bold;">{{item.vehicleType}}</view>
 								<view style="width: 160rpx; height: 44rpx;color: #666666; font-size: 28rpx;margin: 48rpx 0rpx;">{{taxiOrderState(item.state)}}</view>
 							</view>
 
 							<view style="display: flex; margin-top: -72rpx;">
-								<image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/order/time.png"></image>
+								<!-- <image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/order/time.png"></image> -->
 								<view style="width: 540rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx -76rpx;">{{changeTime(item.orderTime)}}</view>
 								<!-- <view style="width: 160rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx 0rpx;">{{item.money}}</view> -->
 							</view>
@@ -1071,7 +1071,7 @@
 						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/menpiao.png" mode="aspectFill"></image>
+								<!-- <image class="at_icon" src="../../static/order/menpiao.png" mode="aspectFill"></image> -->
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -1104,7 +1104,7 @@
 						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image>
+								<!-- <image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image> -->
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -1139,7 +1139,7 @@
 						<view class="pd_view">{{item.or_date}}</view>
 						<view class="cm_view">
 							<view class="cm_titleView">
-								<image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image>
+								<!-- <image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image> -->
 								<text class="cm_title">{{item.or_class}}</text>
 								<text class="cm_status">{{getBCstate(item.or_Type)}}</text>
 							</view>
@@ -1171,7 +1171,7 @@
 								<view class="pd_view">下单时间：{{item.bookTime}}</view>
 								<view class="at_view">
 									<view class="at_titleView">
-										<image class="at_icon" src="../../static/order/keche.png" mode="aspectFill"></image>
+										<!-- <image class="at_icon" src="../../static/order/keche.png" mode="aspectFill"></image> -->
 										<view class="at_textView"><text class="at_title">{{item.startSiteName}}-{{item.endSiteName}}</text></view>
 										<text class="at_status">{{getCtkyOrderStatus(item.state)}}</text>
 									</view>
@@ -1214,13 +1214,13 @@
 							<view style="background-color: #FFF;border-radius: 12rpx;margin:20rpx 0;padding: 20rpx 42rpx;box-shadow: 0 0 5rpx 0rpx #aaa;">
 								<view style="display: flex;justify-content: space-between;">
 									<view style="display: flex;">
-										<image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image>
+										<!-- <image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image> -->
 										<view style="color: #2C2D2D; font-size: 34rpx;font-weight: bold;padding-left: 20rpx;">{{item.title}}</view>
 									</view>
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image>
+									<!-- <image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image> -->
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -1255,13 +1255,13 @@
 							<view style="background-color: #FFF;border-radius: 12rpx;margin:20rpx 0;padding: 20rpx 42rpx;box-shadow: 0 0 5rpx 0rpx #aaa;">
 								<view style="display: flex;justify-content: space-between;">
 									<view style="display: flex;">
-										<image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image>
+										<!-- <image v-if='item.titleIndex == 1' style="width: 40rpx; height: 45rpx; " src="../../static/order/Car1.png"></image> -->
 										<view style="color: #2C2D2D; font-size: 34rpx;font-weight: bold;padding-left: 20rpx;">{{item.title}}</view>
 									</view>
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/Order/time.png"></image>
+									<!-- <image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/Order/time.png"></image> -->
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -1294,13 +1294,13 @@
 						</view>
 						<view class="CZCwhiteBg">
 							<view style="display: flex; margin-top: -40rpx;">
-								<image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/Order/Car1.png"></image>
+								<!-- <image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/Order/Car1.png"></image> -->
 								<view style="width: 600rpx; height: 44rpx;color: #2C2D2D; font-size: 34rpx;margin: 48rpx -28rpx;font-weight: bold;">{{item.vehicleType}}</view>
 								<view style="width: 160rpx; height: 44rpx;color: #666666; font-size: 28rpx;margin: 48rpx 0rpx;">{{taxiOrderState(item.state)}}</view>
 							</view>
 
 							<view style="display: flex; margin-top: -72rpx;">
-								<image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/Order/time.png"></image>
+								<!-- <image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/Order/time.png"></image> -->
 								<view style="width: 540rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx -76rpx;">{{changeTime(item.orderTime)}}</view>
 								<!-- <view style="width: 160rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx 0rpx;">{{item.money}}</view> -->
 							</view>
@@ -1334,7 +1334,7 @@
 						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/Order/menpiao.png" mode="aspectFill"></image>
+								<!-- <image class="at_icon" src="../../static/Order/menpiao.png" mode="aspectFill"></image> -->
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -1387,7 +1387,7 @@
 						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/Order/chanping.png" mode="aspectFill"></image>
+								<!-- <image class="at_icon" src="../../static/Order/chanping.png" mode="aspectFill"></image> -->
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -1441,7 +1441,7 @@
 						<view class="pd_view">{{item.or_date}}</view>
 						<view class="cm_view">
 							<view class="cm_titleView">
-								<image class="cm_icon" src="../../static/Order/baoche.png" mode="aspectFill"></image>
+								<!-- <image class="cm_icon" src="../../static/Order/baoche.png" mode="aspectFill"></image> -->
 								<text class="cm_title">{{item.or_class}}</text>
 								<text class="cm_status">{{getBCstate(item.or_Type)}}</text>
 							</view>
@@ -1470,7 +1470,7 @@
 									<view class="pd_view">下单时间：{{item.bookTime}}</view>
 									<view class="at_view">
 										<view class="at_titleView">
-											<image class="at_icon" src="../../static/Order/keche.png" mode="aspectFill"></image>
+											<!-- <image class="at_icon" src="../../static/Order/keche.png" mode="aspectFill"></image> -->
 											<view class="at_textView"><text class="at_title">{{item.startSiteName}}-{{item.endSiteName}}</text></view>
 											<text class="at_status">{{getCtkyOrderStatus(item.state)}}</text>
 										</view>
