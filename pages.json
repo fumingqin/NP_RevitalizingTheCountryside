@@ -143,7 +143,7 @@
 			"path": "pages/ZXDT/infor_details",
 			"style": {}
 		}
-	],
+    ],
 
 	"subPackages": [
 		//---------------------------------------------第一个包：个人中心------------------------------------------
@@ -680,6 +680,12 @@
 					"path": "pages/agricultureProducts/ap_personalList",
 					"style": {}
 				}
+				,{
+				    "path" : "pages/agricultureProducts/ap_toExamine",
+				    "style" : {
+						"enablePullDownRefresh": true
+					}
+				}
 			]
 		},
 		//---------------------------------------------第十二个包：旅游服务------------------------------------------
@@ -971,7 +977,7 @@
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [{
 			"name": "", //模式名称
-			"path": "pages_FBRCP/pages/agricultureProducts/ap_list", //启动页面，必选
+			"path": "pages_FBRCP/pages/agricultureProducts/ap_toExamine", //启动页面，必选
 			"query": "" //启动参数，在页面的onLoad函数里面得到
 		}]
 	}
