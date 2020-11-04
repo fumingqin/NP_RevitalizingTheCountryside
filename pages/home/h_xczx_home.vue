@@ -29,7 +29,7 @@
 
 		<!-- banner区 -->
 		<view>
-			<image style="width: 100%; height: 164upx;" src="../../static/home/temporary/banner.png" mode="aspectFit"></image>
+			<image style="width: 100%; height: 164upx;" :src="bannerImage" mode="aspectFill"></image>
 		</view>
 
 		<!-- 小功能引导区 -->
@@ -71,18 +71,12 @@
 				</view>
 			</view>
 		</view>
-		
-		
-		
 
 		<!-- 公示项目 -->
 		<view class="gs_view">
 			<view class="gs_title">公示项目</view>
 			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" bg-color="#ffffff" @click="navigateToClick"></u-swiper>
 		</view>
-
-
-
 
 		<!-- 隐藏协议弹出 -->
 		<u-modal v-model="protocolStatus" :show-cancel-button="true" confirm-text="同意" title="服务协议和隐私政策" @confirm="agreeProtocol">
@@ -101,7 +95,6 @@
 				<rich-text :nodes="upgradeContent"></rich-text>
 			</view>
 		</u-modal>
-
 	</view>
 </template>
 
@@ -122,6 +115,7 @@
 								4. 修复键盘组件在微信小程序上遮罩无效的问题
 								`,
 				quickEntryData: [], //乡村美景数组
+				bannerImage : '',//首页banner图片
 				
 				functionArray: [{
 					array: [{
@@ -133,14 +127,14 @@
 						name: '乡村动态',
 						image: '../../static/home/vajra/xiangcundongtai.png',
 						display: true,
-						entrance: '../../pages_ZXGP/pages/ZXGP/SpecialBus/Home/zxgpHomePage',
+						entrance: '../../pages_XCDT/pages/ruralDynamics/rd_generalList',
 					}, {
 						name: '政策发布',
 						image: '../../static/home/vajra/fabudongtai.png',
 						display: true,
-						entrance: '../../pages_ZCFB/pages/ZCFB/issuePolicy',
+						entrance: '../../pages_ZCFB/pages/ZCFB/policyList',
 					}, {
-						name: '季度考核',
+						name: '乡村评榜',
 						image: '../../static/home/vajra/jidukaohe.png',
 						display: true,
 						entrance: '../../pages_BUS/pages/Bus/BusQuery',
@@ -148,7 +142,7 @@
 						name: '民情反馈',
 						image: '../../static/home/vajra/minqingfankui.png',
 						display: true,
-						entrance: '',
+						entrance: '../../pages_MQFK/pages/publicFeedback/pf_list',
 					}]
 				}], //功能数组
 			}
@@ -160,8 +154,9 @@
 			if (pro !== true) {
 				// this.protocolStatus = true;
 			}
-			this.loadData();
-			this.getTodayDate();
+			this.cacheLoadData();
+			
+			// this.getTodayDate();
 			// #ifdef MP-WEIXIN
 			// 校验小程序登录
 			// this.getLoginState();
@@ -169,8 +164,85 @@
 		},
 
 		methods: {
-			//加载数据  
-			loadData: function() {
+			//加载缓存数据
+			cacheLoadData : function(){
+				//轮播图缓存
+				uni.getStorage({
+					key:'rotationData',
+					success: (res) => {
+						// console.log('拿到缓存了',res)
+						if(res.data.length >= 2){
+							for(var i =0; i<res.data.length; i++){
+								this.rotationChart.push(res.data[i].image)
+							}
+						}else{
+							this.rotationChart.push(res.data.image)
+						}
+						this.rotationLoadData();
+					},
+					fail: (err) => {
+						this.rotationLoadData();
+					}
+				})
+				
+				//banner缓存
+				uni.getStorage({
+					key:'bannerData',
+					success: (res) => {
+						// console.log('拿到缓存了',res)
+						this.bannerImage = res.data.image
+						this.bannerLoadData();
+					},
+					fail: (err) => {
+						this.bannerLoadData();
+					}
+				})
+				
+				//跑马灯缓存
+				uni.getStorage({
+					key:'lampData',
+					success: (res) => {
+						// console.log('拿到缓存了',res)
+						this.information = [];
+						this.information.push(res.data.content)
+						this.lampLoadData();
+					},
+					fail: (err) => {
+						this.lampLoadData();
+					}
+				})
+				
+				//乡村美景缓存
+				uni.getStorage({
+					key:'countrysideData',
+					success: (res) => {
+						console.log('拿到缓存了',res)
+						this.quickEntryData = res.data;
+						this.countrysideLoadData();
+					},
+					fail: (err) => {
+						this.countrysideLoadData();
+					}
+				})
+				
+				
+				//公开项目缓存
+				uni.getStorage({
+					key:'projectData',
+					success: (res) => {
+						// console.log('拿到缓存了',res)
+						this.advertisingMap = res.data;
+						this.projectLoadData();
+					},
+					fail: (err) => {
+						this.projectLoadData();
+					}
+				})
+				
+			},
+			
+			//轮播图请求
+			rotationLoadData:function(){
 				//轮播图
 				uni.request({
 					url: this.$home.KyInterface.getImage.Url,
@@ -180,14 +252,21 @@
 					},
 					success: (res) => {
 						// console.log('轮播区', res)
-						if(res.data.data.length >= 2){
-							for(var i =0; i<res.data.data.length; i++){
-								this.rotationChart.push(res.data.data[i].image)
-							}
+						if(res.data.data == ''){
+							this.rotationLoadData();
 						}else{
-							this.rotationChart.push(res.data.data.image)
+							if(res.data.data.length >= 2){
+								for(var i =0; i<res.data.data.length; i++){
+									this.rotationChart.push(res.data.data[i].image)
+								}
+							}else{
+								this.rotationChart.push(res.data.data.image)
+							}
+							uni.setStorage({
+								key : 'rotationData',
+								data : res.data.data,
+							})
 						}
-						// console.log(this.rotationChart)
 					},
 					fail: function() {
 						uni.showToast({
@@ -196,7 +275,40 @@
 						})
 					}
 				})
-				
+			},
+			
+			//banner请求
+			bannerLoadData:function(){
+				//banner图
+				uni.request({
+					url: this.$home.KyInterface.getImage.Url,
+					method: this.$home.KyInterface.getImage.method,
+					data:{
+						type : '2' 
+					},
+					success: (res) => {
+						// console.log('banner', res)
+						if(res.data.data == ''){
+							this.bannerLoadData();
+						}else{
+							this.bannerImage = res.data.data.image
+							uni.setStorage({
+								key : 'bannerData',
+								data : res.data.data,
+							})
+						}
+					},
+					fail: function() {
+						uni.showToast({
+							title: '首页banner加载异常',
+							icon: 'none'
+						})
+					}
+				})
+			},
+			
+			//跑马灯请求
+			lampLoadData:function(){
 				//跑马灯
 				uni.request({
 					url: this.$home.KyInterface.getMarquee.Url,
@@ -205,10 +317,17 @@
 						location : '首页'
 					},
 					success: (res) => {
-						console.log('跑马灯',res)
-						this.information = [];
-						this.information.push(res.data.data.content)
-						// console.log(this.rotationChart)
+						// console.log('跑马灯',res)
+						if(res.data.data == ''){
+							this.lampLoadData();
+						}else{
+							this.information = [];
+							this.information.push(res.data.data.content)
+							uni.setStorage({
+								key : 'lampData',
+								data : res.data.data,
+							})
+						}
 					},
 					fail: function() {
 						uni.showToast({
@@ -217,14 +336,26 @@
 						})
 					}
 				})
-				
+			},
+			
+			//乡村美景请求
+			countrysideLoadData:function(){
 				//乡村美景
 				uni.request({
 					url: this.$home.KyInterface.getEconomy.Url,
 					method: this.$home.KyInterface.getEconomy.method,
 					success: (res) => {
-						console.log('乡村美景',res)
-						this.quickEntryData = res.data.data;
+						// console.log('乡村美景',res)
+						if(res.data.data == ''){
+							this.countrysideLoadData();
+						}else{
+							this.quickEntryData = res.data.data;
+							uni.setStorage({
+								key : 'countrysideData',
+								data : res.data.data,
+							})
+						}
+						
 					},
 					fail: function() {
 						uni.showToast({
@@ -233,24 +364,36 @@
 						})
 					}
 				})
-				
-				//乡村美景
+			},
+			
+			//公开项目请求
+			projectLoadData:function(){
+				//公开项目
 				uni.request({
 					url: this.$home.KyInterface.getProject.Url,
 					method: this.$home.KyInterface.getProject.method,
 					success: (res) => {
-						console.log('公开项目',res)
-						this.advertisingMap = res.data.data;;
+						// console.log('公开项目',res)
+						if(res.data.data == ''){
+							this.projectLoadData();
+						}else{
+							this.advertisingMap = res.data.data;
+							uni.setStorage({
+								key : 'projectData',
+								data : res.data.data,
+							})
+						}
+						
 					},
 					fail: function() {
 						uni.showToast({
-							title: '乡村美景网络加载异常',
+							title: '公开项目网络加载异常',
 							icon: 'none'
 						})
 					}
 				})
-
 			},
+			
 
 			//获取时间
 			getTodayDate() {

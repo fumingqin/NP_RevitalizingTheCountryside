@@ -67,7 +67,7 @@
 						data:1,
 						success:function(){
 							uni.switchTab({
-								url: '../../../../pages/Home/zy_zhcx'
+								url: '../../../../pages/home/h_xczx_home'
 							});
 						}
 					})
