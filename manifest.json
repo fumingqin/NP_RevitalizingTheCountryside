@@ -21,7 +21,8 @@
             "Maps" : {},
             "OAuth" : {},
             "Payment" : {},
-            "Share" : {}
+            "Share" : {},
+            "VideoPlayer" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -73,8 +74,8 @@
                 },
                 "maps" : {
                     "amap" : {
-                        "appkey_ios" : "9bf55dfa180310f267055a6e232e3875",
-                        "appkey_android" : "780b1394757ee312c904293172e2a749"
+                        "appkey_ios" : "bf02c27c171e556ea05ff4f4c1dfb970",
+                        "appkey_android" : "fe9afb3e30987f45ad0b9033e8f3cbff"
                     }
                 },
                 "share" : {
@@ -117,6 +118,10 @@
                         "spotlight@3x" : "unpackage/res/icons/120x120.png"
                     }
                 }
+            },
+            "splashscreen" : {
+                "iosStyle" : "common",
+                "androidStyle" : "common"
             }
         },
         "nvueLaunchMode" : ""
