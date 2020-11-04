@@ -20,6 +20,7 @@ import fbrcp from 'common/FBRCP.js'//引入民情反馈
 import wssc from 'common/wssc.js'//引入网上商城
 import Lyfwcwd from 'common/LYFW/LyfwCwd.js' //旅游服务-蔡伟达
 import Sceniclist from 'common/scenicSpotDistribution.js' //旅游服务-景区目录
+import fbxm from 'common/fbxm.js'//引入网上商城
 
 
 Vue.use(uView)
@@ -40,6 +41,7 @@ Vue.prototype.$smjj=smjj;//乡村动态
 Vue.prototype.$mqfk=mqfk;//乡村动态
 Vue.prototype.$fbrcp=fbrcp;//发布农产品
 Vue.prototype.$wssc=wssc;//网上商城
+Vue.prototype.$fbxm=fbxm;//网上商城
 App.mpType = 'app'
 
 const app = new Vue({
