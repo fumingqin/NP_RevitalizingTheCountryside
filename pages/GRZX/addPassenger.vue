@@ -603,12 +603,12 @@
 				this.user.userName="";
 				this.user.userPhoneNum="";
 				this.user.userCodeNum="";
-				this.codeType="请选择证件类型 >";
-				this.ticketType="请选择购票类型 >";
+				this.codeType="身份证 >";
+				this.ticketType="成人 >";
 				this.selector="请选择特殊凭证 >";
 				this.user.userDefault=false;
-				this.code=0;
-				this.user.prove=0;
+				this.code=1;
+				this.user.prove=1;
 				this.user.type=0;
 				// this.user.userEmergencyContact=false;
 			},
