@@ -5,33 +5,36 @@
 			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.order_state == '已取消'" activeColor="#FA3534"></uni-steps>
 		</view>
 		
+		
 		<!-- 申请信息 -->
-		<u-form-item :label-style="customStyle" :label-position="labelPosition" label="申请信息" :border-bottom="false" prop="name">
-			<view style="padding: 0 32rpx;"><text>申请乡村：</text>{{stepsData.villageName}}</view>
-			<view style="padding: 0 32rpx;"><text>申请人：</text>{{stepsData.nick_name}}</view>
-			<view style="padding: 0 32rpx;"><text>联系电话：</text>{{stepsData.telephone}}</view>
-		</u-form-item>
+		<view class="deta_view">
+			<view class="deta_title">申请信息</view>
+			<view class="deta_text"><text>申请乡村：</text>{{stepsData.villageName}}</view>
+			<view class="deta_text"><text>申请人：</text>{{stepsData.nick_name}}</view>
+			<view class="deta_text"><text>联系电话：</text>{{stepsData.telephone}}</view>
+		</view>
 		
 		
-		<!-- 问题内容 -->
-		<u-form-item :label-style="customStyle" :label-position="labelPosition" label="问题内容" :border-bottom="false" prop="name">
-			<view style="padding: 0 32rpx;"><text>问题类型：</text>{{stepsData.apply_type}}</view>
-			<view style="padding: 0 32rpx;">
+		<!-- 申请信息 -->
+		<view class="deta_view">
+			<view class="deta_title">问题信息</view>
+			<view class="deta_text"><text>问题类型：</text>{{stepsData.apply_type}}</view>
+			<view class="deta_text">
 				<text>相关图片：</text><text v-if="stepsData.image == null">未上传</text>
 				<view class="imageView">
-					<image class="imageS" v-if="stepsData.image !== null" v-for="(item,index) in stepsData.image" :key="index" :src="item" mode="aspectFill" @click="previewOpen(index)"></image>
+					<image class="imageS" v-if="stepsData.image !== null" v-for="(item,index) in stepsData.image" :key="index" :src="item"
+					 mode="aspectFill" @click="previewOpen(index)"></image>
 				</view>
 			</view>
-			<view style="padding: 0 32rpx; margin-top: 16upx;">
-				<text>问题内容：</text>
-				<text>{{stepsData.content}}</text>
-			</view>
-		</u-form-item>
+			<view class="deta_text"><text>问题内容：</text>{{stepsData.content}}</view>
+		</view>
 		
 		<!-- 执行结果 -->
-		<u-form-item :label-style="customStyle" :label-position="labelPosition" label="处理结果" :border-bottom="false" prop="name" v-if="stepsData.order_state == '已完成'">
-			<view style="padding: 0 32rpx;"><text>内容：</text>{{stepsData.result}}</view>
-		</u-form-item>
+		<view class="deta_view" v-if="StepsIndex == 2">
+			<view class="deta_title">执行结果</view>
+			<view class="deta_text"><text>内容：</text>{{stepsData.result}}</view>
+		</view>
+		
 		
 		<!-- 防触底空模块 -->
 		<view style="width: 100%; height: 112upx;"></view>
@@ -111,24 +114,14 @@
 				cancelShow : false,//提交弹框默认值
 				contentInputData : '',//输入框内容
 				contentList : ['问题已处理','问题较为困难','任务需加派人员','任务需要配合'],//可选失败内容
-				
-				//----------------uview样式--------------------------
-				customStyle: {
-					fontWeight: 'bold',
-					fontSize: '17px',
-					marginTop : '24rpx',
-					padding: '0rpx 16px',
-				},
-				labelPosition: 'right',
 			
 			}
 		},
 		
 		onLoad:function(e){
-			uni.showLoading({
-				title: '加载数据中...'
-			})
 			this.id = e.id;
+		},
+		onShow:function(){
 			this.userData();
 		},
 		onPullDownRefresh: function() {
@@ -150,8 +143,13 @@
 					fail: (err) => {
 						uni.hideLoading()
 						uni.showToast({
-							title:'加载个人信息失败',
-							icon:'none'
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../pages/GRZX/userLogin'
+								})
+							}
 						})
 					}
 				});
@@ -291,6 +289,7 @@
 	//图片样式
 	.imageView{
 		display: flex;
+		margin-top: 20upx;
 		.imageS{
 			display: block; 
 			width: 212upx; 
@@ -299,6 +298,22 @@
 		}
 	}
 	
+	//主体文字样式
+	.deta_view {
+		padding: 0upx 32upx;
+	
+		.deta_title {
+			margin: 8upx 0;
+			font-weight: bold;
+			font-size: 34upx;
+			margin-top: 24upx;
+		}
+	
+		.deta_text {
+			font-size: 30upx;
+			padding: 20upx 16upx;
+		}
+	}
 	
 	//提交弹框
 	.box_Vlew {
