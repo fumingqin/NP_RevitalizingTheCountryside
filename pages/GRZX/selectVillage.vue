@@ -11,7 +11,7 @@
 		</view>
 
 		<!-- 搜索列表 -->
-		<view class="stationList" :style="{ 'height':scrollHeight }" v-if="SearchStatus">
+		<view class="stationList" :style="{ 'height':scrollHeight +'px' }" v-if="SearchStatus">
 			<block v-for="(item,index) in VillageSearchList" :key="index">
 				<view class="listItem" @click="Listclick(item)">
 					<rich-text :nodes="item.village_name"></rich-text>
@@ -20,7 +20,7 @@
 		</view>
 
 		<!-- 原列表 -->
-		<view class="stationList" :style="{ 'height':scrollHeight }" v-if="VillageStatus">
+		<view class="stationList" :style="{ 'height':scrollHeight +'px'}" v-if="VillageStatus">
 			<block v-for="(item,index) in VillageList" :key="index">
 				<view class="listItem" @click="Listclick(item)">
 					<rich-text :nodes="item.village_name"></rich-text>
@@ -36,6 +36,7 @@
 			return {
 				VillageSearchList: [], //关键字查询的乡村
 				VillageList: [], //乡村列表
+				
 				VillageStatus: true, //原列表显示状态
 				SearchStatus: false, //搜索框显示状态
 				
@@ -45,6 +46,9 @@
 			}
 		},
 		onLoad(pam) {
+			const res = uni.getSystemInfoSync();
+			this.scrollHeight = res.windowHeight - 50;
+			console.log(this.scrollHeight);
 			this.userId = pam.id;
 			uni.showModal({
 				title:'温馨提示',
