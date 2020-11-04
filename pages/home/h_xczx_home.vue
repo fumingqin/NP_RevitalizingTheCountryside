@@ -162,7 +162,11 @@
 			// this.getLoginState();
 			//#endif
 		},
-
+		
+		onPullDownRefresh:function(){
+			this.cacheLoadData();
+		},
+		
 		methods: {
 			//加载缓存数据
 			cacheLoadData : function(){
@@ -170,14 +174,7 @@
 				uni.getStorage({
 					key:'rotationData',
 					success: (res) => {
-						// console.log('拿到缓存了',res)
-						if(res.data.length >= 2){
-							for(var i =0; i<res.data.length; i++){
-								this.rotationChart.push(res.data[i].image)
-							}
-						}else{
-							this.rotationChart.push(res.data.image)
-						}
+						this.rotationChart  = res.data
 						this.rotationLoadData();
 					},
 					fail: (err) => {
@@ -251,21 +248,25 @@
 						type : '1' 
 					},
 					success: (res) => {
-						// console.log('轮播区', res)
+						console.log('轮播区', res)
 						if(res.data.data == ''){
 							this.rotationLoadData();
 						}else{
 							if(res.data.data.length >= 2){
-								for(var i =0; i<res.data.data.length; i++){
-									this.rotationChart.push(res.data.data[i].image)
-								}
+								this.rotationChart = res.data.data
+								uni.setStorage({
+									key : 'rotationData',
+									data : res.data.data,
+								})
 							}else{
-								this.rotationChart.push(res.data.data.image)
+								this.rotationChart = [];
+								this.rotationChart.push(res.data.data)
+								uni.setStorage({
+									key : 'rotationData',
+									data : this.rotationChart,
+								})
 							}
-							uni.setStorage({
-								key : 'rotationData',
-								data : res.data.data,
-							})
+							
 						}
 					},
 					fail: function() {
