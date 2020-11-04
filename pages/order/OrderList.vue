@@ -214,148 +214,6 @@
 						</view>
 					</view>
 
-					<!-- 旅游产品 -->
-					<!-- 同景区门票 -->
-					<view v-if="item.title=='旅游产品' && item.isDel !== '是'">
-						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
-						<view class="at_view">
-							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image>
-								<text class="at_title">{{item.ticketTitle}}</text>
-								<text class="at_status">{{item.orderType}}</text>
-							</view>
-							<view class="at_contentView" style="display: flex;">
-								<view v-for="(item2,index2) in item.ticketComment" :key="index2">
-									<view class="at_contentFrame">{{item2}}</view>
-								</view>
-								<text class="at_contentPrice">¥{{item.orderActualPayment}}</text>
-							</view>
-
-							<view class="at_contentView">
-								<text class="at_contentText">使用时间：&nbsp;{{item.orderDate}}</text>
-								<text class="at_contentText">预订人数：&nbsp;{{item.orderUserIndex}}人</text>
-							</view>
-
-							<!-- 已使用 -->
-							<view class="at_buttonView" v-if="item.orderType=='已使用'">
-								<view class="at_button at_btDetails" @click="details(item.orderNumber)" style="margin-right: 0upx;">详情</view>
-							</view>
-
-							<!-- 待使用 -->
-							<view class="at_buttonView" v-if="item.orderType=='待使用'">
-								<view class="at_button at_btDelete" @click="open2(item.orderNumber,'5')">退票</view>
-								<view class="at_button at_btQrCode" @click="open5(item)">二维码</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-							</view>
-
-							<!-- 待选车 -->
-							<view class="at_buttonView" v-if="item.orderType=='待选车'">
-								<view class="at_button at_btDelete" @click="open2(item.orderNumber,'5')">退票</view>
-								<view class="at_button at_btQrCode" @click="chooseShuttle(item)">选班车</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-							</view>
-
-							<!-- 待支付 -->
-							<view class="at_buttonView" v-if="item.orderType=='待支付'">
-								<view class="at_button at_btDelete" @click="open3(item.orderNumber,'5')">取消</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btToPay" @click="topay(item.orderNumber,'5')">去支付</view>
-							</view>
-
-							<!-- 已退票 -->
-							<view class="at_buttonView" v-if="item.orderType=='已退票'">
-								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'5')">删除</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'5')">再次预订</view>
-							</view>
-
-							<!-- 已取消 -->
-							<view class="at_buttonView" v-if="item.orderType=='已取消'">
-								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'5')">删除</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'5')">再次预订</view>
-							</view>
-
-							<!-- 支付超时 -->
-							<view class="at_buttonView" v-if="item.orderType=='支付超时'">
-								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'5')">删除</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'5')">再次预订</view>
-							</view>
-
-							<!-- 已失效 -->
-							<view class="at_buttonView" v-if="item.orderType=='已失效'">
-								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'5')">删除</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'5')">再次预订</view>
-							</view>
-
-						</view>
-					</view>
-
-					<!-- 包车订单 -->
-					<!-- 标签class命名：;全称：Purchase Date -->
-					<!-- 内容class命名：cm;全称：custom made -->
-					<view v-if="item.or_class=='包车-定制' || item.or_class=='包车-专线'">
-						<view class="pd_view">{{item.or_date}}</view>
-						<view class="cm_view">
-							<view class="cm_titleView">
-								<image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image>
-								<text class="cm_title">{{item.or_class}}</text>
-								<text class="cm_status">{{getBCstate(item.or_Type)}}</text>
-							</view>
-							<!-- <view class="cm_contentView" style="display: flex;">
-							<text class="cm_contentPrice">¥{{item.cm_money}}</text>
-						</view> -->
-							<view class="cm_contentView">
-								<text class="cm_contentText">发车时间：&nbsp;{{item.or_dateString}}</text>
-								<text class="cm_contentText">上车点：&nbsp;{{item.or_boardingPoint}}</text>
-								<text class="cm_contentText">目的地：&nbsp;{{item.or_destination}}</text>
-								<view v-if="item.or_class=='包车-定制'"><text class="cm_contentText">包车天数：&nbsp;{{item.cm_day}}天</text></view>
-							</view>
-
-
-							<!-- 已完成 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='13'">
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)" style="margin-right: 0upx;">详情</view>
-								<view class="cm_button cm_btDetails" @click="czcComplaint2(item)" style="margin-right: 0upx;margin-left: 20upx;">投诉</view>
-							</view>
-
-							<!-- 待补款 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='11'">
-							<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-							<view class="cm_button cm_btToPay" @click="topay3(item.or_number)">去支付</view>
-						</view>
-							<!-- 等待接单中 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='0'">
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-								<view class="cm_button cm_btDelete" @click="open3(item.or_number,'4')">取消</view>
-							</view>
-							<!-- 订单执行中 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='4'">
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-							</view>
-							<!-- 进行中 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='2'||item.or_Type=='3'||item.or_Type=='1'||item.or_Type=='10'">
-								<view class="cm_button cm_contact" @click="tel(item.or_driverTelephone)">联系司机</view>
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-								<view class="cm_button cm_btDelete" @click="open3(item.or_number,'4')">取消</view>
-							</view>
-
-							<!-- 待支付 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='5'">
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-								<view class="cm_button cm_btDelete" @click="open3(item.or_number,'4')">取消</view>
-								<view class="cm_button cm_btToPay" @click="topay2(item.or_number)">去支付</view>
-							</view>
-
-							<!-- 已取消 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='8'||item.or_Type=='7'">
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-								<view class="cm_button cm_btDelete" @click="open4(item.or_number,'4')">删除</view>
-							</view>
-						</view>
-					</view>
 						<!-- （全部）客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车 -->
 						<view v-if="item.carType=='普通班车' || item.carType=='定制班车' ||item.carType=='定制巴士'">
 							<view class="pd_view">下单时间：{{item.bookTime}}</view>
@@ -555,66 +413,6 @@
 						</view>
 					</view>
 
-					<!-- 旅游产品 -->
-					<!-- 同景区门票 -->
-					<view v-if="item.title=='旅游产品' && item.isDel !== '是'">
-						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
-						<view class="at_view">
-							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image>
-								<text class="at_title">{{item.ticketTitle}}</text>
-								<text class="at_status">{{item.orderType}}</text>
-							</view>
-							<view class="at_contentView" style="display: flex;">
-								<view v-for="(item2,index2) in item.ticketComment" :key="index2">
-									<view class="at_contentFrame">{{item2}}</view>
-								</view>
-								<text class="at_contentPrice">¥{{item.orderActualPayment}}</text>
-							</view>
-
-							<view class="at_contentView">
-								<text class="at_contentText">使用时间：&nbsp;{{item.orderDate}}</text>
-								<text class="at_contentText">预订人数：&nbsp;{{item.orderUserIndex}}人</text>
-							</view>
-
-							<!-- 已使用 -->
-							<view class="at_buttonView" v-if="item.orderType=='已使用'">
-								<view class="at_button at_btDetails" @click="details(item.orderNumber)" style="margin-right: 0upx;">详情</view>
-							</view>
-
-
-						</view>
-					</view>
-
-					<!-- 包车订单 -->
-					<!-- 标签class命名：;全称：Purchase Date -->
-					<!-- 内容class命名：cm;全称：custom made -->
-					<view v-if="item.or_class=='包车-定制' || item.or_class=='包车-专线'">
-						<view class="pd_view">{{item.or_date}}</view>
-						<view class="cm_view">
-							<view class="cm_titleView">
-								<image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image>
-								<text class="cm_title">{{item.or_class}}</text>
-								<text class="cm_status">{{getBCstate(item.or_Type)}}</text>
-							</view>
-							<!-- <view class="cm_contentView" style="display: flex;">
-							<text class="cm_contentPrice">¥{{item.cm_money}}</text>
-						</view> -->
-							<view class="cm_contentView">
-								<text class="cm_contentText">发车时间：&nbsp;{{item.or_dateString}}</text>
-								<text class="cm_contentText">上车点：&nbsp;{{item.or_boardingPoint}}</text>
-								<text class="cm_contentText">目的地：&nbsp;{{item.or_destination}}</text>
-								<view v-if="item.or_class=='包车-定制'"><text class="cm_contentText">包车天数：&nbsp;{{item.cm_day}}天</text></view>
-							</view>
-							<!-- 已完成 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='13'">
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)" style="margin-right: 0upx;">详情</view>
-								<view class="cm_button cm_btDetails" @click="czcComplaint2(item)" style="margin-right: 0upx;margin-left: 20upx;">投诉</view>
-							</view>
-						</view>
-					</view>
-
-
 					<!-- （已完成）客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车 -->
 							<!-- （已完成）客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车 -->
 							<view v-if="item.carType=='普通班车' || item.carType=='定制班车' ||item.carType=='定制巴士'">
@@ -806,94 +604,6 @@
 								<view class="at_button at_btDelete" @click="open2(item.orderNumber,'3')">退票</view>
 								<view class="at_button at_btQrCode" @click="open5(item)">二维码</view>
 								<view class="at_button at_btDetails" @click="details(item.orderNumber,'3')">详情</view>
-							</view>
-
-						</view>
-					</view>
-
-					<!-- 旅游产品 -->
-					<!-- 同景区门票 -->
-					<view v-if="item.title=='旅游产品' && item.isDel !== '是'">
-						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
-						<view class="at_view">
-							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image>
-								<text class="at_title">{{item.ticketTitle}}</text>
-								<text class="at_status">{{item.orderType}}</text>
-							</view>
-							<view class="at_contentView" style="display: flex;">
-								<view v-for="(item2,index2) in item.ticketComment" :key="index2">
-									<view class="at_contentFrame">{{item2}}</view>
-								</view>
-								<text class="at_contentPrice">¥{{item.orderActualPayment}}</text>
-							</view>
-
-							<view class="at_contentView">
-								<text class="at_contentText">使用时间：&nbsp;{{item.orderDate}}</text>
-								<text class="at_contentText">预订人数：&nbsp;{{item.orderUserIndex}}人</text>
-							</view>
-
-
-
-							<!-- 待使用 -->
-							<view class="at_buttonView" v-if="item.orderType=='待使用'">
-								<view class="at_button at_btDelete" @click="open2(item.orderNumber,'5')">退票</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btQrCode" @click="open5(item)">二维码</view>
-							</view>
-
-							<!-- 待选车 -->
-							<view class="at_buttonView" v-if="item.orderType=='待选车'">
-								<view class="at_button at_btDelete" @click="open2(item.orderNumber,'5')">退票</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btQrCode" @click="chooseShuttle(item)">选班车</view>
-							</view>
-
-
-
-						</view>
-					</view>
-
-					<!-- 包车订单 -->
-					<!-- 标签class命名：;全称：Purchase Date -->
-					<!-- 内容class命名：cm;全称：custom made -->
-					<view v-if="item.or_class=='包车-定制' || item.or_class=='包车-专线'">
-						<view class="pd_view">{{item.or_date}}</view>
-						<view class="cm_view">
-							<view class="cm_titleView">
-								<image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image>
-								<text class="cm_title">{{item.or_class}}</text>
-								<text class="cm_status">{{getBCstate(item.or_Type)}}</text>
-							</view>
-							<!-- <view class="cm_contentView" style="display: flex;">
-							<text class="cm_contentPrice">¥{{item.cm_money}}</text>
-						</view> -->
-							<view class="cm_contentView">
-								<text class="cm_contentText">发车时间：&nbsp;{{item.or_dateString}}</text>
-								<text class="cm_contentText">上车点：&nbsp;{{item.or_boardingPoint}}</text>
-								<text class="cm_contentText">目的地：&nbsp;{{item.or_destination}}</text>
-								<view v-if="item.or_class=='包车-定制'"><text class="cm_contentText">包车天数：&nbsp;{{item.cm_day}}天</text></view>
-							</view>
-							<!-- 待补款 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='11'">
-							<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-							<view class="cm_button cm_btToPay" @click="topay3(item.or_number)">去支付</view>
-						</view>
-
-							<!-- 等待接单-->
-							<view class="cm_buttonView" v-if="item.or_Type=='0'">
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-								<view class="cm_button cm_btDelete" @click="open3(item.or_number,'4')">取消</view>
-							</view>
-							<!-- 订单执行中 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='4'">
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-							</view>
-							<!-- 进行中 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='1'||item.or_Type=='2'||item.or_Type=='3'||item.or_Type=='10'">
-								<view class="cm_button cm_contact" @click="tel(item.or_driverTelephone)">联系司机</view>
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-								<view class="cm_button cm_btDelete" @click="open3(item.or_number,'4')">取消</view>
 							</view>
 
 						</view>
@@ -1098,73 +808,6 @@
 						</view>
 					</view>
 
-					<!-- 旅游产品 -->
-					<!-- 同景区门票 -->
-					<view v-if="item.title=='旅游产品' && item.isDel !== '是'">
-						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
-						<view class="at_view">
-							<view class="at_titleView">
-								<image class="at_icon" src="../../static/order/chanping.png" mode="aspectFill"></image>
-								<text class="at_title">{{item.ticketTitle}}</text>
-								<text class="at_status">{{item.orderType}}</text>
-							</view>
-							<view class="at_contentView" style="display: flex;">
-								<view v-for="(item2,index2) in item.ticketComment" :key="index2">
-									<view class="at_contentFrame">{{item2}}</view>
-								</view>
-								<text class="at_contentPrice">¥{{item.orderActualPayment}}</text>
-							</view>
-
-							<view class="at_contentView">
-								<text class="at_contentText">使用时间：&nbsp;{{item.orderDate}}</text>
-								<text class="at_contentText">预订人数：&nbsp;{{item.orderUserIndex}}人</text>
-							</view>
-
-
-							<!-- 待支付 -->
-							<view class="at_buttonView" v-if="item.orderType=='待支付'">
-								<view class="at_button at_btDelete" @click="open3(item.orderNumber,'5')">取消</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btToPay" @click="topay(item.orderNumber,'5')">去支付</view>
-							</view>
-
-						</view>
-					</view>
-
-
-					<!-- 包车订单 -->
-					<!-- 标签class命名：;全称：Purchase Date -->
-					<!-- 内容class命名：cm;全称：custom made -->
-					<view v-if="item.or_class=='包车-定制' || item.or_class=='包车-专线'">
-						<view class="pd_view">{{item.or_date}}</view>
-						<view class="cm_view">
-							<view class="cm_titleView">
-								<image class="cm_icon" src="../../static/order/baoche.png" mode="aspectFill"></image>
-								<text class="cm_title">{{item.or_class}}</text>
-								<text class="cm_status">{{getBCstate(item.or_Type)}}</text>
-							</view>
-							<!-- <view class="cm_contentView" style="display: flex;">
-							<text class="cm_contentPrice">¥{{item.cm_money}}</text>
-						</view> -->
-							<view class="cm_contentView">
-								<text class="cm_contentText">发车时间：&nbsp;{{item.or_dateString}}</text>
-								<text class="cm_contentText">上车点：&nbsp;{{item.or_boardingPoint}}</text>
-								<text class="cm_contentText">目的地：&nbsp;{{item.or_destination}}</text>
-								<view v-if="item.or_class=='包车-定制'"><text class="cm_contentText">包车天数：&nbsp;{{item.cm_day}}天</text></view>
-							</view>
-
-
-							<!-- 待支付 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='5'">
-								<view class="cm_button cm_btDelete" @click="open3(item.or_number,'4')">取消</view>
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-								<view class="cm_button cm_btToPay" @click="topay2(item.or_number)">去支付</view>
-							</view>
-
-
-						</view>
-					</view>
-
 							<!-- (未支付)客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车 -->
 							<view v-if="item.carType=='普通班车' || item.carType=='定制班车' ||item.carType=='定制巴士'">
 								<!-- 预定日期 -->
@@ -1261,7 +904,7 @@
 									<view style="color: #666666; font-size: 28rpx;">{{item.orderType}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 20rpx 0 15rpx 0rpx ;">
-									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/Order/time.png"></image>
+									<image style="width: 22rpx; height: 22rpx;margin-left: 60rpx;" src="../../static/order/time.png"></image>
 									<view style=" color: #AAAAAA; font-size: 28rpx;padding-left: 20rpx;">{{changeTime(item.time)}}</view>
 								</view>
 								<view style="display: flex;align-items: center;padding: 15rpx 0 15rpx 0rpx ;">
@@ -1294,13 +937,13 @@
 						</view>
 						<view class="CZCwhiteBg">
 							<view style="display: flex; margin-top: -40rpx;">
-								<image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/Order/Car1.png"></image>
+								<image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/order/Car1.png"></image>
 								<view style="width: 600rpx; height: 44rpx;color: #2C2D2D; font-size: 34rpx;margin: 48rpx -28rpx;font-weight: bold;">{{item.vehicleType}}</view>
 								<view style="width: 160rpx; height: 44rpx;color: #666666; font-size: 28rpx;margin: 48rpx 0rpx;">{{taxiOrderState(item.state)}}</view>
 							</view>
 
 							<view style="display: flex; margin-top: -72rpx;">
-								<image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/Order/time.png"></image>
+								<image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/order/time.png"></image>
 								<view style="width: 540rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx -76rpx;">{{changeTime(item.orderTime)}}</view>
 								<!-- <view style="width: 160rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx 0rpx;">{{item.money}}</view> -->
 							</view>
@@ -1334,7 +977,7 @@
 						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
 						<view class="at_view">
 							<view class="at_titleView">
-								<image class="at_icon" src="../../static/Order/menpiao.png" mode="aspectFill"></image>
+								<image class="at_icon" src="../../static/order/menpiao.png" mode="aspectFill"></image>
 								<text class="at_title">{{item.ticketTitle}}</text>
 								<text class="at_status">{{item.orderType}}</text>
 							</view>
@@ -1381,96 +1024,13 @@
 					</view>
 
 
-					<!-- 旅游产品 -->
-					<!-- 同景区门票 -->
-					<view v-if="item.title=='旅游产品' && item.isDel !== '是'">
-						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
-						<view class="at_view">
-							<view class="at_titleView">
-								<image class="at_icon" src="../../static/Order/chanping.png" mode="aspectFill"></image>
-								<text class="at_title">{{item.ticketTitle}}</text>
-								<text class="at_status">{{item.orderType}}</text>
-							</view>
-							<view class="at_contentView" style="display: flex;">
-								<view v-for="(item2,index2) in item.ticketComment" :key="index2">
-									<view class="at_contentFrame">{{item2}}</view>
-								</view>
-								<text class="at_contentPrice">¥{{item.orderActualPayment}}</text>
-							</view>
-
-							<view class="at_contentView">
-								<text class="at_contentText">使用时间：&nbsp;{{item.orderDate}}</text>
-								<text class="at_contentText">预订人数：&nbsp;{{item.orderUserIndex}}人</text>
-							</view>
-
-							<!-- 已退票 -->
-							<view class="at_buttonView" v-if="item.orderType=='已退票'">
-								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'5')">删除</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'5')">再次预订</view>
-							</view>
-
-							<!-- 已取消 -->
-							<view class="at_buttonView" v-if="item.orderType=='已取消'">
-								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'5')">删除</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'5')">再次预订</view>
-							</view>
-
-							<!-- 支付超时 -->
-							<view class="at_buttonView" v-if="item.orderType=='支付超时'">
-								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'5')">删除</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'5')">再次预订</view>
-							</view>
-
-							<!-- 已失效 -->
-							<view class="at_buttonView" v-if="item.orderType=='已失效'">
-								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'5')">删除</view>
-								<view class="at_button at_btDetails" @click="details(item.orderNumber,'5')">详情</view>
-								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'5')">再次预订</view>
-							</view>
-
-						</view>
-					</view>
-
-					<!-- 包车定制 -->
-					<!-- 标签class命名：;全称：Purchase Date -->
-					<!-- 内容class命名：cm;全称：custom made -->
-					<view v-if="item.or_class=='包车-定制' || item.or_class=='包车-专线'">
-						<view class="pd_view">{{item.or_date}}</view>
-						<view class="cm_view">
-							<view class="cm_titleView">
-								<image class="cm_icon" src="../../static/Order/baoche.png" mode="aspectFill"></image>
-								<text class="cm_title">{{item.or_class}}</text>
-								<text class="cm_status">{{getBCstate(item.or_Type)}}</text>
-							</view>
-							<!-- <view class="cm_contentView" style="display: flex;">
-							<text class="cm_contentPrice">¥{{item.cm_money}}</text>
-						</view> -->
-							<view class="cm_contentView">
-								<text class="cm_contentText">发车时间：&nbsp;{{item.or_dateString}}</text>
-								<text class="cm_contentText">上车点：&nbsp;{{item.or_boardingPoint}}</text>
-								<text class="cm_contentText">目的地：&nbsp;{{item.or_destination}}</text>
-								<view v-if="item.or_class=='包车-定制'"><text class="cm_contentText">包车天数：&nbsp;{{item.cm_day}}天</text></view>
-							</view>
-
-
-							<!-- 已取消 -->
-							<view class="cm_buttonView" v-if="item.or_Type=='8'||item.or_Type=='7'">
-								<view class="cm_button cm_btDelete" @click="open4(item.or_number,'4')">删除</view>
-								<view class="cm_button cm_btDetails" @click="details2(item.or_number)">详情</view>
-
-							</view>
-						</view>
-					</view>
 								<!-- (已取消)客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车客车 -->
 								<view v-if="item.carType=='普通班车' || item.carType=='定制班车' ||item.carType=='定制巴士'">
 									<!-- 预定日期 -->
 									<view class="pd_view">下单时间：{{item.bookTime}}</view>
 									<view class="at_view">
 										<view class="at_titleView">
-											<image class="at_icon" src="../../static/Order/keche.png" mode="aspectFill"></image>
+											<image class="at_icon" src="../../static/order/keche.png" mode="aspectFill"></image>
 											<view class="at_textView"><text class="at_title">{{item.startSiteName}}-{{item.endSiteName}}</text></view>
 											<text class="at_status">{{getCtkyOrderStatus(item.state)}}</text>
 										</view>
@@ -4703,10 +4263,10 @@
 
 			.at_icon {
 				position: relative;
-				top: 16upx;
+				top: 0upx;
 				right: 20upx;
 				width: 40upx;
-				height: 34upx;
+				height: 38upx;
 			}
 			.at_textView{
 				padding-left: 20upx;
