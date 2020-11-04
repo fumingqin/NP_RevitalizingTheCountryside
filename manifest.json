@@ -21,7 +21,8 @@
             "Maps" : {},
             "OAuth" : {},
             "Payment" : {},
-            "Share" : {}
+            "Share" : {},
+            "VideoPlayer" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -117,6 +118,10 @@
                         "spotlight@3x" : "unpackage/res/icons/120x120.png"
                     }
                 }
+            },
+            "splashscreen" : {
+                "iosStyle" : "common",
+                "androidStyle" : "common"
             }
         },
         "nvueLaunchMode" : ""

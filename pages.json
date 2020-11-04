@@ -625,9 +625,7 @@
 					"style": {}
 				}, {
 					"path": "pages/shuimeiEconomy/se_detailsPage",
-					"style": {
-						"navigationStyle": "custom"
-					}
+					"style": {}
 				}, {
 					"path": "pages/shuimeiEconomy/se_generalList",
 					"style": {}
@@ -933,9 +931,6 @@
 			]
 		}
 	],
-
-
-
 
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
