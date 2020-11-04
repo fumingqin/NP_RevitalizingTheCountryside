@@ -39,6 +39,9 @@
 				</view>
 			</view>
 		</view>
+		
+		<!-- 防触底空模块 -->
+		<view style="width: 100%; height: 112upx;"></view>
 
 	</view>
 </template>
@@ -101,6 +104,13 @@
 					ImageURL1: "../../static/home/serve/xmjd.png", //亮
 					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
 					ItemTitle: "项目监督",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "",
+					ImageURL1: "../../static/home/vajra/jidukaohe.png", //亮
+					ImageURL2: "../../static/home/vajra/jidukaohe2.png", //暗
+					ItemTitle: "季度考核",
 					style: "sv_print",
 				}],
 
@@ -188,7 +198,7 @@
 					ItemTitle: "发布考评",
 					style: "sv_print",
 				}]
-
+				
 			}
 		},
 		onLoad: function() {

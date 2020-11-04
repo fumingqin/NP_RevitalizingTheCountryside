@@ -134,7 +134,7 @@
 						display: true,
 						entrance: '../../pages_ZCFB/pages/ZCFB/policyList',
 					}, {
-						name: '季度考核',
+						name: '乡村评榜',
 						image: '../../static/home/vajra/jidukaohe.png',
 						display: true,
 						entrance: '../../pages_BUS/pages/Bus/BusQuery',
