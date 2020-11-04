@@ -454,7 +454,7 @@
 				{
 					"path": "pages/ZCFB/policyDetails",
 					"style": {
-						"navigationBarTitleText": ""
+						"navigationBarTitleText": "政策详情"
 					}
 				},
 				{
@@ -541,13 +541,25 @@
 				{
 					"path": "pages/WSSC/goodsDetails",
 					"style": {
-						"navigationBarTitleText": ""
+						"navigationBarTitleText": "商品详情"
 					}
 				},
 				{
 					"path": "pages/WSSC/myGoodsList",
 					"style": {
 						"navigationBarTitleText": "我的发布"
+					}
+				},
+				{
+					"path": "pages/WSSC/checkGoods",
+					"style": {
+						"navigationBarTitleText": "审核商品"
+					}
+				},
+				{
+					"path": "pages/WSSC/village",
+					"style": {
+						"navigationBarTitleText": "村名列表"
 					}
 				}
 
@@ -927,6 +939,21 @@
 					"style": {
 						"navigationStyle": "custom"
 					}
+				}
+			]
+		},
+		//---------------------------------------------第二个包：网络约车------------------------------------------
+		{
+			"root": "pages_FBXM/",
+			"pages": [
+				//----------------------------------出租车--------------------------------------------
+				{
+				    "path" : "pages/publishProject/pp_list",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/publishProject/PP_addPage",
+				    "style" : {}
 				}
 			]
 		}
