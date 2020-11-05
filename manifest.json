@@ -22,7 +22,8 @@
             "OAuth" : {},
             "Payment" : {},
             "Share" : {},
-            "VideoPlayer" : {}
+            "VideoPlayer" : {},
+            "Geolocation" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -74,8 +75,8 @@
                 },
                 "maps" : {
                     "amap" : {
-                        "appkey_ios" : "bf02c27c171e556ea05ff4f4c1dfb970",
-                        "appkey_android" : "fe9afb3e30987f45ad0b9033e8f3cbff"
+                        "appkey_ios" : "fe9afb3e30987f45ad0b9033e8f3cbff",
+                        "appkey_android" : "bf02c27c171e556ea05ff4f4c1dfb970"
                     }
                 },
                 "share" : {
@@ -84,7 +85,13 @@
                         "UniversalLinks" : "https://zntc.145u.net/ulink/"
                     }
                 },
-                "geolocation" : {},
+                "geolocation" : {
+                    "amap" : {
+                        "__platform__" : [ "ios", "android" ],
+                        "appkey_ios" : "fe9afb3e30987f45ad0b9033e8f3cbff",
+                        "appkey_android" : "bf02c27c171e556ea05ff4f4c1dfb970"
+                    }
+                },
                 "ad" : {}
             },
             "icons" : {

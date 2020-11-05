@@ -182,10 +182,6 @@
 			this.loadCateList(options.fid, options.sid);
 			this.Getpostion();
 		},
-		
-		onShow:function(){
-			this.getAuthorizeInfo();//检查是否开启定位
-		},
 
 		onPullDownRefresh: function() {
 			this.lyfwData(); //请求接口数据
@@ -270,41 +266,17 @@
 						success: (res) => {
 							// console.log(res)
 							this.regionWeixin = res.data;
+							this.lyfwData(); //请求接口数据
 						},
 						fail: (res) => {
-							// #ifdef APP-NVUE
 							uni.showToast({
 								title:'请选择地区',
 								icon:'none'
 							})
-							// #endif
-						},
-						complete: () => {
 							this.lyfwData(); //请求接口数据
-						}
-					}),
-					uni.getStorage({
-						key: 'app_position',
-						success: (res) => {
-							// console.log(res)
-							if (res.data !== undefined) {
-								this.regionWeixin = res.data.city;
-							}
 						},
-						fail: (res) => {
-							// #ifdef APP-NVUE
-							uni.showToast({
-								title:'请选择地区',
-								icon:'none'
-							})
-							// #endif
-						},
-						complete: () => {
-							this.lyfwData(); //请求接口数据
-						}
 					})
-				}, 1000)
-
+				},500)
 			},
 
 			//打开地区选择器
@@ -529,58 +501,7 @@
 				if (this.scenicListIndex >= this.scenicList.length) {
 					this.loadingType = 2;
 				}
-			},
-			
-			//------------------------------开启定位功能----------------------------------
-			getAuthorizeInfo() {
-				const that = this;
-				uni.authorize({
-					scope: 'scope.userLocation',
-					success() { // 允许授权
-						that.getLocationInfo();
-						// console.log("你允许授权")
-					},
-					fail() { // 拒绝授权
-						that.openConfirm();
-						// console.log("你拒绝了授权，无法获得周边信息")
-					}
-				})
-			},
-			
-			// 获取地理位置
-			getLocationInfo() {
-				uni.getLocation({
-					type: 'wgs84',
-					success(res) {
-						// console.log(res);
-					}
-				});
-			},
-			
-			// 再次获取授权
-			// 当用户第一次拒绝后再次请求授权
-			openConfirm() {
-				uni.showModal({
-					title: '请求授权当前位置',
-					content: '需要获取您的地理位置，请确认授权',
-					success: (res) => {
-						// console.log(res)
-						if (res.confirm) {
-							uni.openSetting(); // 打开地图权限设置
-						} else if (res.cancel) {
-							uni.showToast({
-								title: '你拒绝了授权，无法获得周边信息',
-								icon: 'none',
-								duration: 1000
-							})
-						}
-					}
-				});
 			}
-			
-			
-			
-
 		}
 	}
 </script>

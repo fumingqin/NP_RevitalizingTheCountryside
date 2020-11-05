@@ -156,6 +156,10 @@
 					},
 					fail() { //1.2 拒绝授权
 						// console.log("你拒绝了授权，无法获得周边信息")
+						uni.showToast({
+							title: '你拒绝了授权，无法获得您当前的定位地区',
+							icon: 'none'
+						})
 					}
 				})
 			},
@@ -248,26 +252,28 @@
 				uni.getLocation({
 					type: 'wgs84',
 					geocode: true,
-					success: function(res) {
-						// console.log(res)
+					success: (res)=>{
+						console.log(res);
+						this.position = res.address.city
 						uni.setStorage({
-							key: 'app_position',
-							data: res.address,
+							key: 'wx_position',
+							data: this.position,
 						})
-						that.loadCity(); //小程序-调用高德
-					},
+					}
 				})
+				// that.loadCity();//小程序-调用高德
 			},
 			//把当前位置的经纬度传给高德地图，调用高德API获取当前地理位置
 			loadCity: function() {
 				var myAmapFun = new amapFile.AMapWX({
 					key: this.markersData.key,
 				});
-				// console.log(myAmapFun);
+				console.log(myAmapFun);
 				myAmapFun.getRegeo({
 					success: (data) => {
-						// console.log(data)
+						console.log(data)
 						this.position = data[0].regeocodeData.addressComponent.city
+						console.log(this.position);
 						uni.setStorage({
 							key: 'wx_position',
 							data: this.position
