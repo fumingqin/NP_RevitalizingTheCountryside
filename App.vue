@@ -1,6 +1,23 @@
 <script>
 	export default {
 		onLaunch: function() {
+			var a = uni.getStorageSync('guidePageData')
+			if(a == true){
+				console.log
+				uni.switchTab({
+					url: 'h_xczx_home'
+				})
+			}else{
+				uni.setStorage({
+					key:'guidePageData',
+					data:true,
+					success: () => {
+						uni.redirectTo({
+							url: 'guidePage'
+						})
+					}
+				})
+			}
 			console.log('App Launch')
 		},
 		onShow: function() {

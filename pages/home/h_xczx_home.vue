@@ -150,12 +150,27 @@
 		},
 
 		onLoad: function() {
+			this.cacheLoadData();
+			// var a = uni.getStorageSync('')
+			// if(a == true){
+				
+			// }else{
+			// 	uni.setStorage({
+			// 		key:'guidePageData',
+			// 		data:true,
+			// 		success: () => {
+			// 			uni.navigateTo()({
+			// 				url: 'guidePage'
+			// 			})
+			// 		}
+			// 	})
+			// }
 			// uni.clearStorage()
 			// let pro = uni.getStorageSync('protocol')
 			// if (pro !== true) {
 				// this.protocolStatus = true;
 			// }
-			this.cacheLoadData();
+			
 			
 			// this.getTodayDate();
 			// #ifdef MP-WEIXIN

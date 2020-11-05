@@ -136,13 +136,19 @@
 		},
 		
 		//----------------------------个人中心模块结束----------------------------
-
 		 {
 			"path": "pages/ZXDT/zxdt_information",
 			"style": {}
 		}, {
 			"path": "pages/ZXDT/infor_details",
 			"style": {}
+		},
+		{
+			"path": "pages/home/guidePage",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 
