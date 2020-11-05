@@ -72,13 +72,6 @@
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "../../pages_XCDT/pages/ruralDynamics/rd_generalList",
-					ImageURL1: "../../static/home/serve/yh.png", //亮
-					ImageURL2: "../../static/home/serve/yh2.png", //暗
-					ItemTitle: "乡村动态",
-					style: "sv_print",
-				},{
-					IsUse: true,
 					clickURL: "../../pages_STYH/pages/ecologicalBank/eb_generalList",
 					ImageURL1: "../../static/home/serve/yh.png", //亮
 					ImageURL2: "../../static/home/serve/yh2.png", //暗
@@ -118,13 +111,6 @@
 					ImageURL1: "../../static/home/vajra/jidukaohe.png", //亮
 					ImageURL2: "../../static/home/vajra/jidukaohe2.png", //暗
 					ItemTitle: "季度考评",
-					style: "sv_print",
-				},{
-					IsUse: true,
-					clickURL: "../../pages_MQFK/pages/publicFeedback/pf_list",
-					ImageURL1: "../../static/home/serve/xmjd.png", //亮
-					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
-					ItemTitle: "民情反馈",
 					style: "sv_print",
 				}],
 
