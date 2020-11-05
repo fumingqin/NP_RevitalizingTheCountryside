@@ -142,9 +142,6 @@
 			}
 		},
 		onLoad: function(e) {
-			uni.showLoading({
-				title: '加载数据中...'
-			})
 			/* 设置当前滚动容器的高，若非窗口的高度，请自行修改 */
 			uni.getSystemInfo({
 				success: (res) => {
@@ -152,8 +149,12 @@
 				}
 			});
 			this.id = e.id;
+		},
+		
+		onShow:function(){
 			this.userData();
 		},
+		
 		onPullDownRefresh: function() {
 			this.loadData();
 		},
@@ -178,8 +179,13 @@
 					fail: (err) => {
 						uni.hideLoading()
 						uni.showToast({
-							title:'加载个人信息失败',
-							icon:'none'
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../pages/GRZX/userLogin'
+								})
+							}
 						})
 					}
 				});

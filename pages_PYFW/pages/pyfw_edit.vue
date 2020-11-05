@@ -201,6 +201,8 @@
 				}
 			});
 			this.lostData();
+		},
+		onShow:function(){
 			this.userData();
 		},
 
@@ -212,6 +214,18 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						console.log('获取个人信息', this.userInfo)
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../pages/GRZX/userLogin'
+								})
+							}
+						})
 					}
 				});
 			},

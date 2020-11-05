@@ -113,13 +113,12 @@
 		},
 		onLoad: function(e) {
 			// console.log(e)
-			uni.showLoading({
-				title: '加载数据中...'
-			})
 			this.id = e.id;
-			this.loadData();
+		},
+		onShow:function(){
 			this.userData();
 		},
+		
 		onPullDownRefresh: function() {
 			this.loadData();
 		},
@@ -131,12 +130,27 @@
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
 			userData: function() {
+				uni.showLoading({
+					title: '加载数据中...'
+				})
 				uni.getStorage({
 					key: 'userInfo',
 					success: (res) => {
 						this.userInfo = res.data;
 						this.loadData();
 						console.log('获取个人信息', this.userInfo)
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../pages/GRZX/userLogin'
+								})
+							}
+						})
 					}
 				});
 			},
