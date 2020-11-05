@@ -54,7 +54,6 @@
 				imageIndex: '', //首页图片
 				level: 2, //0为普通用户，1为村级职责人员，2位县市级职责人员
 				userInfo: '', //用户数据
-
 				//普通用户管理区
 				ItemArr: [{
 					IsUse: true,
@@ -80,8 +79,8 @@
 				},{
 					IsUse: true,
 					clickURL: "../../pages_PYFW/pages/pyfw_py_list",
-					ImageURL1: "../../static/home/serve/kjtpy.png", //亮
-					ImageURL2: "../../static/home/serve/kjtpy2.png", //暗
+					ImageURL1: "../../static/home/serve/特派任务.png", //亮
+					ImageURL2: "../../static/home/serve/特派任务2.png", //暗
 					ItemTitle: "特派任务",
 					style: "sv_print",
 				},{
@@ -108,9 +107,16 @@
 				},{
 					IsUse: true,
 					clickURL: "",
-					ImageURL1: "../../static/home/vajra/jidukaohe.png", //亮
-					ImageURL2: "../../static/home/vajra/jidukaohe2.png", //暗
+					ImageURL1: "../../static/home/serve/季度考评.png", //亮
+					ImageURL2: "../../static/home/serve/季度考评2.png", //暗
 					ItemTitle: "季度考评",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "",
+					ImageURL1: "../../static/home/serve/农产品.png", //亮
+					ImageURL2: "../../static/home/serve/农产品2.png", //暗
+					ItemTitle: "农产品",
 					style: "sv_print",
 				}],
 
@@ -133,36 +139,36 @@
 				{
 					IsUse: true,
 					clickURL: "../../pages_WSSC/pages/WSSC/checkGoods",
-					ImageURL1: "../../static/home/serve/sphy.png", //亮
-					ImageURL2: "../../static/home/serve/sphy2.png", //暗
+					ImageURL1: "../../static/home/serve/审核商品.png", //亮
+					ImageURL2: "../../static/home/serve/审核商品2.png", //暗
 					ItemTitle: "审核商品",
 					style: "sv_print",
 				},{
 					IsUse: true,
 					clickURL: "../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_list",
-					ImageURL1: "../../static/home/serve/xmjd.png", //亮
-					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ImageURL1: "../../static/home/serve/村档管理.png", //亮
+					ImageURL2: "../../static/home/serve/村档管理2.png", //暗
 					ItemTitle: "村档管理",
 					style: "sv_print",
 				},{
 					IsUse: true,
 					clickURL: "../../pages_XCDT/pages/ruralDynamics/rd_list",
-					ImageURL1: "../../static/home/serve/xmjd.png", //亮
-					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ImageURL1: "../../static/home/serve/动态管理.png", //亮
+					ImageURL2: "../../static/home/serve/动态管理2.png", //暗
 					ItemTitle: "动态管理",
 					style: "sv_print",
 				},{
 					IsUse: true,
 					clickURL: "../../pages_SMJJ/pages/shuimeiEconomy/se_list",
-					ImageURL1: "../../static/home/serve/xmjd.png", //亮
-					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ImageURL1: "../../static/home/serve/水美管理.png", //亮
+					ImageURL2: "../../static/home/serve/水美管理2.png", //暗
 					ItemTitle: "水美管理",
 					style: "sv_print",
 				},{
 					IsUse: true,
 					clickURL: "../../pages_STYH/pages/ecologicalBank/eb_list",
-					ImageURL1: "../../static/home/serve/xmjd.png", //亮
-					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ImageURL1: "../../static/home/serve/生态管理.png", //亮
+					ImageURL2: "../../static/home/serve/生态管理2.png", //暗
 					ItemTitle: "生态管理",
 					style: "sv_print",
 				}],
@@ -171,34 +177,37 @@
 				ItemArr3: [{
 					IsUse: true,
 					clickURL: "../../pages_PYFW/pages/pyfw_gl_list",
-					ImageURL1: "../../static/home/serve/kjtpy.png", //亮
-					ImageURL2: "../../static/home/serve/kjtpy2.png", //暗
+					ImageURL1: "../../static/home/serve/特派审批.png", //亮
+					ImageURL2: "../../static/home/serve/特派审批2.png", //暗
 					ItemTitle: "特派审批",
 					style: "sv_print",
 				},
 				{
 					IsUse: true,
-					clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
-					ImageURL1: "../../static/home/serve/sphy.png", //亮
-					ImageURL2: "../../static/home/serve/sphy2.png", //暗
+					clickURL: "",
+					// clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
+					ImageURL1: "../../static/home/serve/发布政策.png", //亮
+					ImageURL2: "../../static/home/serve/发布政策2.png", //暗
 					ItemTitle: "发布政策",
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
-					ImageURL1: "../../static/home/serve/sphy.png", //亮
-					ImageURL2: "../../static/home/serve/sphy2.png", //暗
+					clickURL: "",
+					// clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
+					ImageURL1: "../../static/home/serve/发布考评.png", //亮
+					ImageURL2: "../../static/home/serve/发布考评2.png", //暗
 					ItemTitle: "发布考评",
 					style: "sv_print",
 				}
-				,{
-					IsUse: true,
-					clickURL: "../../pages_FBXM/pages/publishProject/pp_list",
-					ImageURL1: "../../static/home/serve/sphy.png", //亮
-					ImageURL2: "../../static/home/serve/sphy2.png", //暗
-					ItemTitle: "发布项目",
-					style: "sv_print",
-				}]
+				// ,{
+				// 	IsUse: true,
+				// 	clickURL: "../../pages_FBXM/pages/publishProject/pp_list",
+				// 	ImageURL1: "../../static/home/serve/sphy.png", //亮
+				// 	ImageURL2: "../../static/home/serve/sphy2.png", //暗
+				// 	ItemTitle: "发布项目",
+				// 	style: "sv_print",
+				// }
+				]
 				
 			}
 		},
