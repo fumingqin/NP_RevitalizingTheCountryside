@@ -469,7 +469,6 @@
 		{
 			"root": "pages_PYFW/",
 			"pages": [
-
 				{
 					"path": "pages/pyfw_edit",
 					"style": {
@@ -956,6 +955,68 @@
 				    "style" : {}
 				}
 			]
+		},
+		//---------------------------------------------第十六个包：特派员服务------------------------------------------
+		{
+			"root": "pages_JDKP/",
+			"pages": [
+				{
+					"path": "pages/pyfw_edit",
+					"style": {
+						"navigationBarTitleText": "申请派员"
+					}
+				}, {
+					"path": "pages/pyfw_personalList",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "申请列表"
+					}
+				}, {
+					"path": "pages/pyfw_details",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "申请详情"
+					}
+				}, {
+					"path": "pages/pyfw_py_list",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "特派员任务",
+						"app-plus": {
+							"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
+							"background": "transparent", // 背景透明
+							"backgroundColor": "rgba(0,0,0,0)", // 背景透明
+							"popGesture": "none" // 关闭IOS屏幕左边滑动关闭当前页面的功能
+						}
+					}
+				}, {
+					"path": "pages/pyfw_py_details",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "任务详情"
+					}
+				}, {
+					"path": "pages/pyfw_gl_list",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "特派员申请审批"
+					}
+				},
+				{
+					"path": "pages/pyfw_gl_details",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "申请详情"
+					}
+				}
+			    ,{
+                    "path" : "pages/jdkp_appraisalList",
+                    "style" : {
+						"navigationBarBackgroundColor":"#c0f3ee",
+						"navigationBarTitleText": "乡村评榜"
+					}
+                }
+            ]
 		}
 	],
 

@@ -228,8 +228,13 @@
 					fail: (err) => {
 						uni.hideLoading()
 						uni.showToast({
-							title: '加载个人信息失败',
-							icon: 'none'
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../pages/GRZX/userLogin'
+								})
+							}
 						})
 					}
 				});
