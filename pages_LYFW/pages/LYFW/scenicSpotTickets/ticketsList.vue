@@ -218,7 +218,6 @@
 								icon: 'none'
 							})
 						}
-
 					},
 					fail: function(ee) {
 						// console.log(ee)
@@ -241,7 +240,7 @@
 							this.scenicList = res.data.data;
 							uni.stopPullDownRefresh();
 							uni.hideLoading()
-						} else if (res.data.status == false) {
+						} else if (res.data.status == false ) {
 							this.scenicList = '';
 							uni.hideLoading()
 							uni.stopPullDownRefresh();
