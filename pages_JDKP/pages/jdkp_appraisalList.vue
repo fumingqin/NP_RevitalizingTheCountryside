@@ -10,7 +10,7 @@
 					<view style="line-height: 1.8; margin-left: 18upx; margin-right: 20upx;" v-if="item.index >= 4 && item.index <= 9">{{item.index}}</view>
 					<view style="line-height: 1.8; margin-left: 14upx; margin-right: 10upx;" v-if="item.index >= 10">11</view>
 					<view style="line-height: 1.8; margin-left: 24upx;">{{item.rural_name}}</view>
-					<view style="line-height: 1.8; right: 12upx; position: absolute;">{{item.score}}</view>
+					<view style="line-height: 1.8; right: 12upx; position: absolute;">{{item.score}}分</view>
 				</view>
 			</view>
 		</view>
