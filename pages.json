@@ -942,6 +942,22 @@
 					}
 				}
 			]
+		},
+		//---------------------------------------------第二个包：发布项目------------------------------------------
+		{
+			"root": "pages_FBXM/",
+			"pages": [
+				{
+				    "path" : "pages/publishProject/pp_list",
+				    "style" : {
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+				    "path" : "pages/publishProject/PP_addPage",
+				    "style" : {}
+				}
+			]
 		}
 	],
 

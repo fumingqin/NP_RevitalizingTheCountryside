@@ -2,7 +2,7 @@
 	<div class="wrapper" :style="'top:'+statusBarHeight+'px'">
 		<div class="header">
 			<view class="back_div">
-				<image class="back_img jdticon icon-zuo" @click="back_city()"  mode=""></image>
+				<image class="back_img jdticon icon-zuo" @click="back_city()" mode=""></image>
 			</view>
 			<input class="input" @input="onInput" placeholder="中文/拼音/首字母" v-model="searchValue" />
 		</div>
@@ -18,7 +18,7 @@
 							{{position}}
 						</view>
 						<view class="dingweis_div" @click="getWarpweft">
-							
+
 							<text>{{po_tips}}</text>
 						</view>
 					</view>
@@ -32,7 +32,7 @@
 					<view class="dingwei_city dingwei_city_zuijin">
 						<view class="dingwei_city_one toright" v-for="(item,index) in Visit" :key="index" v-if="index<2" @click="back_city(item)">
 							{{item.cityName}}
-						</view> 
+						</view>
 					</view>
 				</view>
 
@@ -40,7 +40,7 @@
 
 
 			<!-- 城市列表 -->
-			<view v-if="searchValue == ''" v-for="(item, index) in list" :key="index" :id="getId(index)" >
+			<view v-if="searchValue == ''" v-for="(item, index) in list" :key="index" :id="getId(index)">
 				<!-- <view class="letter-header">{{ getId(index) }}</view> -->
 				<view class="city-div" v-for="(city, i) in item" :key="i" @click="back_city(city)">
 					<text class="city">{{ city.cityName }}</text>
@@ -101,12 +101,12 @@
 				latitude: '', //纬度
 				seconds: 3,
 				po_tips: '重新定位',
-				markersData:{
-				        latitude: '',//纬度
-				        longitude: '',//经度
-				        key: "eb06b78edba8039ed8721c590492a679"//申请的高德地图key（申请的web key）
-				      },
-				      gpsCode:'',
+				markersData: {
+					latitude: '', //纬度
+					longitude: '', //经度
+					key: "eb06b78edba8039ed8721c590492a679" //申请的高德地图key（申请的web key）
+				},
+				gpsCode: '',
 			}
 		},
 
@@ -147,18 +147,18 @@
 			getId(index) {
 				return this.letter[index];
 			},
-			getAuthorizeInfo(a="scope.userLocation"){  //1. uniapp弹窗弹出获取授权（地理，个人微信信息等授权信息）弹窗
-					var _this=this;
-					uni.authorize({
-						scope: a,
-						success() { //1.1 允许授权
-							_this.getLocationInfo();
-						},
-						fail(){    //1.2 拒绝授权
-							// console.log("你拒绝了授权，无法获得周边信息")
-						}
-					})
-				},
+			getAuthorizeInfo(a = "scope.userLocation") { //1. uniapp弹窗弹出获取授权（地理，个人微信信息等授权信息）弹窗
+				var _this = this;
+				uni.authorize({
+					scope: a,
+					success() { //1.1 允许授权
+						_this.getLocationInfo();
+					},
+					fail() { //1.2 拒绝授权
+						// console.log("你拒绝了授权，无法获得周边信息")
+					}
+				})
+			},
 
 			scrollTo(letter) {
 				this.showMask = true
@@ -189,7 +189,7 @@
 					});
 					return isHave;
 				});
-				
+
 				return res;
 			},
 
@@ -199,7 +199,7 @@
 
 			onInput(e) {
 				const value = e.target.value;
-				
+
 				if (value !== '' && this.citys && this.citys.length > 0) {
 					const queryData = this.query(this.citys, String(value).trim());
 					this.searchList = queryData;
@@ -209,7 +209,7 @@
 					this.disdingwei = true
 				}
 			},
-            
+
 			back_city(item) {
 				if (item) {
 					this.$emit('back_city', item);
@@ -238,48 +238,48 @@
 					this.$emit('back_city', 'no');
 				}
 			},
-			back_city2(){
+			back_city2() {
 				this.$emit('back_city', 'yes');
 			},
-			
+
 			getWarpweft() {
 				var that = this
 				that.po_tips = '定位中...'
 				uni.getLocation({
-					type:'wgs84',
-					geocode:true,
+					type: 'wgs84',
+					geocode: true,
 					success: function(res) {
 						// console.log(res)
-							uni.setStorage({
-								key: 'app_position',
-								data:res.address,
-							})
-							that.loadCity();//小程序-调用高德
-						},
+						uni.setStorage({
+							key: 'app_position',
+							data: res.address,
+						})
+						that.loadCity(); //小程序-调用高德
+					},
 				})
 			},
 			//把当前位置的经纬度传给高德地图，调用高德API获取当前地理位置
-			    loadCity:function(){
-			      var myAmapFun = new amapFile.AMapWX({ 
-					  key: this.markersData.key,
-					  });
-			      // console.log(myAmapFun);
-			      myAmapFun.getRegeo({
-			        success:(data) =>{
+			loadCity: function() {
+				var myAmapFun = new amapFile.AMapWX({
+					key: this.markersData.key,
+				});
+				// console.log(myAmapFun);
+				myAmapFun.getRegeo({
+					success: (data) => {
 						// console.log(data)
-						this.position =data[0].regeocodeData.addressComponent.city
-			          uni.setStorage({
-			          	key: 'wx_position',
-			          	data:this.position
-			          })
-					  this.po_tips = '重新定位'
-			        },
-			        fail:()=>{
+						this.position = data[0].regeocodeData.addressComponent.city
+						uni.setStorage({
+							key: 'wx_position',
+							data: this.position
+						})
+						this.po_tips = '重新定位'
+					},
+					fail: () => {
 						this.po_tips = '重新定位'
 					}
-			      });
-			 
-			    },
+				});
+
+			},
 		}
 	};
 </script>

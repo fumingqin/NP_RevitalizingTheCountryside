@@ -59,8 +59,7 @@
 				QQ: '32589407', 		//qq客服
 				nickname: '', 	//昵称
 				port: '', 		//头像
-				advert:'../../static/GRZX/icon/advert.png',
-				
+				advert:'',
 				userInfo: [], 		//用户信息
 				userId: '', 		//用户id
 				
@@ -70,6 +69,7 @@
 			}
 		},
 		onLoad() {	
+			this.loadImg();
 			//加载服务功能模块
 			this.loadServiceList();
 		},
@@ -78,6 +78,23 @@
 			this.loadData();
 		},
 		methods: {
+			loadImg(){
+				uni.request({
+					url: this.$GrzxInter.Interface.getImage.value,
+					method: this.$GrzxInter.Interface.getImage.method,
+					data:{
+						type : '4' 
+					},
+					success: (res) => {
+						console.log(res,"111");
+						this.advert = res.data.status ? res.data.data.image : "/static/GRZX/icon/advert.png";
+					},
+					fail:(err)=>{
+						console.log(err,"222");
+						this.advert = "/static/GRZX/icon/advert.png";
+					},
+				})
+			},
 			// ---------------------------加载服务功能模块----------------------------
 			loadServiceList(){
 				this.serviceList=[{
