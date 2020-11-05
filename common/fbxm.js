@@ -30,6 +30,18 @@ const KyInterface = {
 		name:'发布项目接口',
 		method:'POST',
 	},
+	
+	deleteProject:{
+		Url:Url + '/api/project/deleteProject',
+		name:'删除发布项目接口',
+		method:'POST',
+	},
+	
+	upAndDownProject:{
+		Url:Url + '/api/project/upAndDownProject',
+		name:'上下架发布项目接口',
+		method:'POST',
+	},
 }
 
 // 接口声明区
