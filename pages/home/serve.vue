@@ -197,6 +197,14 @@
 					ImageURL2: "../../static/home/serve/sphy2.png", //暗
 					ItemTitle: "发布考评",
 					style: "sv_print",
+				}
+				,{
+					IsUse: true,
+					clickURL: "../../pages_FBXM/pages/publishProject/pp_list",
+					ImageURL1: "../../static/home/serve/sphy.png", //亮
+					ImageURL2: "../../static/home/serve/sphy2.png", //暗
+					ItemTitle: "发布项目",
+					style: "sv_print",
 				}]
 				
 			}

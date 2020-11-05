@@ -33,6 +33,12 @@ const Interface={
 		pages: [],
 	},
 	
+	getImage:{
+		value:Url+'/api/manage/getImage',
+		name:'获取图片',
+		method:'POST',
+		pages: [],
+	},
 	login:{
 		value:Url+'/api/user/login',
 		name:'用户登录',

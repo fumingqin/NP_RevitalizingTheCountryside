@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<!-- 头部切换栏 -->
-		<u-tabs :list="headList" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
-		
+		<u-tabs :list="headList1" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
+
 		<!-- 内容1 -->
 		<view class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
 			<view class="view_titleView">
@@ -17,10 +17,10 @@
 				</view>
 				<image class="tv_image" :src="item.image" mode="aspectFill"></image>
 			</view>
-			
+
 			<view class="view_contentView">
 				<text>{{item.nick_name}}</text>
-				<text class="cont_text">{{item.count}}人看过</text>
+				<text class="cont_text">{{item.view}}人看过</text>
 				<text class="cont_text">{{informationDate(item.create_time)}}</text>
 				<text class="cont_icon" style="color: #007AFF;" v-if="item.state=='已上架'">发布中</text>
 				<text class="cont_icon" style="color: #FC4646;" v-if="item.state=='已下架'">未发布</text>
@@ -31,38 +31,36 @@
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 			</view> -->
 		</view>
-		<view  style="padding-bottom: 180upx;"></view>
-		<view>
-			<view class="to_view">
-				<scroll-view class="to_scroll" scroll-x="true">
-					<view class="btnClass" style="background: #007AFF;" @click="routeJump2">添加</view>
-					<view class="btnClass" style="background: #FA3534;" @click="routeJump(groupTitle[selectIndex].id)">详情</view>
-					<!-- <u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump2">添加</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">{{release}}</u-button> -->
-					<!-- <u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" v-if="groupTitle[selectIndex].state=='已上架'" @click="offTheShelf(groupTitle[selectIndex].id)">下架</u-button> -->
-				</scroll-view>
-			</view>
+		<view style="padding-bottom: 180upx;"></view>
+		<view class="to_view">
+			<scroll-view class="to_scroll" scroll-x="true">
+				<view style="display: flex;padding-right: 30upx;">
+					<view class="btnClass" @click="routeJump2">添加</view>
+					<view class="btnClass" @click="routeJump(groupTitle[selectIndex].id)">详情</view>
+					<view class="btnClass" @click="modifyJump(groupTitle[selectIndex])">修改</view>
+					<view class="btnClass" @click="Delete(groupTitle[selectIndex].id)">删除</view>
+					<view class="btnClass" v-show="groupTitle[selectIndex].state=='已上架'" @click="onTheShelf(groupTitle[selectIndex].id)">上架</view>
+					<view class="btnClass" v-show="groupTitle[selectIndex].state=='已下架'" @click="onTheShelf(groupTitle[selectIndex].id)">下架</view>
+				</view>
+			</scroll-view>
 		</view>
-		
+
 		<!-- 缺省提示 -->
 		<view style="margin-top: 250upx;" v-if="groupTitle.length ==0">
 			<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
 		</view>
-	</view>	
+	</view>
 </template>
 
 <script>
 	export default {
 		data() {
 			return {
-				headList: [{
+				headList1: [{
 					name: '全部'
-				},{
+				}, {
 					name: '发布中'
-				},{
+				}, {
 					name: '未发布'
 				}], //头部数组
 				headCurrent: 0, //头部tabs下标
@@ -75,113 +73,110 @@
 					background: '#FFFFFF',
 					borderRadius: '10px',
 					color: '#007AFF',
-					fontSize:'17px',
-					border:'#007AFF solid 1rpx',
-					
+					fontSize: '17px',
+					border: '#007AFF solid 1rpx',
+
 				},
-				groupTitle:[],
-				selectId:'',//去出id
-				selectIndex:0,//下标
-				userInfo:[],
-				state:'修改',
+				groupTitle: [],
+				selectId: '', //去出id
+				selectIndex: 0, //下标
+				userInfo: [],
+				state: '修改',
 			}
 		},
-		
+
 		onShow() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
 			this.userData();
 		},
-		
+
 		onUnload() {
 			uni.hideLoading();
 		},
-		
+
 		onPullDownRefresh: function() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
 			this.userData();
 		},
-		
+
 		onReachBottom() {
 			// this.getMore();
 		},
-		
+
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
-			userData:function() {
+			userData: function() {
 				uni.getStorage({
 					key: 'userInfo',
 					success: (res) => {
 						this.userInfo = res.data;
-						console.log('获取个人信息',this.userInfo)
+						console.log('获取个人信息', this.userInfo)
 						this.ycydData();
 					}
 				});
 			},
-			
+
 			//--------------------点击列表事件------------------------------
-			selectClick:function(e){
+			selectClick: function(e) {
 				//给选择的下标赋值
 				this.selectIndex = e;
-				this.release=this.groupTitle[e].state=='已上架'?'下架':'发布';
-				console.log('上车点下标赋值',this.selectIndex)
+				this.release = this.groupTitle[e].state == '已上架' ? '下架' : '发布';
+				console.log('上车点下标赋值', this.selectIndex)
 				//取出id
 				// this.selectId = this.groupTitle[e].id;
 				// console.log('取出id',this.selectId)
 			},
-			
+
 			//--------------------资讯时间-------------------------------
-			informationDate:function(e){
+			informationDate: function(e) {
 				console.log(e)
 				// var tsetDate = e.replace('T',' ')
-				var a = e.substr(0,10)
+				var a = e.substr(0, 10)
 				return a;
 			},
-			
+
 			//----------------------点击tab切换----------------------------
 			headChange: function(e) {
 				this.headCurrent = e;
 				uni.showLoading({
-					title: '加载信息中...'
+					title: '加载列表中...'
 				})
 				this.ycydData(e);
 			},
-			
-			
+
+
 			//----------------------列表接口--------------------------------
-			ycydData:function(e){
-				uni.showLoading({
-					title: '加载列表中...',
-				})
-				this.groupTitle = [];
+			ycydData: function(e) {
 				uni.request({
-					url:this.$fbxm.KyInterface.getProjectByUserID.Url,
-					method:this.$fbxm.KyInterface.getProjectByUserID.method,
-					data:{
-						userId:100006
+					url: this.$fbxm.KyInterface.getProjectByUserID.Url,
+					method: this.$fbxm.KyInterface.getProjectByUserID.method,
+					data: {
+						userId: 100006
 					},
-					success:(res) =>{
-						console.log('列表数据',res)
-						if(res.data.status == true){
+					success: (res) => {
+						console.log('列表数据', res)
+						if (res.data.status == true) {
 							if (this.headCurrent == 0) {
 								this.groupTitle = res.data.data
-							}else if (this.headCurrent == 1){
+							} else if (this.headCurrent == 1) {
 								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
 									return item.state == '已上架';
 								})
-							}else if (this.headCurrent == 2){
+							} else if (this.headCurrent == 2) {
 								this.groupTitle = res.data.data.filter(item => {
-									return item.state == '已上架'
+									uni.hideLoading();
+									return item.state == '已下架'
 								})
 							}
-							this.release=this.groupTitle[0].state=='已上架'?'下架':'发布';
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
-						}else{
+						} else {
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 							uni.showToast({
@@ -200,80 +195,130 @@
 					}
 				})
 			},
-			
+
 			//--------------------------路由跳转------------------------------
-			routeJump:function(e){
+			routeJump: function(e) {
 				uni.navigateTo({
-					url:'ovof_detailsPage?id=' +e,
+					url: 'ovof_detailsPage?id=' + e,
 				})
 			},
-			
+
 			//--------------------------路由跳转(添加列表文章)------------------------------
-			routeJump2:function(e){
+			routeJump2: function(e) {
 				uni.navigateTo({
-					url:'./PP_addPage',
+					url: './PP_addPage',
 				})
 			},
-			
+
 			//--------------------------路由跳转(修改列表文章)------------------------------
-			modifyJump:function(item){
+			modifyJump: function(item) {
 				uni.navigateTo({
-					url: './ovof_edit?jumpStatus=' +this.state + '&id=' + item.id
+					url: './ovof_edit?jumpStatus=' + this.state + '&id=' + item.id
 				})
 			},
-			
+
 			//-----------------------上架------------------------------------
 			onTheShelf: function(e) {
-				uni.showModal({
-					title: '你确认发布文章？',
-					success: (res) => {
-						console.log(res)
-						if (res.confirm == true) {
-							uni.showLoading({
-								title: '正在发布....'
-							})
-							uni.request({
-								url: this.$ycyd.KyInterface.upAndDownArchives.Url,
-								method: this.$ycyd.KyInterface.upAndDownArchives.method,
-								data: {
-									id: e
-								},
-								success: (res) => {
-									console.log(res)
-									if (res.data.status == true) {
+				if (this.groupTitle[this.selectIndex].state == '已下架') {
+					uni.showModal({
+						title: '你确认上架文章？',
+						success: (res) => {
+							console.log(res)
+							if (res.confirm == true) {
+								uni.showLoading({
+									title: '正在发布....'
+								})
+								uni.request({
+									url: this.$fbxm.KyInterface.upAndDownProject.Url,
+									method: this.$fbxm.KyInterface.upAndDownProject.method,
+									data: {
+										id: e
+									},
+									success: (res) => {
+										console.log(res)
+										if (res.data.status == true) {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布成功',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										} else {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布失败',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										}
+
+									},
+									fail: () => {
 										uni.hideLoading()
 										uni.showToast({
-											title: '发布成功',
-											icon: 'success'
-										})
-										uni.startPullDownRefresh();
-									} else {
-										uni.hideLoading()
-										uni.showToast({
-											title: '发布失败',
+											title: '服务器异常，请重试',
 											icon: 'success'
 										})
 										uni.startPullDownRefresh();
 									}
-			
-								},
-								fail: () => {
-									uni.hideLoading()
-									uni.showToast({
-										title: '服务器异常，请重试',
-										icon: 'success'
-									})
-									uni.startPullDownRefresh();
-								}
-							})
-						} else {
-			
+								})
+							} else {
+
+							}
 						}
-					}
-				})
+					})
+				} else if (this.groupTitle[this.selectIndex].state == '已上架') {
+					uni.showModal({
+						title: '你确认下架文章？',
+						success: (res) => {
+							console.log(res)
+							if (res.confirm == true) {
+								uni.showLoading({
+									title: '正在发布....'
+								})
+								uni.request({
+									url: this.$fbxm.KyInterface.upAndDownProject.Url,
+									method: this.$fbxm.KyInterface.upAndDownProject.method,
+									data: {
+										id: e
+									},
+									success: (res) => {
+										console.log(res)
+										if (res.data.status == true) {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布成功',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										} else {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布失败',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										}
+
+									},
+									fail: () => {
+										uni.hideLoading()
+										uni.showToast({
+											title: '服务器异常，请重试',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									}
+								})
+							} else {
+
+							}
+						}
+					})
+				}
 			},
-			
-			
+
+
 			//-----------------------删除------------------------------------
 			Delete: function(e) {
 				uni.showModal({
@@ -285,11 +330,12 @@
 								title: '正在删除....'
 							})
 							uni.request({
-								url: this.$ycyd.KyInterface.deleteArchives.Url,
-								method: this.$ycyd.KyInterface.deleteArchives.method,
+								url: this.$fbxm.KyInterface.deleteProject.Url,
+								method: this.$fbxm.KyInterface.deleteProject.method,
 								data: {
 									id: e,
-									userId:this.userInfo.userId
+									userId: 100006
+									// userId:this.userInfo.userId
 								},
 								success: (res) => {
 									console.log(res)
@@ -308,7 +354,7 @@
 										})
 										uni.startPullDownRefresh();
 									}
-			
+
 								},
 								fail: () => {
 									uni.hideLoading()
@@ -320,7 +366,7 @@
 								}
 							})
 						} else {
-			
+
 						}
 					}
 				})
@@ -334,68 +380,74 @@
 	page {
 		background-color: #FFFFFF;
 	}
-	
-	.to_view{
+
+	.to_view {
 		margin-top: 30upx;
-		padding-left: 32upx;
-		bottom:40upx;
-		position:fixed;
-		overflow:scroll;
-		width: 100%;
+		bottom: 40upx;
+		position: fixed;
+		overflow: scroll;
+		width: 96%;
 	}
-	
+
 	.to_scroll {
 		display: flex;
 		white-space: nowrap;
 		width: 100%;
 	}
-	
+
 	.btnClass {
-		padding: 20upx 100upx;
-		color: #FFFFFF;
+		padding: 20upx 60upx;
+		width: 28%;
+		color: #007AFF;
 		text-align: center;
+		background: #FFFFFF;
 		border-radius: 15upx;
 		font-size: 34upx;
+		border: #007AFF solid 1rpx;
+		margin-left: 30upx;
 	}
-	
+
 	//资讯列表样式
-	.infor_view{
-		padding: 0 32upx; 
+	.infor_view {
+		padding: 0 32upx;
 		margin-top: 32upx;
-		.view_titleView{
+
+		.view_titleView {
 			display: flex;
-			.tv_view{
+
+			.tv_view {
 				// display: flex;
 				// padding-right: 32upx; 
 				// width: 468upx; 
-				
-				.tv_label{
-					font-size: 24upx; 
-					background: #007AFF; 
-					color: #FFFFFF; 
-					padding: 4upx 8upx; 
+
+				.tv_label {
+					font-size: 24upx;
+					background: #007AFF;
+					color: #FFFFFF;
+					padding: 4upx 8upx;
 					border-radius: 4upx;
 				}
-				.tv_title{
+
+				.tv_title {
 					position: relative;
-					font-weight: bold; 
-					font-size: 34upx; 
+					font-weight: bold;
+					font-size: 34upx;
 					line-height: 1.7;
 					width: 320upx;
 					white-space: nowrap;
 					overflow: hidden;
 				}
-				
-				.tv_view2{
+
+				.tv_view2 {
 					display: block;
 					padding-top: 10upx;
 					position: relative;
-					
-					.tv_richText{
+
+					.tv_richText {
 						padding-right: 16upx;
 						width: 454upx;
 						// font-weight: bold;
-						font-size: 30upx; 
+						font-size: 30upx;
 						line-height: 1.7;
 						height: 100upx;
 						text-overflow: -o-ellipsis-lastline;
@@ -407,28 +459,31 @@
 					}
 				}
 			}
-			
-			
-			.tv_image{
-				width: 220upx; 
-				height: 160upx; 
+
+
+			.tv_image {
+				width: 220upx;
+				height: 160upx;
 				border-radius: 8upx;
 			}
 		}
-		.view_contentView{
-			font-size: 24upx; 
-			color: #AAAAAA; 
-			padding: 19upx 0; 
-			.cont_text{
+
+		.view_contentView {
+			font-size: 24upx;
+			color: #AAAAAA;
+			padding: 19upx 0;
+
+			.cont_text {
 				margin-left: 20upx;
 			}
-			.cont_icon{
-				float: right; 
+
+			.cont_icon {
+				float: right;
 			}
 		}
 	}
-	
-	.select{
+
+	.select {
 		padding: 0 32upx;
 		margin-left: 18upx;
 		border-left: #007AFF solid 6rpx;

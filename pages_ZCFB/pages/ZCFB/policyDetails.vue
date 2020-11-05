@@ -11,7 +11,7 @@
 			<view class="ovof_dp_bg_background">
 				<view class="ovof_dp_bg_title">{{groupTitle.title}}</view>
 				<view class="ovof_dp_bg_time">
-					<text class="time">{{groupTitle.update_time}}</text>
+					<text class="time">{{gettime(groupTitle.update_time)}}</text>
 				</view>
 				<view class="grClass">
 					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.avatar" mode="aspectFill"></image>
@@ -32,6 +32,9 @@
 							项目介绍
 						</view>
 						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
+							相关视频
+						</view>
+						<view class="screenText" :class="{current:type===2}" @click="tabClick(2)">
 							相关文件
 						</view>
 					</view>
@@ -47,13 +50,16 @@
 						    <video :src="groupTitle.video[0]" class="video"></video>
 						</view>
 					</view>
-					<view style="width: 600upx;">{{groupTitle.pdfName}}</view>
-					<view>
+					
+				</u-read-more>
+				<u-read-more v-if="type==2" :toggle="toggle" :show-height="showHeight">
+					<view style="margin-bottom: 30upx;">
+						<view style="width: 600upx;text-indent : 0em;">文件名：{{groupTitle.pdfName}}</view>
 						<l-file ref="lFile" @up-success="onSuccess"></l-file>
-						<view class="text-center">
-							<view class="padding" style="display: flex;">
-								<button style="width: 200upx;font-size: 24upx;" @tap="onOpenDoc(groupTitle.pdfFile[0])">预览</button>
-								<button style="width: 200upx;font-size: 24upx;" @tap="onDown(groupTitle.pdfFile[0])">下载到本地</button>
+						<view>
+							<view style="display: flex;">
+								<view class="at_button" @tap="onOpenDoc(groupTitle.pdfFile[0])">预览</view>
+								<view  class="at_button" @tap="onDown(groupTitle.pdfFile[0])">下载</view>
 							</view>
 						</view>
 					</view>
@@ -83,7 +89,7 @@
 				id:'',
 				// 字符串的形式
 				style: {
-					p: 'letter-spacing: 4rpx;text-align: justify;line-height: 48rpx;font-size:30rpx;text-justify: inter-ideograph; text-indent: 2em;padding-bottom: 20rpx;padding-top: 20rpx;',
+					// p: 'letter-spacing: 4rpx;text-align: justify;line-height: 48rpx;font-size:30rpx;text-justify: inter-ideograph;padding-bottom: 20rpx;padding-top: 20rpx;',
 					span: 'font-size: 30rpx'
 				},
 			}
@@ -134,9 +140,15 @@
 			},
 			//-------------------时间切割---------------------------
 			gettime:function(param){
-					let array=param.split(' ');
-					var a=array[0];
+				console.log(param);
+				if(param==''){
 					return a;
+				}else{
+					let array=param.split(' ');
+					let array2=array[1].split(':');
+					var a=array[0]+' '+array2[0]+':'+array2[1];
+					return a;
+					}
 			},
 			//----------------预览--------------------
 			onOpenDoc(e) {
@@ -161,6 +173,8 @@
 					this.type = 0;
 				} else if (e == 1) {
 					this.type = 1;
+				}else if (e == 2) {
+					this.type = 2;
 				}
 			},
 		}
@@ -211,7 +225,7 @@
 	}
 	
 	.u-content{
-		margin-top: 20upx;
+		// margin-top: 20upx;
 		background: #FFFFFF;
 		padding-left: 15upx;
 		padding-right: 15upx;
@@ -279,7 +293,7 @@
 		.screenView {
 			left: 0;
 			display: flex;
-			width: 50%;
+			width: 60%;
 			height: 87upx;
 			z-index: 10;
 			position: sticky;
@@ -296,6 +310,7 @@
 				font-size: 30upx;
 				color: #888;
 				position: relative;
+				margin-left: 10upx;
 
 
 
@@ -322,9 +337,20 @@
 	    z-index: 1;
 	    width: 200upx;
 	    height: 200upx;
+		margin-top: 30upx;
+		margin-bottom: 30upx;
 	}
 	.video{
 	    width: 100%;
 	    height: 100%;
+	}
+	.at_button {
+		text-indent : 0em;
+		padding: 16upx 68upx;
+		// font-size: 24upx;
+		border-radius: 6upx;
+		border: 1upx solid #888;
+		color: #888;
+		margin-right: 24upx;
 	}
 </style>

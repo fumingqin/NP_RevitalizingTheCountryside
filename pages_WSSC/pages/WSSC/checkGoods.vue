@@ -113,6 +113,17 @@
 							icon: 'none'
 						})
 						// console.log(res)
+					},
+					complete() {
+						setTimeout(function(){
+							if(this.groupTitle==''){
+								uni.hideLoading();
+								uni.showToast({
+									title: '服务器异常',
+									icon: 'none'
+								})
+							}
+						},3000);
 					}
 				})
 				}
