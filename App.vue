@@ -3,7 +3,6 @@
 		onLaunch: function() {
 			var a = uni.getStorageSync('guidePageData')
 			if(a == true){
-				console.log
 				uni.switchTab({
 					url: 'h_xczx_home'
 				})
@@ -12,7 +11,7 @@
 					key:'guidePageData',
 					data:true,
 					success: () => {
-						uni.redirectTo({
+						uni.navigateTo({
 							url: 'guidePage'
 						})
 					}
