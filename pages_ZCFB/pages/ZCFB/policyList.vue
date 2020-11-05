@@ -20,8 +20,7 @@
 					</view>
 					
 					<view class="view_contentView">
-						<text>{{item.state}}</text>
-						<text class="cont_text">{{gettime(item.update_time)}}</text>
+						<text class="cont_text">上架时间：{{gettime(item.update_time)}}</text>
 					</view>
 					<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 				</view>
@@ -57,9 +56,7 @@
 		},
 		
 		onPullDownRefresh: function() {
-			uni.showLoading({
-				title: '加载列表中...',
-			})
+
 			this.zcfbData();
 		},
 		
@@ -70,9 +67,7 @@
 		methods: {
 			//----------------------列表接口--------------------------------
 			zcfbData:function(){
-				uni.showLoading({
-					title: '加载列表中...',
-				})
+
 				uni.request({
 					url:this.$zcfb.KyInterface.getPolicy.Url,
 					method:this.$zcfb.KyInterface.getPolicy.method,
@@ -82,7 +77,7 @@
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.groupTitle=res.data.data;
+							this.groupTitle = res.data.data;
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
@@ -95,12 +90,24 @@
 						}
 					},
 					fail(res) {
+						uni.stopPullDownRefresh();
 						uni.hideLoading();
 						uni.showToast({
 							title: '服务器异常',
 							icon: 'none'
 						})
 						// console.log(res)
+					},
+					complete() {
+						setTimeout(function(){
+							if(this.groupTitle==''){
+								uni.hideLoading();
+								uni.showToast({
+									title: '服务器异常',
+									icon: 'none'
+								})
+							}
+						},3000);
 					}
 				})
 			},
@@ -211,7 +218,7 @@
 			color: #AAAAAA; 
 			padding: 22upx 0; 
 			.cont_text{
-				margin-left: 20upx;
+				// margin-left: 20upx;
 			}
 			.cont_icon{
 				float: right; 

@@ -65,7 +65,7 @@
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "../../pages_LYFW/pages/LYFW/currency/ho_zhly",
+					clickURL: "../../pages_LYFW/pages/LYFW/scenicSpotTickets/ticketsList",
 					ImageURL1: "../../static/home/serve/cpdg.png", //亮
 					ImageURL2: "../../static/home/serve/cpdg2.png", //暗
 					ItemTitle: "景区售票",
@@ -117,7 +117,7 @@
 					clickURL: "",
 					ImageURL1: "../../static/home/vajra/jidukaohe.png", //亮
 					ImageURL2: "../../static/home/vajra/jidukaohe2.png", //暗
-					ItemTitle: "季度考核",
+					ItemTitle: "季度考评",
 					style: "sv_print",
 				},{
 					IsUse: true,
@@ -243,8 +243,13 @@
 					fail: (err) => {
 						uni.hideLoading()
 						uni.showToast({
-							title: '加载个人信息失败',
-							icon: 'none'
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../pages/GRZX/userLogin'
+								})
+							}
 						})
 					}
 				});

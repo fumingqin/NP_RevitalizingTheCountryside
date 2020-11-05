@@ -265,7 +265,7 @@
 					})
 					setTimeout(function() {
 						uni.navigateTo({
-							url: '/pages/GRZX/userLogin?loginType=4'
+							url: '/pages/GRZX/userLogin'
 						})
 					}, 500);
 				}
@@ -409,11 +409,8 @@
 						console.log(res)
 						var array=[];
 						array.push(that.src);
-						console.log(that.localPath);
-						console.log(JSON.stringify(that.filename));
-						console.log(array);
-						console.log(e);
-						console.log(that.model.name);
+						var array2=[];
+						array2.push(that.localPath);
 						uni.request({
 							url: that.$zcfb.KyInterface.releasePolicy.Url,
 							method: that.$zcfb.KyInterface.releasePolicy.method,
@@ -422,7 +419,7 @@
 								content: e,
 								image:  JSON.stringify(that.lists),
 								video: JSON.stringify(array),
-								pdfName:that.localPath,
+								pdfName:JSON.stringify(array2),
 								pdfFile:JSON.stringify(that.filename),
 								userId: res.data.userId,
 							},
@@ -471,6 +468,8 @@
 						console.log(res)
 						var array=[];
 						array.push(that.src);
+						var array2=[];
+						array2.push(that.localPath);
 						console.log(array)
 						uni.request({
 							url: that.$zcfb.KyInterface.updatePolicy.Url,
@@ -482,7 +481,7 @@
 								image:  JSON.stringify(that.lists),
 								video: JSON.stringify(array),
 								pdfFile:JSON.stringify(that.filename),
-								pdfName:that.localPath,
+								pdfName:JSON.stringify(array2),
 								userId: res.data.userId,
 							},
 							success: (res) => {

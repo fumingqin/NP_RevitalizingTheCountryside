@@ -8,7 +8,6 @@
 		{
 			"path": "pages/home/h_xczx_home",
 			"style": {
-				"enablePullDownRefresh": true,
 				"navigationStyle": "custom",
 				"app-plus": {
 					"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
@@ -92,6 +91,7 @@
 		{
 			"path": "pages/order/OrderList",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationBarBackgroundColor": "#F5F5F5"
 			}
 		},
@@ -144,7 +144,7 @@
 			"path": "pages/ZXDT/infor_details",
 			"style": {}
 		}
-    ],
+	],
 
 	"subPackages": [
 		//---------------------------------------------第一个包：个人中心------------------------------------------
@@ -456,6 +456,7 @@
 				{
 					"path": "pages/ZCFB/policyList",
 					"style": {
+						"enablePullDownRefresh": true,
 						"navigationBarTitleText": "政策列表"
 					}
 				},
@@ -468,6 +469,7 @@
 				{
 					"path": "pages/ZCFB/myPolicyList",
 					"style": {
+						"enablePullDownRefresh": true,
 						"navigationBarTitleText": "我的发布"
 					}
 				}
@@ -477,7 +479,6 @@
 		{
 			"root": "pages_PYFW/",
 			"pages": [
-
 				{
 					"path": "pages/pyfw_edit",
 					"style": {
@@ -543,6 +544,7 @@
 				{
 					"path": "pages/WSSC/goodsList",
 					"style": {
+						"enablePullDownRefresh": true,
 						"navigationBarTitleText": "商品列表"
 					}
 				},
@@ -555,12 +557,14 @@
 				{
 					"path": "pages/WSSC/myGoodsList",
 					"style": {
+						"enablePullDownRefresh": true,
 						"navigationBarTitleText": "我的发布"
 					}
 				},
 				{
 					"path": "pages/WSSC/checkGoods",
 					"style": {
+						"enablePullDownRefresh": true,
 						"navigationBarTitleText": "审核商品"
 					}
 				},
@@ -732,12 +736,6 @@
 				}, {
 					"path": "pages/agricultureProducts/ap_personalList",
 					"style": {}
-				}
-				,{
-				    "path" : "pages/agricultureProducts/ap_toExamine",
-				    "style" : {
-						"enablePullDownRefresh": true
-					}
 				}
 			]
 		},
@@ -999,8 +997,73 @@
 				    "style" : {}
 				}
 			]
+		},
+		//---------------------------------------------第十六个包：特派员服务------------------------------------------
+		{
+			"root": "pages_JDKP/",
+			"pages": [
+				{
+					"path": "pages/pyfw_edit",
+					"style": {
+						"navigationBarTitleText": "申请派员"
+					}
+				}, {
+					"path": "pages/pyfw_personalList",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "申请列表"
+					}
+				}, {
+					"path": "pages/pyfw_details",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "申请详情"
+					}
+				}, {
+					"path": "pages/pyfw_py_list",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "特派员任务",
+						"app-plus": {
+							"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
+							"background": "transparent", // 背景透明
+							"backgroundColor": "rgba(0,0,0,0)", // 背景透明
+							"popGesture": "none" // 关闭IOS屏幕左边滑动关闭当前页面的功能
+						}
+					}
+				}, {
+					"path": "pages/pyfw_py_details",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "任务详情"
+					}
+				}, {
+					"path": "pages/pyfw_gl_list",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "特派员申请审批"
+					}
+				},
+				{
+					"path": "pages/pyfw_gl_details",
+					"style": {
+						"enablePullDownRefresh": true,
+						"navigationBarTitleText": "申请详情"
+					}
+				}
+			    ,{
+                    "path" : "pages/jdkp_appraisalList",
+                    "style" : {
+						"navigationBarBackgroundColor":"#c0f3ee",
+						"navigationBarTitleText": "乡村评榜"
+					}
+                }
+            ]
 		}
 	],
+
+
+
 
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -1019,8 +1082,7 @@
 		"list": [{
 				"pagePath": "pages/home/h_xczx_home",
 				"text": "首页"
-			},
-			{
+			},{
 				"pagePath": "pages/GRZX/notice",
 				"text": "通知"
 			},
@@ -1030,8 +1092,7 @@
 			}, {
 				"pagePath": "pages/order/OrderList",
 				"text": "订单"
-			},
-			{
+			},{
 				"pagePath": "pages/GRZX/user",
 				"text": "我的"
 			}
@@ -1043,7 +1104,7 @@
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [{
 			"name": "", //模式名称
-			"path": "", //启动页面，必选			
+			"path": "", //启动页面，必选
 			"query": "" //启动参数，在页面的onLoad函数里面得到
 		}]
 	}
