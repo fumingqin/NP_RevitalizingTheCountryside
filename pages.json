@@ -1042,8 +1042,7 @@
 		"list": [{
 				"pagePath": "pages/home/h_xczx_home",
 				"text": "首页"
-			},
-			{
+			},{
 				"pagePath": "pages/GRZX/notice",
 				"text": "通知"
 			},
@@ -1053,8 +1052,7 @@
 			}, {
 				"pagePath": "pages/order/OrderList",
 				"text": "订单"
-			},
-			{
+			},{
 				"pagePath": "pages/GRZX/user",
 				"text": "我的"
 			}
@@ -1066,7 +1064,7 @@
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [{
 			"name": "", //模式名称
-			"path": "pages_FBRCP/pages/agricultureProducts/ap_list", //启动页面，必选
+			"path": "", //启动页面，必选
 			"query": "" //启动参数，在页面的onLoad函数里面得到
 		}]
 	}
