@@ -568,8 +568,8 @@
 								url: this.$styh.KyInterface.releaseEcology.Url,
 								method: this.$styh.KyInterface.releaseEcology.method,
 								data: {
-									// userId: this.userInfo.userId,
-									userId:100006,
+									userId: this.userInfo.userId,
+									// userId:100006,
 									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,

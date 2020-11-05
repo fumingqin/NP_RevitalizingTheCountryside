@@ -21,7 +21,7 @@
 			
 			<view class="view_contentView">
 				<text>{{item.nick_name}}</text>
-				<text class="cont_text">{{item.count}}人看过</text>
+				<text class="cont_text">{{item.view}}人看过</text>
 				<text class="cont_text">{{informationDate(item.update_time)}}</text>
 				<text class="cont_icon" style="color: #007AFF;" v-if="item.state=='已上架'">发布中</text>
 				<text class="cont_icon" style="color: #FC4646;" v-if="item.state=='已下架'">未发布</text>
@@ -32,7 +32,7 @@
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 			</view> -->
 		</view>
-		
+		<view  style="padding-bottom: 180upx;"></view>
 		<view>
 			<view class="to_view">
 				<scroll-view class="to_scroll" scroll-x="true">
@@ -162,12 +162,13 @@
 				uni.showLoading({
 					title: '加载列表中...',
 				})
+				this.groupTitle = [],
 				uni.request({
 					url:this.$xcdt.KyInterface.getDynamicById.Url,
 					method:this.$xcdt.KyInterface.getDynamicById.method,
 					data:{
-						// userId:this.userInfo.userId
-						userId:100006
+						userId:this.userInfo.userId
+						// userId:'100006'
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
@@ -361,8 +362,8 @@
 								method: this.$xcdt.KyInterface.deleteDynamic.method,
 								data: {
 									id: e,
-									// userId:this.userInfo.userId
-									userId:100006
+									userId:this.userInfo.userId
+									// userId:100006
 								},
 								success: (res) => {
 									console.log(res)

@@ -36,7 +36,7 @@
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 			</view> -->
 		</view>
-		
+		<view  style="padding-bottom: 180upx;"></view>
 		<view>
 			<view class="to_view">
 				<scroll-view class="to_scroll" scroll-x="true">
@@ -163,17 +163,17 @@
 				uni.showLoading({
 					title: '加载列表中...',
 				})
+				this.groupTitle = [],
 				uni.request({
 					url:this.$smjj.KyInterface.getEconomyByUserID.Url,
 					method:this.$smjj.KyInterface.getEconomyByUserID.method,
 					data:{
-						// userId:this.userInfo.userId
-						userId:100006
+						userId:this.userInfo.userId
+						// userId:100006
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.informationList = '';
 							if (this.headCurrent == 0) {
 								this.groupTitle = res.data.data
 							}else if (this.headCurrent == 1){
@@ -361,8 +361,8 @@
 								method: this.$smjj.KyInterface.deleteEconomy.method,
 								data: {
 									id: e,
-									// userId:this.userInfo.userId
-									userId:100006
+									userId:this.userInfo.userId
+									// userId:100006
 								},
 								success: (res) => {
 									console.log(res)
