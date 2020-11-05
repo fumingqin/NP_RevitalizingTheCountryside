@@ -137,7 +137,7 @@
 						name: '乡村评榜',
 						image: '../../static/home/vajra/jidukaohe.png',
 						display: true,
-						entrance: '../../pages_BUS/pages/Bus/BusQuery',
+						entrance: '../../pages_JDKP/pages/jdkp_appraisalList',
 					}, {
 						name: '民情反馈',
 						image: '../../static/home/vajra/minqingfankui.png',
