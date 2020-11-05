@@ -410,27 +410,35 @@
 				{
 					"path": "pages/LYFW/agricultureProducts/ovof_list",
 					"style": {
+						"navigationBarTitleText": "村档管理列表",
 						"enablePullDownRefresh": true
 					}
 				},
 				{
 					"path": "pages/LYFW/agricultureProducts/ovof_edit",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "村档管理修改页面"
+					}
 				},
 				{
 					"path": "pages/LYFW/agricultureProducts/ovof_generalList",
 					"style": {
+						"navigationBarTitleText": "一村一档列表",
 						"enablePullDownRefresh": true
 					}
 				}, {
 					"path": "pages/LYFW/agricultureProducts/ovof_detailsPage",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "列表详情页面"
+					}
 				}, {
 					"path": "pages/LYFW/agricultureProducts/ovof_feedback",
 					"style": {}
 				}, {
 					"path": "pages/LYFW/agricultureProducts/ovof_addPage",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "村档管理添加页面"
+					}
 				}
 			]
 		},
@@ -577,27 +585,37 @@
 				//----------------------------------通用页面----------------------------------
 				{
 					"path": "pages/ruralDynamics/rd_edit",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "我的发布修改"
+					}
 				},
 				{
 					"path": "pages/ruralDynamics/rd_list",
 					"style": {
+						"navigationBarTitleText": "我的列表",
 						"enablePullDownRefresh": true
 					}
 				}, {
 					"path": "pages/ruralDynamics/rd_addPage",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "我的发布"
+					}
 				}, {
 					"path": "pages/ruralDynamics/rd_detailsPage",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "列表详情"
+					}
 				}, {
 					"path": "pages/ruralDynamics/rd_generalList",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "乡村动态列表",
+						"enablePullDownRefresh": true
+					}
 				}
 			]
 		},
 
-		//---------------------------------------------第九个包：乡村动态------------------------------------------
+		//---------------------------------------------第九个包：生态银行------------------------------------------
 		{
 			"root": "pages_STYH/",
 			"pages": [
@@ -605,25 +623,35 @@
 				{
 					"path": "pages/ecologicalBank/eb_list",
 					"style": {
+						"navigationBarTitleText": "生态管理列表",
 						"enablePullDownRefresh": true
 					}
 				}, {
 					"path": "pages/ecologicalBank/eb_edit",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "我的修改"
+					}
 				}, {
 					"path": "pages/ecologicalBank/eb_addPage",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "我的添加"
+					}
 				}, {
 					"path": "pages/ecologicalBank/eb_detailsPage",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "生态列表详情"
+					}
 				}, {
 					"path": "pages/ecologicalBank/eb_generalList",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "生态银行列表",
+						"enablePullDownRefresh": true
+					}
 				}
 			]
 		},
 
-		//---------------------------------------------第十个包：乡村动态------------------------------------------
+		//---------------------------------------------第十个包：水美经济------------------------------------------
 		{
 			"root": "pages_SMJJ/",
 			"pages": [
@@ -631,27 +659,35 @@
 				{
 					"path": "pages/shuimeiEconomy/se_list",
 					"style": {
+						"navigationBarTitleText": "我的列表",
 						"enablePullDownRefresh": true
 					}
 				}, {
 					"path": "pages/shuimeiEconomy/se_addPage",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "我的发布"
+					}
 				}, {
 					"path": "pages/shuimeiEconomy/se_edit",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "我的修改"
+					}
 				}, {
 					"path": "pages/shuimeiEconomy/se_detailsPage",
 					"style": {
-						"navigationStyle": "custom"
+						"navigationBarTitleText": "水美经济详情"
 					}
 				}, {
 					"path": "pages/shuimeiEconomy/se_generalList",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "水美经济列表",
+						"enablePullDownRefresh": true
+					}
 				}
 			]
 		},
 
-		//---------------------------------------------第十个包：乡村动态------------------------------------------
+		//---------------------------------------------第十一个包：民情反馈------------------------------------------
 		{
 			"root": "pages_MQFK/",
 			"pages": [
@@ -659,17 +695,21 @@
 				{
 					"path": "pages/publicFeedback/pf_list",
 					"style": {
+						"navigationBarTitleText": "民情反馈列表",
 						"enablePullDownRefresh": true
 					}
 				}, {
 					"path": "pages/publicFeedback/pf_addPage",
+					"navigationBarTitleText": "添加反馈",
 					"style": {}
 				}, {
 					"path": "pages/publicFeedback/pf_personalList",
 					"style": {}
 				}, {
 					"path": "pages/publicFeedback/pf_details",
-					"style": {}
+					"style": {
+						"navigationBarTitleText": "问题详情"
+					}
 				}
 			]
 		},

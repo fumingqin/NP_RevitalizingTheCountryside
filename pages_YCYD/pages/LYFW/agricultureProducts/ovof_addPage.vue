@@ -19,16 +19,17 @@
 				</u-form-item>
 
 				<!-- 上传图片 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
-					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164" height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
-						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150" >
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false">
+					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
+					 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
+						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 							<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
 						</view>
 					</u-upload>
 				</u-form-item>
 
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
@@ -36,6 +37,14 @@
 					<text style="position: absolute;width: :;upx;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 28upx;">{{informationDetail.video}}</text>
 					<text style="position: absolute;right: 0;color:#007AFF;font-size: 28upx;" @click="deleteVideo(0)">删除</text>
 				</view> -->
+
+				<!-- 简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="centent">
+					<view class="viewClass" style="padding:20rpx 30rpx;">
+						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
+					</view>
+				</u-form-item>
+
 				<!-- 商品简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -43,7 +52,7 @@
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
 							 :placeholder="placeholder" @statuschange="onStatusChange" @ready="onEditorReady">
 							</editor>
-							
+
 						</view>
 
 						<view class="toolbar" @touchend.stop="format" :style="'bottom: ' + (isIOS ? keyboardHeight : 0) + 'px'">
@@ -115,7 +124,7 @@
 					</view>
 				</u-form-item>
 			</u-form>
-			<view  style="padding-bottom: 120upx;"></view>
+			<view style="padding-bottom: 120upx;"></view>
 			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
 			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 			<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
@@ -158,6 +167,7 @@
 					goodsType: '', //选择类型value
 					// cost: '', //价格
 					intro: '', //商品简介
+					content: '',
 					imageData: [], //图像日期
 				},
 				//----------------uview样式--------------------------
@@ -235,6 +245,16 @@
 						message: '请选择商品类型',
 						trigger: 'change',
 					}],
+					centent: [{
+							required: true,
+							message: '请填写简介'
+						},
+						{
+							min: 5,
+							message: '简介不能少于5个字',
+							trigger: 'change',
+						},
+					]
 				},
 				pickerShow: false,
 				errorType: ['message'],
@@ -245,8 +265,8 @@
 				formData: { //表格数据
 					userId: 2
 				},
-				types:'',
-				imageList:[],
+				types: '',
+				imageList: [],
 				enableDel: true, //是否启动del
 				enableAdd: true, //是否启动删除
 				pictureArray: [], //存储图片base64
@@ -260,10 +280,10 @@
 				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
 				showUploadList: true,
 				lists: [],
-				fileList:[],
+				fileList: [],
 				category: 'video',
 				videoData: '',
-				videoArray:[],
+				videoArray: [],
 				selectList: [{
 						value: '村容村貌',
 						label: '村容村貌'
@@ -283,16 +303,16 @@
 				],
 			}
 		},
-		
-		
-		onRemove:function(e){
+
+
+		onRemove: function(e) {
 			console.log(e)
 		},
-		
+
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
-		
+
 		onLoad(param) {
 			_self = this;
 			this.userData();
@@ -469,50 +489,50 @@
 				this.videoData = data;
 				console.log('视频上传成功', this.videoData)
 			},
-			
+
 			//删除图片提示
-			uploadOnRemove:function(e){
+			uploadOnRemove: function(e) {
 				this.fileList = undefined;
 				this.lists = [];
-				
+
 			},
-			
-			deleteVideo:function(e){
-				this.types=e
-				if(this.types==0){
-					var videoArray=[];
+
+			deleteVideo: function(e) {
+				this.types = e
+				if (this.types == 0) {
+					var videoArray = [];
 				}
 			},
-			
+
 			//删除图片提示
-			uploadOnsuccess:function(e){
-				console.log('上传成功',e)
+			uploadOnsuccess: function(e) {
+				console.log('上传成功', e)
 				var a = {
-					data : e.data
+					data: e.data
 				};
 				this.lists.push(a.data)
 				console.log(this.lists)
 				console.log(this.fileList)
 			},
-			
-			successData:function(){
+
+			successData: function() {
 				this.editorCtx.getContents({
 					success: (res) => {
 						console.log(res);
 						this.issueText = res.html;
-						
+
 						this.uploadData(this.issueText);
 					}
 				});
-				
+
 			},
-			
-			uploadData:function(e) {
+
+			uploadData: function(e) {
 				uni.showLoading({
 					title: '提交中...',
 					mask: true,
 				})
-				var arr=[];
+				var arr = [];
 				arr.push(this.videoData.data);
 				console.log('1', this.issueText);
 				console.log('2', this.userInfo.userId);
@@ -531,11 +551,13 @@
 								url: this.$ycyd.KyInterface.releaseArchives.Url,
 								method: this.$ycyd.KyInterface.releaseArchives.method,
 								data: {
-									userId: this.userInfo.userId,
+									// userId: this.userInfo.userId,
+									userId: 100006,
 									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,
 									article_type: this.model.goodsType,
+									introduce: this.model.centent,
 									video: JSON.stringify(arr)
 								},
 								success: (res) => {

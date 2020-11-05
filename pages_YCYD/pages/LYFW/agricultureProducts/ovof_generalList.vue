@@ -10,13 +10,17 @@
 					<view class="tv_view">
 						<view style="display: flex;">
 							<view style="margin-top: 10upx;">
-								<text class="tv_label">{{item.article_type}}</text>
+								<text class="tv_label" v-if="item.article_type=='村容村貌'" style="background: #007AFF;">{{item.article_type}}</text>
+								<text class="tv_label" v-if="item.article_type=='环境整治'" style="background: #18B566;">{{item.article_type}}</text>
+								<text class="tv_label" v-if="item.article_type=='企业帮扶'" style="background: #F29100;">{{item.article_type}}</text>
+								<text class="tv_label" v-if="item.article_type=='三化管理'" style="background: #E3424B;">{{item.article_type}}</text>
 							</view>
 							<view class="tv_title">{{item.title}}</view>
 						</view>
 						<!-- <text class="tv_richText">{{item.content}}</text> -->
 						<view class="tv_view2">
-							<rich-text class="tv_richText" :nodes="item.content"></rich-text>
+							<text class="tv_richText">{{item.introduce}}</text>
+							<!-- <rich-text class="tv_richText" :nodes="item.content"></rich-text> -->
 						</view>
 					</view>
 					<image class="tv_image" :src="item.image" mode="aspectFill"></image>
@@ -32,7 +36,7 @@
 			</view>
 			<!-- 缺省提示 -->
 			<view style="margin-top: 250upx;" v-if="groupTitle.length ==0">
-				<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
+				<u-empty text="该分类没有相关档案哦~" mode="news"></u-empty>
 			</view>
 			<!-- <view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
@@ -131,7 +135,6 @@
 				uni.showLoading({
 					title: '加载列表中...',
 				})
-				this.groupTitle = [];
 				uni.request({
 					url:this.$ycyd.KyInterface.getArchives.Url,
 					method:this.$ycyd.KyInterface.getArchives.method,
@@ -139,21 +142,26 @@
 						console.log('列表数据',res)
 						if(res.data.status == true){
 							if (this.headCurrent == 0) {
+								uni.hideLoading();
 								this.groupTitle = res.data.data
 							}else if (this.headCurrent == 1){
 								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
 									return item.article_type == '村容村貌';
 								})
 							}else if (this.headCurrent == 2){
 								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
 									return item.article_type == '环境整治'
 								})
 							} else if (this.headCurrent == 3){
 								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
 									return item.article_type == '企业帮扶'
 								})
 							} else if (this.headCurrent == 4){
 								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
 									return item.article_type == '三化管理'
 								})
 							}
