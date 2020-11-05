@@ -65,7 +65,7 @@
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "../../pages_LYFW/pages/LYFW/currency/ho_zhly",
+					clickURL: "../../pages_LYFW/pages/LYFW/scenicSpotTickets/ticketsList",
 					ImageURL1: "../../static/home/serve/cpdg.png", //亮
 					ImageURL2: "../../static/home/serve/cpdg2.png", //暗
 					ItemTitle: "景区售票",
