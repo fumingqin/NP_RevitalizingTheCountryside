@@ -61,8 +61,8 @@
 							<image class="commentsImage" :src="item.image" mode="aspectFill"></image>
 						</view>
 						<!-- 回复评论 -->
-						<view class="replyArea" v-if="item.title!==''">
-							<text class="replyingPerson">客服回复：<text class="replyContent">{{item.title}}</text></text>
+						<view class="replyArea" v-if="item.return_content!==''">
+							<text class="replyingPerson">客服回复：<text class="replyContent">{{item.return_content}}</text></text>
 						</view>
 					</view>
 				</view>
@@ -90,7 +90,6 @@
 		},
 		
 		onLoad() {
-			this.wtfkData();
 			/* 设置当前滚动容器的高，若非窗口的高度，请自行修改 */
 			uni.getSystemInfo({
 				success: (res) => {
@@ -100,9 +99,6 @@
 		},
 		
 		onShow() {
-			uni.showLoading({
-				title: '加载列表中...',
-			})
 			this.userData();
 		},
 		
@@ -111,9 +107,6 @@
 		},
 		
 		onPullDownRefresh: function() {
-			uni.showLoading({
-				title: '加载列表中...',
-			})
 			this.userData();
 		},
 		
@@ -124,12 +117,27 @@
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
 			userData:function() {
+				uni.showLoading({
+					title: '加载列表中...',
+				})
 				uni.getStorage({
 					key: 'userInfo',
 					success: (res) => {
 						this.userInfo = res.data;
 						console.log('获取个人信息',this.userInfo)
-						this.ycydData();
+						this.wtfkData();
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../../pages/GRZX/userLogin'
+								})
+							}
+						})
 					}
 				});
 			},
@@ -163,10 +171,36 @@
 			},
 			
 			//----------------------列表接口--------------------------------
-			ycydData:function(){
-				uni.showLoading({
-					title: '加载列表中...',
+			wtfkData:function(){
+				uni.request({
+					url:this.$mqfk.KyInterface.getFeedbackDemo.Url,
+					method:this.$mqfk.KyInterface.getFeedbackDemo.method,
+					success:(res) =>{
+						console.log('列表数据2',res)
+						if(res.data.status == true){
+							this.listTitle=res.data.data;
+							// console.log('列表数据',this.groupTitle)
+							this.ycydData();
+						}else{
+							this.ycydData();
+							uni.showToast({
+								title: '暂无列表信息',
+								icon: 'none'
+							})
+						}
+					},
+					fail(res) {
+						this.ycydData();
+						uni.showToast({
+							title: '服务器异常',
+							icon: 'none'
+						})
+						// console.log(res)
+					}
 				})
+			},
+			
+			ycydData:function(){
 				uni.request({
 					url:this.$mqfk.KyInterface.getFeedback.Url,
 					method:this.$mqfk.KyInterface.getFeedback.method,
@@ -178,43 +212,10 @@
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
-							this.groupTitle=res.data.data;
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 							uni.showToast({
-								title: '暂无列表信息',
-								icon: 'none'
-							})
-						}
-					},
-					fail(res) {
-						uni.hideLoading();
-						uni.showToast({
-							title: '服务器异常',
-							icon: 'none'
-						})
-						// console.log(res)
-					}
-				})
-			},
-			
-			wtfkData:function(){
-				uni.request({
-					url:this.$mqfk.KyInterface.getFeedbackDemo.Url,
-					method:this.$mqfk.KyInterface.getFeedbackDemo.method,
-					success:(res) =>{
-						console.log('列表数据2',res)
-						if(res.data.status == true){
-							this.listTitle=res.data.data;
-							// console.log('列表数据',this.groupTitle)
-							uni.stopPullDownRefresh();
-							uni.hideLoading();
-						}else{
-							this.groupTitle=res.data.data;
-							uni.stopPullDownRefresh();
-							uni.hideLoading();
-							uni.showToast({
-								title: '暂无列表信息',
+								title: res.data.msg,
 								icon: 'none'
 							})
 						}
@@ -280,7 +281,7 @@
 					var create_time = keywords[i].create_time;
 					var title = keywords[i].title;
 					//定义高亮#9f9f9f
-					var html = content.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
+					var html = title.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
 					html = '<div>' + html + '</div>';
 					var tmpObj = {
 						content: content,
@@ -390,6 +391,8 @@
 	//评论
 	.comment{
 		padding-top: 40upx;
+		padding-bottom: 12upx;
+		border-bottom: 1upx solid #EAEAEA;
 	}
 	
 	.personalInformation{

@@ -13,7 +13,8 @@
 						</view>
 						<!-- <text class="tv_richText">{{item.content}}</text> -->
 						<view class="tv_view2">
-							<rich-text class="tv_richText" :nodes="item.content"></rich-text>
+							<!-- <rich-text class="tv_richText" :nodes="item.content"></rich-text> -->
+							<text class="tv_richText">{{item.introduce}}</text>
 						</view>
 					</view>
 					<image class="tv_image" :src="item.image" mode="aspectFill"></image>
@@ -21,7 +22,7 @@
 				
 				<view class="view_contentView">
 					<text>{{item.nick_name}}</text>
-					<text class="cont_text">{{item.count}}人看过</text>
+					<text class="cont_text">{{item.view}}人看过</text>
 					<text class="cont_text">{{informationDate(item.update_time)}}</text>
 					<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
 				</view>
@@ -32,7 +33,7 @@
 			</view> -->
 			<!-- 缺省提示 -->
 			<view style="margin-top: 360upx;" v-if="groupTitle.length==0">
-				<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
+				<u-empty text="该分类没有动态哦~" mode="news"></u-empty>
 			</view>
 		</view>
 	</view>

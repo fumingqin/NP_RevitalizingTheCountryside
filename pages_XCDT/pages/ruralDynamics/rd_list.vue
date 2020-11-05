@@ -12,7 +12,8 @@
 					</view>
 					<!-- <text class="tv_richText">{{item.content}}</text> -->
 					<view class="tv_view2">
-						<rich-text class="tv_richText" :nodes="item.content"></rich-text>
+						<!-- <rich-text class="tv_richText" :nodes="item.content"></rich-text> -->
+						<text class="tv_richText">{{item.introduce}}</text>
 					</view>
 				</view>
 				<image class="tv_image" :src="item.image" mode="aspectFill"></image>
@@ -20,7 +21,7 @@
 			
 			<view class="view_contentView">
 				<text>{{item.nick_name}}</text>
-				<text class="cont_text">{{item.view}}人看过</text>
+				<text class="cont_text">{{item.count}}人看过</text>
 				<text class="cont_text">{{informationDate(item.update_time)}}</text>
 				<text class="cont_icon" style="color: #007AFF;" v-if="item.state=='已上架'">发布中</text>
 				<text class="cont_icon" style="color: #FC4646;" v-if="item.state=='已下架'">未发布</text>
@@ -39,14 +40,15 @@
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">{{release}}</u-button>
+					<!-- <u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">{{release}}</u-button> -->
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">上下架</u-button>
 				</scroll-view>
 			</view>
 		</view>
 		
 		<!-- 缺省提示 -->
 		<view style="margin-top: 360upx;" v-if="groupTitle.length==0 || groupTitle ==''">
-			<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
+			<u-empty text="该分类没有动态哦~" mode="news"></u-empty>
 		</view>
 	</view>
 </template>
@@ -123,7 +125,7 @@
 						this.userInfo = res.data;
 						console.log('获取个人信息',this.userInfo)
 						this.ycydData();
-					}
+					},
 				});
 			},
 			
@@ -131,7 +133,6 @@
 			selectClick:function(e){
 				//给选择的下标赋值
 				this.selectIndex = e;
-				this.release=this.groupTitle[e].state=='已上架'?'下架':'发布';
 				console.log('上车点下标赋值',this.selectIndex)
 				//取出id
 				// this.selectId = this.groupTitle[e].id;
@@ -165,24 +166,26 @@
 					url:this.$xcdt.KyInterface.getDynamicById.Url,
 					method:this.$xcdt.KyInterface.getDynamicById.method,
 					data:{
-						userId:this.userInfo.userId
+						// userId:this.userInfo.userId
+						userId:100006
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.informationList = '';
 							if (this.headCurrent == 0) {
+								uni.hideLoading();
 								this.groupTitle = res.data.data
 							}else if (this.headCurrent == 1){
 								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
 									return item.state == '已上架';
 								})
 							}else if (this.headCurrent == 2){
 								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
 									return item.state == '已下架'
 								})
 							}
-							this.release=this.groupTitle[0].state=='已上架'?'下架':'发布';
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
@@ -244,53 +247,103 @@
 			
 			//-----------------------上架------------------------------------
 			onTheShelf: function(e) {
-				uni.showModal({
-					title: '你确认发布文章？',
-					success: (res) => {
-						console.log(res)
-						if (res.confirm == true) {
-							uni.showLoading({
-								title: '正在发布....'
-							})
-							uni.request({
-								url: this.$xcdt.KyInterface.upAndDown.Url,
-								method: this.$xcdt.KyInterface.upAndDown.method,
-								data: {
-									id: e
-								},
-								success: (res) => {
-									console.log(res)
-									if (res.data.status == true) {
+				if (this.groupTitle[this.selectIndex].state == '已下架') {
+					uni.showModal({
+						title: '你确认发布文章？',
+						success: (res) => {
+							console.log(res)
+							if (res.confirm == true) {
+								uni.showLoading({
+									title: '正在发布....'
+								})
+								uni.request({
+									url: this.$xcdt.KyInterface.upAndDown.Url,
+									method: this.$xcdt.KyInterface.upAndDown.method,
+									data: {
+										id: e
+									},
+									success: (res) => {
+										console.log(res)
+										if (res.data.status == true) {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布成功',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										} else {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布失败',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										}
+				
+									},
+									fail: () => {
 										uni.hideLoading()
 										uni.showToast({
-											title: '发布成功',
-											icon: 'success'
-										})
-										uni.startPullDownRefresh();
-									} else {
-										uni.hideLoading()
-										uni.showToast({
-											title: '发布失败',
+											title: '服务器异常，请重试',
 											icon: 'success'
 										})
 										uni.startPullDownRefresh();
 									}
-			
-								},
-								fail: () => {
-									uni.hideLoading()
-									uni.showToast({
-										title: '服务器异常，请重试',
-										icon: 'success'
-									})
-									uni.startPullDownRefresh();
-								}
-							})
-						} else {
-			
+								})
+							} else {
+				
+							}
 						}
-					}
-				})
+					})
+				} else if (this.groupTitle[this.selectIndex].state == '已上架') {
+					uni.showModal({
+						title: '你确认下架文章？',
+						success: (res) => {
+							console.log(res)
+							if (res.confirm == true) {
+								uni.showLoading({
+									title: '正在发布....'
+								})
+								uni.request({
+									url: this.$xcdt.KyInterface.upAndDown.Url,
+									method: this.$xcdt.KyInterface.upAndDown.method,
+									data: {
+										id: e
+									},
+									success: (res) => {
+										console.log(res)
+										if (res.data.status == true) {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布成功',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										} else {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布失败',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										}
+				
+									},
+									fail: () => {
+										uni.hideLoading()
+										uni.showToast({
+											title: '服务器异常，请重试',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									}
+								})
+							} else {
+				
+							}
+						}
+					})
+				}
 			},
 			
 			//-----------------------删除------------------------------------
@@ -308,7 +361,8 @@
 								method: this.$xcdt.KyInterface.deleteDynamic.method,
 								data: {
 									id: e,
-									userId:this.userInfo.userId
+									// userId:this.userInfo.userId
+									userId:100006
 								},
 								success: (res) => {
 									console.log(res)

@@ -21,14 +21,18 @@
 				</u-form-item>
 
 				<!-- 上传视频 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
-					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo" ></easy-upload>
 				</u-form-item>
-				<view v-if="informationDetail.video!=='' || types!==0" style="display: flex;position: relative;width: 100%;">
-					<text style="position: absolute;width: :;upx;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 28upx;">{{informationDetail.video}}</text>
-					<text style="position: absolute;right: 0;color:#007AFF;font-size: 28upx;" @click="deleteVideo(0)">删除</text>
-				</view> -->
+				
+				<!-- 简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="centent">
+					<view class="viewClass" style="padding:20rpx 30rpx;">
+						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
+					</view>
+				</u-form-item>
+				
 				<!-- 商品简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -149,6 +153,7 @@
 					region: '', //选择来源地value
 					goodsType: '', //选择类型value
 					// cost: '', //价格
+					centent:'',
 					intro: '', //商品简介
 					imageData: [], //图像日期
 					phone: '',
@@ -252,6 +257,17 @@
 							trigger: ['change', 'blur'],
 						}
 					],
+					
+					centent: [{
+							required: true,
+							message: '请填写简介'
+						},
+						{
+							min: 5,
+							message: '简介不能少于5个字',
+							trigger: 'change',
+						},
+					]
 				},
 				pickerShow: false,
 				errorType: ['message'],
@@ -527,22 +543,15 @@
 					title: '提交中...',
 					mask: true,
 				})
-				// console.log('1', this.issueText);
-				// console.log('2', this.userInfo.userId);
-				// console.log('3', this.pictureArray);
-				// console.log('4', this.model.name);
-				// console.log('5', this.model.goodsType);
-				// console.log('6', this.informationDetail.id);
-				if (this.informationDetail.video !== "") {
-					var arr = [];
-					arr.push(this.informationDetail.video);
-				} else if (this.videoData.data !== this.informationDetail.video) {
-					var arr = [];
-					arr.push(this.videoData.data);
-				} else if (this.types == 0) {
-					var arr = [];
-				}
+				var arr = [];
 				arr.push(this.videoData.data);
+				console.log('1', this.issueText);
+				console.log('2', this.userInfo.userId);
+				console.log('3', this.pictureArray);
+				console.log('4', this.model.name);
+				console.log('5', this.model.goodsType);
+				console.log('6', this.informationDetail.id);
+				console.log('7', arr);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -553,11 +562,13 @@
 								url: this.$smjj.KyInterface.releaseEconomy.Url,
 								method: this.$smjj.KyInterface.releaseEconomy.method,
 								data: {
-									userId: this.userInfo.userId,
+									// userId: this.userInfo.userId,
+									userId: 100006,
 									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,
-									// video: JSON.stringify(arr)
+									introduce: this.model.centent,
+									video: JSON.stringify(arr)
 								},
 								success: (res) => {
 									console.log(res, "请求完接口");
