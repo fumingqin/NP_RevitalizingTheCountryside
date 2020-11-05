@@ -150,10 +150,10 @@
 
 		onLoad: function() {
 			// uni.clearStorage()
-			let pro = uni.getStorageSync('protocol')
-			if (pro !== true) {
+			// let pro = uni.getStorageSync('protocol')
+			// if (pro !== true) {
 				// this.protocolStatus = true;
-			}
+			// }
 			this.cacheLoadData();
 			
 			// this.getTodayDate();

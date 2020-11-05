@@ -47,7 +47,7 @@
 				</u-form-item> -->
 
 				<!-- 上传视频 -->
-				<!-- <view style="font-size: 34upx;font-weight: bold;">视频上传</view> -->
+				<view style="font-size: 34upx;font-weight: bold;">视频上传</view>
 				<view class="burst-wrap">
 				    <view class="burst-wrap-bg">
 				        <view>

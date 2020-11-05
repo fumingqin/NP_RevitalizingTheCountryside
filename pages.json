@@ -454,7 +454,7 @@
 				{
 					"path": "pages/ZCFB/policyDetails",
 					"style": {
-						"navigationBarTitleText": ""
+						"navigationBarTitleText": "政策详情"
 					}
 				},
 				{
@@ -541,13 +541,25 @@
 				{
 					"path": "pages/WSSC/goodsDetails",
 					"style": {
-						"navigationBarTitleText": ""
+						"navigationBarTitleText": "商品详情"
 					}
 				},
 				{
 					"path": "pages/WSSC/myGoodsList",
 					"style": {
 						"navigationBarTitleText": "我的发布"
+					}
+				},
+				{
+					"path": "pages/WSSC/checkGoods",
+					"style": {
+						"navigationBarTitleText": "审核商品"
+					}
+				},
+				{
+					"path": "pages/WSSC/village",
+					"style": {
+						"navigationBarTitleText": "村名列表"
 					}
 				}
 
@@ -625,9 +637,7 @@
 					"style": {}
 				}, {
 					"path": "pages/shuimeiEconomy/se_detailsPage",
-					"style": {
-						"navigationStyle": "custom"
-					}
+					"style": {}
 				}, {
 					"path": "pages/shuimeiEconomy/se_generalList",
 					"style": {}
@@ -931,11 +941,24 @@
 					}
 				}
 			]
+		},
+		//---------------------------------------------第二个包：发布项目------------------------------------------
+		{
+			"root": "pages_FBXM/",
+			"pages": [
+				{
+				    "path" : "pages/publishProject/pp_list",
+				    "style" : {
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+				    "path" : "pages/publishProject/PP_addPage",
+				    "style" : {}
+				}
+			]
 		}
 	],
-
-
-
 
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

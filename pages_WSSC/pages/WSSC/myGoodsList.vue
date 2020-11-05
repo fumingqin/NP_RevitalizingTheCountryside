@@ -36,6 +36,7 @@
 					</view>
 					<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 				</view>
+				<view class="goodsbtn">提交新商品</view>
 				<view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
 					<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 				</view>
@@ -64,7 +65,7 @@
 			uni.showLoading({
 				title: '加载列表中...',
 			})
-			this.zcfbData();
+			// this.zcfbData();
 		},
 		onShow() {
 			this.zcfbData();
@@ -339,5 +340,20 @@
 				color: #888;
 				margin-right: 12upx;
 			}
+		}
+		.goodsbtn{
+			position: fixed;
+			bottom: 10upx;
+			left: 0;
+			right: 0;
+			padding: 24upx 0;
+			border-radius: 64upx;
+			margin: 0 76upx;
+			background: #FC4646;
+			text-align: center;
+			color: #FFFFFF;
+			font-size: 32upx;
+			font-weight: 400;
+			box-shadow: 0px 0.2px 0px #aaa;
 		}
 </style>
