@@ -544,8 +544,8 @@
 								url: this.$xcdt.KyInterface.releaseDynamic.Url,
 								method: this.$xcdt.KyInterface.releaseDynamic.method,
 								data: {
-									// userId: this.userInfo.userId,
-									userId: 100006,
+									userId: this.userInfo.userId,
+									// userId: 100006,
 									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,

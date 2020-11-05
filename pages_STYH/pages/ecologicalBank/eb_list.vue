@@ -32,7 +32,7 @@
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 			</view> -->
 		</view>
-		
+		<view  style="padding-bottom: 180upx;"></view>
 		<view>
 			<view class="to_view">
 				<scroll-view class="to_scroll" scroll-x="true">
@@ -160,12 +160,13 @@
 				uni.showLoading({
 					title: '加载列表中...',
 				})
+				this.groupTitle = [],
 				uni.request({
 					url:this.$styh.KyInterface.getEcologyByUserID.Url,
 					method:this.$styh.KyInterface.getEcologyByUserID.method,
 					data:{
-						// userId:this.userInfo.userId
-						userId:100006
+						userId:this.userInfo.userId
+						// userId:100006
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
@@ -360,8 +361,8 @@
 								method: this.$styh.KyInterface.deleteEcology.method,
 								data: {
 									id: e,
-									// userId:this.userInfo.userId,
-									userId:100006
+									userId:this.userInfo.userId,
+									// userId:100006
 								},
 								success: (res) => {
 									console.log(res)

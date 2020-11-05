@@ -645,8 +645,8 @@
 								method: this.$smjj.KyInterface.updateEconomy.method,
 								data: {
 									id: this.informationDetail.id,
-									// userId: this.userInfo.userId,
-									userId:100006,
+									userId: this.userInfo.userId,
+									// userId:100006,
 									content: this.issueText,
 									image: JSON.stringify(this.pictureArray),
 									title: this.model.name,

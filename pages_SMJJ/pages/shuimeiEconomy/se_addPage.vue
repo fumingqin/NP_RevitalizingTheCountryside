@@ -562,8 +562,8 @@
 								url: this.$smjj.KyInterface.releaseEconomy.Url,
 								method: this.$smjj.KyInterface.releaseEconomy.method,
 								data: {
-									// userId: this.userInfo.userId,
-									userId: 100006,
+									userId: this.userInfo.userId,
+									// userId: 100006,
 									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,

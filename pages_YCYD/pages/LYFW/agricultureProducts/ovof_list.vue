@@ -185,6 +185,7 @@
 				uni.showLoading({
 					title: '加载列表中...',
 				})
+				this.groupTitle = [],
 				uni.request({
 					url:this.$ycyd.KyInterface.getArchivesByUserID.Url,
 					method:this.$ycyd.KyInterface.getArchivesByUserID.method,
