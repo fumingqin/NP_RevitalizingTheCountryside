@@ -204,12 +204,12 @@
 					},
 					// header: {'content-type': 'application/x-www-form-urlencoded'},
 					success: (res) => {
-						// console.log(res)
+						console.log(res)
 						if (res.data.msg == '搜索景区信息成功！') {
 							this.sixPalaceList = res.data.data;
 							uni.stopPullDownRefresh();
 							uni.hideLoading()
-						} else if (res.data.msg == '查不到相关景区，请确认景区名！') {
+						} else if (res.data.status == false) {
 							this.sixPalaceList = '';
 							uni.hideLoading()
 							uni.stopPullDownRefresh();
@@ -236,12 +236,12 @@
 					},
 					// header: {'content-type': 'application/x-www-form-urlencoded'},
 					success: (res) => {
-						// console.log(res)
+						console.log(res)
 						if (res.data.msg == '搜索景区信息成功') {
 							this.scenicList = res.data.data;
 							uni.stopPullDownRefresh();
 							uni.hideLoading()
-						} else if (res.data.msg == '查不到相关景区，请确认景区名！') {
+						} else if (res.data.status == false) {
 							this.scenicList = '';
 							uni.hideLoading()
 							uni.stopPullDownRefresh();
@@ -294,33 +294,19 @@
 					this.screenIndex = 0;
 					this.searchIndex = 0;
 				} else if (e == 'yes') {
-					// #ifndef APP-PLUS
 					uni.getStorage({
 						key: 'wx_position',
 						success: (res) => {
-							// console.log(res)
+							console.log(res)
 							this.regionWeixin = res.data;
 							this.lyfwData(); //请求接口数据
 						}
-					}),
-					// #endif
-					// #ifdef APP-PLUS
-					uni.getStorage({
-						key: 'app_position',
-						success: (res) => {
-							// console.log(res)
-							if (res.data !== undefined) {
-								this.regionWeixin = res.data.city;
-								this.lyfwData(); //请求接口数据
-							}
-						}
 					})
-					// #endif
 					this.$refs.popupRef.close();
 				} else {
 					this.$refs.popupRef.close();
 				}
-			},
+			}, 
 
 
 

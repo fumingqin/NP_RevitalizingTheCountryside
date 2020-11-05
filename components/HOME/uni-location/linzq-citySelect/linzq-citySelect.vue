@@ -259,6 +259,7 @@
 							key: 'wx_position',
 							data: this.position,
 						})
+						this.po_tips = '重新定位'
 					}
 				})
 				// that.loadCity();//小程序-调用高德
