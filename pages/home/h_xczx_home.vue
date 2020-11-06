@@ -132,12 +132,13 @@
 						name: '政策发布',
 						image: '../../static/home/vajra/fabudongtai.png',
 						display: true,
-						entrance: '../../pages_ZCFB/pages/ZCFB/policyList',
+						// entrance: '../../pages_ZCFB/pages/ZCFB/policyList',
+						entrance: '',
 					}, {
 						name: '乡村评榜',
 						image: '../../static/home/vajra/jidukaohe.png',
 						display: true,
-						entrance: '../../pages_BUS/pages/Bus/BusQuery',
+						entrance: '../../pages_JDKP/pages/jdkp_appraisalList',
 					}, {
 						name: '民情反馈',
 						image: '../../static/home/vajra/minqingfankui.png',
@@ -149,12 +150,21 @@
 		},
 
 		onLoad: function() {
+			var a = uni.getStorageSync('guidePageData')
+			if( a !== true){
+				this.cacheLoadData();
+				uni.navigateTo({
+					url: 'guidePage',
+				})
+			}else{
+				this.cacheLoadData();
+			}
 			// uni.clearStorage()
 			// let pro = uni.getStorageSync('protocol')
 			// if (pro !== true) {
 				// this.protocolStatus = true;
 			// }
-			this.cacheLoadData();
+			
 			
 			// this.getTodayDate();
 			// #ifdef MP-WEIXIN

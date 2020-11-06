@@ -33,8 +33,15 @@
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
 				
-				<!-- 商品简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
+				<!-- 简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="centent">
+					<view class="viewClass" style="padding:20rpx 30rpx;">
+						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
+					</view>
+				</u-form-item>
+				
+				<!-- 生态简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="生态简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
@@ -153,6 +160,7 @@
 					region: '', //选择来源地value
 					goodsType: '', //选择类型value
 					// cost: '', //价格
+					centent:'',
 					intro: '', //商品简介
 					imageData: [], //图像日期
 					phone: '',
@@ -256,6 +264,17 @@
 							trigger: ['change', 'blur'],
 						}
 					],
+					
+					centent: [{
+							required: true,
+							message: '请填写简介'
+						},
+						{
+							min: 5,
+							message: '简介不能少于5个字',
+							trigger: 'change',
+						},
+					]
 				},
 				pickerShow: false,
 				errorType: ['message'],
@@ -550,10 +569,12 @@
 								method: this.$styh.KyInterface.releaseEcology.method,
 								data: {
 									userId: this.userInfo.userId,
+									// userId:100006,
 									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,
 									telphone: this.model.phone,
+									introduce: this.model.centent,
 									video: JSON.stringify(arr)
 								},
 								success: (res) => {

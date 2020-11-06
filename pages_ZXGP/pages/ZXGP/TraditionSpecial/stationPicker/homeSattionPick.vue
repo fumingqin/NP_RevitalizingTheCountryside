@@ -110,17 +110,16 @@
 				// console.log($Zxgp.KyInterface.Cs_GetInsuranceCheckState.Url)
 				// console.log($KyInterface.KyInterface.getStations.Url)
 				if(this.type=='车票订购'){
-					var systemNameCode = '八闽出行';
 					uni.request({
 						url: $KyInterface.KyInterface.getStations.Url,
 						method: $KyInterface.KyInterface.getStations.method,
 						data:{
-							systemName: systemNameCode
+							systemName : this.$ky_cpdg.KyInterface.system.KY_systemName
 						},
 						success: (res) => {
 							
 							uni.hideLoading();
-							var a=res.data;
+							var a=res.data; 
 							var b=JSON.parse(a);
 							console.log('请求接口的数据：', b)
 							// console.log(this.stationArray)
@@ -173,7 +172,7 @@
 				}
 			},
 			//-------------------------监听输入-------------------------
-			onInput(event){
+			onInput:function(event){
 				var keyword = event.detail?event.detail.value:event;
 				if (!keyword) {
 					this.keywordList = [];
@@ -185,49 +184,102 @@
 				this.isShowAllList = false;
 				//以下示例截取淘宝的关键字，请替换成你的接口
 				uni.showLoading();
-				uni.request({
-					url:$KyInterface.KyInterface.GetLineNameByKey.Url,
-					method:$KyInterface.KyInterface.GetLineNameByKey.method,
-					data:{
-						AppSystemName:this.type,
-						key:keyword
-					},
-					success: (res) => {
-						uni.hideLoading();
-						console.log('模糊搜索',res);
-						this.keywordList = [];
-						this.keywordList = this.drawCorrelativeKeyword(res.data.data, keyword);
-					},
-					fail(res) {
-						uni.hideLoading();
-					}
-				});
+				if(this.type == '武夷新区专线'){
+					uni.request({
+						url:$KyInterface.KyInterface.GetLineNameByKey.Url,
+						method:$KyInterface.KyInterface.GetLineNameByKey.method,
+						data:{
+							AppSystemName:this.type,
+							key:keyword
+						},
+						success: (res) => {
+							uni.hideLoading();
+							console.log('模糊搜索',res);
+							this.keywordList = [];
+							this.keywordList = this.drawCorrelativeKeyword(res.data.data, keyword);
+						},
+						fail(res) {
+							uni.hideLoading();
+						}
+					});
+				}else{
+					uni.request({
+						url:this.$ky_cpdg.KyInterface.ky_getSatartSite.Url,
+						method:this.$ky_cpdg.KyInterface.ky_getSatartSite.method,
+						data:{
+							systemName:'南平综合出行小程序',
+							keyword:keyword
+						},
+						success: (res) => {
+							uni.hideLoading();
+							console.log('模糊搜索',res);
+							this.keywordList = [];
+							this.keywordList = this.drawCorrelativeKeyword(JSON.parse(res.data), keyword);
+						},
+						fail(res) {
+							uni.hideLoading();
+						}
+					});
+				}
+				
+				
+				
+				
 			},
 			//-------------------------高亮关键字-------------------------
 			drawCorrelativeKeyword(keywords, keyword) {
 				// console.log(keywords);
-				var len = keywords.length,
-					keywordArr = [];
-				for (var i = 0; i < len; i++) {
-					var row = keywords[i].LineName;
-					var start = keywords[i].StartSite;
-					var end = keywords[i].EndSite;
-					//定义高亮#9f9f9f
-					var html = row.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
-					html = '<div>' + html + '</div>';
-					var tmpObj = {
-						keyword: row,
-						htmlStr: html,
-						StartSite:start,
-						EndSite:end
-					};
-					keywordArr.push(tmpObj)
-					// console.log(keywordArr)
+				// console.log(keyword);
+				if(this.type == '武夷新区专线'){
+					var len = keywords.length,
+						keywordArr = [];
+					for (var i = 0; i < len; i++) {
+						var row = keywords[i].LineName;
+						var start = keywords[i].StartSite;
+						var end = keywords[i].EndSite;
+						//定义高亮#9f9f9f
+						var html = row.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
+						html = '<div>' + html + '</div>';
+						var tmpObj = {
+							keyword: row,
+							htmlStr: html,
+							StartSite:start,
+							EndSite:end
+						};
+						keywordArr.push(tmpObj)
+						// console.log(keywordArr)
+					}
+					return keywordArr;
+				}else{ 
+					var len = keywords.length,
+						keywordArr = [];
+					for (var i = 0; i < len; i++) {
+						var row = keywords[i].siteName;
+						//定义高亮#9f9f9f
+						var html = row.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
+						html = '<div>' + html + '</div>';
+						var tmpObj = {
+							text : keywords[i].siteName,
+							htmlStr: html,
+						};
+						keywordArr.push(tmpObj)
+						// console.log(keywordArr)
+					}
+					return keywordArr;
 				}
-				return keywordArr;
+				
+				
+				
+				
+				
 			},
+			
+			
+			
+			
 			//-------------------------点击下拉站点-------------------------
 			itemClick(index){
+				console.log(index)
 				var that = this;
 				//获取点击选项的文字
 				var key = this.keywordList[index];
@@ -239,6 +291,20 @@
 						data2: key.EndSite,
 					});
 					uni.navigateBack({});
+				}else if(that.type == '车票订购'){
+					if (that.stationType == 'qidian') {
+						//当前是上车点
+						uni.$emit('startstaionChange', {
+						    data: key.text
+						});
+						uni.navigateBack({ });
+					}else if(that.stationType == 'zhongdian') {
+						//当前是下车点
+						uni.$emit('endStaionChange', {
+						    data: key.text
+						});
+						uni.navigateBack({ });
+					}
 				}else {
 					uni.showToast({
 						title:'暂无搜索',
@@ -248,7 +314,7 @@
 			},
 			//-------------------------点击站点-------------------------
 			detailStationTap(item){
-				// console.log(item.countys);
+				console.log(item);
 				var that = this;
 				if(this.type=='车票订购'){
 					if (that.stationType == 'qidian') {

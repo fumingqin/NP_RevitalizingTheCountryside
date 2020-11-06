@@ -129,7 +129,7 @@
 					that.startStationList = that.arrayDistinct(that.stationArray.starSiteArr);
 					//保存下车点数组
 					that.endStationList = that.arrayDistinct(that.stationArray.endSiteArr);
-					that.default = that.startStationList.length-1;
+					that.default = 0;
 					that.default2 = that.endStationList.length-1;
 					//定位已选择的上车点
 					that.startSelectIndex = that.default;

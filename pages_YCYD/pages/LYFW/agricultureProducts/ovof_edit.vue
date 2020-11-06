@@ -55,8 +55,16 @@
 					<text style="position: absolute;width: :;upx;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 28upx;">{{informationDetail.video}}</text>
 					<text style="position: absolute;right: 0;color:#007AFF;font-size: 28upx;" @click="deleteVideo(0)">删除</text>
 				</view> -->
-				<!-- 商品简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
+				
+				<!-- 简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="centent">
+					<view class="viewClass" style="padding:20rpx 30rpx;">
+						<u-input type="textarea" :border="border" :height="height" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
+					</view>
+				</u-form-item>
+				
+				<!-- 档案简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="档案简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
@@ -175,6 +183,7 @@
 					region: '', //选择来源地value
 					goodsType: '', //选择类型value
 					// cost: '', //价格
+					centent:'',
 					intro: '', //商品简介
 					imageData: [], //图像日期
 				},
@@ -253,6 +262,16 @@
 						message: '请选择商品类型',
 						trigger: 'change',
 					}],
+					centent: [{
+							required: true,
+							message: '请填写简介'
+						},
+						{
+							min: 5,
+							message: '简介不能少于5个字',
+							trigger: 'change',
+						},
+					]
 				},
 				pickerShow: false,
 				errorType: ['message'],
@@ -346,6 +365,18 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						// console.log('获取个人信息', this.userInfo)
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../../pages/GRZX/userLogin'
+								})
+							}
+						})
 					}
 				});
 			},
@@ -362,10 +393,11 @@
 						if(data.data.video !== null){
 							this.imageList.push(data.data.video[0])	
 						}
-						console.log(this.videoData)
+						console.log(data.data.introduce)
 						this.issueText2 = data.data.content;
 						this.model.name = data.data.title;
 						this.model.goodsType = data.data.article_type;
+						this.model.centent = data.data.introduce;
 						this.onEditorReady();
 						// console.log('赋值前', this.lists)
 						for(var i=0;i<this.informationDetail.image.length;i++){
@@ -618,10 +650,12 @@
 								data: {
 									id: this.informationDetail.id,
 									userId: this.userInfo.userId,
+									// userId: 100006,
 									content: this.issueText,
 									image: JSON.stringify(this.pictureArray),	
 									title: this.model.name,
 									article_type: this.model.goodsType,
+									introduce:this.model.centent,
 									video: JSON.stringify(this.imageList)
 								},
 								success: (res) => {

@@ -10,8 +10,22 @@
 					</view>
 				</u-form-item>
 
+				<!-- 乡村名称 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="乡村名称" :border-bottom="false" prop="village">
+					<view class="viewClass" style="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入乡村名称" v-model="model.village" :type="text"></u-input>
+					</view>
+				</u-form-item>
+
+				<!-- 负责人 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="负责人" :border-bottom="false" prop="personnel">
+					<view class="viewClass" style="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入负责人" v-model="model.personnel" :type="text"></u-input>
+					</view>
+				</u-form-item>
+
 				<!-- 上传图片 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
 					 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
@@ -21,13 +35,35 @@
 				</u-form-item>
 
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
+
+				<!-- 文件上传 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false">
+					<view class="viewClass">
+						<view>
+							<l-file ref="lFile" @up-success="onSuccess"></l-file>
+							<view class="padding text-center">
+								<view class="padding">
+									<button @tap="onUpload">上传</button>
+								</view>
+								<view>{{localPath}}</view>
+							</view>
+						</view>
+					</view>
+				</u-form-item>
 				
-				<!-- 商品简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
+				<!-- 简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="centent">
+					<view class="viewClass" style="padding:20rpx 30rpx;">
+						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
+					</view>
+				</u-form-item>
+
+				<!-- 项目内容 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="项目内容" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
@@ -107,7 +143,6 @@
 			</u-form>
 			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
 			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
-			<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
 		</view>
 	</view>
 </template>
@@ -146,9 +181,11 @@
 					region: '', //选择来源地value
 					goodsType: '', //选择类型value
 					// cost: '', //价格
+					centent:'',//简介
 					intro: '', //商品简介
+					village: '', //乡村名
 					imageData: [], //图像日期
-					phone: '',
+					personnel: '', //负责人
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
@@ -196,6 +233,28 @@
 							trigger: ['change', 'blur'],
 						},
 					],
+					village: [{
+							required: true,
+							message: '请输入乡村名称',
+							trigger: 'blur',
+						},
+						{
+							min: 1,
+							message: '请输入乡村名称',
+							trigger: ['change', 'blur'],
+						},
+					],
+					personnel: [{
+							required: true,
+							message: '请输入负责人',
+							trigger: 'blur',
+						},
+						{
+							min: 1,
+							message: '请输入负责人',
+							trigger: ['change', 'blur'],
+						},
+					],
 					region: [{
 						required: true,
 						message: '请选择商品来源地',
@@ -233,22 +292,16 @@
 						message: '请选择商品类型',
 						trigger: 'change',
 					}],
-
-					phone: [{
+					centent: [{
 							required: true,
-							message: '请输入手机号',
-							trigger: ['change', 'blur'],
+							message: '请填写简介'
 						},
 						{
-							validator: (rule, value, callback) => {
-								// 调用uView自带的js验证规则，详见：https://www.uviewui.com/js/test.html
-								return this.$u.test.mobile(value);
-							},
-							message: '手机号码不正确',
-							// 触发器可以同时用blur和change，二者之间用英文逗号隔开
-							trigger: ['change', 'blur'],
-						}
-					],
+							min: 5,
+							message: '简介不能少于5个字',
+							trigger: 'change',
+						},
+					]
 				},
 				pickerShow: false,
 				errorType: ['message'],
@@ -277,23 +330,8 @@
 				fileList: [],
 				category: 'video',
 				videoArray: [],
-				selectList: [{
-						value: '村容村貌',
-						label: '村容村貌'
-					},
-					{
-						value: '环境整治',
-						label: '环境整治'
-					},
-					{
-						value: '企业帮扶',
-						label: '企业帮扶'
-					},
-					{
-						value: '三化管理',
-						label: '三化管理'
-					}
-				],
+				localPath: '',
+				filename: [],
 			}
 		},
 
@@ -320,22 +358,20 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						// console.log('获取个人信息', this.userInfo)
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../../pages/GRZX/userLogin'
+								})
+							}
+						})
 					}
 				});
-			},
-
-			//--------------------- 选择地区回调 --------------------------
-			regionConfirm(e) {
-				this.model.region = e.province.label + '-' + e.city.label + '-' + e.area.label;
-				console.log(this.model)
-			},
-
-			//--------------------- 选择商品类型回调------------------------
-			selectConfirm(e) {
-				this.model.goodsType = '';
-				e.map((val, index) => {
-					this.model.goodsType += this.model.goodsType == '' ? val.label : '-' + val.label;
-				})
 			},
 
 			//--------------------------------------------
@@ -506,6 +542,49 @@
 				console.log(this.lists)
 			},
 
+			//-------------------------------上传文件---------------------------------------------------------------------------
+			onOpenDoc() {
+				let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
+				/* 下载返回临时路径（退出应用失效） */
+				this.$refs.lFile.download(url)
+					.then(path => {
+						/* 预览 */
+						this.$refs.lFile.open(path);
+					});
+			},
+
+			/* 保存 */
+			onDown() {
+				let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
+				this.$refs.lFile.download(url, 'local')
+					.then(path => {
+						this.localPath = path;
+					});
+			},
+
+			/* 上传 */
+			onUpload() {
+				this.localPath = '';
+				this.filename = [];
+				this.$refs.lFile.upload({
+					// #ifdef APP-PLUS
+					// nvue页面使用时请查阅nvue获取当前webview的api，当前示例为vue窗口
+					currentWebview: this.$mp.page.$getAppWebview(),
+					// #endif
+					//非真实地址，记得更换,调试时ios有跨域，需要后端开启跨域并且接口地址不要使用http://localhost/
+					url: 'http://120.24.144.6:8080/api/file/upload',
+					//默认file,上传文件的key
+					name: 'file',
+					// header: {'Authorization':'token'},
+					//...其他参数
+				});
+			},
+			onSuccess(res) {
+				console.log('上传成功回调', JSON.stringify(res));
+				this.localPath = JSON.stringify(res.fileName);
+				this.filename.push(res.data.data);
+			},
+
 			successData: function() {
 				this.editorCtx.getContents({
 					success: (res) => {
@@ -523,15 +602,17 @@
 					title: '提交中...',
 					mask: true,
 				})
-				var arr=[];
+				var arr = [];
 				arr.push(this.videoData.data);
+				var arr2 = [];
+				arr2.push(this.localPath);
 				console.log('1', this.issueText);
 				console.log('2', this.userInfo.userId);
 				console.log('3', this.pictureArray);
 				console.log('4', this.model.name);
 				console.log('5', this.model.goodsType);
-				console.log('6', this.informationDetail.id);
 				console.log('7', arr);
+				console.log('8', arr2);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -542,11 +623,15 @@
 								url: this.$fbxm.KyInterface.releaseProject.Url,
 								method: this.$fbxm.KyInterface.releaseProject.method,
 								data: {
-									userId: 100006,
+									userId: this.userInfo.userId,
 									content: e,
 									image: JSON.stringify(this.lists),
 									title: this.model.name,
-									video: JSON.stringify(arr)
+									video: JSON.stringify(arr),
+									pdfFile: JSON.stringify(this.filename),
+									pdfName: JSON.stringify(arr2),
+									villageCode: this.model.village,
+									introduce: this.model.centent,
 								},
 								success: (res) => {
 									console.log(res, "请求完接口");

@@ -45,6 +45,116 @@
 							</view>
 						</view>
 					</view>
+					<!-- 出租车 -->
+					<view v-if="item.vehicleType=='出租车'">
+						<view v-if="item.orderType=='预约'" style="margin-left: 30rpx;width: 375rpx; height: 62rpx; border-radius: 32rpx;background-color: #06B4FD;display: flex;justify-content: center;align-items: center;">
+							<text style="font-size: 24rpx; color: #FFFFFF;font-weight: 400;line-height: 62rpx;">预定时间：{{changeTime(item.appointmentTime)}}</text>
+						</view>
+						<view class="CZCwhiteBg">
+							<view style="display: flex; margin-top: -40rpx;">
+								<!-- <image style="width: 48rpx; height: 45rpx; margin:48rpx 45rpx;" src="../../static/order/Car1.png"></image> -->
+								<view style="width: 600rpx; height: 44rpx;color: #2C2D2D; font-size: 34rpx;margin: 48rpx -28rpx;font-weight: bold;">{{item.vehicleType}}</view>
+								<view style="width: 160rpx; height: 44rpx;color: #666666; font-size: 28rpx;margin: 48rpx 0rpx;">{{taxiOrderState(item.state)}}</view>
+							</view>
+					
+							<view style="display: flex; margin-top: -72rpx;">
+								<!-- <image style="width: 22rpx; height: 22rpx; margin:58rpx 92rpx;" src="../../static/order/time.png"></image> -->
+								<view style="width: 540rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx -76rpx;">{{changeTime(item.orderTime)}}</view>
+								<!-- <view style="width: 160rpx; height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin: 48rpx 0rpx;">{{item.money}}</view> -->
+							</view>
+					
+							<view style="display: flex; margin-top: -16rpx;">
+								<view class="bluering"></view>
+								<view style=" height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin-top: -12rpx;margin-left: 16rpx;">{{item.startAddress}}</view>
+							</view>
+					
+							<view style="display: flex; margin-top: 36rpx;">
+								<view class="redring"></view>
+								<view style=" height: 44rpx;color: #AAAAAA; font-size: 28rpx;margin-top: -12rpx;margin-left: 16rpx;">{{item.endAddress}}</view>
+							</view>
+					
+							<view class="CTKYBtnView">
+								<button class="allBtn" @click="CallAgain(item)" v-if="taxiOrderState(item.state)=='已完成'|| taxiOrderState(item.state)=='已取消'">再次呼叫</button>
+								<button class="allBtn" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</button>
+								<button class="allBtn" @click="czcComplaint(item)" v-if="taxiOrderState(item.state)=='已完成'">投诉</button>
+								<button class="allBtn czcpayBtn" @click="czcGotoPay(item.orderNumber)" v-if="taxiOrderState(item.state)=='未支付'">去支付</button>
+								<!-- <button class="allBtn" @tap="del(index)" v-if="taxiOrderState(item.state)=='已取消' || taxiOrderState(item.state)=='已完成'">删除</button> -->
+								<button class="allBtn" @click="cancleOrder(item)" v-if="taxiOrderState(item.state)=='进行中'">取消</button>
+							</view>
+						</view>
+					</view>
+					<!-- 景区门票 -->
+					<!-- 标签class命名：pd;全称：Purchase Date -->
+					<!-- 内容class命名：at;全称：Admission ticket -->
+					<view v-if="item.title=='景区门票' && item.isDel !== '是'">
+						<view class="pd_view">下单时间：{{item.setOrderTime}}</view>
+						<view class="at_view">
+							<view class="at_titleView">
+								<!-- <image class="at_icon" src="../../static/order/menpiao.png" mode="aspectFill"></image> -->
+								<text class="at_title">{{item.ticketTitle}}</text>
+								<text class="at_status">{{item.orderType}}</text>
+							</view>
+							<view class="at_contentView" style="display: flex;">
+								<view v-for="(item2,index2) in item.ticketComment" :key="index2">
+									<view class="at_contentFrame">{{item2}}</view>
+								</view>
+								<text class="at_contentPrice">¥{{item.orderActualPayment}}</text>
+							</view>
+					
+							<view class="at_contentView">
+								<text class="at_contentText">使用时间：&nbsp;{{item.orderDate}}</text>
+								<text class="at_contentText">预订人数：&nbsp;{{item.orderUserIndex}}人</text>
+							</view>
+					
+							<!-- 已使用 -->
+							<view class="at_buttonView" v-if="item.orderType=='已使用'">
+								<view class="at_button at_btDetails" @click="details(item.orderNumber,'3')" style="margin-right: 0upx;">详情</view>
+							</view>
+					
+							<!-- 待使用 -->
+							<view class="at_buttonView" v-if="item.orderType=='待使用'">
+								<view class="at_button at_btDelete" @click="open2(item.orderNumber,'3')">退票</view>
+								<view class="at_button at_btQrCode" @click="open5(item)">二维码</view>
+								<view class="at_button at_btDetails"  @click="details(item.orderNumber,'3')">详情</view>
+							</view>
+					
+							<!-- 待支付 -->
+							<view class="at_buttonView" v-if="item.orderType=='待支付'">
+								<view class="at_button at_btDelete" @click="open3(item.orderNumber,'3')">取消</view>
+								<view class="at_button at_btToPay" @click="topay(item.orderNumber,'3')">去支付</view>
+								<view class="at_button at_btDetails" @click="details(item.orderNumber,'3')">详情</view>
+							</view>
+					
+							<!-- 已退票 -->
+							<view class="at_buttonView" v-if="item.orderType=='已退票'">
+								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'3')">删除</view>
+								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'3')">再次预订</view>
+								<view class="at_button at_btDetails" @click="details(item.orderNumber,'3')">详情</view>
+							</view>
+					
+							<!-- 已取消 -->
+							<view class="at_buttonView" v-if="item.orderType=='已取消'">
+								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'3')">删除</view>
+								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'3')">再次预订</view>
+								<view class="at_button at_btDetails" @click="details(item.orderNumber,'3')">详情</view>
+							</view>
+					
+							<!-- 支付超时 -->
+							<view class="at_buttonView" v-if="item.orderType=='支付超时'">
+								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'3')">删除</view>
+								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'3')">再次预订</view>
+								<view class="at_button at_btDetails" @click="details(item.orderNumber,'3')">详情</view>
+							</view>
+					
+							<!-- 已失效 -->
+							<view class="at_buttonView" v-if="item.orderType=='已失效'">
+								<view class="at_button at_btDelete" @click="open4(item.orderNumber,'3')">删除</view>
+								<view class="at_button at_btQrCode" @click="repurchase(item.ticketId,'3')">再次预订</view>
+								<view class="at_button at_btDetails" @click="details(item.orderNumber,'3')">详情</view>
+							</view>
+					
+						</view>
+					</view>
 				</view>
 				<empty-data :isShow="info.length==0" text="暂无数据" :image="noDataImage" textColor="#999999"></empty-data>
 			</view>
@@ -254,6 +364,7 @@
 	import uniPopup2 from "@/components/Order/uni-popup/uni-popup2.vue";
 	import emptyData from "@/components/Order/emptyData/emptyData.vue"; //无数据时显示内容
 	import $KyInterface from "@/common/Ctky.js"
+	import $lyfw from '@/common/LYFW/LyfwFmq.js' //旅游服务
 	export default {
 		components: {
 			uniSegmentedControl,
@@ -287,7 +398,7 @@
 				specialLineInfo: '',
 				noDataImage:'',//客运弹框背景图
 				textareaValue:"",
-				
+				selectorIndex : 0,//模块筛选值
 				SfcInfo: '',
 			}
 		},
@@ -375,7 +486,21 @@
 				that.goingArr = [];
 				that.unfinishArr = [];
 				that.cancelArr = [];
-					that.getUserInfo();//加载普通班车订单方法
+					if(that.selectorIndex==0){
+						that.getUserInfo();//加载普通班车订单方法
+						setTimeout(function(){
+							that.toFinished();//加载景区订单方法
+						},400)
+						setTimeout(function(){
+							that.loadczcData();//加载出租车订单方法
+						},800)
+					}else if(that.selectorIndex==1){
+						that.getUserInfo();//加载传统客运订单方法
+					}else if(that.selectorIndex==2){
+						that.toFinished();//加载景区订单方法
+					}else if(that.selectorIndex==3){
+						that.loadczcData();//加载出租车订单方法
+					}
 			},
 			//--------------------------读取公众号openid--------------------------
 			getOpenID() {
@@ -1115,7 +1240,142 @@
 					this.current = e.currentIndex
 				}
 			},
-
+			//-------------------------请求订单列表-------------------------
+			toFinished: function() {
+				var that = this;
+				uni.request({
+					url: $lyfw.Interface.spt_RequestTicketsList.value,
+					method: $lyfw.Interface.spt_RequestTicketsList.method,
+					data: {
+						userId: this.userInfo.userId
+					},
+					header: {
+						'content-type': 'application/json'
+					},
+					success: (res) => {
+						console.log('景区门票',res);
+						
+						if (res.data.status == true) {
+								for (var i = 0; i < res.data.data.length; i++) {
+										that.info.push(res.data.data[i]);
+								}
+								for (var i = 0; i < res.data.data.length; i++) {
+									if (res.data.data[i].orderType == '已完成' || res.data.data[i].orderType == '已使用') {
+										that.finishArr.push(res.data.data[i]);
+									} else if (res.data.data[i].orderType == '进行中' || res.data.data[i].orderType == '待使用') {
+										that.goingArr.push(res.data.data[i]);
+									} else if (res.data.data[i].orderType == '未支付' || res.data.data[i].orderType == '待支付') {
+										that.unfinishArr.push(res.data.data[i]);
+									} else if (res.data.data[i].orderType == '已取消' || res.data.data[i].orderType == '已退票' || res.data.data[i].orderType == '支付超时' || res.data.data[i].orderType == '已失效') {
+										that.cancelArr.push(res.data.data[i]);
+									}
+								}
+							//执行旅游产品列表接口
+							// that.tp_orderListData();
+							uni.hideLoading();
+							uni.stopPullDownRefresh();
+						} else {
+							uni.hideLoading();
+							uni.stopPullDownRefresh();
+							uni.showToast({
+								title:'无订单数据',
+								icon:'none'
+							})
+							// that.tp_orderListData();
+							
+						}
+						
+					},
+					fail:function(){
+						uni.hideLoading();
+						uni.stopPullDownRefresh();
+					}
+				})
+			},
+			//-------------------------出租车开始-------------------------
+			loadczcData: function() {
+				var that = this;
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res1) => {
+						this.userInfo = res1.data;
+						uni.request({
+							url: 'https://zntc.145u.net:9099/api/taxi/GetAllExpressOrder_Passenger',
+							data: {
+								userId: that.userInfo.userId,
+							},
+							method: 'POST',
+							success: (res) => {
+								console.log('出租车',res);
+								uni.hideLoading();
+								uni.stopPullDownRefresh();
+								if (res.data.status) {
+									for (var i = 0; i < res.data.data.length; i++) {
+										that.info.push(res.data.data[i]);
+										if (res.data.data[i].state == "0" || res.data.data[i].state == "1" || res.data.data[i].state == "2" ||
+											res.data.data[i].state == "3" || res.data.data[i].state == "4") {
+											that.goingArr.push(res.data.data[i]);
+										} else if (res.data.data[i].state == "5" || res.data.data[i].state == "9") {
+											that.unfinishArr.push(res.data.data[i]);
+										} else if (res.data.data[i].state == "7" || res.data.data[i].state == "8") {
+											that.cancelArr.push(res.data.data[i]);
+										} else if (res.data.data[i].state == 6) {
+											that.finishArr.push(res.data.data[i]);
+										}
+									}
+								} else {
+								}
+							}
+						})
+					},
+					fail() {
+						uni.hideLoading();
+						//请求数据失败，停止刷新
+					    uni.stopPullDownRefresh();
+						uni.showToast({
+							title: '暂无订单数据，请先登录后查看订单',
+							icon: 'none',
+							success: function() {
+								// uni.redirectTo({
+								// 	url: '../GRZX/userLogin?urlData=1'
+								// })
+							}
+						})
+					}
+				})
+			},
+			taxiOrderState(param) {
+				if (param == 0 || param == 1 || param == 2 || param == 3 || param == 4) {
+					return '进行中';
+				} else if (param == 5 || param == 9) {
+					return '未支付';
+				} else if (param == 7 || param == 8) {
+					return '已取消';
+				} else if (param == 6) {
+					return '已完成';
+				}
+			}, 
+			changeTime: function(value) { //时间格式转换
+				var date = new Date(value + "+08:00");
+				var year = date.getFullYear();
+				var mounth = date.getMonth() + 1;
+				if (mounth < 10) {
+					mounth = "0" + mounth;
+				}
+				var day = date.getDate();
+				if (day < 10) {
+					day = "0" + day;
+				}
+				var hours = date.getHours();
+				if (hours < 10) {
+					hours = "0" + hours;
+				}
+				var minutes = date.getMinutes();
+				if (minutes < 10) {
+					minutes = "0" + minutes;
+				}
+				return year + '-' + mounth + '-' + day + " " + hours + ':' + minutes;
+			},
 		}
 	}
 </script>
@@ -1280,6 +1540,13 @@
 				color: #FFFFFF;
 				margin-right: 24upx;
 			}
+			//二维码/再次购买 - 实心橙
+			.at_btQrCode {
+				background: #FF6600;
+				border: 1upx solid #FF6600;
+				margin-right: 24upx;
+				color: #FFFFFF;
+			}
 		}
 	}
 	//须知弹框
@@ -1373,5 +1640,68 @@
 			}
 		}
 	}
-
+	.CZCwhiteBg {
+		position: relative;
+		margin: 30rpx;
+		// margin-top: -20rpx;
+		padding: 20rpx 0;
+		padding-bottom: 140rpx;
+		width: 698rpx;
+		background: #FFFFFF;
+		border-radius: 12rpx;
+		// box-shadow: 0 0 5rpx 0rpx #aaa;
+	}
+	.bluering {
+		width: 8rpx;
+		height: 8rpx;
+		border: 4rpx solid #06B4FD;
+		background: #06B4FD;
+		border-radius: 100%;
+		margin-left: 96rpx;
+	}
+	
+	.redring {
+		width: 8rpx;
+		height: 8rpx;
+		border: 4rpx solid #FC4646;
+		background: #FC4646;
+		border-radius: 100%;
+		margin-left: 96rpx;
+	}
+	.CTKYBtnView {
+		margin-top: 30upx;
+		display: flex;
+		float: right;
+		margin-bottom: 20rpx;
+	
+		.allBtn {
+			padding: 0 20upx;
+			// padding-top: 32upx;
+			font-size: 26upx;
+			border-radius: 8upx;
+			border: 0.1 solid #06B4FD;
+			margin-right: 30upx;
+			background-color: #fff;
+			color: #666666;
+		}
+	
+		//支付
+		.payBtn {
+			background-color: #FC4646;
+			color: #ffffff;
+		}
+		//支付
+		.czcpayBtn {
+			background-color: #FC4646;
+			color: #ffffff;
+			margin-right: 32rpx;
+		}
+	
+		//二维码
+		.QRCode {
+			background-color: #06B4FD;
+			color: #06B4FD;
+		}
+	}
+	
 </style>

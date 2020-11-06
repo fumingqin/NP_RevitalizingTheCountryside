@@ -39,8 +39,7 @@
 					<view class="btnClass" @click="routeJump(groupTitle[selectIndex].id)">详情</view>
 					<view class="btnClass" @click="modifyJump(groupTitle[selectIndex])">修改</view>
 					<view class="btnClass" @click="Delete(groupTitle[selectIndex].id)">删除</view>
-					<view class="btnClass" v-show="groupTitle[selectIndex].state=='已上架'" @click="onTheShelf(groupTitle[selectIndex].id)">上架</view>
-					<view class="btnClass" v-show="groupTitle[selectIndex].state=='已下架'" @click="onTheShelf(groupTitle[selectIndex].id)">下架</view>
+					<view class="btnClass" @click="onTheShelf(groupTitle[selectIndex].id)">上下架</view>
 				</view>
 			</scroll-view>
 		</view>
@@ -75,7 +74,6 @@
 					color: '#007AFF',
 					fontSize: '17px',
 					border: '#007AFF solid 1rpx',
-
 				},
 				groupTitle: [],
 				selectId: '', //去出id
@@ -116,6 +114,18 @@
 						this.userInfo = res.data;
 						console.log('获取个人信息', this.userInfo)
 						this.ycydData();
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../../pages/GRZX/userLogin'
+								})
+							}
+						})
 					}
 				});
 			},
@@ -155,7 +165,7 @@
 					url: this.$fbxm.KyInterface.getProjectByUserID.Url,
 					method: this.$fbxm.KyInterface.getProjectByUserID.method,
 					data: {
-						userId: 100006
+						userId: this.userInfo.userId
 					},
 					success: (res) => {
 						console.log('列表数据', res)
@@ -376,6 +386,7 @@
 </script>
 
 <style lang="scss">
+	@import "./editor.css";
 	//默认背景颜色
 	page {
 		background-color: #FFFFFF;

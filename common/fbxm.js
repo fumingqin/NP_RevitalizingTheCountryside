@@ -42,6 +42,12 @@ const KyInterface = {
 		name:'上下架发布项目接口',
 		method:'POST',
 	},
+	
+	updateProject:{
+		Url:Url + '/api/project/updateProject',
+		name:'编辑项目接口',
+		method:'POST',
+	},
 }
 
 // 接口声明区
