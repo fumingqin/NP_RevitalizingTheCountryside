@@ -61,6 +61,7 @@
 				userId:'',
 				phoneNumber:'',
 				port:'',
+				port1:'',
 				duty:'',
 			};
 		},
@@ -97,8 +98,9 @@
 						let data = res.data;
 						that.userId = data.userId;
 						// ------------1.头像-------------
-						that.port=data.portrait;
-						that.portrait = data.portrait
+						that.port="http://120.24.144.6:888/prod-api" + data.portrait;
+						that.port1 = data.portrait;
+						that.portrait = "http://120.24.144.6:888/prod-api" + data.portrait
 						// ------------2.昵称-------------
 						that.userName =data.userName;
 						// ------------3.性别-------------
@@ -193,18 +195,19 @@
 						icon:'none'
 					})
 				}else{
-					if(this.port.indexOf("http://120.24.144.6") != -1 || this.port == ""){
-						this.changeInfo(this.port);
+					if(this.port.indexOf("http://120.24.144.6:888") != -1 || this.port == ""){
+						this.changeInfo(this.port1);
 					}else{
 						console.log(this.port,"111");
 						uni.uploadFile({
-							url: this.$GrzxInter.Interface.upload.value, 
+							url: this.$GrzxInter.Interface.avatar.value, 
 							filePath: this.port,
 							name: 'file',
 							success: (res) => {
+								console.log(res,"上传头像");
 								let data = JSON.parse(res.data);
 								if(data.code == 200){
-									this.changeInfo(data.data);
+									this.changeInfo(data.msg);
 								}else{
 									uni.showToast({
 										title: '上传失败',
