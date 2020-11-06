@@ -49,7 +49,7 @@
 								<view class="padding">
 									<button @tap="onUpload">上传</button>
 								</view>
-								<view>{{localPath}}</view>
+								<view>{{filename}}</view>
 							</view>
 						</view>
 					</view>
@@ -330,8 +330,8 @@
 				fileList: [],
 				category: 'video',
 				videoArray: [],
-				localPath: '',
-				filename: [],
+				localPath: [],
+				filename: '',
 			}
 		},
 
@@ -564,8 +564,7 @@
 
 			/* 上传 */
 			onUpload() {
-				this.localPath = '';
-				this.filename = [];
+				this.filename='';
 				this.$refs.lFile.upload({
 					// #ifdef APP-PLUS
 					// nvue页面使用时请查阅nvue获取当前webview的api，当前示例为vue窗口
@@ -580,9 +579,9 @@
 				});
 			},
 			onSuccess(res) {
-				console.log('上传成功回调', JSON.stringify(res));
-				this.localPath = JSON.stringify(res.fileName);
-				this.filename.push(res.data.data);
+				console.log('上传成功回调', res);
+				this.filename = JSON.stringify(res.fileName);
+				this.localPath=res.data;
 			},
 
 			successData: function() {
@@ -605,14 +604,17 @@
 				var arr = [];
 				arr.push(this.videoData.data);
 				var arr2 = [];
-				arr2.push(this.localPath);
+				arr2.push(this.localPath.data);
 				console.log('1', this.issueText);
 				console.log('2', this.userInfo.userId);
 				console.log('3', this.pictureArray);
 				console.log('4', this.model.name);
 				console.log('5', this.model.goodsType);
+				console.log('7.1', this.videoData);
+				console.log('7.2', JSON.stringify(arr));
 				console.log('7', arr);
-				console.log('8', arr2);
+				console.log('8', this.localPath.data);
+				console.log('9', JSON.stringify(arr2));
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -628,8 +630,8 @@
 									image: JSON.stringify(this.lists),
 									title: this.model.name,
 									video: JSON.stringify(arr),
-									pdfFile: JSON.stringify(this.filename),
-									pdfName: JSON.stringify(arr2),
+									pdfFile: JSON.stringify(arr2),
+									pdfName: this.filename,
 									villageCode: this.model.village,
 									introduce: this.model.centent,
 								},
