@@ -98,9 +98,15 @@
 						let data = res.data;
 						that.userId = data.userId;
 						// ------------1.头像-------------
-						that.port="http://120.24.144.6:888/prod-api" + data.portrait;
-						that.port1 = data.portrait;
-						that.portrait = "http://120.24.144.6:888/prod-api" + data.portrait
+						if (data.portrait == "" || data.portrait == null) {
+							that.port = "";
+							that.port1 = "";
+							that.portrait= "";
+						} else {
+							that.port="http://120.24.144.6:888/prod-api" + data.portrait;
+							that.port1 = data.portrait;
+							that.portrait = "http://120.24.144.6:888/prod-api" + data.portrait;
+						}
 						// ------------2.昵称-------------
 						that.userName =data.userName;
 						// ------------3.性别-------------
