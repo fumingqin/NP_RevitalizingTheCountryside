@@ -32,7 +32,14 @@
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo" ></easy-upload>
 				</u-form-item>
-
+				
+				<!-- 简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="centent">
+					<view class="viewClass" style="padding:20rpx 30rpx;">
+						<u-input type="textarea" :border="border" :height="height" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
+					</view>
+				</u-form-item>
+				
 				<!-- 动态简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="动态简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -153,6 +160,7 @@
 					region: '', //选择来源地value
 					goodsType: '', //选择类型value
 					// cost: '', //价格
+					centent:'',
 					intro: '', //商品简介
 					imageData: [], //图像日期
 				},
@@ -231,6 +239,16 @@
 						message: '请选择商品类型',
 						trigger: 'change',
 					}],
+					centent: [{
+							required: true,
+							message: '请填写简介'
+						},
+						{
+							min: 5,
+							message: '简介不能少于5个字',
+							trigger: 'change',
+						},
+					]
 				},
 				pickerShow: false,
 				errorType: ['message'],
@@ -322,6 +340,18 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						// console.log('获取个人信息', this.userInfo)
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../../pages/GRZX/userLogin'
+								})
+							}
+						})
 					}
 				});
 			},
@@ -342,6 +372,7 @@
 						this.issueText2 = data.data.content;
 						this.model.name = data.data.title;
 						this.model.goodsType = data.data.article_type;
+						this.model.centent = data.data.introduce;
 						this.onEditorReady();
 						// console.log('赋值前', this.lists)
 						for(var i=0;i<this.informationDetail.image.length;i++){
@@ -606,9 +637,11 @@
 								data: {
 									id: this.informationDetail.id,
 									userId: this.userInfo.userId,
+									// userId:100006,
 									content: e,
 									image: JSON.stringify(this.pictureArray),	
 									title: this.model.name,
+									introduce:this.model.centent,
 									video: JSON.stringify(this.imageList)
 								},
 								success: (res) => {

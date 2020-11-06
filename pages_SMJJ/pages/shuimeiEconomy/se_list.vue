@@ -16,7 +16,8 @@
 					</view>
 					<!-- <text class="tv_richText">{{item.content}}</text> -->
 					<view class="tv_view2">
-						<rich-text class="tv_richText" :nodes="item.content"></rich-text>
+						<!-- <rich-text class="tv_richText" :nodes="item.content"></rich-text> -->
+						<text class="tv_richText">{{item.introduce}}</text>
 					</view>
 				</view>
 				<image class="tv_image" :src="item.image" mode="aspectFill"></image>
@@ -35,7 +36,7 @@
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 			</view> -->
 		</view>
-		
+		<view  style="padding-bottom: 180upx;"></view>
 		<view>
 			<view class="to_view">
 				<scroll-view class="to_scroll" scroll-x="true">
@@ -43,14 +44,14 @@
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">{{release}}</u-button>
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">上下架</u-button>
 				</scroll-view>
 			</view>
 		</view>
 		
 		<!-- 缺省提示 -->
 		<view style="margin-top: 360upx;" :hidden="listStatusIndex !==0">
-			<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
+			<u-empty text="暂无列表数据哦~" mode="news"></u-empty>
 		</view>
 	</view>
 </template>
@@ -91,7 +92,6 @@
 				scenicListIndex:5,//列表默认数量
 				userInfo:[],
 				state:'修改',
-				release:'',
 			}
 		},
 		
@@ -163,16 +163,17 @@
 				uni.showLoading({
 					title: '加载列表中...',
 				})
+				this.groupTitle = [],
 				uni.request({
 					url:this.$smjj.KyInterface.getEconomyByUserID.Url,
 					method:this.$smjj.KyInterface.getEconomyByUserID.method,
 					data:{
 						userId:this.userInfo.userId
+						// userId:100006
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.informationList = '';
 							if (this.headCurrent == 0) {
 								this.groupTitle = res.data.data
 							}else if (this.headCurrent == 1){
@@ -246,104 +247,103 @@
 			
 			//----------------------------------上架---------------------------------------
 			onTheShelf: function(e) {
-				uni.showModal({
-					title: '你确认发布文章？',
-					success: (res) => {
-						console.log(res)
-						if (res.confirm == true) {
-							uni.showLoading({
-								title: '正在发布....'
-							})
-							uni.request({
-								url: this.$smjj.KyInterface.upAndDownEconomy.Url,
-								method: this.$smjj.KyInterface.upAndDownEconomy.method,
-								data: {
-									id: e
-								},
-								success: (res) => {
-									console.log(res)
-									if (res.data.status == true) {
+				if (this.groupTitle[this.selectIndex].state == '已下架') {
+					uni.showModal({
+						title: '你确认发布文章？',
+						success: (res) => {
+							console.log(res)
+							if (res.confirm == true) {
+								uni.showLoading({
+									title: '正在发布....'
+								})
+								uni.request({
+									url: this.$smjj.KyInterface.upAndDownEconomy.Url,
+									method: this.$smjj.KyInterface.upAndDownEconomy.method,
+									data: {
+										id: e
+									},
+									success: (res) => {
+										console.log(res)
+										if (res.data.status == true) {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布成功',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										} else {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布失败',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										}
+				
+									},
+									fail: () => {
 										uni.hideLoading()
 										uni.showToast({
-											title: '发布成功',
-											icon: 'success'
-										})
-										uni.startPullDownRefresh();
-									} else {
-										uni.hideLoading()
-										uni.showToast({
-											title: '发布失败',
-											icon: 'success'
-										})
-										uni.startPullDownRefresh();
-									}
-			
-								},
-								fail: () => {
-									uni.hideLoading()
-									uni.showToast({
-										title: '服务器异常，请重试',
-										icon: 'success'
-									})
-									uni.startPullDownRefresh();
-								}
-							})
-						} else {
-			
-						}
-					}
-				})
-			},
-			
-			//-----------------------下架------------------------------------
-			offTheShelf: function(e) {
-				uni.showModal({
-					title: '你确认下架文章？',
-					success: (res) => {
-						console.log(res)
-						if (res.confirm == true) {
-							uni.showLoading({
-								title: '正在下架....'
-							})
-							uni.request({
-								url: this.$smjj.KyInterface.upAndDownEconomy.Url,
-								method: this.$smjj.KyInterface.upAndDownEconomy.method,
-								data: {
-									id: e
-								},
-								success: (res) => {
-									console.log(res)
-									if (res.data.status == true) {
-										uni.hideLoading()
-										uni.showToast({
-											title: '下架成功',
-											icon: 'success'
-										})
-										uni.startPullDownRefresh();
-									} else {
-										uni.hideLoading()
-										uni.showToast({
-											title: '下架失败',
+											title: '服务器异常，请重试',
 											icon: 'success'
 										})
 										uni.startPullDownRefresh();
 									}
-			
-								},
-								fail: () => {
-									uni.hideLoading()
-									uni.showToast({
-										title: '服务器异常，请重试',
-										icon: 'success'
-									})
-									uni.startPullDownRefresh();
-								}
-							})
-						} else {
-			
+								})
+							} else {
+				
+							}
 						}
-					}
-				})
+					})
+				} else if (this.groupTitle[this.selectIndex].state == '已上架') {
+					uni.showModal({
+						title: '你确认下架文章？',
+						success: (res) => {
+							console.log(res)
+							if (res.confirm == true) {
+								uni.showLoading({
+									title: '正在发布....'
+								})
+								uni.request({
+									url: this.$smjj.KyInterface.upAndDownEconomy.Url,
+									method: this.$smjj.KyInterface.upAndDownEconomy.method,
+									data: {
+										id: e
+									},
+									success: (res) => {
+										console.log(res)
+										if (res.data.status == true) {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布成功',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										} else {
+											uni.hideLoading()
+											uni.showToast({
+												title: '发布失败',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										}
+				
+									},
+									fail: () => {
+										uni.hideLoading()
+										uni.showToast({
+											title: '服务器异常，请重试',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									}
+								})
+							} else {
+				
+							}
+						}
+					})
+				}
 			},
 			
 			//-----------------------删除------------------------------------
@@ -362,6 +362,7 @@
 								data: {
 									id: e,
 									userId:this.userInfo.userId
+									// userId:100006
 								},
 								success: (res) => {
 									console.log(res)

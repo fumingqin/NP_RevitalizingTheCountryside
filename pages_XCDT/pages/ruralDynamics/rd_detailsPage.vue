@@ -34,7 +34,7 @@
 							项目介绍
 						</view>
 						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
-							相关文件
+							相关视频
 						</view>
 					</view>
 				</view>
