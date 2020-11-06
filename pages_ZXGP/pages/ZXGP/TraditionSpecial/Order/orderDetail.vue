@@ -22,11 +22,12 @@
 			<view class="passageInfo u-f-ac">
 				<!-- 标题 -->
 				<view class="title">
+					<view style="display: flex;">接送时间：<text class="detailInfo2">{{getTsetDate(orderInfo.setOutTime)}}</text></view>
 					<view style="display: flex;">接送上车点：<text class="detailInfo2">{{ispickupData.PickUpAddress}}</text></view>
-					<view style="display: flex;">接送状态：<text class="detailInfo2">{{getState(ispickupData.State)}}</text></view>
-					<view style="display: flex;">车辆状态：<text class="detailInfo2">{{getIsSend(ispickupData.IsSend)}}</text></view>
-					<view style="display: flex;">司机姓名：<text class="detailInfo2">{{getNamePhone(ispickupData.DriverName)}}</text></view>
-					<view style="display: flex;">司机手机号：<text class="detailInfo2">{{getNamePhone(ispickupData.DriverPhone)}}</text></view>
+					<!-- <view style="display: flex;">接送状态：<text class="detailInfo2">{{getState(ispickupData.State)}}</text></view> -->
+					<view style="display: flex;">接送状态：<text class="detailInfo2">{{getIsSend(ispickupData.IsSend)}}</text></view>
+					<!-- <view style="display: flex;">司机姓名：<text class="detailInfo2">{{getNamePhone(ispickupData.DriverName)}}</text></view> -->
+					<!-- <view style="display: flex;">司机手机号：<text class="detailInfo2">{{getNamePhone(ispickupData.DriverPhone)}}</text></view> -->
 				</view>
 			</view>
 		</view>
@@ -343,7 +344,22 @@
 				} else {
 					return e
 				}
-			}
+			},
+
+			//接送时间方法
+			getTsetDate: function(e) {
+				var tsetDate2 = e.replace('T', ' ')
+				var date = new Date(new Date(tsetDate2).getTime() - 2700 * 1000),
+					yers  = date.getFullYear(),
+					month = date.getMonth() + 1,
+					day = date.getDate(),
+					hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+					minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+				month >= 1 && month <= 9 ? (month = "0" + month) : "";
+				day >= 0 && day <= 9 ? (day = "0" + day) : "";
+				return yers + '-' + month + '-' + day + ' ' + hour + ':' + minutes; //当前年月日时分
+			},
+
 		}
 	}
 </script>

@@ -1,21 +1,9 @@
 <template>
 	<view>
 		<view class="zh_top">
-			<image class="top_image" :src="background[0].imageUrl" mode="aspectFill"></image>
+			<image class="top_image" :src="background[0].ImageURL" mode="aspectFill"></image>
 			<!-- 顶部滑动 -->
 			<view style="position: absolute;z-index: 999;margin-top: 5upx;">
-				<!-- <view style="width: 46%;top: 90upx;padding: 0 200upx;padding-top: 100upx;">
-					<view class="screen">
-						<view class="screenView">
-							<view class="screenText" :class="{current:type2===0}" @click="tabClick(0)">
-								出发
-							</view>
-							<view class="screenText" :class="{current:type2===1}" @click="tabClick(1)">
-								到达
-							</view>
-						</view>
-					</view>
-				</view> -->
 
 				<!-- 暂时用不到 v-if="type2==0" -->
 				<view style="margin-top: 90upx;">
@@ -36,24 +24,6 @@
 					</view>
 				</view>
 
-				<!-- <view v-if="type2==1">
-					<view style="display: flex;margin-top: 26upx;"> -->
-				<!-- 目的地 -->
-				<!-- <view class="top_startingPoint">
-							<view class="top_text3">起点（不可选）</view>
-							<view class="startingPoint">{{departure2}}</view>
-						</view> -->
-				<!-- 选择到达地 -->
-				<!-- 		<view class="top_chooseEnd" hover-class="ve_hover" @tap="setOutStationTap">
-							<view class="top_text4">终点</view>
-							<view style="display: flex;">
-								<text class="setEnd">{{destination2}}</text>
-								<text class="jdticon icon-xia"></text>
-							</view>
-						</view>
-					</view>
-				</view> -->
-
 				<!-- 选择时间 -->
 				<view class="top_chooseTime" hover-class="ve_hover" @click="onShowDatePicker('date')">
 					<text class="dateClass">{{datestring}}&nbsp;&nbsp;&nbsp;&nbsp;{{Week}}</text>
@@ -63,8 +33,6 @@
 
 				<!-- 按钮 -->
 				<view class="tjButton" hover-class="ve_hover2" @click="queryClick">查询</view>
-
-
 
 				<view class="zl_recommend" v-if="mainArray.length!==0">
 					<view>
@@ -76,16 +44,6 @@
 						</view>
 					</view>
 				</view>
-
-				<!-- <view class="hp_view">
-					<view class="hp_Line"></view>
-					<view class="hp_text">特惠须知</view>
-					<view class="hp_Line2"></view>
-				</view>
-				
-				<view class="ct_noticeText ct_noticeText2">
-					<rich-text :nodes="way2"></rich-text>
-				</view> -->
 
 				<view class="hp_view">
 					<view class="hp_Line"></view>
@@ -124,7 +82,7 @@
 				departure2: '请选择起点',
 				destination2: '请选择终点',
 				background: [{
-					imageUrl: '',
+					ImageURL: '',
 				}], //背景图
 				applyName: '',
 				way: '',
@@ -169,40 +127,35 @@
 			loadData: function() {
 				//请求图片
 				uni.request({
-					url: $KyInterface.KyInterface.qg_GetImage.value,
-					method: $KyInterface.KyInterface.qg_GetImage.method,
-					data: {
-						model: 9, //模块名称
-						systemtype: 'XCX', //应用类型
-						companyid: this.applyName, //公司名称
-						// type:'背景图', //图片类型
-					},
-					header: {
-						'content-type': 'application/json'
-					},
-					success: (res) => {
-						console.log(res)
+					url: this.$home.KyInterface.GetRotationChart.Url,
+					method:this.$home.KyInterface.GetRotationChart.method,
+					success:(res)=>{
+						console.log('轮播区',res)
 						this.background = res.data.data.filter(item => {
-							return item.type == '背景';
+							return item.Title == '武夷新区背景图';
 						})
-						// console.log(this.imgXXDT)
+						console.log(this.background)
+					},
+					fail:function(){
+						uni.showToast({
+							title:'首页轮播图网络加载异常',
+							icon:'none'
+						})
 					}
 				})
-
+				
 				uni.request({
-					url: $KyInterface.KyInterface.Cs_getByTitle.Url,
-					method: $KyInterface.KyInterface.Cs_getByTitle.method,
-					data: {
-						title: '购票须知',
-						systemName: this.applyName,
-					},
+					url: this.$ky_cpdg.KyInterface.Cs_getByTitle.Url,
+					method: this.$ky_cpdg.KyInterface.Cs_getByTitle.method,
 					success: (res) => {
 						console.log('购票须知', res)
-						this.way = res.data.data.msg;
-						// console.log('购票须知2',this.way)
+						var data = res.data.data.filter(item => {
+							return item.Type == '购票须知';
+						})
+						this.way = data[0].Body;
+						console.log('购票须知2', this.way)
 					}
 				})
-
 				uni.stopPullDownRefresh();
 			},
 
@@ -697,9 +650,14 @@
 			.zl_textView {
 				color: #333333;
 				font-size: 30upx;
-				padding: 20upx 86upx;
+				padding: 20upx 50upx;
 				background: #FFFFFF;
 				border-radius: 44rpx;
+				width: 300rpx;
+				text-align: center;
+				overflow: hidden;
+				text-overflow:ellipsis;
+				white-space: nowrap;
 			}
 		}
 

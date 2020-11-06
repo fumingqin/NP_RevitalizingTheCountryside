@@ -88,7 +88,7 @@
 				that.departure = '选择上车点';
 				that.destination = '选择下车点';
 			}
-			that.getPicture();
+			// that.getPicture();
 			//读取历史记录
 			uni.getStorage({
 				key:'historyLines',
@@ -107,29 +107,29 @@
 		methods: {
 			
 			//---------------------------------获取图片---------------------------------
-			getPicture() {
-				var that = this;
-				uni.request({
-					url:$KyInterface.KyInterface.Ky_AddPicture.Url,
-					method:$KyInterface.KyInterface.Ky_AddPicture.method,
-					header:$KyInterface.KyInterface.Ky_AddPicture.header,
-					data:{
-						model:0,
-					},
-					success(res) {
-						console.log(res)
-						if(res.data.status == true) {
-							that.imageUrl = res.data.data[0].imageUrl
-							console.log(that.imageUrl)
-						}else {
-							console.log(res.data.status)
-						}
-					},
-					fail(res) {
-						console.log(res)
-					}
-				})
-			},
+			// getPicture() {
+			// 	var that = this;
+			// 	uni.request({
+			// 		url:$KyInterface.KyInterface.Ky_AddPicture.Url,
+			// 		method:$KyInterface.KyInterface.Ky_AddPicture.method,
+			// 		header:$KyInterface.KyInterface.Ky_AddPicture.header,
+			// 		data:{
+			// 			model:0,
+			// 		},
+			// 		success(res) {
+			// 			console.log(res)
+			// 			if(res.data.status == true) {
+			// 				that.imageUrl = res.data.data[0].imageUrl
+			// 				console.log(that.imageUrl)
+			// 			}else {
+			// 				console.log(res.data.status)
+			// 			}
+			// 		},
+			// 		fail(res) {
+			// 			console.log(res)
+			// 		}
+			// 	})
+			// },
 			//---------------------------------点击起点站---------------------------------
 			startStationTap(){
 				var that = this;
@@ -189,7 +189,7 @@
 			},
 			//---------------------------------互换起止地址---------------------------------
 			changeClick: function() {
-				if(that.departure !== '选择上车点' || that.destination !== '选择下车点'){
+				if(this.departure !== '选择上车点' || this.destination !== '选择下车点'){
 					this.changeText = this.departure;
 					this.departure = this.destination;
 					this.destination = this.changeText;

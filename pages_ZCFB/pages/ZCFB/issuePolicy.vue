@@ -10,8 +10,8 @@
 					</view>
 				</u-form-item>
 				<!-- 文件上传 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false" prop="name">
-					<view class="viewClass" style="padding-right: 20rpx;">
+				<view style="font-size: 34upx;font-weight: bold;margin-top:20upx;">文件上传</view>
+					<view class="viewClass">
 							<view>
 								<l-file ref="lFile" @up-success="onSuccess"></l-file>
 								<view class="padding text-center">
@@ -22,7 +22,6 @@
 								</view>
 							</view>
 					</view>
-				</u-form-item>
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164" height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
@@ -31,20 +30,6 @@
 						</view>
 					</u-upload>
 				</u-form-item>
-
-				<!-- 商品来源地 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品来源地" :border-bottom="false" prop="region">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" type="select" :select-open="pickerShow" v-model="model.region" placeholder="请选择商品来源地" @click="pickerShow = true"></u-input>
-					</view>
-				</u-form-item> -->
-
-				<!-- 商品价格 -->
-				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品价格" :border-bottom="false" prop="cost">
-					<view class="viewClass" s1tyle="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入商品价格" v-model="model.cost" :type="text"></u-input>
-					</view>
-				</u-form-item> -->
 
 				<!-- 上传视频 -->
 				<view style="font-size: 34upx;font-weight: bold;">视频上传</view>
@@ -56,12 +41,17 @@
 				                <view class="uni-uploader-body">
 				                    <view class="uni-uploader__files">
 				                        <!-- 视频 -->
+										<view>
+											
 				                        <view class="uni-uploader__file" v-if="src">
-				                            <view class="uploader_video">
-				                                <view class="icon iconfont icon-cuo" @tap="delectVideo"></view>
+				                            <view class="uploader_video" style="display: flex;">
 				                                <video :src="src" class="video"></video>
 				                            </view>
 				                        </view>
+										<view>
+											<button @tap="delectVideo">删除</button>
+										</view>
+										</view>
 				                        <view>
 											<button @tap="chooseVideo">上传</button>
 				                        </view>
@@ -223,6 +213,15 @@
 				customStyle: {
 					fontWeight: 'bold',
 					fontSize: '17px',
+					paddingTop: '8px',
+				},
+				customStyle2: {
+					fontWeight: 'bold',
+					fontSize: '17px',
+					paddingTop: '8px',
+					width: '100%',
+					background: '#FFFFFF',
+					borderRadius: '6px',
 				},
 				buttonStyle: {
 					marginTop: '20px',
@@ -438,7 +437,7 @@
 								} else {
 									uni.hideLoading()
 									uni.showToast({
-										title: '提交失败',
+										title: res.data.msg,
 										icon: 'none'
 									})
 								}
@@ -489,17 +488,17 @@
 								if (res.data.status) {
 									uni.hideLoading()
 									uni.showToast({
-										title: '提交成功',
+										title: '发布成功',
 										success() {
 											uni.navigateBack({
-												url: './pictureList'
+												url: 'myPolicyList'
 											})
 										}
 									})
 								} else {
 									uni.hideLoading()
 									uni.showToast({
-										title: '提交失败',
+										title: res.data.msg,
 										icon: 'none'
 									})
 								}
@@ -679,7 +678,7 @@
 							console.log(that.src);
 						}else{
 							uni.showToast({
-								title: '加载失败',
+								title: res.data.msg,
 								icon: 'none'
 							})
 						}
@@ -734,12 +733,12 @@
 .uni-uploader__file,.uploader_video{
     position: relative;
     z-index: 1;
-    width: 200upx;
-    height: 200upx;
+    width: 300upx;
+    height: 300upx;
 }
 .video{
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
 }
 .icon-cuo {
 	    position: absolute;

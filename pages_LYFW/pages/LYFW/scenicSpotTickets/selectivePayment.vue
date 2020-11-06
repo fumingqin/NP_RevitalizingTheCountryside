@@ -444,7 +444,7 @@
 								signType: res.data.data.signType,
 								paySign: res.data.data.paySign,
 								success: function(res){
-									// console.log(res)
+									console.log(res)
 									if(res.errMsg == 'requestPayment:ok'){
 										uni.request({
 											url:$lyfw.Interface.spt_RequestTickets.value,
@@ -668,7 +668,7 @@
 											},
 											header: {'content-type': 'application/json'},
 											success: function(res) {
-												// console.log(res)
+												console.log(res)
 												if (res.data.msg == '出票成功') {
 													uni.redirectTo({
 														url: 'successfulPayment'
@@ -693,7 +693,7 @@
 								},
 					
 								fail: function(e) {
-									// console.log(e)
+									console.log(e)
 									if (e.errMsg == 'requestPayment:fail canceled') {
 										uni.showToast({
 											title: '您放弃了支付',
