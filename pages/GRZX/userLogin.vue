@@ -60,7 +60,7 @@
 		},
 		onShow() {
 			// this.phoneNumber = "";
-			// this.captchaCode = "";
+			this.captchaCode = "";
 			this.whetherClick=true;
 		},
 		onUnload() {
