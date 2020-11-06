@@ -168,10 +168,10 @@
 		},
 		
 		onShow:function(){
-			let pro = uni.getStorageSync('protocol')
-			if (pro !== true) {
-				this.protocolStatus = true;
-			}
+			// let pro = uni.getStorageSync('protocol')
+			// if (pro !== true) {
+			// 	this.protocolStatus = true;
+			// }
 		},
 		
 		onPullDownRefresh:function(){

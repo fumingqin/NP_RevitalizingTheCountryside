@@ -154,22 +154,22 @@
 			},
 			
 			//------------------加载乘车人须知----------------
-			loadText:function(e){
-				uni.request({
-					url:this.$GrzxInter.Interface.GetAggrement.value,
-					method:this.$GrzxInter.Interface.GetAggrement.method,
-					success: res =>{
-						console.log(res,'1');
-						if(res.data.status){
-							for(let i = 0; i < res.data.data.length; i++){
-								if(res.data.data[i].Title == e){
-									this.text=res.data.data[i].Body.replace(/font-size:14px/g, 'font-size:17px');
-								}
-							}
-						}
-					},
-				})
-			},
+			// loadText:function(e){
+			// 	uni.request({
+			// 		url:this.$GrzxInter.Interface.GetAggrement.value,
+			// 		method:this.$GrzxInter.Interface.GetAggrement.method,
+			// 		success: res =>{
+			// 			console.log(res,'1');
+			// 			if(res.data.status){
+			// 				for(let i = 0; i < res.data.data.length; i++){
+			// 					if(res.data.data[i].Title == e){
+			// 						this.text=res.data.data[i].Body.replace(/font-size:14px/g, 'font-size:17px');
+			// 					}
+			// 				}
+			// 			}
+			// 		},
+			// 	})
+			// },
 		}
 	}
 </script>
