@@ -33,6 +33,13 @@ const Interface={
 		pages: [],
 	},
 	
+	avatar:{
+		value:'http://120.24.144.6:8080/api/file/avatar',
+		name:'上传头像',
+		method:'POST',
+		pages: [],
+	},
+	
 	getImage:{
 		value:Url+'/api/manage/getImage',
 		name:'获取图片',

@@ -161,6 +161,7 @@
 
 			//----------------------列表接口--------------------------------
 			ycydData: function(e) {
+				this.groupTitle = []
 				uni.request({
 					url: this.$fbxm.KyInterface.getProjectByUserID.Url,
 					method: this.$fbxm.KyInterface.getProjectByUserID.method,
@@ -344,7 +345,7 @@
 								method: this.$fbxm.KyInterface.deleteProject.method,
 								data: {
 									id: e,
-									userId: 100006
+									userId: this.userInfo.userId
 									// userId:this.userInfo.userId
 								},
 								success: (res) => {
