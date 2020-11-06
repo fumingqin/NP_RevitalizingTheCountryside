@@ -59,8 +59,8 @@
 			})
 		},
 		onShow() {
-			this.phoneNumber = "";
-			this.captchaCode = "";
+			// this.phoneNumber = "";
+			// this.captchaCode = "";
 			this.whetherClick=true;
 		},
 		onUnload() {
