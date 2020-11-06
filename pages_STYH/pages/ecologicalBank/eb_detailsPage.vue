@@ -39,19 +39,20 @@
 					</view>
 				</view>
 				
-				<u-read-more v-if="type==0" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
-				</u-read-more>
+				<view v-if="type==0">
+					<u-read-more :toggle="toggle" :show-height="showHeight">
+						<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+					</u-read-more>
+				</view>
 				
-				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
-					<view>
-						<video id="myVideo" :src="groupTitle.video[0]" enable-danmu danmu-btn controls></video>
-					</view>
-				</u-read-more>
+				<view v-if="type==1 && video==true">
+					<video id="myVideo" :src="groupTitle.video[0]" enable-danmu danmu-btn controls></video>
+				</view>
 				
-				<!-- <view>
-					<video id="myVideo" :src="groupTitle." enable-danmu danmu-btn controls></video>
-				</view> -->
+				<!-- 缺省提示 -->
+				<view style="padding:200upx 0" v-if="type==1 && video==false">
+					<u-empty text="暂无相关视频哦~" mode="list"></u-empty>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -71,6 +72,7 @@
 				post:'市级职责人员',
 				type: 0,
 				id:'',
+				video:false,
 				// 字符串的形式
 				style: {
 					p: 'letter-spacing: 4rpx;text-align: justify;line-height: 48rpx;font-size:30rpx;text-justify: inter-ideograph; text-indent: 2em;padding-bottom: 20rpx;padding-top: 20rpx;',
@@ -80,11 +82,14 @@
 		},
 		
 		onLoad:function(param) {
+			this.id = param.id;
+			console.log(this.id)
+		},
+		
+		onShow() {
 			uni.showLoading({
 				title: '加载详情中...',
 			})
-			this.id = param.id;
-			console.log(this.id)
 			this.loadData();
 		},
 		
@@ -117,10 +122,15 @@
 					success: (res) => {
 						console.log('详情', res)
 						if(res.data.status == true){
-							this.groupTitle=res.data.data;
-							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
+							this.groupTitle=res.data.data;
+							if(this.groupTitle.video[0].length == 0){
+								this.video= false;
+							}else{
+								this.video= true;
+							}
+							// console.log('列表数据',this.groupTitle)
 						}else{
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
