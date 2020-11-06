@@ -25,7 +25,7 @@
 				</u-form-item>
 
 				<!-- 上传图片 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
 					 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
@@ -35,13 +35,13 @@
 				</u-form-item>
 
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
 
 				<!-- 文件上传 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false" prop="name">
 					<view class="viewClass">
 						<view>
 							<l-file ref="lFile" @up-success="onSuccess"></l-file>
@@ -143,6 +143,7 @@
 			</u-form>
 			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
 			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
+			<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
 		</view>
 	</view>
 </template>
@@ -330,6 +331,23 @@
 				fileList: [],
 				category: 'video',
 				videoArray: [],
+				selectList: [{
+						value: '村容村貌',
+						label: '村容村貌'
+					},
+					{
+						value: '环境整治',
+						label: '环境整治'
+					},
+					{
+						value: '企业帮扶',
+						label: '企业帮扶'
+					},
+					{
+						value: '三化管理',
+						label: '三化管理'
+					}
+				],
 				localPath: '',
 				filename: [],
 			}
@@ -372,6 +390,56 @@
 						})
 					}
 				});
+			},
+			
+			//-------------------------------读取修改数据缓存-------------------------------
+			xiugaiData: function() {
+				var that=this;
+				console.log('1111111111111111111111')
+				uni.getStorage({
+					key: 'informationData',
+					success: (data) => {
+						// console.log('修改信息列表', data.data)
+						this.informationDetail = data.data;
+						if(data.data.video !== null){
+							this.imageList.push(data.data.video[0])	
+						}
+						console.log(this.videoData)
+						this.issueText2 = data.data.content;
+						this.model.name = data.data.title;
+						this.model.phone=data.data.telphone;
+						this.model.centent = data.data.introduce;
+						this.onEditorReady();
+						// console.log('赋值前', this.lists)
+						for(var i=0;i<this.informationDetail.image.length;i++){
+							if(this.informationDetail.image[0] !== ''){
+								var imageObj={
+									url:this.informationDetail.image[i]
+								};
+								var imageArray=[];
+								imageArray.push(imageObj)
+							}
+						}
+						this.fileList = imageArray
+						if(this.informationDetail.image[0] !== ''){
+							this.lists = this.informationDetail.image[0];
+						}
+					}
+				})
+			},
+
+			//--------------------- 选择地区回调 --------------------------
+			regionConfirm(e) {
+				this.model.region = e.province.label + '-' + e.city.label + '-' + e.area.label;
+				console.log(this.model)
+			},
+
+			//--------------------- 选择商品类型回调------------------------
+			selectConfirm(e) {
+				this.model.goodsType = '';
+				e.map((val, index) => {
+					this.model.goodsType += this.model.goodsType == '' ? val.label : '-' + val.label;
+				})
 			},
 
 			//--------------------------------------------
@@ -606,13 +674,14 @@
 				arr.push(this.videoData.data);
 				var arr2 = [];
 				arr2.push(this.localPath);
+				console.log(arr2)
 				console.log('1', this.issueText);
 				console.log('2', this.userInfo.userId);
 				console.log('3', this.pictureArray);
 				console.log('4', this.model.name);
 				console.log('5', this.model.goodsType);
+				console.log('6', this.informationDetail.id);
 				console.log('7', arr);
-				console.log('8', arr2);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -620,9 +689,10 @@
 						console.log('验证通过');
 						if (this.issueText !== '<p><br></p>') {
 							uni.request({
-								url: this.$fbxm.KyInterface.releaseProject.Url,
-								method: this.$fbxm.KyInterface.releaseProject.method,
+								url: this.$fbxm.KyInterface.updateProject.Url,
+								method: this.$fbxm.KyInterface.updateProject.method,
 								data: {
+									id: this.informationDetail.id,
 									userId: this.userInfo.userId,
 									content: e,
 									image: JSON.stringify(this.lists),
