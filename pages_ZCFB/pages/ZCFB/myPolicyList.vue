@@ -32,7 +32,7 @@
 					</view>
 					<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 				</view>
-				<view class="policybtn">发布新政策</view>
+				<view class="policybtn" @click="gopolicy">发布新政策</view>
 				<view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
 					<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 				</view>
@@ -92,7 +92,7 @@
 					url:this.$zcfb.KyInterface.getPolicyById.Url,
 					method:this.$zcfb.KyInterface.getPolicyById.method,
 					data:{
-						userId:100013,
+						userId:100011,
 						},
 					success:(res) =>{
 						console.log('列表数据',res)
@@ -151,6 +151,11 @@
 				if(this.scenicListIndex >= this.groupTitle.length){
 					this.loadingType = 2;
 				}
+			},
+			gopolicy:function(e){
+				uni.navigateTo({
+					url:'issuePolicy'
+				})
 			},
 			//--------------上下架--------------
 			updatestate:function(e){

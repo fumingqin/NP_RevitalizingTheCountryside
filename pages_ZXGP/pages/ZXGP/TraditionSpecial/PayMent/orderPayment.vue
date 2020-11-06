@@ -44,7 +44,7 @@
 						<text class="MP_number">×{{childrenNum}}</text>
 						<text class="MP_userCost">¥{{orderInfo.halfTicket}}</text>
 					</view>
-					
+
 					<view class="MP_cost" v-if="freeTicketNum>=1">
 						<text>携带免童票</text>
 						<text class="MP_number">×{{freeTicketNum}}</text>
@@ -57,14 +57,14 @@
 						<text class="MP_number">×{{ticketNum}}</text>
 						<text class="MP_total">¥{{orderInfo.insurePrice}}</text>
 					</view>
-					
+
 					<!-- 接送费用 -->
 					<view class="MP_cost" v-if="ticketInfo.pickUpStatus == true ">
 						<text>上门接送服务</text>
 						<text class="MP_number">×{{ticketNum}}</text>
 						<text class="MP_total">¥{{ticketInfo.PickUpPrice}}</text>
 					</view>
-					
+
 					<!-- 优惠券 -->
 					<!-- <view class="MP_cost" v-if="orderInfo[0].couponPrice>0" v-if="false">
 						<text>{{orderInfo[0].couponTitle}}</text>
@@ -85,7 +85,7 @@
 
 			</view>
 
-<!-- 			<view class="MP_information2">
+			<!-- 			<view class="MP_information2">
 				<view class="MP_optionBar">
 					<text class="Mp-icon jdticon icon-weixinzhifu"></text>
 					<text class="Mp_title">微信</text>
@@ -132,7 +132,7 @@
 				ticketNum: '0', //总票数
 				adultNum: '0', //成人数量
 				childrenNum: '0', //儿童数量
-				freeTicketNum: '0',//免童
+				freeTicketNum: '0', //免童
 				adultTotalPrice: '', //成人总价
 				childrenTotalPrice: '', //儿童总价
 				totalPrice: '0', //总价格
@@ -145,21 +145,18 @@
 				specialEndStation: '', //定制班车下车点
 				tickettype: '', //班车类型
 				ctkyOpenID: '', //公众号的openid
-				weixinOpenId:'', //小程序的openid
+				weixinOpenId: '', //小程序的openid
 			}
 		},
 		onLoad: function(param) {
 			// console.log(JSON.parse(param.array))
 			var that = this;
 			that.ticketInfo = JSON.parse(param.array);
-			that.specialStartStation = that.ticketInfo.getOnPoint;//上车点
-			that.specialEndStation = that.ticketInfo.getOffPoint;//下车点
-			that.tickettype = that.ticketInfo.shuttleType;//班车类型
-			that.totalPrice = that.ticketInfo.totalPrice;//总价格
-			that.isInsurance = that.ticketInfo.isInsurance;//是否选择保险
-			uni.showLoading({
-			    title: '正在下单...'
-			});
+			that.specialStartStation = that.ticketInfo.getOnPoint; //上车点
+			that.specialEndStation = that.ticketInfo.getOffPoint; //下车点
+			that.tickettype = that.ticketInfo.shuttleType; //班车类型
+			that.totalPrice = that.ticketInfo.totalPrice; //总价格
+			that.isInsurance = that.ticketInfo.isInsurance; //是否选择保险
 			if (that.isInsurance == 1) {
 				that.insurance = '保险';
 				that.isInsurance = true;
@@ -167,14 +164,26 @@
 				that.insurance = '';
 				that.isInsurance = false;
 			}
+
+			uni.showLoading({
+				title: '正在下单...'
+			});
 			//读取车票信息
 			that.getTickerInfo();
 			//读取用户信息
 			that.getUserInfo();
-			
+
 		},
 		onShow() {
-			
+			let a = uni.getStorageSync('paymentStorage')
+			// console.log('支付缓存',a)
+			if (a !== '') {
+				uni.showLoading({
+					title: '检测支付中...'
+				});
+				this.getTicketPaymentInfo(a);
+			}
+
 		},
 		onUnload() {
 			clearInterval(this.timer);
@@ -228,12 +237,12 @@
 					}
 				})
 			},
-			
+
 			//-------------------------------时间转换-------------------------------
 			turnDate(date) {
 				if (date) {
 					var setTime = date.replace('T', ' ');
-					var setTime2 = setTime.substr(0,16);
+					var setTime2 = setTime.substr(0, 16);
 					return setTime2;
 				}
 			},
@@ -252,7 +261,7 @@
 									type = 0;
 								} else if (data.data[i].userType == '成人') {
 									type = 2;
-								}else if (data.data[i].userType == '半票儿童') {
+								} else if (data.data[i].userType == '半票儿童') {
 									type = 1;
 								}
 								//拼接id name type
@@ -262,9 +271,9 @@
 								//把儿童票筛选出来
 								if (that.passengerInfo[i].userType == '半票儿童') {
 									that.childrenNum++;
-								} else if (that.passengerInfo[i].userType == '成人'){
+								} else if (that.passengerInfo[i].userType == '成人') {
 									that.adultNum++;
-								}else if(that.passengerInfo[i].userType == '免票儿童'){
+								} else if (that.passengerInfo[i].userType == '免票儿童') {
 									that.freeTicketNum++;
 								}
 							}
@@ -275,12 +284,12 @@
 						// #ifdef H5
 						that.getOpenID();
 						// #endif
-						
+
 						//-------------------------------下单-------------------------------
 						// #ifdef APP-PLUS || MP-WEIXIN
 						that.getOrder();
 						// #endif
-						
+
 					},
 					fail() {
 						uni.showToast({
@@ -351,58 +360,50 @@
 				openId = that.ctkyOpenID;
 				// #endif
 				var companyCode = '';
-				// #ifdef H5
-				companyCode = this.$ky_cpdg.KyInterface.system.systemNameH5;
-				// #endif
-				// #ifdef APP-PLUS
-				companyCode = this.$ky_cpdg.KyInterface.system.systemNameApp;
-				// #endif
-				// #ifdef MP-WEIXIN
-				companyCode = this.$ky_cpdg.KyInterface.system.systemNameWeiXin;
-				// #endif
+				companyCode = this.$ky_cpdg.KyInterface.system.KY_systemName;
 				//--------------------------发起下单请求-----------------------
 				uni.showLoading({
-				    title: '正在下单...'
+					title: '正在下单...'
 				});
 				console.log('----------------接下来是下单的请求参数-------------------')
-				console.log('班车类型： ',that.tickettype)
-				console.log('公司代码： ',companyCode)
-				console.log('用户ID： ',that.userInfo.userId)
-				console.log('用户名： ',that.userInfo.nickname)
-				console.log('调度公司代码： ',that.orderInfo.scheduleCompanyCode)
-				console.log('班次ID： ',that.orderInfo.executeScheduleID)
-				console.log('上车点ID： ',that.orderInfo.startSiteID)
-				console.log('下车点ID： ',that.orderInfo.endSiteID)
-				console.log('起点站： ',that.orderInfo.startStaion)
-				console.log('终点站： ',that.orderInfo.endStation)
-				console.log('价格ID： ',that.orderInfo.priceID)
-				console.log('手机号码： ',that.userInfo.phoneNumber)
-				console.log('全票人数： ',that.adultNum)
-				console.log('半票人数： ',that.childrenNum)
-				console.log('携童人数： ',that.freeTicketNum)
-				console.log('乘车人信息： ',that.idNameTypeStr)
-				console.log('是否选择了保险： ',that.isInsurance)
-				console.log('保险价格： ',that.orderInfo.insurePrice)
-				console.log('小程序公众号OPENID： ',openId)
-				console.log('总价格： ',that.totalPrice)
-				console.log('发车时间： ',setTime)
-				console.log('定制班车上车点： ',that.specialStartStation)
-				console.log('定制班车下车点： ',that.specialEndStation)
-				console.log('班次号： ',that.orderInfo.planScheduleCode)
-				console.log('线路名称： ',that.orderInfo.lineName)
-				console.log('是否上门接送： ',that.ticketInfo.pickUpStatus)
-				console.log('接送点： ',that.ticketInfo.PickUpAddress)
-				console.log('接送价格： ',that.ticketInfo.PickUpPrice)
-				console.log('接送点纬度： ',that.ticketInfo.pickUpLatitude)
-				console.log('接送点经度： ',that.ticketInfo.pickUpLongitude)
-				console.log('始发站纬度： ',that.ticketInfo.StartStaionLatitude)
-				console.log('始发站经度： ',that.ticketInfo.StartStaionLongitude)
+				console.log('班车类型： ', that.tickettype)
+				console.log('公司代码： ', companyCode)
+				console.log('用户ID： ', that.userInfo.userId)
+				console.log('用户名： ', that.userInfo.nickname)
+				console.log('调度公司代码： ', that.orderInfo.scheduleCompanyCode)
+				console.log('班次ID： ', that.orderInfo.executeScheduleID)
+				console.log('上车点ID： ', that.orderInfo.startSiteID)
+				console.log('下车点ID： ', that.orderInfo.endSiteID)
+				console.log('起点站： ', that.orderInfo.startStaion)
+				console.log('终点站： ', that.orderInfo.endStation)
+				console.log('价格ID： ', that.orderInfo.priceID)
+				console.log('手机号码： ', that.userInfo.phoneNumber)
+				console.log('全票人数： ', that.adultNum)
+				console.log('半票人数： ', that.childrenNum)
+				console.log('携童人数： ', that.freeTicketNum)
+				console.log('乘车人信息： ', that.idNameTypeStr)
+				console.log('是否选择了保险： ', that.isInsurance)
+				console.log('保险价格： ', that.orderInfo.insurePrice)
+				console.log('小程序公众号OPENID： ', openId)
+				console.log('总价格： ', that.totalPrice)
+				console.log('发车时间： ', setTime)
+				console.log('定制班车上车点： ', that.specialStartStation)
+				console.log('定制班车下车点： ', that.specialEndStation)
+				console.log('班次号： ', that.orderInfo.planScheduleCode)
+				console.log('线路名称： ', that.orderInfo.lineName)
+				console.log('是否上门接送： ', that.ticketInfo.pickUpStatus)
+				console.log('接送点： ', that.ticketInfo.PickUpAddress)
+				console.log('接送价格： ', that.ticketInfo.PickUpPrice)
+				console.log('接送点纬度： ', that.ticketInfo.pickUpLatitude)
+				console.log('接送点经度： ', that.ticketInfo.pickUpLongitude)
+				console.log('始发站纬度： ', that.ticketInfo.StartStaionLatitude)
+				console.log('始发站经度： ', that.ticketInfo.StartStaionLongitude)
 				console.log('-------------------------结束---------------------------')
 				uni.request({
-					url:this.$ky_cpdg.KyInterface.Ky_PaymentUrl.Url,
-					method:this.$ky_cpdg.KyInterface.Ky_PaymentUrl.method,
-					header:this.$ky_cpdg.KyInterface.Ky_PaymentUrl.header,
-					
+					url: this.$ky_cpdg.KyInterface.Ky_PaymentUrl.Url,
+					method: this.$ky_cpdg.KyInterface.Ky_PaymentUrl.method,
+					header: this.$ky_cpdg.KyInterface.Ky_PaymentUrl.header,
+
 					data: {
 						carType: that.tickettype, //班车类型
 						companyCode: companyCode, //公司代码
@@ -425,53 +426,57 @@
 						openId: openId, //小程序公众号OPENID
 						totalPrice: that.totalPrice, //总价格
 						setOutTime: setTime, //发车时间
-						
-						IsPickUp : that.ticketInfo.pickUpStatus,//是否上门接送
-						PickUpPrice : that.ticketInfo.PickUpPrice,//上门接送费用
-						PickUpAddress : that.ticketInfo.PickUpAddress, //接送点
-						PickUpLatitude : that.ticketInfo.pickUpLatitude,//接送点纬度
-						PickUpLongitude : that.ticketInfo.pickUpLongitude,//接送点经度
-						StartStaionLatitude : that.ticketInfo.StartStaionLatitude,//始发站纬度
-						StartStaionLongitude : that.ticketInfo.StartStaionLongitude,//始发站经度
-						
+
+						IsPickUp: that.ticketInfo.pickUpStatus, //是否上门接送
+						PickUpPrice: that.ticketInfo.PickUpPrice, //上门接送费用
+						PickUpAddress: that.ticketInfo.PickUpAddress, //接送点
+						PickUpLatitude: that.ticketInfo.pickUpLatitude, //接送点纬度
+						PickUpLongitude: that.ticketInfo.pickUpLongitude, //接送点经度
+						StartStaionLatitude: that.ticketInfo.StartStaionLatitude, //始发站纬度
+						StartStaionLongitude: that.ticketInfo.StartStaionLongitude, //始发站经度
+
 						payParameter: '', //不需要的参数，传空
 						getOnPoint: that.specialStartStation, //定制班车上车点
 						getOffPoint: that.specialEndStation, //定制班车下车点
-						planScheduleCode:that.orderInfo.planScheduleCode,//班次号
-						lineName: that.orderInfo.lineName,//线路名称
+						planScheduleCode: that.orderInfo.planScheduleCode, //班次号
+						lineName: that.orderInfo.lineName, //线路名称
 					},
 
 					success: (res) => {
-						console.log('下单返回结果',res)
+						console.log('下单返回结果', res)
 						if (res.data) {
 							if (res.data.status == true) {
+								uni.setStorage({
+									key: 'paymentStorage',
+									data: res.data.data
+								})
 								that.orderNum = res.data.data;
 								that.getTicketPaymentInfo(res.data.data);
-							}else if(res.data.msg == '车票预定失败,您有未完成的订单,请支付后再预定'){
+							} else if (res.data.msg == '车票预定失败,您有未完成的订单,请支付后再预定') {
 								uni.hideLoading()
 								uni.showToast({
-									title:res.data.msg,
-									duration:1500,
+									title: res.data.msg,
+									duration: 1500,
 									success: () => {
 										uni.switchTab({
-											url:'../../../../../pages/order/newOrderList'
+											url: '../../../../../pages/order/newOrderList'
 										})
 									}
 								})
-								
-								
-							}else if (res.data.status == false) {
+
+
+							} else if (res.data.status == false) {
 								uni.hideLoading();
 								uni.showModal({
 									content: res.data.msg,
-									showCancel:false,
+									showCancel: false,
 									success: (res) => {
 										if (res.confirm) {
 											uni.navigateBack()
-										} 
+										}
 									}
 								})
-							}else {
+							} else {
 								uni.hideLoading();
 								uni.showToast({
 									title: '网络错误',
@@ -494,16 +499,16 @@
 				that.timer = timer;
 				timer = setInterval(function() {
 					uni.request({
-						url:that.$ky_cpdg.KyInterface.Ky_getTicketPaymentInfo.Url,
-						method:that.$ky_cpdg.KyInterface.Ky_getTicketPaymentInfo.method,
+						url: that.$ky_cpdg.KyInterface.Ky_getTicketPaymentInfo.Url,
+						method: that.$ky_cpdg.KyInterface.Ky_getTicketPaymentInfo.method,
 						// header:that.$ky_cpdg.KyInterface.Ky_getTicketPaymentInfo.header,
 						data: {
 							//订单编号
 							orderNumber: orderNumber
 						},
 						success: (res) => {
-							console.log('支付参数',res);
-							
+							console.log('支付参数', res);
+
 							if (res.data) {
 								if (res.data.status == true) {
 									clearInterval(timer);
@@ -521,10 +526,10 @@
 										uni.showModal({
 											content: '请在2分钟内完成支付',
 											success(res) {
-												console.log('确认',res)
-												if(res.confirm == true) {
+												console.log('确认', res)
+												if (res.confirm == true) {
 													that.payment();
-												}else if(res.confirm == false) {
+												} else if (res.confirm == false) {
 													uni.request({
 														url: that.$ky_cpdg.KyInterface.Ky_CancelTicket.Url,
 														method: that.$ky_cpdg.KyInterface.Ky_CancelTicket.method,
@@ -564,18 +569,18 @@
 						fail(res) {
 							clearInterval(timer);
 							uni.hideLoading();
-							console.log('失败',res);
+							console.log('失败', res);
 							//回调失败，取消定时器
 						}
 					})
 				}, 3000)
 			},
-			
+
 			//--------------------------调起支付--------------------------
 			payment: function() {
 				var that = this;
-				
-				
+
+
 				// #ifdef H5
 				uni.hideLoading()
 				WeixinJSBridge.invoke('getBrandWCPayRequest', {
@@ -651,7 +656,7 @@
 						// 	showCancel: false
 						// })
 						console.log(res)
-						
+
 						if (res.errMsg == 'requestPayment:ok') { //成功
 							uni.showToast({
 								title: '支付成功',
@@ -716,29 +721,30 @@
 									that.showToast("您取消了支付，自动取消订单失败")
 								}
 							})
-						}else{
+						} else {
 							uni.showToast({
 								title: '支付失败',
 								icon: 'none',
 								duration: 3000
 							})
-						}	
+						}
 					}
 				})
 				// #endif
-				
-				
-				
-				
+
+
+
+
 				// #ifdef MP-WEIXIN
 				uni.hideLoading()
+
 				uni.requestPayment({
 					provider: 'wxpay',
-					timeStamp:that.paymentData.jsapi.TimeStamp,
-					nonceStr:that.paymentData.jsapi.NonceStr,
-					package:that.paymentData.jsapi.Package,
-					signType:that.paymentData.jsapi.SignType,
-					paySign:that.paymentData.jsapi.PaySign,
+					timeStamp: that.paymentData.jsapi.TimeStamp,
+					nonceStr: that.paymentData.jsapi.NonceStr,
+					package: that.paymentData.jsapi.Package,
+					signType: that.paymentData.jsapi.SignType,
+					paySign: that.paymentData.jsapi.PaySign,
 					success(res) {
 						console.log(res)
 						if (res.errMsg == "requestPayment:ok") {
@@ -747,12 +753,12 @@
 								icon: 'none',
 							})
 							uni.showLoading({
-							    title: '加载中...'
+								title: '加载中...'
 							});
-							setTimeout(function(){
+							setTimeout(function() {
 								that.getTicketPaymentInfo_ticketIssue(that.orderNum);
-							},4000)
-						}else if (res.errMsg == "requestPayment:fail cancel") {
+							}, 4000)
+						} else if (res.errMsg == "requestPayment:fail cancel") {
 							uni.request({
 								url: that.$ky_cpdg.KyInterface.Ky_CancelTicket.Url,
 								method: that.$ky_cpdg.KyInterface.Ky_CancelTicket.method,
@@ -774,7 +780,7 @@
 									that.showToast("您取消了支付，自动取消订单失败")
 								}
 							})
-						}else if (res.errMsg == "requestPayment:fail errors") {
+						} else if (res.errMsg == "requestPayment:fail errors") {
 							setTimeout(function() {
 								that.showToast("支付失败，请重新支付")
 							}, 1000)
@@ -804,26 +810,28 @@
 									that.showToast("您取消了支付，自动取消订单失败")
 								}
 							})
-						}else if (res.errMsg == "requestPayment:fail errors") {
+						} else if (res.errMsg == "requestPayment:fail errors") {
 							setTimeout(function() {
 								that.showToast("支付失败，请重新支付")
 							}, 1000)
-						}else {
+						} else {
 							that.showToast("支付失败")
 						}
 					}
 				});
+
+
 				// #endif
 			},
-			
-			
+
+
 			showToast: function(msg, icon = 'none') {
 				uni.showToast({
 					title: msg,
 					icon: icon
 				})
 			},
-			
+
 			//--------------------------成功之后重新获取车票支付参数--------------------------
 			getTicketPaymentInfo_ticketIssue: function(orderNumber) {
 				var that = this;
@@ -834,8 +842,8 @@
 				});
 				timer = setInterval(function() {
 					uni.request({
-						url:that.$ky_cpdg.KyInterface.Ky_getTicketPaymentInfo.Url,
-						method:that.$ky_cpdg.KyInterface.Ky_getTicketPaymentInfo.method,
+						url: that.$ky_cpdg.KyInterface.Ky_getTicketPaymentInfo.Url,
+						method: that.$ky_cpdg.KyInterface.Ky_getTicketPaymentInfo.method,
 						// header:that.$ky_cpdg.KyInterface.Ky_getTicketPaymentInfo.header,
 						data: {
 							orderNumber: orderNumber,
@@ -889,7 +897,7 @@
 		position: relative;
 		z-index: 2;
 		top: 30upx;
-		padding:150upx 30upx 32upx 30upx;
+		padding: 150upx 30upx 32upx 30upx;
 	}
 
 	//公共样式 - 适用多个数据框

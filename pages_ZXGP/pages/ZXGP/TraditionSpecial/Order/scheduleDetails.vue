@@ -17,8 +17,8 @@
 
 					<!-- 站点-余票 -->
 					<view class="np_ct_occ_ti_siteRemainingTickets">
-						<view class="textCLass1">{{ticketDetail.lineName}}</view>
-						<view class="textCLass2">半票￥{{ticketDetail.halfTicket}}</view>
+						<text class="textCLass1">{{ticketDetail.lineName}}</text>
+						<text class="textCLass2">半票￥{{ticketDetail.halfTicket}}</text>
 					</view>
 
 					<!-- 车型-儿童半价 -->
@@ -37,7 +37,7 @@
 					<image class="imageClass" src="../../../../static/ZXGP/right.png"></image>
 				</view>
 			</view> -->
-			
+
 			<!-- 查看所有途经点 -->
 			<view class="np_ct_routeSite" @tap="approachPoint">
 				<view class="np_ct_rs_title">查看所有途经站</view>
@@ -46,7 +46,7 @@
 					<image class="imageClass" src="../../../../static/ZXGP/right.png"></image>
 				</view>
 			</view>
-			
+
 			<!-- 上下车点选择,0是普通购票不显示上下车点选择 -->
 			<!-- v-if="ticketDetail.shuttleType == '定制班车'" -->
 			<!-- <view class="np_ct_stationContentView" v-if="ticketDetail.shuttleType == '普通班车' && highSpeed!=='(高速)'">
@@ -58,7 +58,7 @@
 					</view>
 				</view>
 			</view> -->
-			
+
 			<!-- 上下车点选择,0是普通购票不显示上下车点选择 -->
 			<!-- v-if="ticketDetail.shuttleType == '定制班车'" -->
 			<view class="np_ct_stationContentView" v-if="ticketDetail.shuttleType == '定制班车'">
@@ -77,7 +77,7 @@
 					</view>
 				</view>
 			</view>
-			
+
 			<!-- 乘车人信息 -->
 			<view class="np_ct_Passengers">
 				<view class="np_ct_pe_title">乘车人信息</view>
@@ -108,7 +108,7 @@
 					</view>
 				</view>
 			</view>
-			
+
 			<!-- 优惠券 -->
 			<view class="np_ct_coupon" @click="toggleMask" v-if="false">
 				<view class="np_ct_cp_title">优惠券</view>
@@ -117,7 +117,7 @@
 					<image class="imageClass" src="../../../../static/ZXGP/right.png"></image>
 				</view>
 			</view>
-			
+
 			<!-- 乘车险 -->
 			<view class="orderCommonClass">
 				<view style="display: flex; align-items: center;">
@@ -129,7 +129,7 @@
 					<radio class="Mp_box" value="1" :color="'#01aaef'" :checked="isInsurance===1 ? true : false" @click="insuranceTap"></radio>
 				</view>
 			</view>
-			
+
 			<!-- 上门服务 -->
 			<view class="orderCommonClass" v-if="pickUp_Display == true">
 				<view style="display: flex; align-items: center;">
@@ -151,7 +151,7 @@
 					<radio class="Mp_box" value="1" :color="'#01aaef'" :checked="pickUp_Status" @click="pickUpClick"></radio>
 				</view>
 			</view>
-			
+
 			<!-- 选择接送上车点 -->
 			<view class="orderCommonClass" v-if="pickUp_Display == true" :hidden="pickUp_Status == false" @click="pickUpAddress">
 				<view style="display: flex; align-items: center; margin-left: 41upx;">
@@ -159,12 +159,12 @@
 					<view style="margin-top: 35upx;margin-bottom: 35upx;font-size:SourceHanSansSC-Regular ;color: #01aaef;font-size: 26upx;">{{pickUp_Address}}</view>
 				</view>
 			</view>
-			
+
 			<!-- 点击预订同意购票须知 -->
 			<view style="display: flex;font-size: 24upx;margin:0 46upx;color: #808080;margin-left: 16%;margin-bottom: 140upx;">点击立即预定表示已阅读并同意<view
 				 style="font-size: 24upx;color: #01aaef;" @tap="checkAttention"> 《购票须知》</view>
 			</view>
-			
+
 			<view class="toPayClass">
 				<view style="display: flex;align-items: center;margin-left: 32upx;">
 					<text style="font-size: 38upx;color: #FC4646;padding: 0;">￥{{totalPrice}}</text>
@@ -291,7 +291,7 @@
 				pickUp_Display: true, //接送服务是否显示
 				pickUp_Price: 4, //上门默认价格，用于显示
 				pickUpPersonPrice: 0, //用于算法和传值的价格
-				pickUp_Status: true, //默认开启
+				pickUp_Status: false, //默认开启
 				pickUp_Address: '请选择接送上车点', //接送点
 				pickUp_Latitude: 0, //接送点纬度
 				pickUp_Longitude: 0, //接送点经度
@@ -313,8 +313,8 @@
 			that.applyName = that.$oSit.Interface.system.applyName;
 			that.appName = that.$oSit.Interface.system.appName;
 			that.startStation = '', //定制班车上车点
-			that.endStation = '', //定制班车下车点
-			console.log(that.endStation)
+				that.endStation = '', //定制班车下车点
+				console.log(that.endStation)
 			uni.setNavigationBarTitle({
 				title: '填写订单'
 			});
@@ -356,12 +356,14 @@
 				}
 			})
 			that.noticeLoadData(); //加载须知
+			
 
 		},
 		onShow() {
 			//读取乘车人信息
 			this.userData();
 			this.getStationData();
+			
 
 		},
 		onReady() {
@@ -474,8 +476,8 @@
 						LineName: this.ticketDetail.lineName,
 					},
 					success: (res) => {
-						console.log('是否上门服务', res)
-						if (res.data.data.IsPickUp == false) {
+						console.log('是否接送服务', res)
+						if (res.data.status	 == false) {
 							this.pickUp_Display = res.data.data.IsPickUp;
 							this.pickUp_Price = res.data.data.Price;
 							this.pickUp_Status = false;
@@ -484,13 +486,17 @@
 							this.PickUpCenterLat = res.data.data.PickUpCenterLat;
 							this.PickUpCenterLon = res.data.data.PickUpCenterLon;
 							this.PickUpRange = res.data.data.PickUpRange;
+							this.calculateTotalPrice();
 						} else {
+							this.pickUp_Status = true;
 							this.pickUp_Display = res.data.data.IsPickUp;
 							this.pickUp_Price = res.data.data.Price;
 							this.PickUpCenter = res.data.data.PickUpCenter;
 							this.PickUpCenterLat = res.data.data.PickUpCenterLat;
 							this.PickUpCenterLon = res.data.data.PickUpCenterLon;
 							this.PickUpRange = res.data.data.PickUpRange;
+							this.getLocation();
+							this.calculateTotalPrice();
 						}
 
 
@@ -560,6 +566,7 @@
 				if (this.pickUp_Status == false) {
 					this.pickUp_Status = true;
 					this.pickUp_Address = '请选择接送上车点';
+					this.getLocation();
 					this.calculateTotalPrice();
 				} else {
 					this.pickUp_Status = false;
@@ -567,7 +574,51 @@
 					this.calculateTotalPrice();
 				}
 			},
-
+			//-------------------------------自动获取接送上车点-------------------------
+			getLocation: function() {
+				console.log('获取自动定位')
+				uni.getLocation({
+					type: 'wgs84',
+					success: (res) => {
+						console.log('当前经纬度',res)
+						let latitude, longitude;
+						latitude = res.latitude.toString();
+						longitude = res.longitude.toString();
+						uni.request({
+							url: 'https://apis.map.qq.com/ws/geocoder/v1/?location=' + latitude + ',' + longitude +
+								'&key=4YNBZ-TXLLD-OF34F-HRHPX-PXVI5-OAFFX',
+							header: {
+									"Content-Type": "application/text"
+								},
+							success:(re)=>{
+								console.log("中文位置",re)
+								var a = this.$ky_cpdg.mathLonLatToDistance(latitude, longitude, this.PickUpCenterLat, this.PickUpCenterLon)
+								console.log(re.data.result.address)
+								if (a <= this.PickUpRange) {
+									this.pickUp_Address = re.data.result.address; //选择的地名
+									this.pickUp_Latitude = re.data.result.location.lat; //选择的纬度
+									this.pickUp_Longitude = re.data.result.location.lng; //选择的经度
+								} else {
+									uni.showModal({
+										title: '当前默认定位不在范围内',
+										content: '您可以手动选择' + '~' + this.PickUpCenter + '~' + '附近，' + this.PickUpRange + '米范围内的正常道路接送点',
+										confirmText: '选择',
+										confirmColor: '#007AFF',
+										success: (res) => {
+											// console.log(res)
+											if (res.confirm == true) {
+												this.pickUpAddress();
+											} else {
+								
+											}
+										},
+									})
+								}
+							}
+						});
+					}
+				})
+			},
 			//-------------------------------选择接送上车点-----------------------------
 			pickUpAddress: function() {
 				uni.chooseLocation({
@@ -861,7 +912,7 @@
 				if (that.pickUp_Status == false) {
 					that.pickUp_Address = ''
 				}
-				if(that.ticketDetail.shuttleType == '普通班车'){
+				if (that.ticketDetail.shuttleType == '普通班车') {
 					var array = {
 						isInsurance: that.isInsurance, //是否选择了保险
 						totalPrice: that.totalPrice, //总价格
@@ -876,7 +927,7 @@
 						StartStaionLatitude: that.ticketDetail.starSiteArr[0].Latitude, //始发站点纬度
 						StartStaionLongitude: that.ticketDetail.starSiteArr[0].Longitude, //始发站经度
 					}
-				}else{
+				} else {
 					var array = {
 						isInsurance: that.isInsurance, //是否选择了保险
 						totalPrice: that.totalPrice, //总价格
@@ -939,7 +990,7 @@
 		height: 140upx;
 		background: #FC4646;
 	}
-	
+
 	.np_content {
 		position: absolute;
 		z-index: 4;
@@ -986,27 +1037,25 @@
 
 				.np_ct_occ_ti_siteRemainingTickets {
 					display: flex;
-					justify-content: space-between;
-					align-items: center;
 
 					.textCLass1 {
 						font-family: MicrosoftYaHei;
 						font-weight: 400;
-						overflow: hidden;
-						text-overflow: ellipsis;
 						margin-bottom: 10upx;
 						font-size: 32upx;
 						color: #333333;
+						width: 488upx;
+						margin-right: 18upx;
 					}
 
 					.textCLass2 {
 						font-family: MicrosoftYaHei;
 						font-weight: 400;
-						overflow: hidden;
-						text-overflow: ellipsis;
 						margin-bottom: 10upx;
 						font-size: 28upx;
+						width: 140upx;
 						color: #FC4646;
+						text-align: right;
 					}
 				}
 
@@ -1074,78 +1123,78 @@
 				}
 			}
 		}
-		
-		.np_ct_routeSite{
+
+		.np_ct_routeSite {
 			background: #FFFFFF;
 			border-radius: 14upx;
 			margin: 0 26upx;
 			margin-bottom: 20upx;
 			display: flex;
 			justify-content: space-between;
-			
-			.np_ct_rs_title{
+
+			.np_ct_rs_title {
 				margin-left: 41upx;
 				margin-top: 35upx;
 				margin-bottom: 35upx;
-				font-size:SourceHanSansSC-Regular ;
+				font-size: SourceHanSansSC-Regular;
 				color: #2C2D2D;
 				font-size: 30upx;
 			}
-			
-			.np_ct_rs_text{
+
+			.np_ct_rs_text {
 				display: flex;
 				margin-right: 41upx;
 				align-items: center;
-				
-				.textClass{
+
+				.textClass {
 					font-size: 28upx;
 					font-family: SourceHanSansSC-Light;
 					color: #999999;
 				}
-				
-				.imageClass{
+
+				.imageClass {
 					width: 11upx;
 					height: 21upx;
 					margin-left: 10upx;
 				}
 			}
 		}
-		
-		.np_ct_stationContentView{
+
+		.np_ct_stationContentView {
 			flex-direction: column;
 			background: #FFFFFF;
 			margin: 0 26upx;
 			margin-bottom: 20upx;
 			border-radius: 14upx;
-			
-			.np_ct_sc_boarding{
+
+			.np_ct_sc_boarding {
 				background: #FFFFFF;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
 				margin-left: 41upx;
 				margin-right: 41upx;
-				
-				.np_ct_sc_bd_title{
+
+				.np_ct_sc_bd_title {
 					margin-top: 35upx;
 					margin-bottom: 35upx;
-					font-size:SourceHanSansSC-Regular ;
+					font-size: SourceHanSansSC-Regular;
 					color: #2C2D2D;
 					font-size: 30upx;
 				}
-				
-				.np_ct_sc_bd_text{
+
+				.np_ct_sc_bd_text {
 					display: flex;
 					align-items: center;
-					
-					.endStationClass{
+
+					.endStationClass {
 						font-size: 28upx;
 						font-family: SourceHanSansSC-Light;
 						color: #999999;
 						text-align: right;
 					}
-					
-					.imageClass{
+
+					.imageClass {
 						width: 11upx;
 						height: 21upx;
 						margin-left: 10upx;
@@ -1153,8 +1202,8 @@
 				}
 			}
 		}
-		
-		.np_ct_Passengers{
+
+		.np_ct_Passengers {
 			background: #FFFFFF;
 			border-radius: 14upx;
 			margin: 0 26upx;
@@ -1163,27 +1212,27 @@
 			justify-content: space-between;
 			flex-direction: column;
 			padding-bottom: 25upx;
-			
-			.np_ct_pe_title{
+
+			.np_ct_pe_title {
 				margin-top: 35upx;
 				margin-bottom: 35upx;
 				margin-left: 41upx;
-				font-size:SourceHanSansSC-Regular ;
+				font-size: SourceHanSansSC-Regular;
 				color: #2C2D2D;
 				font-size: 30upx;
 			}
-			
-			.np_ct_pe_text{
+
+			.np_ct_pe_text {
 				display: flex;
 				margin-bottom: 35upx;
-				
+
 			}
-			
-			.np_ct_pe_passengerInformation{
+
+			.np_ct_pe_passengerInformation {
 				flex-direction: column;
 				background: #FFFFFF;
-				
-				.np_ct_pe_pi_passengerInfoDetail{
+
+				.np_ct_pe_pi_passengerInfoDetail {
 					border-bottom: 1upx solid #DADADA;
 					margin-left: 33upx;
 					margin-right: 33upx;
@@ -1191,71 +1240,71 @@
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
-					
-					.np_ct_pe_pi_pi_content{
+
+					.np_ct_pe_pi_pi_content {
 						display: flex;
 						text-align: center;
 						align-items: center;
-						
-						.delete{
+
+						.delete {
 							width: 73upx;
-							
-							.imageClass{
+
+							.imageClass {
 								width: 34upx;
 								height: 34upx;
 							}
 						}
-						
-						.content{
+
+						.content {
 							height: 100%;
-							
-							.contentView{
+
+							.contentView {
 								display: flex;
 								margin-top: 18upx;
 								margin-bottom: 18upx;
-								
-								.textClass{
-									font-size:32upx;
+
+								.textClass {
+									font-size: 32upx;
 									color: #333333;
-									padding:0;
+									padding: 0;
 									padding-right: 24upx;
 								}
-								
-								.viewClass{
-									background:#EBEBEB;
-									font-size:18upx;
-									border-radius:24upx;
+
+								.viewClass {
+									background: #EBEBEB;
+									font-size: 18upx;
+									border-radius: 24upx;
 									width: 100upx;
 									height: 37upx;
-									line-height:37upx;
-									text-align:center;
+									line-height: 37upx;
+									text-align: center;
 								}
 							}
 						}
-						
-						.IDinformation{
+
+						.IDinformation {
 							display: flex;
 							font-size: 28upx;
-							color:#999999;
+							color: #999999;
 							margin-top: 18upx;
 							margin-bottom: 18upx;
-							
-							.textClass{
+
+							.textClass {
 								margin-right: 20upx;
 							}
 						}
 					}
-					
-					.imageRight{
-						width:12upx;
+
+					.imageRight {
+						width: 12upx;
 						height: 21upx;
 					}
 				}
 			}
 		}
-		
+
 		//优惠券
-		.np_ct_coupon{
+		.np_ct_coupon {
 			background: #FFFFFF;
 			border-radius: 14upx;
 			margin: 0 26upx;
@@ -1264,28 +1313,28 @@
 			justify-content: space-between;
 			flex-direction: column;
 			padding-bottom: 25upx;
-			
-			.np_ct_cp_title{
+
+			.np_ct_cp_title {
 				margin-left: 41upx;
 				margin-top: 35upx;
 				margin-bottom: 35upx;
-				font-size:SourceHanSansSC-Regular;
+				font-size: SourceHanSansSC-Regular;
 				color: #2C2D2D;
 				font-size: 30upx;
 			}
-			
-			.np_ct_cp_text{
+
+			.np_ct_cp_text {
 				display: flex;
 				margin-right: 41upx;
 				align-items: center;
-				
-				.viewClass{
+
+				.viewClass {
 					font-size: 28upx;
 					font-family: SourceHanSansSC-Light;
 					color: #999999;
 				}
-				
-				.imageClass{
+
+				.imageClass {
 					width: 11upx;
 					height: 21upx;
 					margin-left: 10upx;
@@ -1293,7 +1342,7 @@
 			}
 		}
 	}
-	
+
 
 	//下弹框标题
 	.couponTitle {
@@ -1575,11 +1624,11 @@
 			}
 		}
 	}
-	
+
 	.button_1::after {
 		border: none;
 	}
-	
+
 	//订单提交通用块
 	.orderCommonClass {
 		background: #FFFFFF;
@@ -1589,14 +1638,14 @@
 		display: flex;
 		justify-content: space-between;
 	}
-	
+
 	//订单提交通用块
 	.ticketContent {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 	}
-	
+
 	//订单提交通用块
 	.textCLass {
 		font-family: MicrosoftYaHei;
@@ -1605,7 +1654,7 @@
 		text-overflow: ellipsis;
 		margin-bottom: 10upx;
 	}
-	
+
 	// 上下车点选择
 	.stationContentView {
 		flex-direction: column;
@@ -1614,7 +1663,7 @@
 		margin-bottom: 20upx;
 		border-radius: 14upx;
 	}
-	
+
 	/* 优惠券面板 */
 	.discountView {
 		min-height: 30vh;
@@ -1623,7 +1672,7 @@
 		background: #f3f3f3;
 		margin-bottom: 100rpx;
 	}
-	
+
 	//优惠券
 	.discountScroll {
 		min-height: 30vh;

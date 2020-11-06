@@ -89,7 +89,7 @@
 			}
 		},
 		{
-			"path": "pages/order/OrderList",
+			"path": "pages/order/newOrderList",
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarBackgroundColor": "#F5F5F5"
@@ -136,13 +136,19 @@
 		},
 		
 		//----------------------------个人中心模块结束----------------------------
-
 		 {
 			"path": "pages/ZXDT/zxdt_information",
 			"style": {}
 		}, {
 			"path": "pages/ZXDT/infor_details",
 			"style": {}
+		},
+		{
+			"path": "pages/home/guidePage",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
 		}
     ],
 
@@ -1094,7 +1100,7 @@
 				"pagePath": "pages/home/serve",
 				"text": "服务"
 			}, {
-				"pagePath": "pages/order/OrderList",
+				"pagePath": "pages/order/newOrderList",
 				"text": "订单"
 			},{
 				"pagePath": "pages/GRZX/user",
