@@ -43,8 +43,8 @@
 					</view>
 				</u-form-item>
 				
-				<!-- 商品简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
+				<!-- 生态简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="生态简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"

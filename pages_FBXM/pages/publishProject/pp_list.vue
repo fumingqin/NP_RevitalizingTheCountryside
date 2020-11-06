@@ -165,7 +165,7 @@
 					url: this.$fbxm.KyInterface.getProjectByUserID.Url,
 					method: this.$fbxm.KyInterface.getProjectByUserID.method,
 					data: {
-						userId: 100006
+						userId: this.userInfo.userId
 					},
 					success: (res) => {
 						console.log('列表数据', res)
