@@ -5,13 +5,13 @@
 		</view>
 		<!-- <view class="textClass" v-if="title=='软件许可及服务协议'">
 			<view class="mt">
-				欢迎你使用{{systemName}}软件及服务！
+				欢迎你使用{{systemName2}}软件及服务！
 			</view>
 			<view class="mt">
 				一、软件使用协议
 			</view>
 			<view class="mt">
-				本协议是{{companyName}}公司制作的{{systemName}}软件（以下简称“本软件产品”）的法律协议。
+				本协议是{{companyName}}公司制作的{{systemName2}}软件（以下简称“本软件产品”）的法律协议。
 				一旦安装、复制或以其他方式使用本软件产品，即表示同意接受协议各项条件的约束。
 			</view>
 			<view class="mt">
@@ -133,8 +133,9 @@
 				text:'',
 				
 				title:'',
-				systemName:'',
-				companyName:'途游信息科技',
+				systemName:'', 
+				systemName2 : '振兴乡村APP',
+				companyName:'厦门今点通',
 			}
 		},
 		onLoad(options) {
