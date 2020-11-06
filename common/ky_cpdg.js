@@ -3,17 +3,26 @@ import $oSit from '@/common/overallSituation.js'; //引入公共js文件
 
 //接口域名
 // #ifdef H5
-const Url = 'http://36.250.234.10:19755';
+const Url = $oSit.Interface.address.Url;
 // #endif
 // #ifndef H5
-const Url = 'http://36.250.234.10:19755';
+const Url = $oSit.Interface.address.Url;
 // #endif
 
 //接口对象
 const KyInterface = {
 	system: {
 		systemName: '南平综合出行',
-
+		// 用于南平综合出行 - 车票订购小程序使用
+		// #ifdef APP-PLUS
+		KY_systemName:'南平综合出行APP',
+		// #endif
+		// #ifdef MP-WEIXIN
+		KY_systemName:'南平综合出行小程序',
+		// #endif
+		// #ifdef H5
+		KY_systemName:'南平综合出行H5',
+		// #endif
 		// 用于南平综合出行 - 车票订购小程序使用
 		// systemNameApp:'南平综合出行APP',
 		// systemNameH5:'南平综合出行H5',

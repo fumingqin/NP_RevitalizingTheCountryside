@@ -89,7 +89,7 @@
 			}
 		},
 		{
-			"path": "pages/order/OrderList",
+			"path": "pages/order/newOrderList",
 			"style": {
 				"enablePullDownRefresh": true,
 				"navigationBarBackgroundColor": "#F5F5F5"
@@ -1096,7 +1096,7 @@
 				"pagePath": "pages/home/serve",
 				"text": "服务"
 			}, {
-				"pagePath": "pages/order/OrderList",
+				"pagePath": "pages/order/newOrderList",
 				"text": "订单"
 			},{
 				"pagePath": "pages/GRZX/user",
