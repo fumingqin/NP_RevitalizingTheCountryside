@@ -150,7 +150,15 @@
 		},
 
 		onLoad: function() {
-			this.cacheLoadData();
+			var a = uni.getStorageSync('guidePageData')
+			if( a !== true){
+				this.cacheLoadData();
+				uni.navigateTo({
+					url: 'guidePage',
+				})
+			}else{
+				this.cacheLoadData();
+			}
 			// uni.clearStorage()
 			// let pro = uni.getStorageSync('protocol')
 			// if (pro !== true) {
