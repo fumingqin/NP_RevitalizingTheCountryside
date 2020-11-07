@@ -85,7 +85,8 @@
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "../../pages_WSSC/pages/WSSC/goodsList",
+					// clickURL: "../../pages_WSSC/pages/WSSC/goodsList",
+					clickURL: "",
 					ImageURL1: "../../static/home/serve/sc.png", //亮
 					ImageURL2: "../../static/home/serve/sc2.png", //暗
 					ItemTitle: "网上商城",
@@ -138,7 +139,8 @@
 				},
 				{
 					IsUse: true,
-					clickURL: "../../pages_WSSC/pages/WSSC/checkGoods",
+					// clickURL: "../../pages_WSSC/pages/WSSC/checkGoods",
+					clickURL: "",
 					ImageURL1: "../../static/home/serve/shsp.png", //亮
 					ImageURL2: "../../static/home/serve/shsp2.png", //暗
 					ItemTitle: "审核商品",

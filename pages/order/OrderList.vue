@@ -934,7 +934,7 @@
 								</view>
 							</view>
 						</view>
-						<view v-if="goingArr.length == 0">
+						<view v-if="goingArr.length ==0">
 							<empty-data :isShow="goingArr.length == 0" text="暂无数据" :image="noDataImage" textColor="#999999"></empty-data>
 						</view>			
 					</view>
