@@ -1006,6 +1006,10 @@
 				    "path" : "pages/publishProject/pp_edit",
 				    "style" : {}
 				}
+				,{
+				    "path" : "pages/publishProject/PP_addPages",
+				    "style" : {}
+				}
 			]
 		},
 		//---------------------------------------------第十六个包：特派员服务------------------------------------------
