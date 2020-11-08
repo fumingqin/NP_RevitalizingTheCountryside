@@ -2,7 +2,7 @@
 	<view>
 		<view style="width: 100%;" :style="{ 'height':scrollHeight }">
 			<image style="width: 100%; height: 100%;" src="../static/beijing.png" mode="aspectFill"></image>
-			<view style="position: absolute; top: 720upx; left: 57upx; width: 636upx;  background: #FFFFFF; border-radius: 12upx;">
+			<view style="position: absolute; top: 620upx; left: 57upx; width: 636upx;  background: #FFFFFF; border-radius: 12upx;">
 					<view style="margin: 40upx 48upx;display: flex; position: relative;" v-for="(item,index) in rankingList" :key="index">
 					<image style="width: 51upx; height: 51upx;" src="../static/1.png" mode="aspectFill" v-if="item.index == 1"></image>
 					<image style="width: 51upx; height: 51upx;" src="../static/2.png" mode="aspectFill" v-if="item.index == 2"></image>
