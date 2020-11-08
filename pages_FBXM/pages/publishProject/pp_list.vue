@@ -217,7 +217,7 @@
 			//--------------------------路由跳转(添加列表文章)------------------------------
 			routeJump2: function(e) {
 				uni.navigateTo({
-					url: './PP_addPage',
+					url: './PP_addPages',
 				})
 			},
 
