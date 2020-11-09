@@ -12,6 +12,9 @@
 			<view class="view_titleView">
 				<view class="tv_view">
 					<view style="display: flex;">
+						<view style="margin-top: 10upx;">
+							<text class="tv_label" style="background: #007AFF;">水美经济</text>
+						</view>
 						<view class="tv_title">{{item.title}}</view>
 					</view>
 					<!-- <text class="tv_richText">{{item.content}}</text> -->

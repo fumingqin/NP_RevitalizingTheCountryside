@@ -369,8 +369,8 @@
 			this.id = param.id;
 			if (this.jumpStatus == '修改') {
 				uni.request({
-					url: this.$ycyd.KyInterface.getArchiveDetailByID.Url,
-					method: this.$ycyd.KyInterface.getArchiveDetailByID.method,
+					url: this.$fbxm.KyInterface.getProjectDetailByID.Url,
+					method: this.$fbxm.KyInterface.getProjectDetailByID.method,
 					data: {
 						id: this.id
 					},
