@@ -30,18 +30,24 @@
 						</view>
 					</u-upload>
 				</u-form-item>
-
+				
 				<!-- 上传视频 -->
-				<view style="font-size: 34upx;font-weight: bold;">视频上传</view>
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
+					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+				</u-form-item>
+				
+				<!-- 上传视频 -->
+				<!-- <view style="font-size: 34upx;font-weight: bold;">视频上传</view>
 				<view class="burst-wrap">
 				    <view class="burst-wrap-bg">
-				        <view>
+				        <view> -->
 				            <!-- 信息提交 -->
-				            <view class="burst-info">
+				          <!--  <view class="burst-info">
 				                <view class="uni-uploader-body">
-				                    <view class="uni-uploader__files">
+				                    <view class="uni-uploader__files"> -->
 				                        <!-- 视频 -->
-										<view>
+									<!-- 	<view>
 											
 				                        <view class="uni-uploader__file" v-if="src">
 				                            <view class="uploader_video" style="display: flex;">
@@ -57,12 +63,10 @@
 				                        </view>
 				                    </view>
 				                </view>
-				
-				
 				            </view>
 				        </view>
 				    </view>
-				</view>
+				</view> -->
 				<!-- 商品简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false" prop="intro">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -169,6 +173,8 @@
 				fileList:[],
 				policyId:'',
 				issueText: '',
+				imageList: [],
+				category: 'video',
                 src:'',//视频存放
 				showUploadList: true,
                 sourceTypeIndex: 2,
@@ -357,6 +363,14 @@
 					this.localPath = JSON.stringify(res.fileName);
 					this.filename.push(res.data.data);
 				},
+				//---------------------------上传视频回调-------------------------------
+				successvideo: function(e) {
+					var data = JSON.parse(e.data);
+					// console.log(data)
+					this.videoData = data;
+					console.log('视频上传成功', this.videoData)
+				},
+				
 				//删除图片提示
 				uploadOnRemove:function(e){
 					this.fileList = undefined;
