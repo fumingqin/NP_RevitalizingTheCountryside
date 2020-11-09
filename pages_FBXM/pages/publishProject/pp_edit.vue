@@ -430,6 +430,8 @@
 						this.model.name = data.data.title;
 						this.model.phone=data.data.telphone;
 						this.model.centent = data.data.introduce;
+						this.filename=data.data.filename;
+						this.model.village=data.data.village
 						this.onEditorReady();
 						// console.log('赋值前', this.lists)
 						for(var i=0;i<this.informationDetail.image.length;i++){

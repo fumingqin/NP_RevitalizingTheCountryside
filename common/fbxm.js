@@ -54,6 +54,12 @@ const KyInterface = {
 		name:'项目详情接口',
 		method:'POST',
 	},
+	
+	getPersonId:{
+		Url:Url + '/api/project/getPersonId',
+		name:'获取负责人',
+		method:'POST',
+	},
 }
 
 // 接口声明区

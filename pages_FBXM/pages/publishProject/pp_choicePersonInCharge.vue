@@ -1,19 +1,19 @@
 <template>
 	<view>
 		<!-- 顶部搜索框 -->
-		<view class="topSerchView">
+		<!-- <view class="topSerchView">
 			<view class="SearchBar" elevation='5px' style="">
 				<input class="addressInput" @input="onInput" placeholder="请输入关键字搜索" />
 			</view>
-		</view>
+		</view> -->
 		<!-- 搜索列表 -->
-		<view class="stationList" :style="{ 'height':scrollHeight }" v-if="isShowList">
+		<!-- <view class="stationList" :style="{ 'height':scrollHeight }" v-if="isShowList">
 			<block v-for="(item,index) in keywordList" :key="index">
 				<view class="listItem" @click="itemClick(index)">
 					<rich-text :nodes="item.htmlStr"></rich-text>
 				</view>
 			</block>
-		</view>
+		</view> -->
 		
 		<!-- 联动列表 -->
 		<view class="list_box">
@@ -24,7 +24,7 @@
 							<view class="item">
 								<view class="goods" v-for="(item,index) in mainArray" :key="index" @click="detailStationTap(item)">
 									<view>
-										<view>{{item.village_name}}</view>
+										<view>{{item.nick_name}}</view>
 									</view>
 								</view>
 							</view>
@@ -52,11 +52,12 @@
 				isShowList:false,//是否显示站点列表
 				stationType:'',//判断上个页面点击的是上车点还是下车点
 				type:'',
+				ruralId:'',
 			}
 		},
 		onLoad(param){
 			var that = this;
-			that.stationType = param.station;
+			that.ruralId = param.ruralId;
 			console.log(that.type);
 			/* 设置当前滚动容器的高，若非窗口的高度，请自行修改 */
 			uni.getSystemInfo({
@@ -76,8 +77,11 @@
 			getBusStationList() {
 				uni.showLoading();
 				uni.request({
-					url: this.$GrzxInter.Interface.getVillageList.value,
-					method: this.$GrzxInter.Interface.getVillageList.method,
+					url: this.$fbxm.KyInterface.getPersonId.Url,
+					method: this.$fbxm.KyInterface.getPersonId.method,	
+					data:{
+						ruralId:this.ruralId
+					},
 					success: (res) => {
 						uni.hideLoading();
 						// console.log('type2路线',res)
@@ -166,8 +170,8 @@
 				var that = this;
 				//当前是上车点
 				uni.$emit('startstaionChange', {
-					data: item.id,
-					data2: item.village_name,
+					data: item.userId,
+					data2: item.nick_name,
 				});
 				uni.navigateBack({});
 			},

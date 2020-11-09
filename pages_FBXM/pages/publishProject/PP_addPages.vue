@@ -2,22 +2,29 @@
 	<view>
 		<view class="content">
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
-				<view>
-					<!-- 商品名称 -->
-					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="标题内容" :border-bottom="false" prop="name">
-						<view class="viewClass" style="padding-right: 20rpx;">
-							<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入标题内容" v-model="model.name" type="text"></u-input>
-						</view>
-					</u-form-item>
-					
-					<!-- 乡村名称 -->
-					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="乡村名称" :border-bottom="false" prop="village">
-						<view class="viewClass" style="padding-right: 20rpx;">
-							<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入乡村名称" v-model="model.village" type="text"></u-input>
-						</view>
-					</u-form-item>
-				</view>
+				<!-- 商品名称 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="标题内容" :border-bottom="false" prop="name">
+					<view class="viewClass" style="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入标题内容" v-model="model.name" type="text"></u-input>
+					</view>
+				</u-form-item>
+
+				<!-- 乡村名称 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="乡村名称" :border-bottom="false">
+					<view class="top_chooseTime" hover-class="ve_hover" @click="SelectRural">
+						<text class="dateClass" v-if="village_name==''" style="color: #bec3ca;">请选择乡村名称</text>
+						<text class="dateClass" style="color: #333333;">{{village_name}}</text>
+					</view>
+				</u-form-item>
 				
+				<!-- 负责人 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="负责人" :border-bottom="false">
+					<view class="top_chooseTime" hover-class="ve_hover" @click="SelectPersonInCharge">
+						<text class="dateClass" v-if="nick_name==''" style="color: #bec3ca;">请选择负责人</text>
+						<text class="dateClass" style="color: #333333;">{{nick_name}}</text>
+					</view>
+				</u-form-item>
+
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
@@ -33,7 +40,7 @@
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
-				
+
 				<!-- 文件上传 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false">
 					<view class="viewClass">
@@ -48,21 +55,14 @@
 						</view>
 					</view>
 				</u-form-item>
-				
-				<!-- 负责人 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="负责人" :border-bottom="false" prop="personnel">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入负责人名称" v-model="model.personnel" type="text"></u-input>
-					</view>
-				</u-form-item>
-				
+
 				<!-- 简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false">
 					<view class="viewClass" style="padding:20rpx 30rpx;">
-						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent"/>
+						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
 					</view>
 				</u-form-item>
-				
+
 				<!-- 档案简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="档案简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -179,7 +179,7 @@
 				isIOS: false,
 				model: {
 					name: '', //商品名称value
-					centent: '',//简介
+					centent: '', //简介
 					village: '', //乡村名
 					personnel: '', //负责人
 				},
@@ -284,6 +284,10 @@
 				videoArray: [],
 				localPath: [],
 				filename: '',
+				ruralId:'',
+				village_name:'',
+				personId:'',
+				nick_name:'',
 			}
 		},
 
@@ -313,6 +317,56 @@
 					}
 				});
 			},
+			
+			//---------------------------------点击选择乡村---------------------------------
+			SelectRural() {
+				var that = this;
+				//监听事件,监听下个页面返回的值
+				uni.$on('startstaionChange', function(data) {
+					// data即为传过来的值，给上车点赋值
+					that.ruralId = data.data;
+					that.village_name = data.data2;
+					//清除监听，不清除会消耗资源
+					uni.$off('startstaionChange');
+					//如果重新选择就清空负责人参数
+					that.personId='';
+					that.nick_name='';
+					console.log('乡村id值',that.ruralId)
+					console.log('乡村名称',that.village_name)
+				});
+				uni.navigateTo({
+					//跳转到下个页面的时候加个字段，判断当前点击的是上车点
+					url: 'pp_chooseCountryside',
+				})
+			
+			},
+			
+			//---------------------------------点击选择负责人---------------------------------
+			SelectPersonInCharge() {
+				var that = this;
+				if(that.ruralId!==''){
+					//监听事件,监听下个页面返回的值
+					uni.$on('startstaionChange', function(data) {
+						// data即为传过来的值，给上车点赋值
+						that.personId = data.data;
+						that.nick_name = data.data2;
+						//清除监听，不清除会消耗资源
+						uni.$off('startstaionChange');
+						console.log('负责人id值',that.personId)
+						console.log('负责人名称',that.nick_name)
+					});
+					uni.navigateTo({
+						//跳转到下个页面的时候加个字段，判断当前点击的是上车点
+						url: 'pp_choicePersonInCharge?&ruralId=' + that.ruralId,
+					})
+				}else{
+					uni.showToast({
+						title: '请选择乡村名称',
+						icon: 'none',
+					})
+				}
+			},
+			
 
 			//--------------------------------------------
 
@@ -483,7 +537,7 @@
 				console.log(this.lists)
 				console.log(this.fileList)
 			},
-			
+
 			//-------------------------------上传文件---------------------------------------------------------------------------
 			onOpenDoc() {
 				let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
@@ -494,7 +548,7 @@
 						this.$refs.lFile.open(path);
 					});
 			},
-			
+
 			/* 保存 */
 			onDown() {
 				let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
@@ -503,10 +557,10 @@
 						this.localPath = path;
 					});
 			},
-			
+
 			/* 上传 */
 			onUpload() {
-				this.filename='';
+				this.filename = '';
 				this.$refs.lFile.upload({
 					// #ifdef APP-PLUS
 					// nvue页面使用时请查阅nvue获取当前webview的api，当前示例为vue窗口
@@ -523,7 +577,7 @@
 			onSuccess(res) {
 				console.log('上传成功回调', res);
 				this.filename = JSON.stringify(res.fileName);
-				this.localPath=res.data;
+				this.localPath = res.data;
 			},
 
 			successData: function() {
@@ -559,52 +613,68 @@
 					if (valid) {
 						// uni.hideLoading();
 						console.log('验证通过');
-						if (this.issueText !== '<p><br></p>') {
-							uni.request({
-								url: this.$fbxm.KyInterface.releaseProject.Url,
-								method: this.$fbxm.KyInterface.releaseProject.method,
-								data: {
-									userId: this.userInfo.userId,
-									content: e,
-									image: JSON.stringify(this.lists),
-									title: this.model.name,
-									video: JSON.stringify(arr),
-									pdfFile: JSON.stringify(arr2),
-									pdfName: this.filename,
-									villageCode: this.model.village,
-									introduce: this.model.centent,
-								},
-								success: (res) => {
-									console.log(res, "请求完接口");
-									if (res.data.status) {
-										uni.showToast({
-											title: res.data.msg,
-										})
-										setTimeout(function() {
-											uni.navigateBack();
-										}, 1000)
-									} else {
-										uni.showToast({
-											title: res.data.msg,
-											icon: 'none',
-										})
-									}
-								},
-								fail: () => {
+						if(this.ruralId!==''){
+							if(this.personId!==''){
+								if (this.issueText !== '<p><br></p>') {
+									uni.request({
+										url: this.$fbxm.KyInterface.releaseProject.Url,
+										method: this.$fbxm.KyInterface.releaseProject.method,
+										data: {
+											userId: this.userInfo.userId,
+											content: e,
+											image: JSON.stringify(this.lists),
+											title: this.model.name,
+											video: JSON.stringify(arr),
+											pdfFile: JSON.stringify(arr2),
+											pdfName: this.filename,
+											// villageCode: this.village_name,
+											ruralId:this.ruralId,
+											personId:this.personId,
+											introduce: this.model.centent,
+										},
+										success: (res) => {
+											console.log(res, "请求完接口");
+											if (res.data.status) {
+												uni.showToast({
+													title: res.data.msg,
+												})
+												setTimeout(function() {
+													uni.navigateBack();
+												}, 1000)
+											} else {
+												uni.showToast({
+													title: res.data.msg,
+													icon: 'none',
+												})
+											}
+										},
+										fail: () => {
+											uni.showToast({
+												title: '提交失败',
+												icon: 'none',
+											})
+										},
+										complete: () => {
+											setTimeout(function() {
+												uni.hideLoading();
+											}, 800)
+										}
+									});
+								} else {
 									uni.showToast({
-										title: '提交失败',
+										title: '提交失败,请编辑文章内容',
 										icon: 'none',
 									})
-								},
-								complete: () => {
-									setTimeout(function() {
-										uni.hideLoading();
-									}, 800)
 								}
-							});
-						} else {
+							}else{
+								uni.showToast({
+									title: '请选择负责人',
+									icon: 'none',
+								})
+							}
+						}else{
 							uni.showToast({
-								title: '提交失败,请编辑文章内容',
+								title: '请选择乡村名称',
 								icon: 'none',
 							})
 						}
@@ -651,5 +721,36 @@
 	//自定义上传按钮颜色
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
+	}
+	
+	//选择时间
+	.top_chooseTime {
+		// position: absolute;
+		display: flex;
+		width: 100%;
+		// height:100%;
+		overflow: hidden;
+		left: 6%;
+		padding: 12upx 20upx;
+		border-radius: 14upx;
+		background-color: #FFFFFF;
+		z-index: 2;
+	
+		//出发点
+		.dateClass {
+			display: flex;
+			font-size: 28upx;
+			left: 0;
+			text-align: left;
+		}
+	}
+	
+	//点击态
+	.ve_hover {
+		transition: all .3s; //过度
+		border-top-left-radius: 22rpx;
+		border-bottom-left-radius: 22rpx;
+		opacity: 0.9;
+		background: #E4E7ED;
 	}
 </style>
