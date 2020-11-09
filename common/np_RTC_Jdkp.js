@@ -48,8 +48,33 @@ const KyInterface = {
 		name: '获取详情',
 		method: 'POST',
 	},
-	
+	//--------------------------------------取消任务--------------------------------------
+	deleteEvaluation: {
+		Url: Url + '/api/evaluation/deleteEvaluation',
+		name: '取消任务',
+		method: 'POST',
+	},
+	//--------------------------------------获取考评列表（村）--------------------------------------
+	getListByRuralId: {
+		Url: Url + '/api/evaluation/getListByRuralId',
+		name: '获取考评列表（村）',
+		method: 'POST',
+	},
+	//--------------------------------------获取考评人任务--------------------------------------
+	getListByPhone: {
+		Url: Url + '/api/evaluation/getListByPhone',
+		name: '获取考评人任务',
+		method: 'POST',
+	},
+	//--------------------------------------给考评任务评分--------------------------------------
+	addScore: {
+		Url: Url + '/api/evaluation/addScore',
+		name: '给考评任务评分',
+		method: 'POST',
+	},
 }
+
+
 
 export default {
 	KyInterface

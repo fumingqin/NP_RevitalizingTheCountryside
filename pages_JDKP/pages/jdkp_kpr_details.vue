@@ -1,22 +1,33 @@
 <template>
 	<view>
 		<view style="padding: 32upx 0;">
-			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.order_state == '已派员' || stepsData.order_state == '已完成'"></uni-steps>
-			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.order_state == '已取消'" activeColor="#FA3534"></uni-steps>
+			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.order_state !== '已取消'"></uni-steps>
+			<uni-steps :options="stepsList2" :active="StepsIndex" v-if="stepsData.order_state == '已取消'" activeColor="#FA3534"></uni-steps>
 		</view>
 		
 		
 		<!-- 申请信息 -->
 		<view class="deta_view">
-			<view class="deta_title">申请信息</view>
-			<view class="deta_text"><text>申请乡村：</text>{{stepsData.villageName}}</view>
-			<view class="deta_text"><text>申请人：</text>{{stepsData.nick_name}}</view>
-			<view class="deta_text"><text>联系电话：</text>{{stepsData.telephone}}</view>
+			<view class="deta_title">考评信息</view>
+			<view class="deta_text"><text>考评标题：</text>{{stepsData.title}}</view>
+			<view class="deta_text"><text>考评乡村：</text>{{stepsData.rural_name}}</view>
+			<view class="deta_text"><text>考评时间：</text>{{informationDate(stepsData.reviewTime)}}</view>
+			<view class="deta_text">
+				<text style="color: #FA3534;">考评内容：（以下）</text>
+				<view style="width: 100%; height: 24upx;"></view>
+				<rich-text :nodes="stepsData.content"></rich-text>
+			</view>
 		</view>
 		
 		
-		<!-- 申请信息 -->
+		<!-- 发布人信息 -->
 		<view class="deta_view">
+			<view class="deta_title">发布人信息</view>
+			<view class="deta_text"><text>发布人：</text>{{stepsData.nick_name}}</view>
+			<view class="deta_text"><text>发布时间：</text>{{informationDate(stepsData.update_time)}}</view>
+			<view class="deta_text"><text>发布人电话：</text>{{stepsData.phoneNumber}}</view>
+		</view>
+		<!-- <view class="deta_view">
 			<view class="deta_title">问题信息</view>
 			<view class="deta_text"><text>问题类型：</text>{{stepsData.apply_type}}</view>
 			<view class="deta_text">
@@ -27,12 +38,12 @@
 				</view>
 			</view>
 			<view class="deta_text"><text>问题内容：</text>{{stepsData.content}}</view>
-		</view>
+		</view> -->
 		
 		<!-- 执行结果 -->
 		<view class="deta_view" v-if="StepsIndex == 2">
-			<view class="deta_title">执行结果</view>
-			<view class="deta_text"><text>内容：</text>{{stepsData.result}}</view>
+			<view class="deta_title">考评结果</view>
+			<view class="deta_text"><text>分数：</text>{{stepsData.score}}分</view>
 		</view>
 		
 		
@@ -40,14 +51,14 @@
 		<view style="width: 100%; height: 112upx;"></view>
 		
 		<!-- 功能按钮 -->
-		<view class="operButton" v-if="stepsData.order_state == '已派员'">
-			<view class="buttonView1 " hover-class="btn_Click" @click="TelephoneClick">联系申请人</view>
-			<view class="buttonView2 " hover-class="btn_Click" @click="cancelShow = true" >提交结果</view>
+		<view class="operButton" v-if="stepsData.state == '已发布'">
+			<view class="buttonView1 " hover-class="btn_Click" @click="TelephoneClick">联系发布人</view>
+			<view class="buttonView2 " hover-class="btn_Click" @click="cancelShowClick" >提交评分</view>
 		</view>
 		
 		<!-- 功能按钮 -->
-		<view class="operButton" v-if="stepsData.order_state !== '已派员'">
-			<view class="buttonView3" style="width: 100%;" hover-class="btn_Click" @click="TelephoneClick">联系申请人</view>
+		<view class="operButton" v-if="stepsData.state !== '已发布'">
+			<view class="buttonView3" style="width: 100%;" hover-class="btn_Click" @click="TelephoneClick">联系发布人</view>
 		</view>
 		
 		<!-- 提交弹框 -->
@@ -55,7 +66,7 @@
 			<view class="box_Vlew">
 				<view class="box_refundView">
 					<view class="box_refundContentView">
-						<text class="box_refundContentTitle">请填写/选择处理结果</text>
+						<text class="box_refundContentTitle">请为本次考评打分</text>
 					</view>
 				</view>
 				<!-- 滑动区域 -->
@@ -69,7 +80,7 @@
 				
 				<!-- 输入框 -->
 				<view class="box_inputView" >
-					<input class="inputStyle" v-model="contentInputData" type="text" placeholder="填写/选择失败原因"/>
+					<input class="inputStyle" v-model="contentInputData" type="number" placeholder="填写/选择失败原因"/>
 				</view>
 				
 				<!-- 确认按钮 -->
@@ -79,7 +90,7 @@
 			</view>
 		</u-popup>
 		
-		<previewImage ref="previewImage" :opacity="0.8"  :imgs="stepsData.image" ></previewImage>
+		<!-- <previewImage ref="previewImage" :opacity="0.8"  :imgs="stepsData.image" ></previewImage> -->
 	</view>
 </template>
 
@@ -94,16 +105,16 @@
 		data() {
 			return {
 				stepsList : [{
-					title:'待处理'
+					title:'待考评'
 				},{
-					title:'处理中'
+					title:'考评中'
 				},{
-					title:'已处理'
+					title:'已考评'
 				}], //时间轴的标题数组
 				stepsList2 : [{
-					title:'待处理'
+					title:'待考评'
 				},{
-					title:'处理中'
+					title:'考评中'
 				},{
 					title:'已取消'
 				}], //时间轴的标题数组
@@ -113,7 +124,7 @@
 				id : '', //任务id
 				cancelShow : false,//提交弹框默认值
 				contentInputData : '',//输入框内容
-				contentList : ['问题已处理','问题较为困难','任务需加派人员','任务需要配合'],//可选失败内容
+				contentList : ['100','90','80','70','60','50','40','30','20','10','0'],//可选失败内容
 			
 			}
 		},
@@ -158,17 +169,17 @@
 			//加载列表数据
 			loadData: function(e) {
 				uni.request({
-					url: this.$pyfw.KyInterface.getDetailById.Url,
-					method: this.$pyfw.KyInterface.getDetailById.method,
+					url: this.$jdkp.KyInterface.getEvaluationDetailByID.Url,
+					method: this.$jdkp.KyInterface.getEvaluationDetailByID.method,
 					data: {
 						id: this.id
 					},
 					success: (res) => {
 						console.log(res)
 						this.stepsData = res.data.data;
-						if (res.data.data.order_state == '已派员') {
+						if (res.data.data.state == '已发布') {
 							this.StepsIndex = 1
-						} else if (res.data.data.order_state == '已完成' || res.data.data.order_state == '已取消') {
+						} else if (res.data.data.state == '已完成' || res.data.data.state == '已取消') {
 							this.StepsIndex = 2
 						}
 						uni.hideLoading()
@@ -188,9 +199,22 @@
 			
 			//拨打申请人电话
 			TelephoneClick:function(){
-				uni.makePhoneCall({
-					phoneNumber: this.stepsData.telephone
-				})
+				if(this.stepsData.phoneNumber == ''){
+					uni.showToast({
+						title:'相关发布人电话错误，请联系客服处理',
+						icon:'none'
+					})
+				}else{
+					uni.makePhoneCall({
+						phoneNumber: this.stepsData.phoneNumber
+					})
+				}
+				
+			},
+			
+			//打开评分弹框
+			cancelShowClick:function(){
+				this.cancelShow = true;
 			},
 			
 			//点击放大图片
@@ -201,7 +225,7 @@
 			
 			//点击插入文字
 			choiseListData:function(e){
-				var a = this.contentList[e]+'，';
+				var a = this.contentList[e];
 				var b = this.contentInputData;
 				var c = b.concat(a)
 				this.contentInputData = c;
@@ -209,13 +233,16 @@
 			
 			//提交
 			Submit:function(){
+				uni.showLoading({
+					title:'提交中...'
+				})
 				uni.request({
-					url: this.$pyfw.KyInterface.uploadResult.Url,
-					method: this.$pyfw.KyInterface.uploadResult.method,
+					url: this.$jdkp.KyInterface.addScore.Url,
+					method: this.$jdkp.KyInterface.addScore.method,
 					data: {
 						id: this.id,
-						commissionerId : this.stepsData.manager_id,
-						result : this.contentInputData,
+						examinerId : this.stepsData.examinerId,
+						score : this.contentInputData,
 					},
 					success: (res) => {
 						console.log(res)
@@ -246,8 +273,15 @@
 						})
 					}
 				})
-			}
+			},
 			
+			//资讯时间
+			informationDate: function(e) {
+				// console.log(e)
+				// var tsetDate = e.replace('T',' ')
+				var a = e.substr(0, 10)
+				return a;
+			},
 			
 		}
 	}

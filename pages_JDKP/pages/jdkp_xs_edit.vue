@@ -290,7 +290,7 @@
 									content : '乡村季度考评，根据考评结果进行评分',
 									image : '',
 									userId: this.userInfo.userId, //用户id
-									examinerId : this.AssessorList.rural_id,
+									examinerId : this.AssessorList.id, //考评人ID
 									ruralId: this.VillageData.id, //乡村名id
 									reviewTime : this.datestring,//考评时间
 								},
@@ -315,7 +315,7 @@
 									} else {
 										uni.hideLoading()
 										uni.showToast({
-											title: '申请失败，请联系客服处理异常',
+											title: res.data.msg,
 											icon: 'none'
 										})
 									}

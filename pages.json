@@ -1017,27 +1017,27 @@
 			"root": "pages_JDKP/",
 			"pages": [
 				{
-					"path": "pages/jdkp_cj_edit",
+					"path": "pages/jdkp_xs_edit",
 					"style": {
 						"navigationBarTitleText": "发布考评"
 					}
 				}, {
-					"path": "pages/jdkp_cj_list",
+					"path": "pages/jdkp_xs_list",
 					"style": {
 						"enablePullDownRefresh": true,
 						"navigationBarTitleText": "考评列表"
 					}
 				}, {
-					"path": "pages/jdkp_cj_details",
+					"path": "pages/jdkp_xs_details",
 					"style": {
 						"enablePullDownRefresh": true,
 						"navigationBarTitleText": "考评详情"
 					}
 				}, {
-					"path": "pages/pyfw_py_list",
+					"path": "pages/jdkp_kpr_list",
 					"style": {
 						"enablePullDownRefresh": true,
-						"navigationBarTitleText": "特派员任务",
+						"navigationBarTitleText": "考评人任务",
 						"app-plus": {
 							"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
 							"background": "transparent", // 背景透明
@@ -1046,23 +1046,23 @@
 						}
 					}
 				}, {
-					"path": "pages/pyfw_py_details",
+					"path": "pages/jdkp_kpr_details",
 					"style": {
 						"enablePullDownRefresh": true,
 						"navigationBarTitleText": "任务详情"
 					}
 				}, {
-					"path": "pages/pyfw_gl_list",
+					"path": "pages/jdkp_cj_list",
 					"style": {
 						"enablePullDownRefresh": true,
-						"navigationBarTitleText": "特派员申请审批"
+						"navigationBarTitleText": "考评列表"
 					}
 				},
 				{
-					"path": "pages/pyfw_gl_details",
+					"path": "pages/jdkp_cj_details",
 					"style": {
 						"enablePullDownRefresh": true,
-						"navigationBarTitleText": "申请详情"
+						"navigationBarTitleText": "考评详情"
 					}
 				}
 			    ,{

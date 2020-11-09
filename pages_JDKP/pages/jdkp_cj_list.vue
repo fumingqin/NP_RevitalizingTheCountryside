@@ -7,12 +7,12 @@
 		<view class="infor_view" v-for="(item,index) in informationList" :key="index" @click="detailsClick(item.id)">
 			<view class="view_titleView">
 				<text class="tv_view">
-					<text class="tv_label" style="background: #007AFF;" v-if="item.state !== '已完成'">{{item.state}}</text>
-					<text class="tv_label" style="background: #FA3534;" v-if="item.state == '已完成'">{{item.state}}</text>
+					<text class="tv_label" style="background: #007AFF;" v-if="item.state !== '已取消'">{{item.state}}</text>
+					<text class="tv_label" style="background: #FA3534;" v-if="item.state == '已取消'">{{item.state}}</text>
 					<text class="tv_title">{{item.title}}</text>
 					<text class="tv_content"><text style="font-weight: bold;">乡村名：</text>{{item.rural_name}}</text>
 					<text class="tv_content"><text style="font-weight: bold;">发布人：</text>{{item.nick_name}}</text>
-					<text class="tv_content" selectable=""><text style="font-weight: bold;">考评时间：</text>{{informationDate2(item.reviewTime)}}</text>
+					<text class="tv_content" selectable=""><text style="font-weight: bold;">考评时间：</text>{{informationDate(item.reviewTime)}}</text>
 				</text>
 			</view>
 
@@ -33,9 +33,9 @@
 		</view>
 
 		<!-- 派员编号 -->
-		<view class="operButton">
-			<text class="buttonView2" @click="operClick">发布考评</text>
-		</view>
+		<!-- <view class="operButton">
+			<text class="buttonView2" @click="operClick">申请特派员</text>
+		</view> -->
 
 	</view>
 </template>
@@ -46,10 +46,10 @@
 			return {
 				headList: [{
 					name: '全部'
-				}, {
-					name: '执行中'
-				}, {
-					name: '已完成'
+				},{
+					name: '考评中'
+				},{
+					name: '其他'
 				}], //头部数组
 				headCurrent: 0, //头部tabs下标
 				informationList: [], //资讯列表
@@ -100,33 +100,34 @@
 			//加载接口数据
 			loadData: function() {
 				uni.request({
-					url: this.$jdkp.KyInterface.getEvaluationByUserId.Url,
-					method: this.$jdkp.KyInterface.getEvaluationByUserId.method,
-					data: {
-						userId: this.userInfo.userId
+					url: this.$jdkp.KyInterface.getListByRuralId.Url,
+					method: this.$jdkp.KyInterface.getListByRuralId.method,
+					data:{
+						userId: this.userInfo.userId,
+						ruralId : this.userInfo.rId,
 					},
 					success: (res) => {
 						console.log(res)
 						this.informationList = '';
 						if (this.headCurrent == 0) {
 							this.informationList = res.data.data
-						} else if (this.headCurrent == 1) {
+						}else if (this.headCurrent == 1){
 							this.informationList = res.data.data.filter(item => {
-								return item.state == '已发布';
+								return item.state == '已发布'
 							})
-						} else if (this.headCurrent == 2) {
+						}else if (this.headCurrent == 2){
 							this.informationList = res.data.data.filter(item => {
-								return item.state == '已完成';
+								return item.state == '已完成' || item.state == '已取消'
 							})
 						}
-						uni.stopPullDownRefresh()
 						uni.hideLoading()
+						uni.stopPullDownRefresh()
 					},
 					fail: (err) => {
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title:'加载数据失败，刷下拉刷新重试',
+							title:'加载信息失败',
 							icon:'none'
 						})
 					}
@@ -145,14 +146,6 @@
 			informationDate: function(e) {
 				// console.log(e)
 				// var tsetDate = e.replace('T',' ')
-				var a = e.substr(5, 11)
-				return a;
-			},
-			
-			//资讯时间
-			informationDate2: function(e) {
-				// console.log(e)
-				// var tsetDate = e.replace('T',' ')
 				var a = e.substr(0, 10)
 				return a;
 			},
@@ -169,8 +162,17 @@
 			//申请特派员
 			operClick: function() {
 				uni.navigateTo({
-					url: 'jdkp_cj_edit'
+					url: 'pyfw_edit'
 				})
+			},
+			
+			//状态转编译
+			statusMethod:function(e){
+				if(e == '已发布'){
+					return '考评中'
+				}else{
+					return e
+				}
 			}
 		}
 	}
@@ -196,6 +198,7 @@
 				}
 
 				.tv_title {
+					padding-top: 12upx;
 					font-weight: bold;
 					font-size: 34upx;
 					margin-left: 12upx;
