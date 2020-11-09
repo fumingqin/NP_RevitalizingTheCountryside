@@ -52,7 +52,7 @@
 		data() {
 			return {
 				imageIndex: '', //首页图片
-				level: 0, //0为普通用户，1为村级职责人员，2位县市级职责人员
+				level: 2, //0为普通用户，1为村级职责人员，2位县市级职责人员
 				userInfo: '', //用户数据
 				//普通用户管理区
 				ItemArr: [{
@@ -187,7 +187,7 @@
 				{
 					IsUse: true,
 					clickURL: "",
-					// clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
+					clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
 					ImageURL1: "../../static/home/serve/fbzc.png", //亮
 					ImageURL2: "../../static/home/serve/fbzc2.png", //暗
 					ItemTitle: "发布政策",

@@ -1,7 +1,6 @@
 <template>
 	<view>
 		<view class="content">
-			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
 
 				<!-- 商品名称 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="政策标题" :border-bottom="false" prop="name">
@@ -18,7 +17,7 @@
 									<view class="padding">
 										<button @tap="onUpload">上传</button>
 									</view>
-									<view>{{localPath}}</view>
+									<view>{{filename}}</view>
 								</view>
 							</view>
 					</view>
@@ -37,36 +36,6 @@
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
 				
-				<!-- 上传视频 -->
-				<!-- <view style="font-size: 34upx;font-weight: bold;">视频上传</view>
-				<view class="burst-wrap">
-				    <view class="burst-wrap-bg">
-				        <view> -->
-				            <!-- 信息提交 -->
-				          <!--  <view class="burst-info">
-				                <view class="uni-uploader-body">
-				                    <view class="uni-uploader__files"> -->
-				                        <!-- 视频 -->
-									<!-- 	<view>
-											
-				                        <view class="uni-uploader__file" v-if="src">
-				                            <view class="uploader_video" style="display: flex;">
-				                                <video :src="src" class="video"></video>
-				                            </view>
-				                        </view>
-										<view>
-											<button @tap="delectVideo">删除</button>
-										</view>
-										</view>
-				                        <view>
-											<button @tap="chooseVideo">上传</button>
-				                        </view>
-				                    </view>
-				                </view>
-				            </view>
-				        </view>
-				    </view>
-				</view> -->
 				<!-- 商品简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false" prop="intro">
 					<view class="viewClass" style="padding: 20rpx;">
@@ -144,9 +113,7 @@
 						<t-color-picker ref="colorPicker" :color="color" @confirm="confirm" @cancel="cancel"></t-color-picker>
 					</view>
 				</u-form-item>
-			</u-form>
 			<u-button type="success" :custom-style="buttonStyle" @click="submitState">提交</u-button>
-			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 		</view>
 	</view>
 </template>
@@ -168,14 +135,14 @@
 		data() {
 			return {
 				localPath: '',
-				filename:[],
+				filename:'',
 				lists: [],
 				fileList:[],
 				policyId:'',
 				issueText: '',
 				imageList: [],
+				videoData: '',
 				category: 'video',
-                src:'',//视频存放
 				showUploadList: true,
                 sourceTypeIndex: 2,
                 checkedValue:true,
@@ -257,9 +224,6 @@
 				autoHeight: true,
 			}
 		},
-		onReady() {
-			this.$refs.uForm.setRules(this.rules);
-		},
 		onLoad(option) {
 			uni.getStorage({
 				key: 'userInfo',
@@ -284,43 +248,7 @@
 		},
 		
 		methods: {
-			//---------------上传视频--------------
-			chooseVideo(){
-                // 上传视频
-                console.log('上传视频')
-                uni.chooseVideo({
-                    maxDuration:10,	
-                    count: 1,
-                    camera: this.cameraList[this.cameraIndex].value,
-                    sourceType: sourceType[this.sourceTypeIndex],
-                    success: (res) => {
-								const tempFilePaths = res.tempFilePath;
-								console.log(tempFilePaths)
-								uni.uploadFile({
-									url: this.$zcfb.KyInterface.upload.Url,
-									filePath: tempFilePaths,
-									name: 'file',
-									success: (uploadFileRes) => {
-										console.log("编辑详情的时候返回照片地址", uploadFileRes)
-										const back = JSON.parse(uploadFileRes.data);
-										this.src=back.data;
-									}
-								});  
-                    }
-                })
-            },
-			//-----------------------------------
-			delectVideo(){
-			    uni.showModal({
-			        title:"提示",
-			        content:"是否要删除此视频",
-			        success:(res) =>{
-			            if(res.confirm){
-			                this.src = ''
-			            }
-			        }
-			    })
-			},
+
 			//--------------------------------------------------
 				onOpenDoc() {
 					let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
@@ -343,8 +271,6 @@
 				
 				/* 上传 */
 				onUpload() { 
-					this.localPath='';
-					this.filename=[];
 					this.$refs.lFile.upload({
 						// #ifdef APP-PLUS
 						// nvue页面使用时请查阅nvue获取当前webview的api，当前示例为vue窗口
@@ -359,10 +285,16 @@
 					});
 				},
 				onSuccess(res) {
+					var that=this;
 					console.log('上传成功回调',JSON.stringify(res));
-					this.localPath = JSON.stringify(res.fileName);
-					this.filename.push(res.data.data);
-				},
+					that.filename = res.fileName;
+					that.localPath=res.data;
+					var aaa=that.localPath.id.data;
+					console.log('aaa',JSON.stringify(res.data.id));
+					console.log('123',res.data.id.data);
+					console.log('aaa',that.localPath);
+					console.log('7777',aaa);
+				},	
 				//---------------------------上传视频回调-------------------------------
 				successvideo: function(e) {
 					var data = JSON.parse(e.data);
@@ -420,10 +352,12 @@
 					key: 'userInfo',
 					success: (res) => {
 						console.log(res)
-						var array=[];
-						array.push(that.src);
+						// var array=[];
+						console.log(that.videoData.data);
+						// array.push(that.videoData.data);
+						console.log(array);
 						var array2=[];
-						array2.push(that.localPath);
+						array2.push(that.filename);
 						uni.request({
 							url: that.$zcfb.KyInterface.releasePolicy.Url,
 							method: that.$zcfb.KyInterface.releasePolicy.method,
@@ -433,8 +367,8 @@
 								image:  JSON.stringify(that.lists),
 								video: JSON.stringify(array),
 								pdfName:JSON.stringify(array2),
-								pdfFile:JSON.stringify(that.filename),
-								userId: res.data.userId,
+								pdfFile:JSON.stringify(that.localPath),
+								userId: 100012,
 							},
 							success: (res) => {
 								console.log(res)
@@ -480,7 +414,7 @@
 					success: (res) => {
 						console.log(res)
 						var array=[];
-						array.push(that.src);
+						array.push(that.videoData);
 						var array2=[];
 						array2.push(that.localPath);
 						console.log(array)
@@ -493,8 +427,8 @@
 								content: e,
 								image:  JSON.stringify(that.lists),
 								video: JSON.stringify(array),
-								pdfFile:JSON.stringify(that.filename),
-								pdfName:JSON.stringify(array2),
+								pdfFile:JSON.stringify(array2),
+								pdfName:JSON.stringify(that.filename),
 								userId: res.data.userId,
 							},
 							success: (res) => {
@@ -677,8 +611,8 @@
 							console.log(that.model.name);
 							that.issueText=res.data.data.content;
 							console.log(that.issueText);
-							that.localPath=res.data.data.pdfName;
-							console.log(that.localPath);
+							that.filename=res.data.data.pdfName;
+							console.log(that.filename);
 							var imageObj={
 								url:res.data.data.image[0]
 							};
@@ -686,10 +620,17 @@
 							console.log(that.fileList);
 							that.lists=res.data.data.image;
 							console.log(that.lists);
-							that.filename=res.data.data.pdfFile;
-							console.log(that.filename);
-							that.src=res.data.data.video[0];
-							console.log(that.src);
+							that.localPath=res.data.data.pdfFile;
+							console.log(that.localPath);
+							that.videoData=res.data.data.video[0];
+							console.log(that.videoData);
+							uni.createSelectorQuery().select('#editor').context(function(res) {
+								// console.log(res);
+								_self.editorCtx = res.context;
+								that.editorCtx.setContents({
+									html: that.issueText //this.EditGoodsDetail.content为赋值内容。    
+								})
+							}).exec();
 						}else{
 							uni.showToast({
 								title: res.data.msg,
