@@ -59,7 +59,7 @@
 			})
 		},
 		onShow() {
-			this.phoneNumber = "";
+			// this.phoneNumber = "";
 			this.captchaCode = "";
 			this.whetherClick=true;
 		},

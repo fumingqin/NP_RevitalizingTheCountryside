@@ -2,30 +2,24 @@
 	<view>
 		<view class="content">
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
-
-				<!-- 商品名称 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="标题内容" :border-bottom="false" prop="name">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入标题内容" v-model="model.name" :type="text"></u-input>
-					</view>
-				</u-form-item>
-
-				<!-- 乡村名称 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="乡村名称" :border-bottom="false" prop="village">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入乡村名称" v-model="model.village" :type="text"></u-input>
-					</view>
-				</u-form-item>
-
-				<!-- 负责人 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="负责人" :border-bottom="false" prop="personnel">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入负责人" v-model="model.personnel" :type="text"></u-input>
-					</view>
-				</u-form-item>
-
+				<view>
+					<!-- 商品名称 -->
+					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="标题内容" :border-bottom="false" prop="name">
+						<view class="viewClass" style="padding-right: 20rpx;">
+							<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入标题内容" v-model="model.name" type="text"></u-input>
+						</view>
+					</u-form-item>
+					
+					<!-- 乡村名称 -->
+					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="乡村名称" :border-bottom="false" prop="village">
+						<view class="viewClass" style="padding-right: 20rpx;">
+							<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入乡村名称" v-model="model.village" type="text"></u-input>
+						</view>
+					</u-form-item>
+				</view>
+				
 				<!-- 上传图片 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
 					 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
@@ -35,13 +29,13 @@
 				</u-form-item>
 
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
-
+				
 				<!-- 文件上传 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false">
 					<view class="viewClass">
 						<view>
 							<l-file ref="lFile" @up-success="onSuccess"></l-file>
@@ -55,15 +49,22 @@
 					</view>
 				</u-form-item>
 				
-				<!-- 简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="centent">
-					<view class="viewClass" style="padding:20rpx 30rpx;">
-						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
+				<!-- 负责人 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="负责人" :border-bottom="false" prop="personnel">
+					<view class="viewClass" style="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入负责人名称" v-model="model.personnel" type="text"></u-input>
 					</view>
 				</u-form-item>
-
-				<!-- 项目内容 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="项目内容" :border-bottom="false">
+				
+				<!-- 简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false">
+					<view class="viewClass" style="padding:20rpx 30rpx;">
+						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent"/>
+					</view>
+				</u-form-item>
+				
+				<!-- 档案简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="档案简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
@@ -141,6 +142,7 @@
 					</view>
 				</u-form-item>
 			</u-form>
+			<view style="padding-bottom: 120upx;"></view>
 			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
 		</view>
 	</view>
@@ -177,10 +179,8 @@
 				isIOS: false,
 				model: {
 					name: '', //商品名称value
-					// cost: '', //价格
-					centent:'',//简介
+					centent: '',//简介
 					village: '', //乡村名
-					imageData: [], //图像日期
 					personnel: '', //负责人
 				},
 				//----------------uview样式--------------------------
@@ -188,14 +188,6 @@
 					fontWeight: 'bold',
 					fontSize: '17px',
 					paddingTop: '8px',
-				},
-				customStyle2: {
-					fontWeight: 'bold',
-					fontSize: '17px',
-					paddingTop: '8px',
-					width: '100%',
-					background: '#FFFFFF',
-					borderRadius: '6px',
 				},
 				buttonStyle: {
 					marginTop: '20px',
@@ -220,12 +212,12 @@
 				rules: {
 					name: [{
 							required: true,
-							message: '请输入商品名称',
+							message: '请输入标题内容',
 							trigger: 'blur',
 						},
 						{
 							min: 1,
-							message: '请输入商品名称',
+							message: '请输入标题内容',
 							trigger: ['change', 'blur'],
 						},
 					],
@@ -288,6 +280,7 @@
 				lists: [],
 				fileList: [],
 				category: 'video',
+				videoData: '',
 				videoArray: [],
 				localPath: [],
 				filename: '',
@@ -301,10 +294,6 @@
 
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
-		},
-		
-		onUnload() {
-			uni.hideLoading();
 		},
 
 		onLoad(param) {
@@ -321,18 +310,6 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						// console.log('获取个人信息', this.userInfo)
-					},
-					fail: (err) => {
-						uni.hideLoading()
-						uni.showToast({
-							title:'您暂未登录，已为您跳转登录页面',
-							icon:'none',
-							success: () => {
-								uni.navigateTo({
-									url : '../../../pages/GRZX/userLogin'
-								})
-							}
-						})
 					}
 				});
 			},
@@ -475,8 +452,9 @@
 
 			//---------------------------上传视频回调-------------------------------
 			successvideo: function(e) {
+				console.log(e)
 				var data = JSON.parse(e.data);
-				// console.log(data)
+				console.log(data)
 				this.videoData = data;
 				console.log('视频上传成功', this.videoData)
 			},
@@ -503,8 +481,9 @@
 				};
 				this.lists.push(a.data)
 				console.log(this.lists)
+				console.log(this.fileList)
 			},
-
+			
 			//-------------------------------上传文件---------------------------------------------------------------------------
 			onOpenDoc() {
 				let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
@@ -515,7 +494,7 @@
 						this.$refs.lFile.open(path);
 					});
 			},
-
+			
 			/* 保存 */
 			onDown() {
 				let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
@@ -524,7 +503,7 @@
 						this.localPath = path;
 					});
 			},
-
+			
 			/* 上传 */
 			onUpload() {
 				this.filename='';
@@ -568,16 +547,13 @@
 				arr.push(this.videoData.data);
 				var arr2 = [];
 				arr2.push(this.localPath.data);
-				// console.log('1', this.issueText);
-				// console.log('2', this.userInfo.userId);
-				// console.log('3', this.pictureArray);
-				// console.log('4', this.model.name);
-				// console.log('5', this.model.goodsType);
-				// console.log('7.1', this.videoData);
-				// console.log('7.2', JSON.stringify(arr));
-				// console.log('7', arr);
-				// console.log('8', this.localPath.data);
-				// console.log('9', JSON.stringify(arr2));
+				console.log('1', this.issueText);
+				console.log('2', this.userInfo.userId);
+				console.log('3', this.pictureArray);
+				console.log('4', this.model.name);
+				console.log('5', this.model.goodsType);
+				console.log('6', this.informationDetail.id);
+				console.log('7', arr);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {

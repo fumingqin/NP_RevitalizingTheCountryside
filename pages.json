@@ -1006,6 +1006,14 @@
 				    "path" : "pages/publishProject/pp_edit",
 				    "style" : {}
 				}
+				,{
+				    "path" : "pages/publishProject/PP_addPages",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/publishProject/pp_chooseCountryside",
+				    "style" : {}
+				}
 			]
 		},
 		//---------------------------------------------第十六个包：特派员服务------------------------------------------
@@ -1013,21 +1021,21 @@
 			"root": "pages_JDKP/",
 			"pages": [
 				{
-					"path": "pages/pyfw_edit",
+					"path": "pages/jdkp_cj_edit",
 					"style": {
-						"navigationBarTitleText": "申请派员"
+						"navigationBarTitleText": "发布考评"
 					}
 				}, {
-					"path": "pages/pyfw_personalList",
+					"path": "pages/jdkp_cj_list",
 					"style": {
 						"enablePullDownRefresh": true,
-						"navigationBarTitleText": "申请列表"
+						"navigationBarTitleText": "考评列表"
 					}
 				}, {
-					"path": "pages/pyfw_details",
+					"path": "pages/jdkp_cj_details",
 					"style": {
 						"enablePullDownRefresh": true,
-						"navigationBarTitleText": "申请详情"
+						"navigationBarTitleText": "考评详情"
 					}
 				}, {
 					"path": "pages/pyfw_py_list",

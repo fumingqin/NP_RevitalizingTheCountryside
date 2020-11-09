@@ -7,12 +7,12 @@
 		<view class="infor_view" v-for="(item,index) in informationList" :key="index" @click="detailsClick(item.id)">
 			<view class="view_titleView">
 				<text class="tv_view">
-					<text class="tv_label" style="background: #007AFF;" v-if="item.order_state !== '申请失败' && item.order_state !== '已取消'">{{item.order_state}}</text>
-					<text class="tv_label" style="background: #FA3534;" v-if="item.order_state == '申请失败' || item.order_state == '已取消'">{{item.order_state}}</text>
-					<text class="tv_title">科技特派员服务</text>
-					<text class="tv_content"><text style="font-weight: bold;">乡村名：</text>{{item.villageName}}</text>
-					<text class="tv_content"><text style="font-weight: bold;">技术类型：</text>{{item.apply_type}}</text>
-					<text class="tv_content" selectable=""><text style="font-weight: bold;">技术问题：</text>{{item.content}}</text>
+					<text class="tv_label" style="background: #007AFF;" v-if="item.state !== '已完成'">{{item.state}}</text>
+					<text class="tv_label" style="background: #FA3534;" v-if="item.state == '已完成'">{{item.state}}</text>
+					<text class="tv_title">{{item.title}}</text>
+					<text class="tv_content"><text style="font-weight: bold;">乡村名：</text>{{item.rural_name}}</text>
+					<text class="tv_content"><text style="font-weight: bold;">发布人：</text>{{item.nick_name}}</text>
+					<text class="tv_content" selectable=""><text style="font-weight: bold;">考评时间：</text>{{informationDate2(item.reviewTime)}}</text>
 				</text>
 			</view>
 
@@ -29,12 +29,12 @@
 
 		<!-- 缺省提示 -->
 		<view style="margin-top: 360upx;" v-if="informationList.length == 0">
-			<u-empty text="您暂无申请信息哦~" mode="news"></u-empty>
+			<u-empty text="您暂无考评信息哦~" mode="news"></u-empty>
 		</view>
 
 		<!-- 派员编号 -->
 		<view class="operButton">
-			<text class="buttonView2" @click="operClick">申请特派员</text>
+			<text class="buttonView2" @click="operClick">发布考评</text>
 		</view>
 
 	</view>
@@ -47,11 +47,9 @@
 				headList: [{
 					name: '全部'
 				}, {
-					name: '申请中'
+					name: '执行中'
 				}, {
-					name: '已派员'
-				}, {
-					name: '已结束'
+					name: '已完成'
 				}], //头部数组
 				headCurrent: 0, //头部tabs下标
 				informationList: [], //资讯列表
@@ -102,8 +100,8 @@
 			//加载接口数据
 			loadData: function() {
 				uni.request({
-					url: this.$pyfw.KyInterface.getCommissioneryById.Url,
-					method: this.$pyfw.KyInterface.getCommissioneryById.method,
+					url: this.$jdkp.KyInterface.getEvaluationByUserId.Url,
+					method: this.$jdkp.KyInterface.getEvaluationByUserId.method,
 					data: {
 						userId: this.userInfo.userId
 					},
@@ -114,15 +112,11 @@
 							this.informationList = res.data.data
 						} else if (this.headCurrent == 1) {
 							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '申请中';
+								return item.state == '已发布';
 							})
 						} else if (this.headCurrent == 2) {
 							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '已派员';
-							})
-						} else if (this.headCurrent == 3) {
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '已完成' || item.order_state == '申请失败' || item.order_state == '已取消'
+								return item.state == '已完成';
 							})
 						}
 						uni.stopPullDownRefresh()
@@ -142,7 +136,7 @@
 			detailsClick: function(e) {
 				console.log(e)
 				uni.navigateTo({
-					url: 'pyfw_details?id=' + e
+					url: 'jdkp_cj_details?id=' + e
 				})
 			},
 
@@ -152,6 +146,14 @@
 				// console.log(e)
 				// var tsetDate = e.replace('T',' ')
 				var a = e.substr(5, 11)
+				return a;
+			},
+			
+			//资讯时间
+			informationDate2: function(e) {
+				// console.log(e)
+				// var tsetDate = e.replace('T',' ')
+				var a = e.substr(0, 10)
 				return a;
 			},
 
@@ -167,7 +169,7 @@
 			//申请特派员
 			operClick: function() {
 				uni.navigateTo({
-					url: 'pyfw_edit'
+					url: 'jdkp_cj_edit'
 				})
 			}
 		}

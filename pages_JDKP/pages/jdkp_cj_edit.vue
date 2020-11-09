@@ -3,38 +3,53 @@
 		<view>
 			<view class="content">
 				<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
+					
+					<!-- 标题 -->
+					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="标题" :border-bottom="false" prop="intro">
+						<view class="viewClass">
+							<input style="height: 96upx; padding-left: 24upx;" placeholder="如:2020年村级第四季度考评工作" v-model="model.intro"  />
+						</view>
+					</u-form-item>
 
 					<!-- 乡村名 -->
 					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="乡村名" :border-bottom="false" prop="name">
 						<view class="viewClass">
-							<input style="height: 96upx; padding-left: 24upx;" placeholder="点击选择乡村名" v-model="model.name" disabled="true"
+							<input style="height: 96upx; padding-left: 24upx;" placeholder="点击选择需考评的乡村" v-model="model.name" disabled="true"
 							 @click="VillageShow = true" />
 						</view>
 					</u-form-item>
 
-					<!-- 技术类型 -->
-					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="问题类型" :border-bottom="false" prop="">
+
+					<!-- 考评人 -->
+					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="考评人" :border-bottom="false" prop="name">
 						<view class="viewClass">
-							<u-input :custom-style="tradeNameStyle" :border="false" v-model="model.techValue" type="select" @click="techShow = true"></u-input>
-							<u-action-sheet :list="techList" v-model="techShow" @click="actionSheet"></u-action-sheet>
+							<input style="height: 96upx; padding-left: 24upx;" placeholder="自动分配考评人员" v-model="AssessorList.name" disabled="true" />
+						</view>
+					</u-form-item>
+
+					<!-- 考评时间 -->
+					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="考评人" :border-bottom="false" prop="">
+						<view class="viewClass">
+							<view style="height: 96upx; padding:16upx 0 0 24upx; font-size: 32upx;" @click="onShowDatePicker('date')">{{datestring}}&nbsp;&nbsp;&nbsp;&nbsp;{{Week}}</view>
+							<mx-date-picker :show="showPicker" :type="type" :value="value" :show-tips="true" :begin-text="'入住'" :end-text="'离店'"
+							 :show-seconds="true" @confirm="onSelected" @cancel="onSelected" />
 						</view>
 					</u-form-item>
 
 					<!-- 相关图片 -->
-					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="相关图片" :border-bottom="false" prop="photo">
+					<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="相关图片" :border-bottom="false" prop="photo">
 						<view>
 							<u-upload :label-style="uploadStyle" ref="uUpload" :show-upload-list="showUploadList" :action="action" width="164"
 							 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess"></u-upload>
 						</view>
-
-					</u-form-item>
+					</u-form-item> -->
 
 					<!-- 简要备注 -->
-					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="问题内容" :border-bottom="false" prop="intro">
+					<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="问题内容" :border-bottom="false" >
 						<view class="viewClass">
 							<u-input :custom-style="textareaStyle" type="textarea" :height="200" :auto-height="autoHeight"  placeholder="请描述遇到的问题" :maxlength="50000" v-model="model.intro" />
 						</view>
-					</u-form-item>
+					</u-form-item> -->
 				</u-form>
 			</view>
 		</view>
@@ -73,19 +88,23 @@
 						</view>
 					</block>
 				</view>
-				
+
 				<view class="operButton">
 					<text class="buttonView2" @click="VillageShow = false">关闭弹框</text>
 				</view>
 			</view>
 		</u-popup>
 
-		<u-picker mode="region" v-model="pickerShow" ></u-picker>
+		<u-picker mode="region" v-model="pickerShow"></u-picker>
 	</view>
 </template>
 
 <script>
+	import MxDatePicker from "../../components/HOME/mx-datepicker/mx-datepicker.vue";
 	export default {
+		components: {
+			MxDatePicker
+		}, //注册为子组件
 		data() {
 			return {
 				model: {
@@ -99,6 +118,21 @@
 				VillageData: '', //乡村名数据缓存
 				VillageStatus: true, //原列表显示状态
 				SearchStatus: false, //搜索框显示状态
+				AssessorList: {
+					rural_id: '', //考评人ID
+					name: '', //考评人姓名
+					phone: '', //考评人电话
+				}, //考评人信息
+
+				//--------------时间参数-----------
+				value: '',
+				showPicker: false,
+				date: '',
+				type: 'rangetime',
+				datestring: '请选择考评时间',
+				Week: '',
+				//--------------时间参数-----------
+
 
 				showUploadList: true, //图片展示数组状态
 				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
@@ -106,20 +140,12 @@
 				fileListTest: [], //图片测试数组
 
 				techShow: false, //技术类型选项栏开启状态
+				PersonShow: false, //人员名单弹窗状态值
 
-				userInfo : '',//用户信息
+				userInfo: '', //用户信息
 
-				techList: [{
-					text: '设备故障'
-				}, {
-					text: '设备维护'
-				}, {
-					text: '乡村种植'
-				}, {
-					text: '乡村帮扶'
-				}], //技术类型
 
-				scrollHeight : '800upx',//弹框高度默认值
+				scrollHeight: '800upx', //弹框高度默认值
 
 
 				//----------------uview样式--------------------------
@@ -164,18 +190,18 @@
 							trigger: ['change', 'blur'],
 						},
 					],
-					techValue: [{
-						required: true,
-						message: '请选择技术类型',
-						trigger: 'change',
-					}],
+					// techValue: [{
+					// 	required: true,
+					// 	message: '请选择技术类型',
+					// 	trigger: 'change',
+					// }],
 					intro: [{
 							required: true,
-							message: '请填写简介'
+							message: '请输入标题'
 						},
 						{
 							min: 5,
-							message: '简介不能少于5个字',
+							message: '标题不能少于5个字',
 							trigger: 'change',
 						}
 					],
@@ -202,7 +228,7 @@
 			});
 			this.lostData();
 		},
-		onShow:function(){
+		onShow: function() {
 			this.userData();
 		},
 
@@ -218,94 +244,98 @@
 					fail: (err) => {
 						uni.hideLoading()
 						uni.showToast({
-							title:'您暂未登录，已为您跳转登录页面',
-							icon:'none',
+							title: '您暂未登录，已为您跳转登录页面',
+							icon: 'none',
 							success: () => {
 								uni.navigateTo({
-									url : '../../pages/GRZX/userLogin'
+									url: '../../pages/GRZX/userLogin'
 								})
 							}
 						})
 					}
 				});
 			},
-			
+
 			//--------------------------提交表单
 			submit: function() {
 				uni.showLoading({
-					title:'提交中...'
+					title: '提交中...'
 				})
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						console.log('验证通过');
-						var imageListData = [];
-						console.log(this.fileListTest)
-						if(this.fileListTest != ''){
-							if(this.fileListTest.length != 0){
-								for(var i=0; i<this.fileListTest.length; i++){
-									imageListData.push(this.fileListTest[i].url)
-									console.log('循环图片',imageListData)
+						// var imageListData = [];
+						// console.log(this.fileListTest)
+						// if (this.fileListTest != '') {
+						// 	if (this.fileListTest.length != 0) {
+						// 		for (var i = 0; i < this.fileListTest.length; i++) {
+						// 			imageListData.push(this.fileListTest[i].url)
+						// 			console.log('循环图片', imageListData)
+						// 		}
+						// 	}
+						// }
+						if( this.datestring == '请选择考评时间'){
+							uni.hideLoading()
+							uni.showToast({
+								title: '请选择考评时间',
+								icon: 'none'
+							})
+						}else{
+							uni.request({
+								url: this.$jdkp.KyInterface.releaseEvaluation.Url,
+								method: this.$jdkp.KyInterface.releaseEvaluation.method,
+								data: {
+									title : this.model.intro,
+									content : '乡村季度考评，根据考评结果进行评分',
+									image : '',
+									userId: this.userInfo.userId, //用户id
+									examinerId : this.AssessorList.rural_id,
+									ruralId: this.VillageData.id, //乡村名id
+									reviewTime : this.datestring,//考评时间
+								},
+								success: (res) => {
+									console.log(res)
+									if (res.data.status) {
+										uni.hideLoading()
+										uni.showToast({
+											title: res.data.msg,
+											success: () => {
+												// uni.removeStorage({
+												// 	key: 'uploadData'
+												// })
+												// this.fileList = [];
+												// this.fileListTest = [];
+												setTimeout(function(){
+													uni.navigateBack()
+												},1500)
+											}
+							
+										})
+									} else {
+										uni.hideLoading()
+										uni.showToast({
+											title: '申请失败，请联系客服处理异常',
+											icon: 'none'
+										})
+									}
+							
+								},
+								fail: (err) => {
+									uni.hideLoading()
+									uni.showToast({
+										title: '申请失败，服务器异常，请联系客服处理异常',
+										icon: 'none'
+									})
+									console.log(err)
 								}
-							}
+							})
 						}
-						console.log(this.model.techValue)
-						console.log(this.model.intro)
-						console.log(imageListData)
-						console.log(this.userInfo.userId)
-						console.log(this.userInfo.phoneNumber)
-						console.log(this.VillageData.id)
-						
-						uni.request({
-							url: this.$pyfw.KyInterface.releaseCommissioner.Url,
-							method: this.$pyfw.KyInterface.releaseCommissioner.method,
-							data: {
-								applyType :  this.model.techValue,//问题类型
-								content :  this.model.intro,//问题内容
-								image :  JSON.stringify(imageListData),//相关图片
-								userId : this.userInfo.userId ,//用户id
-								telephone : this.userInfo.phoneNumber,//用户电话
-								villageId : this.VillageData.id,//乡村名id
-							},
-							success: (res) => {
-								console.log(res)
-								if(res.data.status){
-									uni.hideLoading()
-									uni.showToast({
-										title:res.data.msg,
-										success: () => {
-											uni.removeStorage({
-												key:'uploadData'
-											})
-											this.fileList = [];
-											this.fileListTest = [];
-											uni.navigateBack()
-										}
-										
-									})
-								}else{
-									uni.hideLoading()
-									uni.showToast({
-										title:'申请失败，请联系客服处理异常',
-										icon:'none'
-									})
-								}
-								
-							},
-							fail: (err) => {
-								uni.hideLoading()
-								uni.showToast({
-									title:'申请失败，服务器异常，请联系客服处理异常',
-									icon:'none'
-								})
-								console.log(err)
-							}
-						})
 					} else {
 						uni.hideLoading()
 						// console.log('验证失败');
 						uni.showToast({
-							title:'请根据相关红字提醒，填写或选择内容',
+							title: '请根据相关红字提醒，填写或选择内容',
 							icon: 'none'
 						})
 					}
@@ -326,12 +356,6 @@
 						uni.hideLoading();
 					}
 				})
-			},
-
-			//选择技术类型回调
-			actionSheet: function(index) {
-				// console.log(index)
-				this.model.techValue = this.techList[index].text;
 			},
 
 			onInput: function(e) {
@@ -362,6 +386,9 @@
 					}
 				});
 			},
+
+
+
 			//点击列表内容后，赋值清空状态，关闭弹框
 			Listclick: function(e) {
 				this.model.name = e.village_name;
@@ -370,7 +397,9 @@
 				this.VillageStatus = true;
 				this.SearchStatus = false;
 				this.VillageShow = false;
+				this.AssessorSuccess();
 			},
+
 
 			//删除图片提示
 			uploadOnRemove: function(e) {
@@ -408,7 +437,104 @@
 						this.fileListTest.push(a)
 					}
 				})
-			}
+			},
+
+			//请求考评人
+			AssessorSuccess: function() {
+				uni.showLoading({
+					title: '自动分配考评人...'
+				})
+				uni.request({
+					url: this.$jdkp.KyInterface.getExaminer.Url,
+					method: this.$jdkp.KyInterface.getExaminer.method,
+					success: (res) => {
+						console.log(res)
+						if (res.data.msg == '获取成功') {
+							uni.hideLoading()
+							this.AssessorList = res.data.data[0];
+							console.log(this.AssessorList)
+						} else {
+							uni.hideLoading()
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+
+						}
+					},
+					fail: (err) => {
+						console.log(err)
+						uni.hideLoading()
+						uni.showToast({
+							title: res.data.msg,
+							icon: 'none'
+						})
+					}
+				})
+			},
+
+
+			//---------------------------------获取当前日期---------------------------------
+			getTodayDate() {
+				var date = new Date();
+				var year = date.getFullYear();
+				var month = date.getMonth() + 1;
+				var day = date.getDate();
+				var timer = year + '-' + month + '-' + day;
+				this.queryWeek(date.toString().substring(0, 3));
+				this.datestring = timer;
+			},
+			onShowDatePicker(type) { //显示
+				this.type = type;
+				this.showPicker = true;
+				this.value = this[type];
+			},
+			//选择时间
+			onSelected(e) {
+				this.showPicker = false;
+				if (e) {
+					// this[this.type] = e.value;
+					this[this.type] = e.value.split('/')[0] + "-" + e.value.split('/')[1] + "-" + e.value.split('/')[2];
+					this.datestring = this[this.type];
+					this.queryWeek(e.date.toString().substring(0, 3));
+					// console.log(this[this.type]);
+					// console.log(e.date.toString().substring(0,3));
+					// console.log(this.Week);
+					//选择的值
+					console.log('value => ' + e.value);
+					//原始的Date对象
+					console.log('date => ' + e.date);
+					this.date = e.value;
+				}
+			},
+			queryWeek(e) {
+				console.log(e);
+				switch (e) {
+					case "Mon":
+						this.Week = '周一';
+						break;
+					case "Tue":
+						this.Week = "周二";
+						break;
+					case "Wed":
+						this.Week = "周三";
+						break;
+					case "Thu":
+						this.Week = "周四";
+						break;
+					case "Fri":
+						this.Week = "周五";
+						break;
+					case "Sat":
+						this.Week = "周六";
+						break;
+					case "Sun":
+						this.Week = "周日";
+						break;
+					default:
+						break;
+				}
+			},
 
 		}
 	}
@@ -497,6 +623,7 @@
 		line-height: 80rpx;
 		box-sizing: border-box;
 		font-size: 28rpx;
+
 		.listItem {
 			margin-left: 20rpx;
 			border-bottom: 1rpx solid #eeeeee;

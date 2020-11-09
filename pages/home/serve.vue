@@ -195,7 +195,7 @@
 				},{
 					IsUse: true,
 					clickURL: "",
-					// clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
+					clickURL: "../../pages_JDKP/pages/jdkp_cj_list",
 					ImageURL1: "../../static/home/serve/fbkp.png", //亮
 					ImageURL2: "../../static/home/serve/fbkp2.png", //暗
 					ItemTitle: "发布考评",
