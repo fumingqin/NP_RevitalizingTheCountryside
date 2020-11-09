@@ -369,8 +369,8 @@
 			this.id = param.id;
 			if (this.jumpStatus == '修改') {
 				uni.request({
-					url: this.$ycyd.KyInterface.getArchiveDetailByID.Url,
-					method: this.$ycyd.KyInterface.getArchiveDetailByID.method,
+					url: this.$fbxm.KyInterface.getProjectDetailByID.Url,
+					method: this.$fbxm.KyInterface.getProjectDetailByID.method,
 					data: {
 						id: this.id
 					},
@@ -430,6 +430,8 @@
 						this.model.name = data.data.title;
 						this.model.phone=data.data.telphone;
 						this.model.centent = data.data.introduce;
+						this.filename=data.data.filename;
+						this.model.village=data.data.village
 						this.onEditorReady();
 						// console.log('赋值前', this.lists)
 						for(var i=0;i<this.informationDetail.image.length;i++){

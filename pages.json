@@ -999,15 +999,19 @@
 					}
 				}
 				,{
-				    "path" : "pages/publishProject/PP_addPage",
-				    "style" : {}
-				}
-				,{
 				    "path" : "pages/publishProject/pp_edit",
 				    "style" : {}
 				}
 				,{
 				    "path" : "pages/publishProject/PP_addPages",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/publishProject/pp_chooseCountryside",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/publishProject/pp_choicePersonInCharge",
 				    "style" : {}
 				}
 			]
