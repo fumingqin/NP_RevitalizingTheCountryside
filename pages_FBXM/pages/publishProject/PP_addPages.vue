@@ -39,6 +39,7 @@
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+					<text class="videoClass">*目前该功能暂时只能上传小于20MB的视频</text>
 				</u-form-item>
 
 				<!-- 文件上传 -->
@@ -561,6 +562,7 @@
 			/* 上传 */
 			onUpload() {
 				this.filename = '';
+				this.localPath = [];
 				this.$refs.lFile.upload({
 					// #ifdef APP-PLUS
 					// nvue页面使用时请查阅nvue获取当前webview的api，当前示例为vue窗口
@@ -577,7 +579,8 @@
 			onSuccess(res) {
 				console.log('上传成功回调', res);
 				this.filename = JSON.stringify(res.fileName);
-				this.localPath = res.data;
+				this.localPath = JSON.parse(res.data.id);
+				console.log('上传成功回调', this.localPath);
 			},
 
 			successData: function() {
@@ -601,13 +604,7 @@
 				arr.push(this.videoData.data);
 				var arr2 = [];
 				arr2.push(this.localPath.data);
-				console.log('1', this.issueText);
-				console.log('2', this.userInfo.userId);
-				console.log('3', this.pictureArray);
-				console.log('4', this.model.name);
-				console.log('5', this.model.goodsType);
-				console.log('6', this.informationDetail.id);
-				console.log('7', arr);
+				console.log('1', arr2);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -627,7 +624,6 @@
 											video: JSON.stringify(arr),
 											pdfFile: JSON.stringify(arr2),
 											pdfName: this.filename,
-											// villageCode: this.village_name,
 											ruralId:this.ruralId,
 											personId:this.personId,
 											introduce: this.model.centent,
@@ -752,5 +748,10 @@
 		border-bottom-left-radius: 22rpx;
 		opacity: 0.9;
 		background: #E4E7ED;
+	}
+	
+	.videoClass{
+		color: #FA3534;
+		font-size: 28upx;
 	}
 </style>

@@ -55,7 +55,7 @@
 			//上传图片大小 默认3M
 			upload_max: {
 				type: Number,
-				default: 500
+				default: 5000
 			}
 		},
 		data(){
@@ -116,6 +116,10 @@
 						uni.chooseVideo({
 							sourceType: ['camera', 'album'],
 							success: (res) => {
+								uni.showLoading({
+									title: '上传视频中...',
+									mask: true,
+								})
 								if(Math.ceil(res.size / 1024) < this.upload_max * 1024){
 									this.uploads.push(res.tempFilePath)
 									uni.uploadFile({
@@ -127,7 +131,8 @@
 											'user': 'test'
 										},
 										success: (uploadFileRes) => {
-											this.$emit('successVideo',uploadFileRes)
+											this.$emit('successVideo',uploadFileRes);
+											uni.hideLoading();
 										}
 									});
 								}else {
@@ -185,6 +190,10 @@
 					return;
 				};
 				for (let i of this.uploadImages) {
+					uni.showLoading({
+						title: '上传视频中...',
+						mask: true,
+					})
 					uni.uploadFile({
 						url: this.uploadUrl, //仅为示例，非真实的接口地址
 						filePath: i,
@@ -194,7 +203,8 @@
 							'user': 'test'
 						},
 						success: (uploadFileRes) => {
-							this.$emit('successImage',uploadFileRes)
+							this.$emit('successImage',uploadFileRes);
+							uni.hideLoading();
 						}
 					});
 				}
