@@ -150,6 +150,16 @@
 				"navigationStyle": "custom"
 			}
 		}
+        ,{
+            "path" : "pages/home/cct_extensionPage",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "村村通",
+                "enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#FFFFFF"
+            }
+            
+        }
     ],
 
 	"subPackages": [
