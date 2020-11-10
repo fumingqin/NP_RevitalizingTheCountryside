@@ -39,10 +39,17 @@ const Interface={
 		method:'POST',
 		pages: [],
 	},
-	
+
 	getImage:{
 		value:Url+'/api/manage/getImage',
 		name:'获取图片',
+		method:'POST',
+		pages: [],
+	},
+	
+	getVersion:{
+		value:Url+'/api/user/getVersion',
+		name:'获取最新版本号',
 		method:'POST',
 		pages: [],
 	},

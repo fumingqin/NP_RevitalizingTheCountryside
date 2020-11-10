@@ -79,6 +79,7 @@
 		},
 		methods: {
 			loadImg(){
+				this.advert = uni.getStorageSync('advertImg') || "/static/GRZX/icon/advert.png";
 				uni.request({
 					url: this.$GrzxInter.Interface.getImage.value,
 					method: this.$GrzxInter.Interface.getImage.method,
@@ -87,7 +88,9 @@
 					},
 					success: (res) => {
 						console.log(res,"111");
-						this.advert = res.data.status ? res.data.data.image : "/static/GRZX/icon/advert.png";
+						if(res.data.status && this.advert != res.data.data.image){
+							uni.setStorageSync('advertImg',res.data.data.image)
+						}
 					},
 					fail:(err)=>{
 						console.log(err,"222");
@@ -150,20 +153,22 @@
 								method: that.$GrzxInter.Interface.login.method,
 								success(res) {
 									console.log(res,'res')
-									let data = res.data.data;
-									uni.setStorageSync('userInfo', data);
-									if (data.userName == "" || data.userName == null) {
-										that.nickname="请输入昵称";
-									} else {
-										that.nickname = data.userName;
+									if(res.data.status){
+										let data = res.data.data;
+										uni.setStorageSync('userInfo', data);
+										if (data.userName == "" || data.userName == null) {
+											that.nickname="请输入昵称";
+										} else {
+											that.nickname = data.userName;
+										}
+										if (data.portrait == "" || data.portrait == null) {
+											that.port = "";
+										} else {
+											that.port = "http://120.24.144.6:888/prod-api" + data.portrait;
+										}
+										that.userId = data.userId;
+										that.duty = data.duty;
 									}
-									if (data.portrait == "" || data.portrait == null) {
-										that.port = "";
-									} else {
-										that.port = "http://120.24.144.6:888/prod-api" + data.portrait;
-									}
-									that.userId = data.userId;
-									that.duty = data.duty;
 								},
 								fail(err) {
 									console.log(err);
@@ -216,9 +221,7 @@
 						this.changeDuty();
 						break;
 					case '乘客管理':
-						uni.navigateTo({
-							url: this.$GrzxInter.Route.infoList.url,
-						})
+						this.passengerClick();
 						break;
 					case 'QQ客服':
 						this.QQClick();
@@ -257,6 +260,20 @@
 				if(user.phoneNumber != "" && user.phoneNumber != null){
 					uni.navigateTo({
 						url: this.$GrzxInter.Route.feedback.url,
+					})
+				}else{
+					uni.showToast({
+						title: '请先登录',
+						icon:'none'
+					});
+				}
+			},
+			
+			passengerClick(){
+				let user = uni.getStorageSync('userInfo');
+				if(user.phoneNumber != "" && user.phoneNumber != null){
+					uni.navigateTo({
+						url: this.$GrzxInter.Route.infoList.url,
 					})
 				}else{
 					uni.showToast({

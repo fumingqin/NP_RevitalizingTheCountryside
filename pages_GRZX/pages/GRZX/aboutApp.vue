@@ -34,6 +34,9 @@
 				</view>
 			</view>
 		</uni-popup>
+		
+		<u-modal v-model="show" :content="content" :show-cancel-button="true"
+		confirm-text="前往下载" cancel-text="取消" @confirm="confirmClick" @cancel="cancelClick" title="检查更新"></u-modal>
 	</view>
 </template>
 
@@ -53,6 +56,8 @@
 				copyright3:'All Rights Reserved',
 				version:'',
 				logo:'../../../../static/GRZX/logo.png',
+				show:false,	//是否开启下载提示
+				content:'',//提示信息
 			}
 		},
 		onLoad(){
@@ -115,41 +120,106 @@
 				})
 			},
 			
+			// // #ifdef APP-PLUS
+			// plus.runtime.openURL(that.$GrzxInter.downloadAPP);
+			// // #endif
+			// // #ifndef APP-PLUS
+			// uni.showToast({
+			// 	title:'暂无法下载新版本',
+			// 	icon:'none'
+			// })
+			// // #endif
+			// wgt :http://27.148.155.9:9248/LoadAppWebsite/zxxc_gxb.wgt
 			//--------------------------检查新功能--------------------------
 			checkClick(){
-				var that=this;
-				console.log(that.$GrzxInter.downloadAPP);
 				uni.request({
-					url:that.$GrzxInter.Interface.GetVersion.value,
-					method:that.$GrzxInter.Interface.GetVersion.method,
-					success(res) {
-						console.log(res)
-						if(that.version!=res.data.data.version){
-							uni.showModal({
-								title:'温馨提示',
-							    content: '检测到有新版本，是否立即下载新版本？',
-							    success: (e)=>{
-							    	if(e.confirm){
-										// #ifdef APP-PLUS
-										plus.runtime.openURL(that.$GrzxInter.downloadAPP);
-										// #endif
-										// #ifndef APP-PLUS
-										uni.showToast({
-											title:'暂无法下载新版本',
-											icon:'none'
-										})
-										// #endif
-							    	}
-							    }
-							});
+					url: this.$GrzxInter.Interface.getVersion.value,
+					method: this.$GrzxInter.Interface.getVersion.method,
+					success: res => {
+						console.log(res,"版本号");
+						if(res.data.status){
+							if(this.cpr_version(this.version,res.data.data)){
+								this.show = true;
+								this.content = "检测到您有新版版本，版本号为："+res.data.data+"，是否前往下载?";
+							}else{
+								uni.showToast({
+									title: '您已是最新版本',
+									icon:'none',
+								});
+							}
 						}else{
 							uni.showToast({
+								title: '您已是最新版本',
 								icon:'none',
-								title:'当前版本为最新版本'
-							})
+							});
 						}
-					}
-				})
+					},
+					fail: () => {
+						uni.showToast({
+							title: '网络连接错误',
+							icon:'none',
+						});
+					},
+					complete: () => {}
+				});
+			},
+			toNum(a){
+				var a=a.toString();
+				//也可以这样写 var c=a.split(/\./);
+				var c=a.split('.');
+				var num_place=["","0","00","000","0000"],r=num_place.reverse();
+				for (var i=0;i<c.length;i++){ 
+					var len=c[i].length;       
+					c[i]=r[len]+c[i];  
+				} 
+				var res= c.join(''); 
+				return res; 
+			},
+			cpr_version(a,b){ 
+				//返回true，有新版本
+				//返回false，无新版本
+				var oldVersion=this.toNum(a);
+				var newVersion=this.toNum(b);   
+				if(oldVersion<newVersion){
+					return true;
+				}else{
+					return false;
+				}
+			},
+			
+			//--------------------------下载按钮--------------------------
+			confirmClick(){
+				console.log("下载");
+				var wgtUrl="http://27.148.155.9:9248/LoadAppWebsite/zxxc_gxb.wgt";  
+				plus.nativeUI.showWaiting("下载wgt文件...");  
+				plus.downloader.createDownload( wgtUrl, {filename:"_doc/update/"}, function(d,status){  
+				    if ( status == 200 ) {   
+				        console.log("下载wgt成功："+d.filename);  
+				        var path = d.filename;
+						plus.nativeUI.showWaiting("安装wgt文件...");  
+						plus.runtime.install(path,{},function(){  
+						    plus.nativeUI.closeWaiting();  
+						    console.log("安装wgt文件成功！");  
+						    plus.nativeUI.alert("应用资源更新完成！",function(){  
+						        plus.runtime.restart();  
+						    });  
+						},function(e){  
+						    plus.nativeUI.closeWaiting();  
+						    console.log("安装wgt文件失败["+e.code+"]："+e.message);  
+						    plus.nativeUI.alert("安装wgt文件失败["+e.code+"]："+e.message);  
+						});  
+				    } else {  
+						console.log(status,"打印");
+				        console.log("下载wgt失败！");  
+				        plus.nativeUI.alert("下载wgt失败！");  
+				    }  
+				    plus.nativeUI.closeWaiting();  
+				}).start();  
+			},
+			
+			//--------------------------取消按钮--------------------------
+			cancelClick(){
+				console.log("取消");
 			},
 			
 			//--------------------------软件许可及服务协议--------------------------

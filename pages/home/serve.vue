@@ -119,6 +119,13 @@
 					ImageURL2: "../../static/home/serve/ncp2.png", //暗
 					ItemTitle: "农产品",
 					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_JDKP/pages/jdkp_kpr_list",
+					ImageURL1: "../../static/home/serve/kprw.png", //亮
+					ImageURL2: "../../static/home/serve/kprw2.png", //暗
+					ItemTitle: "考评任务",
+					style: "sv_print",
 				}],
 
 				//村级管理区
@@ -173,6 +180,13 @@
 					ImageURL2: "../../static/home/serve/stgl2.png", //暗
 					ItemTitle: "生态管理",
 					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_JDKP/pages/jdkp_cj_list",
+					ImageURL1: "../../static/home/serve/kpcx.png", //亮
+					ImageURL2: "../../static/home/serve/kpcx2.png", //暗
+					ItemTitle: "考评查询",
+					style: "sv_print",
 				}],
 
 				//县市级管理区
@@ -195,7 +209,7 @@
 				},{
 					IsUse: true,
 					clickURL: "",
-					clickURL: "../../pages_JDKP/pages/jdkp_cj_list",
+					clickURL: "../../pages_JDKP/pages/jdkp_xs_list",
 					ImageURL1: "../../static/home/serve/fbkp.png", //亮
 					ImageURL2: "../../static/home/serve/fbkp2.png", //暗
 					ItemTitle: "发布考评",
