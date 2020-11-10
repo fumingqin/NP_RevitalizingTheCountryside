@@ -38,6 +38,7 @@
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+					 <text class="videoClass">*目前该功能暂时只能上传小于20MB的视频</text>
 				</u-form-item>
 
 				<!-- 文件上传 -->
@@ -367,7 +368,9 @@
 						if(data.data.video !== null){
 							this.imageList.push(data.data.video[0])	
 						}
-						this.localPath=data.data.pdfFile[0];
+						if(data.data.pdfFile[0] !== null){
+							this.localPath=data.data.pdfFile[0];
+						}
 						this.issueText2 = data.data.content;
 						this.model.name = data.data.title;
 						this.model.phone=data.data.telphone;
@@ -659,7 +662,8 @@
 			onSuccess(res) {
 				console.log('上传成功回调', res);
 				this.filename = JSON.stringify(res.fileName);
-				this.localPath = JSON.parse(res.data.id);
+				var a = JSON.parse(res.data.id);
+				this.localPath=a.data;
 				console.log('上传成功回调', this.localPath);
 			},
 
@@ -694,7 +698,8 @@
 				}
 				
 				var arr = [];
-				arr.push(this.localPath.data);
+				arr.push(this.localPath);
+				console.log('提交数据',arr)
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -839,5 +844,10 @@
 		border-bottom-left-radius: 22rpx;
 		opacity: 0.9;
 		background: #E4E7ED;
+	}
+	
+	.videoClass{
+		color: #FA3534;
+		font-size: 28upx;
 	}
 </style>
