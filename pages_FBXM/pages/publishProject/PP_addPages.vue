@@ -561,6 +561,7 @@
 			/* 上传 */
 			onUpload() {
 				this.filename = '';
+				this.localPath = [];
 				this.$refs.lFile.upload({
 					// #ifdef APP-PLUS
 					// nvue页面使用时请查阅nvue获取当前webview的api，当前示例为vue窗口
@@ -577,7 +578,8 @@
 			onSuccess(res) {
 				console.log('上传成功回调', res);
 				this.filename = JSON.stringify(res.fileName);
-				this.localPath = res.data;
+				this.localPath = JSON.parse(res.data.id);
+				console.log('上传成功回调', this.localPath);
 			},
 
 			successData: function() {
@@ -601,13 +603,7 @@
 				arr.push(this.videoData.data);
 				var arr2 = [];
 				arr2.push(this.localPath.data);
-				console.log('1', this.issueText);
-				console.log('2', this.userInfo.userId);
-				console.log('3', this.pictureArray);
-				console.log('4', this.model.name);
-				console.log('5', this.model.goodsType);
-				console.log('6', this.informationDetail.id);
-				console.log('7', arr);
+				console.log('1', arr2);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -627,7 +623,6 @@
 											video: JSON.stringify(arr),
 											pdfFile: JSON.stringify(arr2),
 											pdfName: this.filename,
-											// villageCode: this.village_name,
 											ruralId:this.ruralId,
 											personId:this.personId,
 											introduce: this.model.centent,
