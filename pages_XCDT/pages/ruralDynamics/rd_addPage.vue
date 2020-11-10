@@ -31,6 +31,7 @@
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+					<text class="videoClass">*目前该功能暂时只能上传小于20MB的视频</text>
 				</u-form-item>
 				
 				<!-- 简介 -->
@@ -629,5 +630,10 @@
 	//自定义上传按钮颜色
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
+	}
+	
+	.videoClass{
+		color: #FA3534;
+		font-size: 28upx;
 	}
 </style>
