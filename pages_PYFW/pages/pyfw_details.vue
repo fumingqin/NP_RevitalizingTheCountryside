@@ -213,13 +213,20 @@
 					success: (res) => {
 						console.log(res)
 						uni.hideLoading()
-						uni.showToast({
-							title: '取消成功',
-							success: () => {
-								this.cancelShow = false;
-								uni.startPullDownRefresh()
-							}
-						})
+						if(res.data.status){
+							uni.showToast({
+								title: '取消成功',
+								success: () => {
+									this.cancelShow = false;
+									uni.startPullDownRefresh()
+								}
+							})
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon:'none'
+							})
+						}
 					},
 					fail: () => {
 						uni.hideLoading()

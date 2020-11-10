@@ -217,14 +217,14 @@
 			//--------------------------路由跳转(添加列表文章)------------------------------
 			routeJump2: function(e) {
 				uni.navigateTo({
-					url: './PP_addPage',
+					url: './PP_addPages',
 				})
 			},
 
 			//--------------------------路由跳转(修改列表文章)------------------------------
 			modifyJump: function(item) {
 				uni.navigateTo({
-					url: './ovof_edit?jumpStatus=' + this.state + '&id=' + item.id
+					url: './pp_edit?jumpStatus=' + this.state + '&id=' + item.id
 				})
 			},
 

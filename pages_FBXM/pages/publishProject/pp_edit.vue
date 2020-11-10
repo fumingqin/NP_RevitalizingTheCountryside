@@ -17,13 +17,6 @@
 					</view>
 				</u-form-item>
 
-				<!-- 负责人 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="负责人" :border-bottom="false" prop="personnel">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入负责人" v-model="model.personnel" :type="text"></u-input>
-					</view>
-				</u-form-item>
-
 				<!-- 上传图片 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
@@ -52,6 +45,13 @@
 								<view>{{localPath}}</view>
 							</view>
 						</view>
+					</view>
+				</u-form-item>
+				
+				<!-- 负责人 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="负责人" :border-bottom="false" prop="personnel">
+					<view class="viewClass" style="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入负责人" v-model="model.personnel" :type="text"></u-input>
 					</view>
 				</u-form-item>
 				
@@ -348,8 +348,8 @@
 						label: '三化管理'
 					}
 				],
-				localPath: '',
-				filename: [],
+				localPath: [],
+				filename: '',
 			}
 		},
 
@@ -367,6 +367,27 @@
 			this.userData();
 			this.jumpStatus = param.jumpStatus;
 			this.id = param.id;
+			if (this.jumpStatus == '修改') {
+				uni.request({
+					url: this.$fbxm.KyInterface.getProjectDetailByID.Url,
+					method: this.$fbxm.KyInterface.getProjectDetailByID.method,
+					data: {
+						id: this.id
+					},
+					success: (res) => {
+						console.log(res)
+						uni.setStorage({
+							key: 'informationData',
+							data: res.data.data,
+							success: () => {
+								this.xiugaiData();
+							}
+						});
+		
+					}
+				})
+		
+			}
 		},
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
@@ -409,6 +430,8 @@
 						this.model.name = data.data.title;
 						this.model.phone=data.data.telphone;
 						this.model.centent = data.data.introduce;
+						this.filename=data.data.filename;
+						this.model.village=data.data.village
 						this.onEditorReady();
 						// console.log('赋值前', this.lists)
 						for(var i=0;i<this.informationDetail.image.length;i++){
@@ -649,8 +672,8 @@
 			},
 			onSuccess(res) {
 				console.log('上传成功回调', JSON.stringify(res));
-				this.localPath = JSON.stringify(res.fileName);
-				this.filename.push(res.data.data);
+				this.filename = JSON.stringify(res.fileName);
+				this.localPath=res.data;
 			},
 
 			successData: function() {
@@ -673,7 +696,7 @@
 				var arr = [];
 				arr.push(this.videoData.data);
 				var arr2 = [];
-				arr2.push(this.localPath);
+				arr2.push(this.localPath.data);
 				console.log(arr2)
 				console.log('1', this.issueText);
 				console.log('2', this.userInfo.userId);
@@ -698,8 +721,8 @@
 									image: JSON.stringify(this.lists),
 									title: this.model.name,
 									video: JSON.stringify(arr),
-									pdfFile: JSON.stringify(this.filename),
-									pdfName: JSON.stringify(arr2),
+									pdfFile: JSON.stringify(arr2),
+									pdfName: this.filename,
 									villageCode: this.model.village,
 									introduce: this.model.centent,
 								},

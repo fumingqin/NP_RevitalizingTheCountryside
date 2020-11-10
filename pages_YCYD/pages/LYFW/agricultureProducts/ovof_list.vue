@@ -190,8 +190,8 @@
 					url:this.$ycyd.KyInterface.getArchivesByUserID.Url,
 					method:this.$ycyd.KyInterface.getArchivesByUserID.method,
 					data:{
-						// userId:this.userInfo.userId,
-						userId: 100006,
+						userId:this.userInfo.userId,
+						// userId: 100006,
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
@@ -397,8 +397,8 @@
 								method: this.$ycyd.KyInterface.deleteArchives.method,
 								data: {
 									id: e,
-									// userId:this.userInfo.userId
-									userId: 100006,
+									userId:this.userInfo.userId
+									// userId: 100006,
 								},
 								success: (res) => {
 									console.log(res)

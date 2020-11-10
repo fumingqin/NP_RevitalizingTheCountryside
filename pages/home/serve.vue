@@ -52,7 +52,7 @@
 		data() {
 			return {
 				imageIndex: '', //首页图片
-				level: 0, //0为普通用户，1为村级职责人员，2位县市级职责人员
+				level: 2, //0为普通用户，1为村级职责人员，2位县市级职责人员
 				userInfo: '', //用户数据
 				//普通用户管理区
 				ItemArr: [{
@@ -119,6 +119,13 @@
 					ImageURL2: "../../static/home/serve/ncp2.png", //暗
 					ItemTitle: "农产品",
 					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_JDKP/pages/jdkp_kpr_list",
+					ImageURL1: "../../static/home/serve/kprw.png", //亮
+					ImageURL2: "../../static/home/serve/kprw2.png", //暗
+					ItemTitle: "考评任务",
+					style: "sv_print",
 				}],
 
 				//村级管理区
@@ -173,6 +180,13 @@
 					ImageURL2: "../../static/home/serve/stgl2.png", //暗
 					ItemTitle: "生态管理",
 					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_JDKP/pages/jdkp_cj_list",
+					ImageURL1: "../../static/home/serve/kpcx.png", //亮
+					ImageURL2: "../../static/home/serve/kpcx2.png", //暗
+					ItemTitle: "考评查询",
+					style: "sv_print",
 				}],
 
 				//县市级管理区
@@ -187,7 +201,7 @@
 				{
 					IsUse: true,
 					clickURL: "",
-					// clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
+					clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
 					ImageURL1: "../../static/home/serve/fbzc.png", //亮
 					ImageURL2: "../../static/home/serve/fbzc2.png", //暗
 					ItemTitle: "发布政策",
@@ -195,7 +209,7 @@
 				},{
 					IsUse: true,
 					clickURL: "",
-					// clickURL: "../../pages_ZCFB/pages/ZCFB/myPolicyList",
+					clickURL: "../../pages_JDKP/pages/jdkp_xs_list",
 					ImageURL1: "../../static/home/serve/fbkp.png", //亮
 					ImageURL2: "../../static/home/serve/fbkp2.png", //暗
 					ItemTitle: "发布考评",

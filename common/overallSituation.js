@@ -20,7 +20,8 @@ const Interface = {
 		applyName:'南平综合出行',
 		
 		// appName:'专线购票小程序', //仅用于微信授权登录
-		appName:'交通在线小程序', //仅用于微信授权登录
+		appName:'乡村振兴APP', //仅用于微信授权登录
+		// appName:'交通在线小程序', //仅用于微信授权登录
 		// appName:'南平综合出行', //仅用于微信授权登录
 		imageApplicationType:'XCX',//全局图片接口应用类型，用于请求全局图片使用
 		// #ifdef H5

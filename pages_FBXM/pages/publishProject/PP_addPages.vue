@@ -2,30 +2,31 @@
 	<view>
 		<view class="content">
 			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
-
 				<!-- 商品名称 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="标题内容" :border-bottom="false" prop="name">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入标题内容" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入标题内容" v-model="model.name" type="text"></u-input>
 					</view>
 				</u-form-item>
 
 				<!-- 乡村名称 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="乡村名称" :border-bottom="false" prop="village">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入乡村名称" v-model="model.village" :type="text"></u-input>
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="乡村名称" :border-bottom="false">
+					<view class="top_chooseTime" hover-class="ve_hover" @click="SelectRural">
+						<text class="dateClass" v-if="village_name==''" style="color: #bec3ca;">请选择乡村名称</text>
+						<text class="dateClass" style="color: #333333;">{{village_name}}</text>
 					</view>
 				</u-form-item>
-
+				
 				<!-- 负责人 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="负责人" :border-bottom="false" prop="personnel">
-					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入负责人" v-model="model.personnel" :type="text"></u-input>
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="负责人" :border-bottom="false">
+					<view class="top_chooseTime" hover-class="ve_hover" @click="SelectPersonInCharge">
+						<text class="dateClass" v-if="nick_name==''" style="color: #bec3ca;">请选择负责人</text>
+						<text class="dateClass" style="color: #333333;">{{nick_name}}</text>
 					</view>
 				</u-form-item>
 
 				<!-- 上传图片 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
 					 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
@@ -35,13 +36,13 @@
 				</u-form-item>
 
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 				</u-form-item>
 
 				<!-- 文件上传 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false">
 					<view class="viewClass">
 						<view>
 							<l-file ref="lFile" @up-success="onSuccess"></l-file>
@@ -54,16 +55,16 @@
 						</view>
 					</view>
 				</u-form-item>
-				
+
 				<!-- 简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="centent">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false">
 					<view class="viewClass" style="padding:20rpx 30rpx;">
 						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
 					</view>
 				</u-form-item>
 
-				<!-- 项目内容 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="项目内容" :border-bottom="false">
+				<!-- 档案简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="档案简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
@@ -141,8 +142,8 @@
 					</view>
 				</u-form-item>
 			</u-form>
+			<view style="padding-bottom: 120upx;"></view>
 			<u-button type="success" :custom-style="buttonStyle" @click="successData">提交</u-button>
-			<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm"></u-picker>
 		</view>
 	</view>
 </template>
@@ -178,13 +179,8 @@
 				isIOS: false,
 				model: {
 					name: '', //商品名称value
-					region: '', //选择来源地value
-					goodsType: '', //选择类型value
-					// cost: '', //价格
-					centent:'',//简介
-					intro: '', //商品简介
+					centent: '', //简介
 					village: '', //乡村名
-					imageData: [], //图像日期
 					personnel: '', //负责人
 				},
 				//----------------uview样式--------------------------
@@ -192,14 +188,6 @@
 					fontWeight: 'bold',
 					fontSize: '17px',
 					paddingTop: '8px',
-				},
-				customStyle2: {
-					fontWeight: 'bold',
-					fontSize: '17px',
-					paddingTop: '8px',
-					width: '100%',
-					background: '#FFFFFF',
-					borderRadius: '6px',
 				},
 				buttonStyle: {
 					marginTop: '20px',
@@ -224,12 +212,12 @@
 				rules: {
 					name: [{
 							required: true,
-							message: '请输入商品名称',
+							message: '请输入标题内容',
 							trigger: 'blur',
 						},
 						{
 							min: 1,
-							message: '请输入商品名称',
+							message: '请输入标题内容',
 							trigger: ['change', 'blur'],
 						},
 					],
@@ -255,43 +243,6 @@
 							trigger: ['change', 'blur'],
 						},
 					],
-					region: [{
-						required: true,
-						message: '请选择商品来源地',
-						trigger: 'change',
-					}],
-					cost: [{
-							required: true,
-							message: '请输入价格',
-							trigger: ['change', 'blur'],
-						},
-						{
-							type: 'number',
-							message: '价格只能为数字',
-							trigger: ['change', 'blur'],
-						}
-					],
-					intro: [{
-							required: true,
-							message: '请填写简介'
-						},
-						{
-							min: 5,
-							message: '简介不能少于5个字',
-							trigger: 'change',
-						},
-						// 正则校验示例，此处用正则校验是否中文，此处仅为示例，因为uView有this.$u.test.chinese可以判断是否中文
-						// {
-						// 	pattern: /^[\u4e00-\u9fa5]+$/gi,
-						// 	message: '简介只能为中文',
-						// 	trigger: 'change',
-						// },
-					],
-					goodsType: [{
-						required: true,
-						message: '请选择商品类型',
-						trigger: 'change',
-					}],
 					centent: [{
 							required: true,
 							message: '请填写简介'
@@ -329,9 +280,14 @@
 				lists: [],
 				fileList: [],
 				category: 'video',
+				videoData: '',
 				videoArray: [],
 				localPath: [],
 				filename: '',
+				ruralId:'',
+				village_name:'',
+				personId:'',
+				nick_name:'',
 			}
 		},
 
@@ -358,21 +314,59 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						// console.log('获取个人信息', this.userInfo)
-					},
-					fail: (err) => {
-						uni.hideLoading()
-						uni.showToast({
-							title:'您暂未登录，已为您跳转登录页面',
-							icon:'none',
-							success: () => {
-								uni.navigateTo({
-									url : '../../../pages/GRZX/userLogin'
-								})
-							}
-						})
 					}
 				});
 			},
+			
+			//---------------------------------点击选择乡村---------------------------------
+			SelectRural() {
+				var that = this;
+				//监听事件,监听下个页面返回的值
+				uni.$on('startstaionChange', function(data) {
+					// data即为传过来的值，给上车点赋值
+					that.ruralId = data.data;
+					that.village_name = data.data2;
+					//清除监听，不清除会消耗资源
+					uni.$off('startstaionChange');
+					//如果重新选择就清空负责人参数
+					that.personId='';
+					that.nick_name='';
+					console.log('乡村id值',that.ruralId)
+					console.log('乡村名称',that.village_name)
+				});
+				uni.navigateTo({
+					//跳转到下个页面的时候加个字段，判断当前点击的是上车点
+					url: 'pp_chooseCountryside',
+				})
+			
+			},
+			
+			//---------------------------------点击选择负责人---------------------------------
+			SelectPersonInCharge() {
+				var that = this;
+				if(that.ruralId!==''){
+					//监听事件,监听下个页面返回的值
+					uni.$on('startstaionChange', function(data) {
+						// data即为传过来的值，给上车点赋值
+						that.personId = data.data;
+						that.nick_name = data.data2;
+						//清除监听，不清除会消耗资源
+						uni.$off('startstaionChange');
+						console.log('负责人id值',that.personId)
+						console.log('负责人名称',that.nick_name)
+					});
+					uni.navigateTo({
+						//跳转到下个页面的时候加个字段，判断当前点击的是上车点
+						url: 'pp_choicePersonInCharge?&ruralId=' + that.ruralId,
+					})
+				}else{
+					uni.showToast({
+						title: '请选择乡村名称',
+						icon: 'none',
+					})
+				}
+			},
+			
 
 			//--------------------------------------------
 
@@ -512,8 +506,9 @@
 
 			//---------------------------上传视频回调-------------------------------
 			successvideo: function(e) {
+				console.log(e)
 				var data = JSON.parse(e.data);
-				// console.log(data)
+				console.log(data)
 				this.videoData = data;
 				console.log('视频上传成功', this.videoData)
 			},
@@ -540,6 +535,7 @@
 				};
 				this.lists.push(a.data)
 				console.log(this.lists)
+				console.log(this.fileList)
 			},
 
 			//-------------------------------上传文件---------------------------------------------------------------------------
@@ -564,7 +560,7 @@
 
 			/* 上传 */
 			onUpload() {
-				this.filename='';
+				this.filename = '';
 				this.$refs.lFile.upload({
 					// #ifdef APP-PLUS
 					// nvue页面使用时请查阅nvue获取当前webview的api，当前示例为vue窗口
@@ -581,7 +577,7 @@
 			onSuccess(res) {
 				console.log('上传成功回调', res);
 				this.filename = JSON.stringify(res.fileName);
-				this.localPath=res.data;
+				this.localPath = res.data;
 			},
 
 			successData: function() {
@@ -605,67 +601,80 @@
 				arr.push(this.videoData.data);
 				var arr2 = [];
 				arr2.push(this.localPath.data);
-				// console.log('1', this.issueText);
-				// console.log('2', this.userInfo.userId);
-				// console.log('3', this.pictureArray);
-				// console.log('4', this.model.name);
-				// console.log('5', this.model.goodsType);
-				// console.log('7.1', this.videoData);
-				// console.log('7.2', JSON.stringify(arr));
-				// console.log('7', arr);
-				// console.log('8', this.localPath.data);
-				// console.log('9', JSON.stringify(arr2));
+				console.log('1', this.issueText);
+				console.log('2', this.userInfo.userId);
+				console.log('3', this.pictureArray);
+				console.log('4', this.model.name);
+				console.log('5', this.model.goodsType);
+				console.log('6', this.informationDetail.id);
+				console.log('7', arr);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						// uni.hideLoading();
 						console.log('验证通过');
-						if (this.issueText !== '<p><br></p>') {
-							uni.request({
-								url: this.$fbxm.KyInterface.releaseProject.Url,
-								method: this.$fbxm.KyInterface.releaseProject.method,
-								data: {
-									userId: this.userInfo.userId,
-									content: e,
-									image: JSON.stringify(this.lists),
-									title: this.model.name,
-									video: JSON.stringify(arr),
-									pdfFile: JSON.stringify(arr2),
-									pdfName: this.filename,
-									villageCode: this.model.village,
-									introduce: this.model.centent,
-								},
-								success: (res) => {
-									console.log(res, "请求完接口");
-									if (res.data.status) {
-										uni.showToast({
-											title: res.data.msg,
-										})
-										setTimeout(function() {
-											uni.navigateBack();
-										}, 1000)
-									} else {
-										uni.showToast({
-											title: res.data.msg,
-											icon: 'none',
-										})
-									}
-								},
-								fail: () => {
+						if(this.ruralId!==''){
+							if(this.personId!==''){
+								if (this.issueText !== '<p><br></p>') {
+									uni.request({
+										url: this.$fbxm.KyInterface.releaseProject.Url,
+										method: this.$fbxm.KyInterface.releaseProject.method,
+										data: {
+											userId: this.userInfo.userId,
+											content: e,
+											image: JSON.stringify(this.lists),
+											title: this.model.name,
+											video: JSON.stringify(arr),
+											pdfFile: JSON.stringify(arr2),
+											pdfName: this.filename,
+											// villageCode: this.village_name,
+											ruralId:this.ruralId,
+											personId:this.personId,
+											introduce: this.model.centent,
+										},
+										success: (res) => {
+											console.log(res, "请求完接口");
+											if (res.data.status) {
+												uni.showToast({
+													title: res.data.msg,
+												})
+												setTimeout(function() {
+													uni.navigateBack();
+												}, 1000)
+											} else {
+												uni.showToast({
+													title: res.data.msg,
+													icon: 'none',
+												})
+											}
+										},
+										fail: () => {
+											uni.showToast({
+												title: '提交失败',
+												icon: 'none',
+											})
+										},
+										complete: () => {
+											setTimeout(function() {
+												uni.hideLoading();
+											}, 800)
+										}
+									});
+								} else {
 									uni.showToast({
-										title: '提交失败',
+										title: '提交失败,请编辑文章内容',
 										icon: 'none',
 									})
-								},
-								complete: () => {
-									setTimeout(function() {
-										uni.hideLoading();
-									}, 800)
 								}
-							});
-						} else {
+							}else{
+								uni.showToast({
+									title: '请选择负责人',
+									icon: 'none',
+								})
+							}
+						}else{
 							uni.showToast({
-								title: '提交失败,请编辑文章内容',
+								title: '请选择乡村名称',
 								icon: 'none',
 							})
 						}
@@ -712,5 +721,36 @@
 	//自定义上传按钮颜色
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
+	}
+	
+	//选择时间
+	.top_chooseTime {
+		// position: absolute;
+		display: flex;
+		width: 100%;
+		// height:100%;
+		overflow: hidden;
+		left: 6%;
+		padding: 12upx 20upx;
+		border-radius: 14upx;
+		background-color: #FFFFFF;
+		z-index: 2;
+	
+		//出发点
+		.dateClass {
+			display: flex;
+			font-size: 28upx;
+			left: 0;
+			text-align: left;
+		}
+	}
+	
+	//点击态
+	.ve_hover {
+		transition: all .3s; //过度
+		border-top-left-radius: 22rpx;
+		border-bottom-left-radius: 22rpx;
+		opacity: 0.9;
+		background: #E4E7ED;
 	}
 </style>

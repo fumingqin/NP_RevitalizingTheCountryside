@@ -55,7 +55,7 @@
 			//上传图片大小 默认3M
 			upload_max: {
 				type: Number,
-				default: 3
+				default: 500
 			}
 		},
 		data(){

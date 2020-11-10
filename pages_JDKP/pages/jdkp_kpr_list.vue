@@ -7,12 +7,12 @@
 		<view class="infor_view" v-for="(item,index) in informationList" :key="index" @click="detailsClick(item.id)">
 			<view class="view_titleView">
 				<text class="tv_view">
-					<text class="tv_label" style="background: #007AFF;" v-if="item.order_state !== '申请失败' && item.order_state !== '已取消' ">{{statusMethod(item.order_state)}}</text>
-					<text class="tv_label" style="background: #FA3534;" v-if="item.order_state == '申请失败' || item.order_state == '已取消'">{{statusMethod(item.order_state)}}</text>
-					<text class="tv_title">科技特派员服务</text>
-					<text class="tv_content"><text style="font-weight: bold;">乡村名：</text>{{item.villageName}}</text>
-					<text class="tv_content"><text style="font-weight: bold;">技术类型：</text>{{item.apply_type}}</text>
-					<text class="tv_content" selectable=""><text style="font-weight: bold;">技术问题：</text>{{item.content}}</text>
+					<text class="tv_label" style="background: #007AFF;" v-if="item.state !== '已取消'">{{item.state}}</text>
+					<text class="tv_label" style="background: #FA3534;" v-if="item.state == '已取消'">{{item.state}}</text>
+					<text class="tv_title">{{item.title}}</text>
+					<text class="tv_content"><text style="font-weight: bold;">乡村名：</text>{{item.rural_name}}</text>
+					<text class="tv_content"><text style="font-weight: bold;">发布人：</text>{{item.nick_name}}</text>
+					<text class="tv_content" selectable=""><text style="font-weight: bold;">考评时间：</text>{{informationDate(item.reviewTime)}}</text>
 				</text>
 			</view>
 
@@ -28,14 +28,21 @@
 		<view style="width: 100%; height: 112upx;"></view>
 
 		<!-- 缺省提示 -->
-		<view style="margin-top: 360upx;" v-if="informationList.length == 0">
-			<u-empty text="您暂无可审信息哦~" mode="news"></u-empty>
+		<view style="margin-top: 240upx;" v-if="informationList.length == 0">
+			<u-empty text="您暂时没有任务哦~" mode="news"></u-empty>
 		</view>
 
 		<!-- 派员编号 -->
-		<!-- <view class="operButton">
-			<text class="buttonView2" @click="operClick">申请特派员</text>
-		</view> -->
+		<view class="operButton">
+			<text class="buttonView2">您的考评人编号：{{commissionerID}}</text>
+		</view>
+
+		<!-- 压屏弹框 -->
+		<u-modal v-model="modalStatus"  confirm-text="确认" title="检测到您不是考评人"  @confirm="modalConfirm" >
+			<view class="u-update-content">
+				<rich-text :nodes="modalContent"></rich-text>
+			</view>
+		</u-modal>
 
 	</view>
 </template>
@@ -45,21 +52,23 @@
 		data() {
 			return {
 				headList: [{
-					name: '待审批'
-				},{
-					name: '审批成功'
-				},{
-					name: '审批失败'
-				},{
-					name: '其他'
+					name: '待考评'
+				}, {
+					name: '已考评'
+				}, {
+					name: '已取消'
 				}], //头部数组
 				headCurrent: 0, //头部tabs下标
 				informationList: [], //资讯列表
+				listStatusIndex: '', //资讯缺省提示初始值
 				userInfo: '', //用户信息
+				modalStatus: false, //压屏弹框
+				modalContent :  `您需与相关村级/县市级职责管理人员添加您的考评人资质信息`,
+				commissionerID : '',
 			}
 		},
 		onLoad: function() {
-			
+
 		},
 		onShow: function() {
 			this.userData();
@@ -99,41 +108,43 @@
 					}
 				});
 			},
+			
+			
 			//加载接口数据
 			loadData: function() {
+				console.log(this.userInfo.phoneNumber)
 				uni.request({
-					url: this.$pyfw.KyInterface.getCommissionery.Url,
-					method: this.$pyfw.KyInterface.getCommissionery.method,
+					url: this.$jdkp.KyInterface.getListByPhone.Url,
+					method: this.$jdkp.KyInterface.getListByPhone.method,
+					data: {
+						phone : this.userInfo.phoneNumber
+					},
 					success: (res) => {
 						console.log(res)
-						this.informationList = '';
-						if (this.headCurrent == 0) {
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '申请中';
-							})
-						}else if (this.headCurrent == 1){
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '已派员'
-							})
-						}else if (this.headCurrent == 2){
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '申请失败'
-							})
-						} else if (this.headCurrent == 3){
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '已完成' || item.order_state == '已取消'
-							})
+						if(res.data.msg == "您当前不是考评人" && res.data.status == false ){
+							uni.stopPullDownRefresh()
+							uni.hideLoading()
+							this.modalStatus = true;
+						}else{
+							if (this.headCurrent == 0) {
+								this.informationList = res.data.data.filter(item => {
+									return item.state == '已发布';
+								})
+								this.commissionerID = res.data.data[0].number;
+							}else if (this.headCurrent == 1){
+								this.informationList = res.data.data.filter(item => {
+									return item.state == '已完成'
+								})
+								this.commissionerID = res.data.data[0].number;
+							}else if (this.headCurrent == 2){
+								this.informationList = res.data.data.filter(item => {
+									return item.state == '已取消'
+								})
+								this.commissionerID = res.data.data[0].number;
+							}
+							uni.stopPullDownRefresh()
+							uni.hideLoading()
 						}
-						uni.hideLoading()
-						uni.stopPullDownRefresh()
-					},
-					fail: (err) => {
-						uni.hideLoading()
-						uni.stopPullDownRefresh()
-						uni.showToast({
-							title:'加载信息失败',
-							icon:'none'
-						})
 					}
 				})
 			},
@@ -141,7 +152,7 @@
 			detailsClick: function(e) {
 				console.log(e)
 				uni.navigateTo({
-					url: 'pyfw_gl_details?id=' + e
+					url: 'jdkp_kpr_details?id=' + e
 				})
 			},
 
@@ -150,7 +161,7 @@
 			informationDate: function(e) {
 				// console.log(e)
 				// var tsetDate = e.replace('T',' ')
-				var a = e.substr(5, 11)
+				var a = e.substr(0, 10)
 				return a;
 			},
 
@@ -163,21 +174,19 @@
 				this.loadData(e);
 			},
 
-			//申请特派员
-			operClick: function() {
-				uni.navigateTo({
-					url: 'pyfw_edit'
-				})
+			
+			//点击压屏框返回上页面
+			modalConfirm:function(e){
+				console.log(e)
+				uni.navigateBack()
 			},
 			
 			//状态转编译
 			statusMethod:function(e){
-				if(e == '申请中'){
-					return '待审核'
-				}else if(e == '已派员'){
-					return '审核成功'
-				}else if(e == '申请失败'){
-					return '审核失败'
+				if(e == '已发布'){
+					return '待考评'
+				}else if(e == '已完成'){
+					return '已考评'
 				}else{
 					return e
 				}
@@ -201,16 +210,15 @@
 				.tv_label {
 					font-size: 24upx;
 					color: #FFFFFF;
-					padding: 6upx 8upx;
+					padding: 4upx 8upx;
 					// border-radius: 4upx;
 				}
 
 				.tv_title {
-					padding-top: 12upx;
 					font-weight: bold;
 					font-size: 34upx;
 					margin-left: 12upx;
-					line-height: 1.8;
+					line-height: 1.7;
 				}
 
 				.tv_content {
@@ -263,4 +271,13 @@
 			line-height: 3;
 		}
 	}
+	
+	//压屏弹框文本样式
+	.u-update-content {
+			font-size: 26rpx;
+			color: $u-content-color;
+			line-height: 1.7;
+			padding: 30rpx;
+		}
+	
 </style>

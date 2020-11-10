@@ -1,46 +1,45 @@
 <template>
 	<view>
 		<view style="padding: 32upx 0;">
-			<uni-steps :options="stepsList" :active="StepsIndex" v-if="StepsIndex != 3 && StepsIndex != 4"></uni-steps>
+			<uni-steps :options="stepsList" :active="StepsIndex" v-if="StepsIndex != 3"></uni-steps>
 			<uni-steps :options="stepsList2" :active="StepsIndex2" v-if="StepsIndex == 3" activeColor="#FA3534"></uni-steps>
-			<uni-steps :options="stepsList3" :active="StepsIndex3" v-if="StepsIndex == 4" activeColor="#FA3534"></uni-steps>
 		</view>
 
-		<!-- 申请信息 -->
+		<!-- 考评信息 -->
 		<view class="deta_view">
-			<view class="deta_title">申请信息</view>
-			<view class="deta_text"><text>申请乡村：</text>{{stepsData.villageName}}</view>
-			<view class="deta_text"><text>问题类型：</text>{{stepsData.apply_type}}</view>
-			<view class="deta_text">
+			<view class="deta_title">考评信息</view>
+			<view class="deta_text"><text>考评标题：</text>{{stepsData.title}}</view>
+			<view class="deta_text"><text>考评乡村：</text>{{stepsData.rural_name}}</view>
+			<view class="deta_text"><text>考评内容：</text>{{stepsData.content}}</view>
+			<!-- <view class="deta_text">
 				<text>相关图片：</text><text v-if="stepsData.image == null">未上传</text>
 				<view class="imageView">
 					<image class="imageS" v-if="stepsData.image !== null" v-for="(item,index) in stepsData.image" :key="index" :src="item"
 					 mode="aspectFill" @click="previewOpen(index)"></image>
 				</view>
-			</view>
-			<view class="deta_text"><text>问题内容：</text>{{stepsData.content}}</view>
+			</view> -->
+			<!-- <view class="deta_text"><text>问题内容：</text>{{stepsData.content}}</view> -->
 		</view>
 
 
-		<!-- 特派员信息 -->
+		<!-- 考评人信息 -->
 		<view class="deta_view">
-			<view class="deta_title">特派员信息</view>
-			<view class="deta_text"><text>姓名：</text>{{managerData(stepsData.manager_name)}}</view>
-			<view class="deta_text"><text>电话：</text>{{managerData(stepsData.manager_telephone)}}</view>
-			<view class="deta_text"><text>技术类型：</text>{{managerData(stepsData.manager_technologyType)}}</view>
-			<view class="deta_text"><text>擅长内容：</text>{{managerData(stepsData.manager_goodType)}}</view>
+			<view class="deta_title">考评人信息</view>
+			<view class="deta_text"><text>编号：</text>{{managerData(stepsData.examiner_number)}}</view>
+			<view class="deta_text"><text>姓名：</text>{{managerData(stepsData.examiner_name)}}</view>
+			<view class="deta_text"><text>电话：</text>{{managerData(stepsData.examiner_phone)}}</view>
 		</view>
 
 		<!-- 执行结果 -->
 		<view class="deta_view" v-if="StepsIndex == 2">
 			<view class="deta_title">执行结果</view>
-			<view class="deta_text"><text>内容：</text>{{stepsData.result}}</view>
+			<view class="deta_text"><text>分数：</text>{{stepsData.score}}分</view>
 		</view>
 
 		<!-- 失败原因 -->
 		<view class="deta_view" v-if="StepsIndex == 3">
-			<view class="deta_title">失败原因</view>
-			<view class="deta_text"><text>内容：</text>{{managerData(stepsData.fail_error)}}</view>
+			<view class="deta_title">取消原因</view>
+			<view class="deta_text"><text>内容：</text>该考评任务已被取消</view>
 		</view>
 
 		<!-- 防触底空模块 -->
@@ -48,8 +47,8 @@
 
 		<!-- 功能按钮 -->
 		<view class="operButton">
-			<view class="buttonView1 " hover-class="btn_Click" v-if="StepsIndex == 0 " @click="cancelShow = true">取消申请</view>
-			<view class="buttonView2 " hover-class="btn_Click" v-if="StepsIndex == 0 " @click="remindClick">提醒派员</view>
+			<view class="buttonView1 " hover-class="btn_Click" v-if="StepsIndex == 1 " @click="cancelShow = true">取消考评</view>
+			<view class="buttonView2 " hover-class="btn_Click" v-if="StepsIndex == 1 " @click="remindClick">提醒考评</view>
 		</view>
 
 		<!-- 取消弹框 -->
@@ -57,8 +56,8 @@
 			<view class="box_Vlew">
 				<view class="box_refundView">
 					<view class="box_refundContentView">
-						<text class="box_refundContentTitle">您确认取消申请吗?</text>
-						<text class="box_refundContentText">一旦取消申请，将无法撤回</text>
+						<text class="box_refundContentTitle">您确认取消考评吗?</text>
+						<text class="box_refundContentText">一旦取消考评，将无法撤回</text>
 					</view>
 					<view class="box_refundButtonView">
 						<text class="box_refundButton" @click="cancelClick">确认</text>
@@ -67,7 +66,7 @@
 			</view>
 		</u-popup>
 
-		<previewImage ref="previewImage" :opacity="0.8" :imgs="stepsData.image"></previewImage>
+		<!-- <previewImage ref="previewImage" :opacity="0.8" :imgs="stepsData.image"></previewImage> -->
 	</view>
 </template>
 
@@ -82,23 +81,16 @@
 		data() {
 			return {
 				stepsList: [{
-					title: '申请中'
+					title: '已发布'
 				}, {
 					title: '执行中'
 				}, {
 					title: '已完成'
 				}], //时间轴的标题数组
 				stepsList2: [{
-					title: '提交申请'
+					title: '已发布'
 				}, {
-					title: '审核中'
-				}, {
-					title: '申请失败'
-				}], //时间轴的标题数组
-				stepsList3: [{
-					title: '提交申请'
-				}, {
-					title: '审核中'
+					title: '执行中'
 				}, {
 					title: '已取消'
 				}], //时间轴的标题数组
@@ -157,24 +149,20 @@
 			//加载详情数据
 			loadData: function(e) {
 				uni.request({
-					url: this.$pyfw.KyInterface.getDetailById.Url,
-					method: this.$pyfw.KyInterface.getDetailById.method,
+					url: this.$jdkp.KyInterface.getEvaluationDetailByID.Url,
+					method: this.$jdkp.KyInterface.getEvaluationDetailByID.method,
 					data: {
 						id: this.id
 					},
 					success: (res) => {
 						console.log(res)
 						this.stepsData = res.data.data;
-						if (res.data.data.order_state == '申请中') {
-							this.StepsIndex = 0
-						} else if (res.data.data.order_state == '已派员') {
+						if (res.data.data.state == '已发布') {
 							this.StepsIndex = 1
-						} else if (res.data.data.order_state == '已完成') {
+						} else if (res.data.data.state == '已完成') {
 							this.StepsIndex = 2
-						} else if (res.data.data.order_state == '申请失败') {
+						}else if (res.data.data.state == '已取消') {
 							this.StepsIndex = 3
-						} else if (res.data.data.order_state == '已取消') {
-							this.StepsIndex = 4
 						}
 						uni.stopPullDownRefresh()
 						uni.hideLoading()
@@ -203,23 +191,29 @@
 					title:'提交中...'
 				})
 				uni.request({
-					url: this.$pyfw.KyInterface.cancelCommissionery.Url,
-					method: this.$pyfw.KyInterface.cancelCommissionery.method,
+					url: this.$jdkp.KyInterface.deleteEvaluation.Url,
+					method: this.$jdkp.KyInterface.deleteEvaluation.method,
 					data: {
 						id: this.id,
-						user_id: this.stepsData.user_id,
-						userId: this.userInfo.userId
 					},
 					success: (res) => {
 						console.log(res)
 						uni.hideLoading()
-						uni.showToast({
-							title: '取消成功',
-							success: () => {
-								this.cancelShow = false;
-								uni.startPullDownRefresh()
-							}
-						})
+						if(res.data.status){
+							uni.showToast({
+								title: '取消成功',
+								success: () => {
+									this.cancelShow = false;
+									uni.startPullDownRefresh()
+								}
+							})
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon:'none'
+							})
+						}
+						
 					},
 					fail: () => {
 						uni.hideLoading()
