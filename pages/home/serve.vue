@@ -122,8 +122,8 @@
 				},{
 					IsUse: true,
 					clickURL: "../../pages_JDKP/pages/jdkp_kpr_list",
-					ImageURL1: "../../static/home/serve/ncp.png", //亮
-					ImageURL2: "../../static/home/serve/ncp2.png", //暗
+					ImageURL1: "../../static/home/serve/kprw.png", //亮
+					ImageURL2: "../../static/home/serve/kprw2.png", //暗
 					ItemTitle: "考评任务",
 					style: "sv_print",
 				}],
@@ -183,8 +183,8 @@
 				},{
 					IsUse: true,
 					clickURL: "../../pages_JDKP/pages/jdkp_cj_list",
-					ImageURL1: "../../static/home/serve/stgl.png", //亮
-					ImageURL2: "../../static/home/serve/stgl2.png", //暗
+					ImageURL1: "../../static/home/serve/kpcx.png", //亮
+					ImageURL2: "../../static/home/serve/kpcx2.png", //暗
 					ItemTitle: "考评查询",
 					style: "sv_print",
 				}],
