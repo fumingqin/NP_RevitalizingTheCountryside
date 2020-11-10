@@ -57,7 +57,7 @@
 				//普通用户管理区
 				ItemArr: [{
 					IsUse: true,
-					clickURL: "../../pages/home/ChooseSite",
+					clickURL: "cct_extensionPage",
 					ImageURL1: "../../static/home/serve/cct.png", //亮
 					ImageURL2: "../../static/home/serve/cct2.png", //暗
 					ItemTitle: "村村通",
@@ -258,7 +258,7 @@
 							icon:'none',
 							success: () => {
 								uni.navigateTo({
-									url : '../../pages/GRZX/userLogin'
+									url : '../../pages/GRZX/userLogin',
 								})
 							}
 						})

@@ -210,7 +210,7 @@
 			//--------------------------路由跳转------------------------------
 			routeJump: function(e) {
 				uni.navigateTo({
-					url: 'ovof_detailsPage?id=' + e,
+					url: 'pp_detailsPage?id=' + e,
 				})
 			},
 
@@ -224,7 +224,7 @@
 			//--------------------------路由跳转(修改列表文章)------------------------------
 			modifyJump: function(item) {
 				uni.navigateTo({
-					url: './pp_edit?jumpStatus=' + this.state + '&id=' + item.id
+					url: './pp_edits?jumpStatus=' + this.state + '&id=' + item.id,
 				})
 			},
 

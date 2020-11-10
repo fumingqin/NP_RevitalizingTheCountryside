@@ -183,7 +183,7 @@
 				}
 				that.allTicketsList = [];
 				var systemNameCode = '';
-				systemNameCode = this.$ky_cpdg.KyInterface.system.KY_systemName
+				systemNameCode = this.$ky_cpdg.KyInterface.system.KY_systemName2
 				console.log(systemNameCode)
 				uni.request({
 					url: this.$ky_cpdg.KyInterface.getListSchedulesInfo.Url,

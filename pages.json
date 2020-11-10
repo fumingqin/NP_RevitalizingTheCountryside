@@ -150,6 +150,16 @@
 				"navigationStyle": "custom"
 			}
 		}
+        ,{
+            "path" : "pages/home/cct_extensionPage",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "村村通",
+                "enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#FFFFFF"
+            }
+            
+        }
     ],
 
 	"subPackages": [
@@ -999,10 +1009,6 @@
 					}
 				}
 				,{
-				    "path" : "pages/publishProject/pp_edit",
-				    "style" : {}
-				}
-				,{
 				    "path" : "pages/publishProject/PP_addPages",
 				    "style" : {}
 				}
@@ -1012,6 +1018,14 @@
 				}
 				,{
 				    "path" : "pages/publishProject/pp_choicePersonInCharge",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/publishProject/pp_edits",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/publishProject/pp_detailsPage",
 				    "style" : {}
 				}
 			]

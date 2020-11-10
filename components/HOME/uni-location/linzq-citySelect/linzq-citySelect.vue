@@ -152,7 +152,12 @@
 				uni.authorize({
 					scope: a,
 					success() { //1.1 允许授权
-						_this.getLocationInfo();
+						// _this.getLocationInfo();
+						_this.getWarpweft()
+						// uni.setStorage({
+						// 	key: 'wx_position',
+						// 	data: '南平市'
+						// })
 					},
 					fail() { //1.2 拒绝授权
 						// console.log("你拒绝了授权，无法获得周边信息")
