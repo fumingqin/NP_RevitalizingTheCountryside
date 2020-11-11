@@ -15,16 +15,16 @@ const KyInterface = {
 		systemName: '南平综合出行',
 		// 用于南平综合出行 - 车票订购小程序使用
 		// #ifdef APP-PLUS
-		// KY_systemName:'南平综合出行APP',
-		KY_systemName:'振兴乡村APP',
+		KY_systemName:'南平综合出行APP',
+		KY_systemName2:'振兴乡村APP',
 		// #endif
 		// #ifdef MP-WEIXIN
-		// KY_systemName:'南平综合出行小程序',
-		KY_systemName:'振兴乡村小程序',
+		KY_systemName:'南平综合出行小程序',
+		KY_systemName2:'振兴乡村小程序',
 		// #endif
 		// #ifdef H5
-		// KY_systemName:'南平综合出行H5',
-		KY_systemName:'振兴乡村H5',
+		KY_systemName:'南平综合出行H5',
+		KY_systemName2:'振兴乡村H5',
 		// #endif
 		// 用于南平综合出行 - 车票订购小程序使用
 		// systemNameApp:'南平综合出行APP',

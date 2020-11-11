@@ -30,8 +30,11 @@
 
 				<!-- 上传视频 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
-					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
-					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+					<view style="display: block;">
+						<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
+						 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+						 <text class="videoClass">*目前该功能暂时只能上传小于200MB的视频</text>
+					</view>
 				</u-form-item>
 				<!-- <view v-if="informationDetail.video!=='' || types!==0" style="display: flex;position: relative;width: 100%;">
 					<text style="position: absolute;width: :;upx;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 28upx;">{{informationDetail.video}}</text>
@@ -637,5 +640,10 @@
 	//自定义上传按钮颜色
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
+	}
+	
+	.videoClass{
+		color: #FA3534;
+		font-size: 28upx;
 	}
 </style>

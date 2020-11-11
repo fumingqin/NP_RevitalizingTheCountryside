@@ -360,7 +360,7 @@
 				openId = that.ctkyOpenID;
 				// #endif
 				var companyCode = '';
-				companyCode = this.$ky_cpdg.KyInterface.system.KY_systemName;
+				companyCode = this.$ky_cpdg.KyInterface.system.KY_systemName2;
 				//--------------------------发起下单请求-----------------------
 				uni.showLoading({
 					title: '正在下单...'
@@ -650,18 +650,18 @@
 						prepayid: that.paymentData.jsapi.PrepayId,
 					},
 					success: function(res) {
-						// uni.showModal({
-						// 	title: '提示',
-						// 	content: res,
-						// 	showCancel: false
-						// })
 						console.log(res)
-
 						if (res.errMsg == 'requestPayment:ok') { //成功
 							uni.showToast({
 								title: '支付成功',
+								icon: 'none',
 							})
-							that.getTicketPaymentInfo_ticketIssue(that.orderNum);
+							uni.showLoading({
+								title: '加载中...'
+							});
+							setTimeout(function() {
+								that.getTicketPaymentInfo_ticketIssue(that.orderNum);
+							}, 4000)
 						} else if (res.errMsg == 'requestPayment:fail errors') { //错误
 							uni.showToast({
 								title: '支付失败，请重新支付',

@@ -36,10 +36,11 @@
 				</u-form-item>
 
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
+				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
-				</u-form-item>
+					<text class="videoClass">*目前该功能暂时只能上传小于20MB的视频</text>
+				</u-form-item> -->
 
 				<!-- 文件上传 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="添加文件" :border-bottom="false">
@@ -620,7 +621,7 @@
 											content: e,
 											image: JSON.stringify(this.lists),
 											title: this.model.name,
-											video: JSON.stringify(arr),
+											// video: JSON.stringify(arr),
 											pdfFile: JSON.stringify(arr2),
 											pdfName: this.filename,
 											ruralId:this.ruralId,
@@ -747,5 +748,10 @@
 		border-bottom-left-radius: 22rpx;
 		opacity: 0.9;
 		background: #E4E7ED;
+	}
+	
+	.videoClass{
+		color: #FA3534;
+		font-size: 28upx;
 	}
 </style>

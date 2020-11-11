@@ -60,6 +60,18 @@ const KyInterface = {
 		name:'获取负责人',
 		method:'POST',
 	},
+	
+	getProjectDetailByID:{
+		Url:Url + '/api/project/getProjectDetailByID',
+		name:'获取项目详情',
+		method:'POST',
+	},
+	
+	addViews:{
+		Url:Url + '/api/project/addViews',
+		name:'获取浏览量',
+		method:'POST',
+	},
 }
 
 // 接口声明区
