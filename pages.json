@@ -1026,6 +1026,12 @@
 				}
 				,{
 				    "path" : "pages/publishProject/pp_detailsPage",
+				    "style" : {
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+				    "path" : "pages/publishProject/pp_generalList",
 				    "style" : {}
 				}
 			]

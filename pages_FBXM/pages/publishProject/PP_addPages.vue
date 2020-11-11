@@ -578,7 +578,7 @@
 			},
 			onSuccess(res) {
 				console.log('上传成功回调', res);
-				this.filename = JSON.stringify(res.fileName);
+				this.filename = res.fileName;
 				this.localPath = JSON.parse(res.data.id);
 				console.log('上传成功回调', this.localPath);
 			},
@@ -605,6 +605,9 @@
 				var arr2 = [];
 				arr2.push(this.localPath.data);
 				console.log('1', arr2);
+				var arr3 = [];
+				arr3.push(this.filename);
+				console.log('2', arr3);
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -623,7 +626,7 @@
 											title: this.model.name,
 											// video: JSON.stringify(arr),
 											pdfFile: JSON.stringify(arr2),
-											pdfName: this.filename,
+											pdfName: JSON.stringify(arr3),
 											ruralId:this.ruralId,
 											personId:this.personId,
 											introduce: this.model.centent,

@@ -375,12 +375,12 @@
 						this.model.name = data.data.title;
 						this.model.phone=data.data.telphone;
 						this.model.centent = data.data.introduce;
-						this.filename=data.data.pdfName;
+						this.filename=data.data.pdfName[0];
 						this.village_name=data.data.ruralName;
 						this.ruralId=data.data.ruralId;
 						this.personId=data.data.personId;
 						this.nick_name=data.data.personName;
-						console.log('1233333',data.data.pdfFile[0])
+						console.log('1233333',data.data.pdfName[0])
 						this.onEditorReady();
 						// console.log('赋值前', this.lists)
 						for(var i=0;i<this.informationDetail.image.length;i++){
@@ -661,10 +661,11 @@
 			},
 			onSuccess(res) {
 				console.log('上传成功回调', res);
-				this.filename = JSON.stringify(res.fileName);
+				this.filename = res.fileName;
 				var a = JSON.parse(res.data.id);
 				this.localPath=a.data;
 				console.log('上传成功回调', this.localPath);
+				console.log('上传成功回调2', this.filename);
 			},
 
 			successData: function() {
@@ -700,6 +701,10 @@
 				var arr = [];
 				arr.push(this.localPath);
 				console.log('提交数据',arr)
+				var arr2=[];
+				arr2.push(this.filename)
+				console.log('提交的名字',this.filename)
+				console.log('提交数据2',arr2)
 				//-----------------提交表单数据-----------------------
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
@@ -719,7 +724,7 @@
 											title: this.model.name,
 											// video: JSON.stringify(this.imageList),
 											pdfFile: JSON.stringify(arr),
-											pdfName: this.filename,
+											pdfName: JSON.stringify(arr2),
 											ruralId:this.ruralId,
 											personId:this.personId,
 											introduce: this.model.centent,
