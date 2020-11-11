@@ -90,7 +90,7 @@
 		</u-modal>
 
 		<!-- 发现新版本弹出 -->
-		<u-modal v-model="upgradeStatus" :show-cancel-button="true" confirm-text="升级" title="发现新版本" @confirm="agreeProtocol">
+		<u-modal v-model="upgradeStatus" :show-cancel-button="true" confirm-text="升级" title="发现新版本" @confirm="confirmClick">
 			<view class="h_popupText">
 				<rich-text :nodes="upgradeContent"></rich-text>
 			</view>
@@ -108,14 +108,18 @@
 				protocolStatus: false, //隐藏弹出层，f为不弹，t为弹
 				upgradeStatus: false, //升级弹出层，f为不弹，t为弹
 				currentDate: '', //当前时间
-				upgradeContent: `
-								1. 修复badg组件的size参数无效问题<br>
-								2. 新增Modal模态框组件<br>
-								3. 新增压窗屏组件，可以在APP上以弹窗的形式遮盖导航栏和底部tabbar<br>
-								4. 修复键盘组件在微信小程序上遮罩无效的问题
-								`,
+				upgradeContent:'',
 				quickEntryData: [], //乡村美景数组
 				bannerImage : '',//首页banner图片
+				version:'', //应用版本参数
+				
+				//------------------------5个区域请求次数，限制只请求3次，如果还是无数据就提示---------------------
+				LoatIndex:0, //轮播图请求次数
+				LoatIndex2:0, //轮播图请求次数
+				LoatIndex3:0, //轮播图请求次数
+				LoatIndex4:0, //轮播图请求次数
+				LoatIndex5:0, //轮播图请求次数
+				//------------------------------------------------------------------------------------------
 				
 				functionArray: [{
 					array: [{
@@ -159,7 +163,10 @@
 			}else{
 				this.cacheLoadData();
 			}
-			
+			// #ifdef APP-PLUS
+			this.version=plus.runtime.version;
+			this.checkClick();
+			//#endif
 			// this.getTodayDate();
 			// #ifdef MP-WEIXIN
 			// 校验小程序登录
@@ -261,7 +268,17 @@
 					success: (res) => {
 						console.log('轮播区', res)
 						if(res.data.data == ''){
-							this.rotationLoadData();
+							if(this.LoatIndex <= 3){
+								this.LoatIndex = 0;
+								uni.showToast({
+									title:'服务器异常，请联系客服',
+									icon:'none'
+								})
+							}else{
+								this.LoatIndex = this.LoatIndex +1;
+								this.rotationLoadData();
+							}
+							
 						}else{
 							if(res.data.data.length >= 2){
 								this.rotationChart = res.data.data
@@ -301,7 +318,16 @@
 					success: (res) => {
 						// console.log('banner', res)
 						if(res.data.data == ''){
-							this.bannerLoadData();
+							if(this.LoatIndex2 <= 3){
+								this.LoatIndex2 = 0;
+								uni.showToast({
+									title:'服务器异常，请联系客服',
+									icon:'none'
+								})
+							}else{
+								this.LoatIndex2 = this.LoatIndex2 +1;
+								this.bannerLoadData();
+							}
 						}else{
 							this.bannerImage = res.data.data.image
 							uni.setStorage({
@@ -331,7 +357,16 @@
 					success: (res) => {
 						// console.log('跑马灯',res)
 						if(res.data.data == ''){
-							this.lampLoadData();
+							if(this.LoatIndex3 <= 3){
+								this.LoatIndex3 = 0;
+								uni.showToast({
+									title:'服务器异常，请联系客服',
+									icon:'none'
+								})
+							}else{
+								this.LoatIndex3 = this.LoatIndex3 +1;
+								this.lampLoadData();
+							}
 						}else{
 							this.information = [];
 							this.information.push(res.data.data.content)
@@ -359,7 +394,16 @@
 					success: (res) => {
 						// console.log('乡村美景',res)
 						if(res.data.data == ''){
-							this.countrysideLoadData();
+							if(this.LoatIndex4 <= 3){
+								this.LoatIndex4 = 0;
+								uni.showToast({
+									title:'服务器异常，请联系客服',
+									icon:'none'
+								})
+							}else{
+								this.LoatIndex4 = this.LoatIndex4 +1;
+								this.countrysideLoadData();
+							}
 						}else{
 							this.quickEntryData = res.data.data;
 							uni.setStorage({
@@ -387,7 +431,16 @@
 					success: (res) => {
 						// console.log('公开项目',res)
 						if(res.data.data == ''){
-							this.projectLoadData();
+							if(this.LoatIndex5 <= 3){
+								this.LoatIndex5 = 0;
+								uni.showToast({
+									title:'服务器异常，请联系客服',
+									icon:'none'
+								})
+							}else{
+								this.LoatIndex5 = this.LoatIndex5 +1;
+								this.projectLoadData();
+							}
 						}else{
 							this.advertisingMap = res.data.data;
 							uni.setStorage({
@@ -501,6 +554,86 @@
 				})
 			},
 			//#endif
+			
+			//版本数字转换
+			toNum:function(a){
+				var a=a.toString();
+				//也可以这样写 var c=a.split(/\./);
+				var c=a.split('.');
+				var num_place=["","0","00","000","0000"],r=num_place.reverse();
+				for (var i=0;i<c.length;i++){ 
+					var len=c[i].length;       
+					c[i]=r[len]+c[i];  
+				} 
+				var res= c.join(''); 
+				return res; 
+			},
+			
+			//版本对比
+			cpr_version:function(a,b){
+				//返回true，有新版本
+				//返回false，无新版本
+				var oldVersion=this.toNum(a);
+				var newVersion=this.toNum(b);   
+				if(oldVersion < newVersion){
+					return true;
+				}else{
+					return false;
+				}
+			},
+			
+			//请求接口，获取版本信息
+			checkClick:function(){
+				uni.request({
+					url: this.$GrzxInter.Interface.getVersion.value,
+					method: this.$GrzxInter.Interface.getVersion.method,
+					success: (res) => {
+						console.log(res,"版本号");
+						if(res.data.status){
+							// console.log('系统版本',this.version)
+							// console.log('服务器',res.data.data.version)
+							if(this.cpr_version(this.version,res.data.data.version)){
+								// console.log('我进来了')
+								this.upgradeStatus = true;
+								this.upgradeContent = res.data.data.content;
+							}
+						}
+					},
+					fail: () => {
+						
+					},
+				});
+			},
+			
+			//--------------------------下载按钮--------------------------
+			confirmClick:function(){
+				console.log("下载");
+				var wgtUrl="http://27.148.155.9:9248/LoadAppWebsite/zxxc_gxb.wgt";  
+				plus.nativeUI.showWaiting("下载wgt文件...");  
+				plus.downloader.createDownload( wgtUrl, {filename:"_doc/update/"}, function(d,status){  
+				    if ( status == 200 ) {   
+				        console.log("下载wgt成功："+d.filename);  
+				        var path = d.filename;
+						plus.nativeUI.showWaiting("安装wgt文件...");  
+						plus.runtime.install(path,{},function(){  
+						    plus.nativeUI.closeWaiting();  
+						    console.log("安装wgt文件成功！");  
+						    plus.nativeUI.alert("应用资源更新完成！",function(){  
+						        plus.runtime.restart();  
+						    });  
+						},function(e){  
+						    plus.nativeUI.closeWaiting();  
+						    console.log("安装wgt文件失败["+e.code+"]："+e.message);  
+						    plus.nativeUI.alert("安装wgt文件失败["+e.code+"]："+e.message);  
+						});  
+				    } else {  
+						console.log(status,"打印");
+				        console.log("下载wgt失败！");  
+				        plus.nativeUI.alert("下载wgt失败！");  
+				    }  
+				    plus.nativeUI.closeWaiting();  
+				}).start();  
+			},
 
 
 		}
