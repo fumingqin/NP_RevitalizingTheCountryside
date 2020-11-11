@@ -126,6 +126,13 @@
 					ImageURL2: "../../static/home/serve/kprw2.png", //暗
 					ItemTitle: "考评任务",
 					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_FBXM/pages/publishProject/pp_generalList",
+					ImageURL1: "../../static/home/serve/kprw.png", //亮
+					ImageURL2: "../../static/home/serve/kprw2.png", //暗
+					ItemTitle: "项目监督",
+					style: "sv_print",
 				}],
 
 				//村级管理区
@@ -186,6 +193,13 @@
 					ImageURL1: "../../static/home/serve/kpcx.png", //亮
 					ImageURL2: "../../static/home/serve/kpcx2.png", //暗
 					ItemTitle: "考评查询",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_FBXM/pages/publishProject/pp_list",
+					ImageURL1: "../../static/home/serve/kprw.png", //亮
+					ImageURL2: "../../static/home/serve/kprw2.png", //暗
+					ItemTitle: "项目管理",
 					style: "sv_print",
 				}],
 

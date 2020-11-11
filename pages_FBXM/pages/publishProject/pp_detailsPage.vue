@@ -5,7 +5,7 @@
 			<u-loading slot="loading"></u-loading>
 			<view slot="error" style="font-size: 24rpx;">加载失败</view>
 		</u-swiper>
-		
+
 		<view class="ovof_dp_background">
 			<view style="width: 750upx;"></view>
 			<view class="ovof_dp_bg_background">
@@ -24,21 +24,21 @@
 					</view>
 				</view>
 			</view>
-			
+
 			<view class="u-content">
-				
+
 				<!-- 顶部滑动 -->
 				<view class="screen">
 					<view class="screenView">
-						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)"> 
+						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)">
 							项目介绍
 						</view>
 						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
-							相关视频
+							相关文件
 						</view>
 					</view>
 				</view>
-				
+
 				<view v-if="type==0">
 					<view>
 						<view class="warning">
@@ -53,21 +53,31 @@
 							<text class="rural">乡村名称：{{groupTitle.ruralName}}</text>
 							<text class="personCharge">负责人：{{groupTitle.personName}}</text>
 						</view>
-						<view class="buttonClass">
-							<view class="btnClass" style="background: #70c778;" v-if="groupTitle.warnNum <= 3" @click="warning">警告</view>
-							<view class="btnClass" style="background: #F29100;" v-if="groupTitle.warnNum > 3 && groupTitle.warnNum <= 6" @click="warning">警告</view>
+						<view class="buttonClass" v-if="userInfo.duty=='市级职责人员' || userInfo.duty=='县级职责人员'">
+							<view class="btnClass" style="background: #70c778;" hover-class="ve_hover" v-if="groupTitle.warnNum <= 3" @click="warning">警告</view>
+							<view class="btnClass" style="background: #F29100;" v-if="groupTitle.warnNum > 3 && groupTitle.warnNum <= 6"
+							 @click="warning">警告</view>
 							<view class="btnClass" style="background: #E3424B;" v-if="groupTitle.warnNum > 6" @click="warning">警告</view>
 						</view>
 					</view>
 				</view>
-				
-				<view style="margin: 40upx 0 0 80upx;padding-bottom: 104upx;" v-if="type==1 && video==true">
-					<video id="myVideo" :src="groupTitle.video[0]" enable-danmu danmu-btn controls></video>
+
+				<view style="margin: 40upx 0 0 80upx;padding-bottom: 252upx;" v-if="type==1 && pdfFile==true">
+					<view style="margin-bottom: 30upx;">
+						<view style="width: 600upx;text-indent : 0em;">文件名：{{groupTitle.pdfName[0]}}</view>
+						<l-file ref="lFile" @up-success="onSuccess"></l-file>
+						<view>
+							<view style="display: flex;">
+								<view class="at_button" @tap="onOpenDoc(groupTitle.pdfFile[0])">预览</view>
+								<view class="at_button" @tap="onDown(groupTitle.pdfFile[0])">下载</view>
+							</view>
+						</view>
+					</view>
 				</view>
-				
+
 				<!-- 缺省提示 -->
-				<view style="padding:200upx 0" v-if="type==1 && video==false">
-					<u-empty text="暂无相关视频哦~" mode="list"></u-empty>
+				<view style="padding:200upx 0" v-if="type==1 && pdfFile==false">
+					<u-empty text="暂无相关文件哦~" mode="list"></u-empty>
 				</view>
 			</view>
 		</view>
@@ -79,16 +89,16 @@
 		data() {
 			return {
 				rotationChart: [], //轮播图
-				groupTitle:[],
-				title:'农田基础建设项目',
-				time:'2020-02-10',
-				browse:'122',
-				showHeight:600,
+				groupTitle: [],
+				title: '农田基础建设项目',
+				time: '2020-02-10',
+				browse: '122',
+				showHeight: 600,
 				toggle: false,
-				post:'市级职责人员',
+				post: '市级职责人员',
 				type: 0,
-				id:'',
-				video:false,
+				id: '',
+				pdfFile: false,
 				userInfo: [],
 				// 字符串的形式
 				style: {
@@ -97,30 +107,27 @@
 				},
 			}
 		},
-		
-		onLoad:function(param) {
+
+		onLoad: function(param) {
 			this.id = param.id;
 			console.log(this.id)
 		},
-		
+
 		onShow() {
 			uni.showLoading({
 				title: '加载详情中...',
 			})
 			this.userData();
 		},
-		
+
 		onPullDownRefresh: function() {
-			uni.showToast({
-				title: '加载详情中...',
-			});
 			this.userData();
 		},
-		
+
 		onUnload() {
 			uni.hideLoading();
 		},
-		
+
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
 			userData: function() {
@@ -134,25 +141,25 @@
 					fail: (err) => {
 						uni.hideLoading()
 						uni.showToast({
-							title:'您暂未登录，已为您跳转登录页面',
-							icon:'none',
+							title: '您暂未登录，已为您跳转登录页面',
+							icon: 'none',
 							success: () => {
 								uni.navigateTo({
-									url : '../../../pages/GRZX/userLogin'
+									url: '../../../pages/GRZX/userLogin'
 								})
 							}
 						})
 					}
 				});
 			},
-			
+
 			//加载数据
 			loadData: function() {
 				uni.request({
-					url:this.$fbxm.KyInterface.addViews.Url,
-					method:this.$fbxm.KyInterface.addViews.method,
-					data:{
-						id : this.id
+					url: this.$fbxm.KyInterface.addViews.Url,
+					method: this.$fbxm.KyInterface.addViews.method,
+					data: {
+						id: this.id
 					},
 					success: (res) => {
 						console.log('浏览量+1', res)
@@ -164,26 +171,26 @@
 						})
 					}
 				})
-				
+
 				uni.request({
 					url: this.$fbxm.KyInterface.getProjectDetailByID.Url,
 					method: this.$fbxm.KyInterface.getProjectDetailByID.method,
-					data:{
-						id : this.id
+					data: {
+						id: this.id
 					},
 					success: (res) => {
 						console.log('详情', res)
-						if(res.data.status == true){
+						if (res.data.status == true) {
 							uni.hideLoading();
 							uni.stopPullDownRefresh();
-							this.groupTitle=res.data.data;
-							if(this.groupTitle.video[0].length == 0){
-								this.video= false;
-							}else{
-								this.video= true;
+							this.groupTitle = res.data.data;
+							if (this.groupTitle.pdfFile[0].length == 0) {
+								this.pdfFile = false;
+							} else {
+								this.pdfFile = true;
 							}
 							// console.log('列表数据',this.groupTitle)
-						}else{
+						} else {
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 							uni.showToast({
@@ -202,8 +209,27 @@
 					}
 				})
 			},
-			
-			
+
+			//----------------预览--------------------
+			onOpenDoc(e) {
+				let url = e;
+				/* 下载返回临时路径（退出应用失效） */
+				this.$refs.lFile.download(url)
+					.then(path => {
+						/* 预览 */
+						this.$refs.lFile.open(path);
+					});
+			},
+			//--------------下载---------------------
+			onDown(e) {
+				let url = e;
+				this.$refs.lFile.download(url, 'local')
+					.then(path => {
+					console.log(path);
+				});
+			},
+
+
 			warning: function() {
 				uni.showModal({
 					title: '您确认警告吗？',
@@ -217,28 +243,29 @@
 								url: this.$fbxm.KyInterface.warnProject.Url,
 								method: this.$fbxm.KyInterface.warnProject.method,
 								data: {
-									id:this.id,
-									userId:this.userInfo.userId,
-									ruralId:this.groupTitle.ruralId
+									id: this.id,
+									// userId:this.userInfo.userId,
+									userId: 100004,
+									ruralId: this.groupTitle.ruralId
 								},
 								success: (res) => {
-									console.log(res)
+									console.log('警告成功', res)
 									if (res.data.status == true) {
 										uni.hideLoading()
 										uni.showToast({
 											title: '警告成功',
-											icon: 'success'
+											icon: 'none'
 										})
 										uni.startPullDownRefresh();
 									} else {
 										uni.hideLoading()
 										uni.showToast({
-											title: '警告失败',
-											icon: 'success'
+											title: res.data.msg,
+											icon: 'none'
 										})
 										uni.startPullDownRefresh();
 									}
-			
+
 								},
 								fail: () => {
 									uni.hideLoading()
@@ -250,13 +277,13 @@
 								}
 							})
 						} else {
-			
+
 						}
 					}
 				})
 			},
-			
-			
+
+
 			tabClick(e) {
 				if (e == 0) {
 					this.type = 0;
@@ -273,71 +300,72 @@
 	page {
 		background-color: #f6f6f6;
 	}
-	
-	.ovof_dp_background{
+
+	.ovof_dp_background {
 		position: absolute;
 		z-index: 999;
 		top: 376upx;
 	}
-	
-	.ovof_dp_bg_background{
+
+	.ovof_dp_bg_background {
 		padding: 30upx;
 		border-top-left-radius: 30upx;
 		border-top-right-radius: 30upx;
 		width: 100%;
 		background: #FFFFFF;
 	}
-	
-	.ovof_dp_bg_title{
+
+	.ovof_dp_bg_title {
 		color: #333333;
 		font-size: 40upx;
 		font-weight: bold;
 		padding-top: 20rpx;
 	}
-	
-	.ovof_dp_bg_time{
+
+	.ovof_dp_bg_time {
 		display: flex;
 		margin-top: 20upx;
-		
-		.time{
+
+		.time {
 			font-size: 30upx;
 			color: #888;
 		}
-		
-		.browse{
+
+		.browse {
 			padding-left: 20upx;
 			font-size: 30upx;
 			color: #888;
 		}
 	}
-	
-	.u-content{
+
+	.u-content {
 		margin-top: 20upx;
 		background: #FFFFFF;
 		padding-left: 15upx;
 		padding-right: 15upx;
 		width: 100%;
 	}
-	
+
 	.grClass {
 		position: relative;
 		display: flex;
 		margin-top: 40upx;
-		
+
 		// padding-right: 40upx;
 		.txImage {
 			border-radius: 50%;
 			width: 88upx;
 			height: 88upx;
 		}
-	
+
 		.grView {
 			margin-left: 25upx;
+
 			.name {
 				display: flex;
 				font-size: 32upx;
 				color: #333333;
-	
+
 				.ladelView {
 					border-radius: 5px;
 					margin-left: 11upx;
@@ -350,7 +378,7 @@
 					margin-top: 5upx;
 				}
 			}
-	
+
 			.number {
 				display: block;
 				font-size: 28upx;
@@ -358,7 +386,7 @@
 				padding-top: 10upx;
 			}
 		}
-	
+
 		.address {
 			position: absolute;
 			font-size: 32upx;
@@ -367,8 +395,8 @@
 			top: 16upx;
 		}
 	}
-	
-	
+
+
 	//筛选样式
 	.screen {
 		height: 87upx;
@@ -418,21 +446,21 @@
 			}
 		}
 	}
-	
-	.ruralPersonCharge{
+
+	.ruralPersonCharge {
 		position: relative;
 		width: 100%;
 		text-align: right;
 		margin-top: 40upx;
 		padding-right: 20upx;
-		
-		.rural{
+
+		.rural {
 			display: block;
 			font-size: 32upx;
 			color: #888;
 		}
-		
-		.personCharge{
+
+		.personCharge {
 			display: block;
 			font-size: 32upx;
 			color: #888;
@@ -440,24 +468,24 @@
 			padding-bottom: 190upx;
 		}
 	}
-	
-	.warning{
+
+	.warning {
 		position: relative;
 		width: 100%;
 		margin-top: 50upx;
 		padding-left: 20upx;
-		
-		.numberWarnings{
+
+		.numberWarnings {
 			display: block;
 			font-size: 32upx;
 		}
 	}
-	
+
 	.buttonClass {
 		position: fixed;
 		bottom: 34upx;
 		width: 96%;
-	
+
 		.btnClass {
 			width: 100%;
 			padding: 20upx 0;
@@ -467,5 +495,22 @@
 			font-size: 34upx;
 		}
 	}
-	
+
+	//点击态
+	.ve_hover {
+		transition: all .3s; //过度
+		border-radius: 15upx;
+		opacity: 0.9;
+		background: #E4E7ED;
+	}
+
+	.at_button {
+		text-indent: 0em;
+		padding: 16upx 68upx;
+		// font-size: 24upx;
+		border-radius: 6upx;
+		border: 1upx solid #888;
+		color: #888;
+		margin-right: 24upx;
+	}
 </style>

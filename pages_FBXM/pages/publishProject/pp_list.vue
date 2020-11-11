@@ -10,9 +10,8 @@
 					<view style="display: flex;">
 						<view class="tv_title">{{item.title}}</view>
 					</view>
-					<!-- <text class="tv_richText">{{item.content}}</text> -->
 					<view class="tv_view2">
-						<rich-text class="tv_richText" :nodes="item.content"></rich-text>
+						<text class="tv_richText">{{item.introduce}}</text>
 					</view>
 				</view>
 				<image class="tv_image" :src="item.image" mode="aspectFill"></image>
@@ -46,7 +45,7 @@
 
 		<!-- 缺省提示 -->
 		<view style="margin-top: 250upx;" v-if="groupTitle.length ==0">
-			<u-empty text="该分类没有资讯哦~" mode="news"></u-empty>
+			<u-empty text="该分类没有项目哦~" mode="news"></u-empty>
 		</view>
 	</view>
 </template>
@@ -459,7 +458,7 @@
 						padding-right: 16upx;
 						width: 454upx;
 						// font-weight: bold;
-						font-size: 30upx;
+						font-size: 30upx; 
 						line-height: 1.7;
 						height: 100upx;
 						text-overflow: -o-ellipsis-lastline;
