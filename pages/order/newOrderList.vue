@@ -36,7 +36,7 @@
 								<!-- #ifndef MP-WEIXIN -->
 								<view class="at_button at_btDelete" v-if="item.state=='4'" @click="busLocation(item)">车辆位置</view>
 								<!-- #endif -->
-								<view class="at_button at_btDelete" v-if="item.state=='7'||item.state=='等待确认'" @tap="open3(item.orderNumber)">取消</view>
+								<view class="at_button at_btDelete" v-if="item.state=='7'||item.state=='等待确认'" @tap="open3(item.orderNumber,'2')">取消</view>
 								<view class="at_button at_btDelete" v-if="item.state=='4'||item.state=='尚未取票'" @tap="open2(item.orderNumber)">退票</view>
 								<view class="at_button at_btDelete" v-if="item.state=='4'||item.state=='已取票'" @click="KyComplain(item)">投诉</view>
 								<view class="at_button at_btToPay" v-if="item.state=='7'" @tap="keYunPay(item,item.carType)">去支付</view>
@@ -373,7 +373,7 @@
 								<text class="at_contentText">班次：&nbsp;{{getScheduleNum(item)}}</text>
 							</view>
 							<view class="at_buttonView">
-								<view class="at_button at_btDelete" v-if="item.carType=='普通班车' || item.carType=='定制班车'" @tap="open3(item.orderNumber)">取消</view>
+								<view class="at_button at_btDelete" v-if="item.carType=='普通班车' || item.carType=='定制班车'" @tap="open3(item.orderNumber,'2')">取消</view>
 								<view class="at_button at_btToPay" @tap="keYunPay(item,item.carType)">去支付</view>
 								<view class="at_button at_btDetails" @click="keYunDetail(item)">详情</view>
 							</view>
@@ -1490,7 +1490,48 @@
 			},
 			//-------------------------取消-------------------------
 			cancel: function() {
-				this.cancel_getTicketPaymentInfo(this.ticketOrderNumber);
+				
+					if (this.exitindex == '3') {
+						uni.request({
+							url: $lyfw.Interface.spt_CancelTickets.value,
+							method: $lyfw.Interface.spt_CancelTickets.method,
+							data: {
+								orderNumber: this.ticketOrderNumber
+							},
+							header: {
+								'content-type': 'application/json'
+							},
+							success: (e) => {
+								// console.log(e)
+								if (e.data.msg == '订单取消成功') {
+									uni.showToast({
+										title: '订单取消成功',
+										icon: 'none'
+									})
+									this.close3();
+									uni.startPullDownRefresh()
+								} else if (e.data.msg == '订单取消失败') {
+									uni.showToast({
+										title: '订单取消失败',
+										icon: 'none'
+									})
+									this.close3();
+									uni.startPullDownRefresh()
+								}
+							},
+							fail() {
+								uni.showToast({
+									title: '取消失败！请检查网络状态',
+									icon: 'none',
+									duration: 1500,
+								})
+							}
+						})
+					} else if (this.exitindex == '2') {//客运取消
+						// this.keYunCancelTicket(this.ticketOrderNumber);
+						//客运取消之前先检测当前车票状态
+						this.cancel_getTicketPaymentInfo(this.ticketOrderNumber);
+					}
 			},
 			//------------------------------------------------客运结束------------------------------------------------
 			onClickItem(e) { //tab点击事件

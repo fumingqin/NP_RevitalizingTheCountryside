@@ -7,7 +7,7 @@
 						<view class="tv_view">
 							<view style="display: flex;">
 								<view style="margin-top: 10upx;">
-									<text class="tv_label">{{item.id}}</text>
+									<text class="tv_label">政策发布</text>
 								</view>
 								<view class="tv_title">{{item.title}}</view>
 							</view>
