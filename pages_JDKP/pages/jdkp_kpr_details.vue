@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<view style="padding: 32upx 0;">
-			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.order_state !== '已取消'"></uni-steps>
-			<uni-steps :options="stepsList2" :active="StepsIndex" v-if="stepsData.order_state == '已取消'" activeColor="#FA3534"></uni-steps>
+			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.state == '已发布' || stepsData.state == '已完成'"></uni-steps>
+			<uni-steps :options="stepsList2" :active="StepsIndex" v-if="stepsData.state == '已取消'" activeColor="#FA3534"></uni-steps>
 		</view>
 		
 		
@@ -277,10 +277,15 @@
 			
 			//资讯时间
 			informationDate: function(e) {
-				// console.log(e)
+				console.log(e)
 				// var tsetDate = e.replace('T',' ')
-				var a = e.substr(0, 10)
-				return a;
+				if(e !== undefined){
+					var a = e.substr(0, 10)
+					return a;
+				}else{
+					return '';
+				}
+				
 			},
 			
 		}
