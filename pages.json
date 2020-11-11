@@ -1005,34 +1005,46 @@
 				{
 				    "path" : "pages/publishProject/pp_list",
 				    "style" : {
+						"navigationBarTitleText": "项目管理页",
 						"enablePullDownRefresh": true
 					}
 				}
 				,{
 				    "path" : "pages/publishProject/PP_addPages",
-				    "style" : {}
+				    "style" : {
+						"navigationBarTitleText": "添加项目页"
+					}
 				}
 				,{
 				    "path" : "pages/publishProject/pp_chooseCountryside",
-				    "style" : {}
+				    "style" : {
+						"navigationBarTitleText": "选择乡村名称"
+					}
 				}
 				,{
 				    "path" : "pages/publishProject/pp_choicePersonInCharge",
-				    "style" : {}
+				    "style" : {
+						"navigationBarTitleText": "选择负责人"
+					}
 				}
 				,{
 				    "path" : "pages/publishProject/pp_edits",
-				    "style" : {}
+				    "style" : {
+						"navigationBarTitleText": "修改项目页"
+					}
 				}
 				,{
 				    "path" : "pages/publishProject/pp_detailsPage",
 				    "style" : {
+						"navigationBarTitleText": "项目监督详情页",
 						"enablePullDownRefresh": true
 					}
 				}
 				,{
 				    "path" : "pages/publishProject/pp_generalList",
-				    "style" : {}
+				    "style" : {
+						"navigationBarTitleText": "项目监督页"
+					}
 				}
 			]
 		},
