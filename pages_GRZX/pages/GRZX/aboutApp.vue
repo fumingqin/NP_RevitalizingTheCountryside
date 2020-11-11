@@ -162,17 +162,7 @@
 					title:'功能介绍'
 				})
 			},
-			
-			// // #ifdef APP-PLUS
-			// plus.runtime.openURL(that.$GrzxInter.downloadAPP);
-			// // #endif
-			// // #ifndef APP-PLUS
-			// uni.showToast({
-			// 	title:'暂无法下载新版本',
-			// 	icon:'none'
-			// })
-			// // #endif
-			// wgt :http://27.148.155.9:9248/LoadAppWebsite/zxxc_gxb.wgt
+
 			//--------------------------检查新功能--------------------------
 			checkClick(){
 				uni.request({
@@ -306,16 +296,16 @@
 			
 			//--------------------------软件许可及服务协议--------------------------
 			agreementClick(){
-				// uni.navigateTo({
-				// 	url:this.$GrzxInter.Route.privacyService.url+'?title=软件许可及服务协议',
-				// })
+				uni.navigateTo({
+					url:this.$GrzxInter.Route.privacyService.url+'?title=软件许可及服务协议',
+				})
 			},
 			
 			//--------------------------隐私政策--------------------------
 			privacyClick(){
-				// uni.navigateTo({
-				// 	url:this.$GrzxInter.Route.privacyService.url+'?title=隐私政策',
-				// })
+				uni.navigateTo({
+					url:this.$GrzxInter.Route.privacyService.url+'?title=隐私政策',
+				})
 			},
 		}
 	}
