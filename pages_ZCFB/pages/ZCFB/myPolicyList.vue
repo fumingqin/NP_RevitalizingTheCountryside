@@ -58,6 +58,20 @@
 				}
 		},
 		onLoad() {
+			uni.getStorage({
+				key: 'userInfo',
+				fail() {
+					uni.showToast({
+						icon: 'none',
+						title: '暂未登录,请登录后查看'
+					})
+					setTimeout(function() {
+						uni.navigateTo({
+							url: '/pages/GRZX/userLogin'
+						})
+					}, 500);
+				}
+			});
 			uni.showLoading({
 				title: '加载列表中...',
 			})
@@ -81,9 +95,6 @@
 		methods: {
 			//----------------------列表接口--------------------------------
 			zcfbData:function(){
-				uni.showLoading({
-					title: '加载列表中...',
-				})
 				uni.getStorage({
 					key: 'userInfo',
 					success: (res) => {
@@ -92,7 +103,7 @@
 					url:this.$zcfb.KyInterface.getPolicyById.Url,
 					method:this.$zcfb.KyInterface.getPolicyById.method,
 					data:{
-						userId:res.data.userId,
+						userId:100012,
 						},
 					success:(res) =>{
 						console.log('列表数据',res)
@@ -243,7 +254,7 @@
 			},
 			//--------------------------路由跳转------------------------------
 			details:function(e){
-				uni.navigateTo({
+				uni.redirectTo({
 					url:'policyDetails?id=' +e,
 				})
 			}

@@ -133,7 +133,6 @@
 						image: '../../static/home/vajra/fabudongtai.png',
 						display: true,
 						entrance: '../../pages_ZCFB/pages/ZCFB/policyList',
-						entrance: '',
 					}, {
 						name: '乡村评榜',
 						image: '../../static/home/vajra/jidukaohe.png',
