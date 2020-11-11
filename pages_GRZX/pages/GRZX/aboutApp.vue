@@ -181,9 +181,9 @@
 					success: res => {
 						console.log(res,"版本号");
 						if(res.data.status){
-							if(this.cpr_version(this.version,res.data.data)){
+							if(this.cpr_version(this.version,res.data.data.version)){
 								this.show = true;
-								this.content = "检测到您有新版版本，版本号为："+res.data.data+"，是否前往下载?";
+								this.content = "检测到您有新版版本，版本号为："+res.data.data.version+"，是否前往下载?";
 							}else{
 								uni.showToast({
 									title: '您已是最新版本',
