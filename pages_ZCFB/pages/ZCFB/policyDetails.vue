@@ -31,9 +31,9 @@
 						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)"> 
 							项目介绍
 						</view>
-						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
+						<!-- <view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
 							相关视频
-						</view>
+						</view> -->
 						<view class="screenText" :class="{current:type===2}" @click="tabClick(2)">
 							相关文件
 						</view>
@@ -54,7 +54,7 @@
 				</u-read-more>
 				<u-read-more v-if="type==2" :toggle="toggle" :show-height="showHeight">
 					<view style="margin-bottom: 30upx;">
-						<view style="width: 600upx;text-indent : 0em;">文件名：{{groupTitle.pdfName}}</view>
+						<view style="width: 600upx;text-indent : 0em;">文件名：{{groupTitle.pdfName[0]}}</view>
 						<l-file ref="lFile" @up-success="onSuccess"></l-file>
 						<view>
 							<view style="display: flex;">
@@ -136,6 +136,13 @@
 							icon: 'none'
 						})
 					}
+				})
+			},
+			onSuccess(res) {
+				console.log('上传成功回调',JSON.stringify(res));
+				uni.showToast({
+					title: JSON.stringify(res),
+					icon: 'none'
 				})
 			},
 			//-------------------时间切割---------------------------

@@ -35,8 +35,16 @@
 			</view>
 		</uni-popup>
 		
+		
+		<u-modal v-model="downShow" :content="downContent" :show-confirm-button="false"  confirm-text="后台下载" @confirm="bgDownloadApk"
+			:show-cancel-button="true" cancel-text="取消"  @cancel="cancelDownload" title="下载新版本">
+			<view class="lineClass">
+				<u-line-progress :percent="percent" :show-percent="true" :striped-active="true"></u-line-progress>
+			</view>
+		</u-modal>
+		
 		<u-modal v-model="show" :content="content" :show-cancel-button="true"
-		confirm-text="前往下载" cancel-text="取消" @confirm="confirmClick" @cancel="cancelClick" title="检查更新"></u-modal>
+		confirm-text="前往下载" cancel-text="取消" @confirm="downloadApk" @cancel="cancelClick" title="检查更新"></u-modal>
 	</view>
 </template>
 
@@ -51,13 +59,18 @@
 				checkVersion:'检查新版本',
 				agreement:'《软件许可及服务协议》',
 				privacy:'《隐私政策》',
-				copyright1:'途游信息科技 版权所有',
+				copyright1:'中国联通 版权所有',
 				copyright2:'Copyright©2020 Journey',
 				copyright3:'All Rights Reserved',
 				version:'',
 				logo:'../../../../static/GRZX/logo.png',
 				show:false,	//是否开启下载提示
 				content:'',//提示信息
+				percent:0,
+				
+				downShow:false, //显示下载进度条
+				downContent:'',//进度显示内容
+				downloadTask:'', //下载任务
 			}
 		},
 		onLoad(){
@@ -65,6 +78,36 @@
 			this.version=plus.runtime.version;
 			//#endif
 			// this.loadService();
+		},
+		onBackPress(e) {
+			var that = this;
+		    console.log(e);
+		    if(e.from == 'backbutton' && this.downShow){
+				uni.showModal({
+					title: '温馨提示',
+					content: '退出后，后台继续下载？',
+					showCancel: true,
+					cancelText: '退出并取消下载',
+					confirmText: '后台下载',
+					success: res => {
+						if(res.confirm){
+							
+							console.log("后台下载");
+							return true;//阻止默认返回行为
+						}else if(res.cancel){
+							that.cancelDownload();
+							console.log("退出并取消下载");
+							return true;//阻止默认返回行为
+						}
+					},
+					fail: () => {
+						return true;//阻止默认返回行为
+					},
+					complete: () => {
+						return true;//阻止默认返回行为
+					}
+				});
+		    }
 		},
 		components: { uniPopup },  //注册为子组件
 		methods:{
@@ -138,9 +181,9 @@
 					success: res => {
 						console.log(res,"版本号");
 						if(res.data.status){
-							if(this.cpr_version(this.version,res.data.data)){
+							if(this.cpr_version(this.version,res.data.data.version)){
 								this.show = true;
-								this.content = "检测到您有新版版本，版本号为："+res.data.data+"，是否前往下载?";
+								this.content = "检测到您有新版版本，版本号为："+res.data.data.version+"，是否前往下载?";
 							}else{
 								uni.showToast({
 									title: '您已是最新版本',
@@ -186,40 +229,79 @@
 					return false;
 				}
 			},
-			
-			//--------------------------下载按钮--------------------------
-			confirmClick(){
-				console.log("下载");
-				var wgtUrl="http://27.148.155.9:9248/LoadAppWebsite/zxxc_gxb.wgt";  
-				plus.nativeUI.showWaiting("下载wgt文件...");  
-				plus.downloader.createDownload( wgtUrl, {filename:"_doc/update/"}, function(d,status){  
-				    if ( status == 200 ) {   
-				        console.log("下载wgt成功："+d.filename);  
-				        var path = d.filename;
-						plus.nativeUI.showWaiting("安装wgt文件...");  
-						plus.runtime.install(path,{},function(){  
-						    plus.nativeUI.closeWaiting();  
-						    console.log("安装wgt文件成功！");  
-						    plus.nativeUI.alert("应用资源更新完成！",function(){  
-						        plus.runtime.restart();  
-						    });  
-						},function(e){  
-						    plus.nativeUI.closeWaiting();  
-						    console.log("安装wgt文件失败["+e.code+"]："+e.message);  
-						    plus.nativeUI.alert("安装wgt文件失败["+e.code+"]："+e.message);  
-						});  
-				    } else {  
-						console.log(status,"打印");
-				        console.log("下载wgt失败！");  
-				        plus.nativeUI.alert("下载wgt失败！");  
-				    }  
-				    plus.nativeUI.closeWaiting();  
-				}).start();  
-			},
-			
+
 			//--------------------------取消按钮--------------------------
 			cancelClick(){
 				console.log("取消");
+			},
+			
+			//--------------------------下载按钮--------------------------
+			downloadApk(){
+				console.log("下载apk");
+				this.downShow = true;
+				var that = this;
+				that.downloadTask = uni.downloadFile({
+					url:'http://27.148.155.9:9248/LoadAppWebsite/振兴乡村APP.apk',
+					success(downloadResult) {
+						console.log(downloadResult,"下载文件wgt");
+						if (downloadResult.statusCode === 200) {
+							that.downShow = false;
+							uni.showToast({
+								title: '下载完成',
+								icon:'none',
+							});
+							plus.runtime.install(
+								downloadResult.tempFilePath,
+								{
+									force: true
+								},
+								// function() {
+								// 	uni.showToast({
+								// 		title: '应用更新完成稍后将重启应用',
+								// 		icon:'none'
+								// 	});
+								// 	setTimeout(() => {
+								// 		plus.runtime.restart();
+								// 	}, 1000);
+								// },
+								function(e) {
+									uni.showToast({
+										icon: 'none',
+										title: e
+									});
+								}
+							);
+						}else{
+							uni.showToast({
+								title: '应用下载失败',
+								icon:'none'
+							});
+						}
+					},
+					fail(e){
+						uni.showToast({
+							title:e,
+							icon:'none'
+						});
+					},complete:()=>{
+						setTimeout(() => {
+							uni.hideLoading();
+						}, 1000);
+					}
+				});
+				// 监听下载进度
+				that.downloadTask.onProgressUpdate((e)=>{
+					that.percent = e.progress;
+				})
+			},
+			
+			//--------------------------后台下载--------------------------
+			bgDownloadApk(){
+				this.downShow = false;
+			},
+			//--------------------------取消下载--------------------------
+			cancelDownload(){
+				this.downloadTask.abort();
 			},
 			
 			//--------------------------软件许可及服务协议--------------------------
@@ -390,4 +472,9 @@
 		padding: 25upx 0;
 	}
 	//弹框end
+	
+	.lineClass{
+		width: 90%;
+		margin: 20upx 5% 40upx 5%;
+	}
 </style>

@@ -479,7 +479,7 @@
 				{
 					"path": "pages/ZCFB/policyDetails",
 					"style": {
-						"navigationBarTitleText": "政策详情"
+						
 					}
 				},
 				{
@@ -1022,6 +1022,10 @@
 				}
 				,{
 				    "path" : "pages/publishProject/pp_edits",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/publishProject/pp_detailsPage",
 				    "style" : {}
 				}
 			]

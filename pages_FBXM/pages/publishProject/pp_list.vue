@@ -210,7 +210,7 @@
 			//--------------------------路由跳转------------------------------
 			routeJump: function(e) {
 				uni.navigateTo({
-					url: 'ovof_detailsPage?id=' + e,
+					url: 'pp_detailsPage?id=' + e,
 				})
 			},
 
