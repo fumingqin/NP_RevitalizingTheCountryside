@@ -41,11 +41,22 @@
 				
 				<view v-if="type==0">
 					<view>
+						<view class="warning">
+							<text class="numberWarnings" style="color: #70c778;" v-if="groupTitle.warnNum <= 3">警告次数：{{groupTitle.warnNum}}</text>
+							<text class="numberWarnings" style="color: #F29100;" v-if="groupTitle.warnNum > 3 && groupTitle.warnNum <= 6">警告次数：{{groupTitle.warnNum}}</text>
+							<text class="numberWarnings" style="color: #E3424B;" v-if="groupTitle.warnNum > 6">警告次数：{{groupTitle.warnNum}}</text>
+						</view>
 						<u-read-more :toggle="toggle" :show-height="showHeight">
 							<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 						</u-read-more>
-						<view style="position: relative;width: 100%;text-align: right;">
-							<text style="">乡村名称：{{groupTitle.ruralName}}</text>
+						<view class="ruralPersonCharge">
+							<text class="rural">乡村名称：{{groupTitle.ruralName}}</text>
+							<text class="personCharge">负责人：{{groupTitle.personName}}</text>
+						</view>
+						<view class="buttonClass">
+							<view class="btnClass" style="background: #70c778;" v-if="groupTitle.warnNum <= 3" @click="warning">警告</view>
+							<view class="btnClass" style="background: #F29100;" v-if="groupTitle.warnNum > 3 && groupTitle.warnNum <= 6" @click="warning">警告</view>
+							<view class="btnClass" style="background: #E3424B;" v-if="groupTitle.warnNum > 6" @click="warning">警告</view>
 						</view>
 					</view>
 				</view>
@@ -78,6 +89,7 @@
 				type: 0,
 				id:'',
 				video:false,
+				userInfo: [],
 				// 字符串的形式
 				style: {
 					p: 'letter-spacing: 4rpx;text-align: justify;line-height: 48rpx;font-size:30rpx;text-justify: inter-ideograph; text-indent: 2em;padding-bottom: 20rpx;padding-top: 20rpx;',
@@ -95,7 +107,14 @@
 			uni.showLoading({
 				title: '加载详情中...',
 			})
-			this.loadData();
+			this.userData();
+		},
+		
+		onPullDownRefresh: function() {
+			uni.showToast({
+				title: '加载详情中...',
+			});
+			this.userData();
 		},
 		
 		onUnload() {
@@ -103,6 +122,30 @@
 		},
 		
 		methods: {
+			//-------------------------------乘客数据读取-------------------------------
+			userData: function() {
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.userInfo = res.data;
+						console.log('获取个人信息', this.userInfo)
+						this.loadData();
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../../pages/GRZX/userLogin'
+								})
+							}
+						})
+					}
+				});
+			},
+			
 			//加载数据
 			loadData: function() {
 				uni.request({
@@ -156,6 +199,59 @@
 							title: '服务器异常',
 							icon: 'none'
 						})
+					}
+				})
+			},
+			
+			
+			warning: function() {
+				uni.showModal({
+					title: '您确认警告吗？',
+					success: (res) => {
+						console.log(res)
+						if (res.confirm == true) {
+							uni.showLoading({
+								title: '正在警告....'
+							})
+							uni.request({
+								url: this.$fbxm.KyInterface.warnProject.Url,
+								method: this.$fbxm.KyInterface.warnProject.method,
+								data: {
+									id:this.id,
+									userId:this.userInfo.userId,
+									ruralId:this.groupTitle.ruralId
+								},
+								success: (res) => {
+									console.log(res)
+									if (res.data.status == true) {
+										uni.hideLoading()
+										uni.showToast({
+											title: '警告成功',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									} else {
+										uni.hideLoading()
+										uni.showToast({
+											title: '警告失败',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									}
+			
+								},
+								fail: () => {
+									uni.hideLoading()
+									uni.showToast({
+										title: '服务器异常，请重试',
+										icon: 'success'
+									})
+									uni.startPullDownRefresh();
+								}
+							})
+						} else {
+			
+						}
 					}
 				})
 			},
@@ -322,4 +418,54 @@
 			}
 		}
 	}
+	
+	.ruralPersonCharge{
+		position: relative;
+		width: 100%;
+		text-align: right;
+		margin-top: 40upx;
+		padding-right: 20upx;
+		
+		.rural{
+			display: block;
+			font-size: 32upx;
+			color: #888;
+		}
+		
+		.personCharge{
+			display: block;
+			font-size: 32upx;
+			color: #888;
+			padding-top: 20upx;
+			padding-bottom: 190upx;
+		}
+	}
+	
+	.warning{
+		position: relative;
+		width: 100%;
+		margin-top: 50upx;
+		padding-left: 20upx;
+		
+		.numberWarnings{
+			display: block;
+			font-size: 32upx;
+		}
+	}
+	
+	.buttonClass {
+		position: fixed;
+		bottom: 34upx;
+		width: 96%;
+	
+		.btnClass {
+			width: 100%;
+			padding: 20upx 0;
+			color: #FFFFFF;
+			text-align: center;
+			border-radius: 15upx;
+			font-size: 34upx;
+		}
+	}
+	
 </style>
