@@ -29,15 +29,21 @@
 						</view>
 					</u-upload>
 				</u-form-item>
-				
+			
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+<!-- 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
 					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+				</u-form-item> -->
+				<!-- 简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false">
+					<view class="viewClass" style="padding:20rpx 30rpx;">
+						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent"/>
+					</view>
 				</u-form-item>
 				
 				<!-- 商品简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false" prop="intro">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="政策内容" :border-bottom="false" prop="intro">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
@@ -134,6 +140,7 @@
 		},
 		data() {
 			return {
+				src:'',
 				localPath: '',
 				filename:'',
 				lists: [],
@@ -144,6 +151,7 @@
 				videoData: '',
 				category: 'video',
 				showUploadList: true,
+				border: false,
                 sourceTypeIndex: 2,
                 checkedValue:true,
                 checkedIndex:0,
@@ -178,23 +186,14 @@
 				isIOS: false,
 				model: {
 					name: '', //商品名称value
-					region: '', //选择来源地value
-					cost: '', //价格
 					intro: '', //商品简介
+					centent:'',
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
 					fontWeight: 'bold',
 					fontSize: '17px',
 					paddingTop: '8px',
-				},
-				customStyle2: {
-					fontWeight: 'bold',
-					fontSize: '17px',
-					paddingTop: '8px',
-					width: '100%',
-					background: '#FFFFFF',
-					borderRadius: '6px',
 				},
 				buttonStyle: {
 					marginTop: '20px',
@@ -248,7 +247,43 @@
 		},
 		
 		methods: {
-
+			// //---------------上传视频--------------
+			// chooseVideo(){
+			//     // 上传视频
+			//     console.log('上传视频')
+			//     uni.chooseVideo({
+			//         maxDuration:10,	
+			//         count: 1,
+			//         camera: this.cameraList[this.cameraIndex].value,
+			//         sourceType: sourceType[this.sourceTypeIndex],
+			//         success: (res) => {
+			// 					const tempFilePaths = res.tempFilePath;
+			// 					console.log(tempFilePaths)
+			// 					uni.uploadFile({
+			// 						url: this.$zcfb.KyInterface.upload.Url,
+			// 						filePath: tempFilePaths,
+			// 						name: 'file',
+			// 						success: (uploadFileRes) => {
+			// 							console.log("编辑详情的时候返回照片地址", uploadFileRes)
+			// 							const back = JSON.parse(uploadFileRes.data);
+			// 							this.src=back.data;
+			// 						}
+			// 					});  
+			//         }
+			//     })
+			// },
+			// //-----------------------------------
+			// delectVideo(){
+			//     uni.showModal({
+			//         title:"提示",
+			//         content:"是否要删除此视频",
+			//         success:(res) =>{
+			//             if(res.confirm){
+			//                 this.src = ''
+			//             }
+			//         }
+			//     })
+			// },
 			//--------------------------------------------------
 				onOpenDoc() {
 					let url = 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg';
@@ -288,20 +323,18 @@
 					var that=this;
 					console.log('上传成功回调',JSON.stringify(res));
 					that.filename = res.fileName;
-					that.localPath=res.data;
-					var aaa=that.localPath.id.data;
-					console.log('aaa',JSON.stringify(res.data.id));
-					console.log('123',res.data.id.data);
-					console.log('aaa',that.localPath);
-					console.log('7777',aaa);
+					var aaa=JSON.parse(res.data.id);
+					that.localPath=aaa.data;
 				},	
 				//---------------------------上传视频回调-------------------------------
-				successvideo: function(e) {
-					var data = JSON.parse(e.data);
-					// console.log(data)
-					this.videoData = data;
-					console.log('视频上传成功', this.videoData)
-				},
+				// successvideo: function(e) {
+				// 	var that=this;
+				// 	var data = JSON.parse(e.data);
+				// 	// console.log(data)
+				// 	var  aa= data;
+				// 	that.videoData=aa.data;
+				// 	console.log('视频上传成功', that.videoData)
+				// },
 				
 				//删除图片提示
 				uploadOnRemove:function(e){
@@ -345,6 +378,8 @@
 
 			submit: function(e) {
 				var that = this;
+				console.log(that.videoData)
+				console.log(this.videoData)
 				uni.showLoading({
 					title: '提交数据中...'
 				});
@@ -352,12 +387,14 @@
 					key: 'userInfo',
 					success: (res) => {
 						console.log(res)
-						// var array=[];
-						console.log(that.videoData.data);
-						// array.push(that.videoData.data);
-						console.log(array);
+
+						// console.log(that.videoData);
+						// array.push(that.videoData);
 						var array2=[];
-						array2.push(that.filename);
+						console.log(that.localPath);
+						array2.push(that.localPath);
+						var array3=[];
+						array3.push(that.filename);
 						uni.request({
 							url: that.$zcfb.KyInterface.releasePolicy.Url,
 							method: that.$zcfb.KyInterface.releasePolicy.method,
@@ -365,10 +402,11 @@
 								title: that.model.name,
 								content: e,
 								image:  JSON.stringify(that.lists),
-								video: JSON.stringify(array),
-								pdfName:JSON.stringify(array2),
-								pdfFile:JSON.stringify(that.localPath),
-								userId: 100012,
+								video:'',
+								pdfName:JSON.stringify(array3),
+								pdfFile:JSON.stringify(array2),
+								introduce:that.model.centent,
+								userId: res.data.userId,
 							},
 							success: (res) => {
 								console.log(res)
@@ -413,11 +451,12 @@
 					key: 'userInfo',
 					success: (res) => {
 						console.log(res)
-						var array=[];
-						array.push(that.videoData);
+						// var array=[];
+						// array.push(that.videoData);
 						var array2=[];
 						array2.push(that.localPath);
-						console.log(array)
+						var array3=[];
+						array3.push(that.filename);
 						uni.request({
 							url: that.$zcfb.KyInterface.updatePolicy.Url,
 							method: that.$zcfb.KyInterface.updatePolicy.method,
@@ -426,10 +465,11 @@
 								title: that.model.name,
 								content: e,
 								image:  JSON.stringify(that.lists),
-								video: JSON.stringify(array),
+								video: '',
 								pdfFile:JSON.stringify(array2),
-								pdfName:JSON.stringify(that.filename),
+								pdfName:JSON.stringify(array3),
 								userId: res.data.userId,
+								introduce:that.model.centent,
 							},
 							success: (res) => {
 								console.log(res)
@@ -611,7 +651,7 @@
 							console.log(that.model.name);
 							that.issueText=res.data.data.content;
 							console.log(that.issueText);
-							that.filename=res.data.data.pdfName;
+							that.filename=res.data.data.pdfName[0];
 							console.log(that.filename);
 							var imageObj={
 								url:res.data.data.image[0]
@@ -620,10 +660,12 @@
 							console.log(that.fileList);
 							that.lists=res.data.data.image;
 							console.log(that.lists);
-							that.localPath=res.data.data.pdfFile;
+							that.localPath=res.data.data.pdfFile[0];
 							console.log(that.localPath);
-							that.videoData=res.data.data.video[0];
-							console.log(that.videoData);
+							that.model.centent=res.data.data.introduce;
+							console.log(that.model.centent);
+							// that.videoData=res.data.data.video[0];
+							// console.log(that.videoData);
 							uni.createSelectorQuery().select('#editor').context(function(res) {
 								// console.log(res);
 								_self.editorCtx = res.context;
@@ -664,6 +706,7 @@
 	}
 
 	.viewClass {
+		width: 100%;
 		background: #FFFFFF;
 		border-radius: 6px;
 	}

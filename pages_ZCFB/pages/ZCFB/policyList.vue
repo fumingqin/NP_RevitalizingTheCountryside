@@ -13,7 +13,7 @@
 							</view>
 							<!-- <text class="tv_richText">{{item.content}}</text> -->
 							<view class="tv_view2">
-								<rich-text class="tv_richText" :nodes="item.content"></rich-text>
+								<rich-text class="tv_richText" :nodes="item.introduce"></rich-text>
 							</view>
 						</view>
 						<image class="tv_image" :src="item.image" mode="aspectFill"></image>
