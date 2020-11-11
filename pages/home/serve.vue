@@ -190,8 +190,8 @@
 				},{
 					IsUse: true,
 					clickURL: "../../pages_FBXM/pages/publishProject/pp_list",
-					ImageURL1: "../../static/home/serve/kprw.png", //亮
-					ImageURL2: "../../static/home/serve/kprw2.png", //暗
+					ImageURL1: "../../static/home/serve/xmgl.png", //亮
+					ImageURL2: "../../static/home/serve/xmgl2.png", //暗
 					ItemTitle: "项目管理",
 					style: "sv_print",
 				}],

@@ -71,13 +71,13 @@
 			</view>
 
 			<!-- 优惠券 -->
-			<view class="MP_information2" @click="toggleMask('show')">
+			<!-- <view class="MP_information2" @click="toggleMask('show')">
 				<view class="MP_optionBar">
 					<text class="Mp_title">优惠券</text>
 					<text class="Mp_arrow"> > </text>
 					<text class="Mp_text">{{couponIndex}}</text>
 				</view>
-			</view>
+			</view> -->
 
 			<!-- 呼出优惠券面板 -->
 			<view class="mask" :class="maskState===0 ? 'none' : maskState===1 ? 'show' : ''" @click="toggleMask">
