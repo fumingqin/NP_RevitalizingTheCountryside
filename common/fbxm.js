@@ -72,6 +72,12 @@ const KyInterface = {
 		name:'获取浏览量',
 		method:'POST',
 	},
+	
+	warnProject:{
+		Url:Url + '/api/project/warnProject',
+		name:'警告操作',
+		method:'POST',
+	},
 }
 
 // 接口声明区

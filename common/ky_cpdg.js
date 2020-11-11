@@ -17,6 +17,7 @@ const KyInterface = {
 		// #ifdef APP-PLUS
 		KY_systemName:'南平综合出行APP',
 		KY_systemName2:'振兴乡村APP',
+		// KY_systemName2:'综合出行APP',
 		// #endif
 		// #ifdef MP-WEIXIN
 		KY_systemName:'南平综合出行小程序',

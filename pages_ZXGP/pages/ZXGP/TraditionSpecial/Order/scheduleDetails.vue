@@ -944,6 +944,9 @@
 					}
 				}
 				console.log(array)
+				uni.removeStorage({
+					key: 'paymentStorage'
+				})
 				uni.navigateTo({
 					url: '../PayMent/orderPayment?array=' + JSON.stringify(array)
 				})
