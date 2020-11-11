@@ -171,6 +171,9 @@
 				title:'加载中...',
 				icon:'loading'
 			})
+			if(this.regionWeixin = '请选择'){
+				this.regionWeixin = '南平市'
+			}
 			// #ifdef H5
 			uni.showToast({
 				title:'公众号当前定位无法启用，已默认定位泉州市',
