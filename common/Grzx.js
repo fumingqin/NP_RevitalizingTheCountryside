@@ -98,13 +98,19 @@ const Interface={
 	
 	getVillageList:{
 		value:Url+'/api/commissioner/getVillageList',
-		name:'修改用户信息',
+		name:'获取存在列表',
 		method:'POST',
 		pages: [],
 	},
 	getVillageListByName:{
 		value:Url+'/api/commissioner/getVillageListByName',
-		name:'修改用户信息',
+		name:'根据名字获取村庄列表',
+		method:'POST',
+		pages: [],
+	},
+	getServiceAgreement:{
+		value:Url+'/api/user/getServiceAgreement',
+		name:'获得服务协议',
 		method:'POST',
 		pages: [],
 	},
