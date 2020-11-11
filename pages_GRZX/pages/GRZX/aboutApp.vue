@@ -59,7 +59,7 @@
 				checkVersion:'检查新版本',
 				agreement:'《软件许可及服务协议》',
 				privacy:'《隐私政策》',
-				copyright1:'途游信息科技 版权所有',
+				copyright1:'中国联通 版权所有',
 				copyright2:'Copyright©2020 Journey',
 				copyright3:'All Rights Reserved',
 				version:'',
