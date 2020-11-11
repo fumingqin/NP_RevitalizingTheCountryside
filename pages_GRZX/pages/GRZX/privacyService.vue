@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="nodeClass">
-			<rich-text :nodes="text" style="width: 100%;font-size: 38upx;"></rich-text>
+			<rich-text :nodes="text" style="width: 100%;font-size: 32upx;"></rich-text>
 		</view>
 		<!-- <view class="textClass" v-if="title=='软件许可及服务协议'">
 			<view class="mt">
@@ -135,7 +135,7 @@
 				title:'',
 				systemName:'', 
 				systemName2 : '振兴乡村APP',
-				companyName:'厦门今点通',
+				companyName:'',
 			}
 		},
 		onLoad(options) {
@@ -153,23 +153,20 @@
 				})
 			},
 			
-			//------------------加载乘车人须知----------------
-			// loadText:function(e){
-			// 	uni.request({
-			// 		url:this.$GrzxInter.Interface.GetAggrement.value,
-			// 		method:this.$GrzxInter.Interface.GetAggrement.method,
-			// 		success: res =>{
-			// 			console.log(res,'1');
-			// 			if(res.data.status){
-			// 				for(let i = 0; i < res.data.data.length; i++){
-			// 					if(res.data.data[i].Title == e){
-			// 						this.text=res.data.data[i].Body.replace(/font-size:14px/g, 'font-size:17px');
-			// 					}
-			// 				}
-			// 			}
-			// 		},
-			// 	})
-			// },
+			//------------------加载服务协议----------------
+			loadText:function(e){
+				var title = "《" + e + "》";
+				uni.request({
+					url:this.$GrzxInter.Interface.getServiceAgreement.value + '?title='+title,
+					method:this.$GrzxInter.Interface.getServiceAgreement.method,
+					success: res =>{
+						console.log(res,'1');
+						if(res.data.status){
+							this.text=res.data.data.replace(/font-size:14px/g, 'font-size:15px');
+						}
+					},
+				})
+			},
 		}
 	}
 </script>
