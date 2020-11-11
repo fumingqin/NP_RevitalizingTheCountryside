@@ -59,7 +59,7 @@
 				checkVersion:'检查新版本',
 				agreement:'《软件许可及服务协议》',
 				privacy:'《隐私政策》',
-				copyright1:'途游信息科技 版权所有',
+				copyright1:'中国联通 版权所有',
 				copyright2:'Copyright©2020 Journey',
 				copyright3:'All Rights Reserved',
 				version:'',
@@ -181,9 +181,9 @@
 					success: res => {
 						console.log(res,"版本号");
 						if(res.data.status){
-							if(this.cpr_version(this.version,res.data.data)){
+							if(this.cpr_version(this.version,res.data.data.version)){
 								this.show = true;
-								this.content = "检测到您有新版版本，版本号为："+res.data.data+"，是否前往下载?";
+								this.content = "检测到您有新版版本，版本号为："+res.data.data.version+"，是否前往下载?";
 							}else{
 								uni.showToast({
 									title: '您已是最新版本',

@@ -133,7 +133,7 @@
 			},
 			//--------------------------路由跳转------------------------------
 			details:function(e){
-				uni.navigateTo({
+				uni.redirectTo({
 					url:'policyDetails?id=' +e,
 				})
 			}

@@ -140,6 +140,7 @@
 		},
 		data() {
 			return {
+				issueState:true,
 				src:'',
 				localPath: '',
 				filename:'',
@@ -240,9 +241,18 @@
 			});
 			_self = this;
 			console.log(option)
+			_self.policyId='';
 			if(option.id>0){
-				this.policyId=option.id;
-				this.Update();
+				_self.policyId=option.id;
+				_self.Update();
+			}else{
+				_self.localPath='';
+				_self.filename='';
+				_self.policyId='';
+				_self.lists=[];
+				_self.fileList=[];
+				_self.model.name='';
+				_self.model.centent='';
 			}
 		},
 		
@@ -354,24 +364,50 @@
 
 			submitState: function() {
 				var that = this;
-				that.editorCtx.getContents({
-					success: (res) => {
-						console.log(res);
-						that.issueText = res.html;
+				if(that.model.name!=''&&that.lists.length>0&&that.filename!=''&&that.model.centent!=''){
+					if (this.submissionState == false) {
+						that.editorCtx.getContents({
+							success: (res) => {
+								console.log(res);
+								that.issueText = res.html;
+							}
+						});
+						this.submissionState = true;
 						if(that.policyId!=''){
 							this.updateSubmit(that.issueText);
 						}else{
 							this.submit(that.issueText);
 						}
+					} else if (this.submissionState == true) {
+						uni.showToast({
+							title: '请勿重复点击提交',
+							icon: 'none',
+							duration: 2000
+						})
 					}
-				});
-				if (this.submissionState == false) {
-					this.submissionState = true;
-				} else if (this.submissionState == true) {
+				}else
+				if(that.model.name==''){
 					uni.showToast({
-						title: '请勿重复点击提交',
-						icon: 'none',
-						duration: 2000
+						title:'请输入政策标题',
+						icon:'none'
+					})
+				}else
+				if(that.lists.length==0){
+					uni.showToast({
+						title:'请上传封面图片',
+						icon:'none'
+					})
+				}else
+				if(that.filename==''){
+					uni.showToast({
+						title:'请上传相关文件',
+						icon:'none'
+					})
+				}else
+				if(that.model.centent==''){
+					uni.showToast({
+						title:'请输入政策简介',
+						icon:'none'
 					})
 				}
 			},
@@ -406,7 +442,7 @@
 								pdfName:JSON.stringify(array3),
 								pdfFile:JSON.stringify(array2),
 								introduce:that.model.centent,
-								userId: res.data.userId,
+								userId:100012,
 							},
 							success: (res) => {
 								console.log(res)
@@ -468,7 +504,7 @@
 								video: '',
 								pdfFile:JSON.stringify(array2),
 								pdfName:JSON.stringify(array3),
-								userId: res.data.userId,
+								userId: 100012,
 								introduce:that.model.centent,
 							},
 							success: (res) => {
