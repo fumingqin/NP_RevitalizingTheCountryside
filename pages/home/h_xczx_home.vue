@@ -75,25 +75,39 @@
 		<!-- 公示项目 -->
 		<view class="gs_view">
 			<view class="gs_title">公示项目</view>
-			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" bg-color="#ffffff" ></u-swiper>
+			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" bg-color="#ffffff"></u-swiper>
 		</view>
 
 		<!-- 隐藏协议弹出 -->
 		<u-modal v-model="protocolStatus" :show-cancel-button="true" confirm-text="同意" title="服务协议和隐私政策" @confirm="agreeProtocol">
-			<view class="h_popupText">
-				<text>请你务必审慎阅读，充分理解“软件许可及服务协议”和“隐私政策”各条款。</br>你可阅读</text>
-				<text style="color: #2F9BFE;" @click="agreementClick">《软件许可及服务协议》</text>
-				<text>和</text>
-				<text style="color: #2F9BFE;" @click="privacyClick">《隐私政策》</text>
-				<text>了解详细信息。</br>如你同意，请点击“同意”开始接受我们的服务。</text>
-			</view>
+			<scroll-view scroll-y="true">
+				<view class="h_popupText">
+					<text>请你务必审慎阅读，充分理解“软件许可及服务协议”和“隐私政策”各条款。</br>你可阅读</text>
+					<text style="color: #2F9BFE;" @click="agreementClick">《软件许可及服务协议》</text>
+					<text>和</text>
+					<text style="color: #2F9BFE;" @click="privacyClick">《隐私政策》</text>
+					<text>了解详细信息。</br>如你同意，请点击“同意”开始接受我们的服务。</text>
+				</view>
+			</scroll-view>
 		</u-modal>
 
 		<!-- 发现新版本弹出 -->
-		<u-modal v-model="upgradeStatus" :show-cancel-button="true" confirm-text="升级" title="发现新版本" @confirm="confirmClick">
-			<view class="h_popupText">
-				<rich-text :nodes="upgradeContent"></rich-text>
+		<u-modal v-model="downShow" :show-cancel-button="true" confirm-text="升级" title="发现新版本" @confirm="downloadApk">
+			<scroll-view scroll-y="true">
+				<view class="h_popupText">
+					<rich-text :nodes="upgradeContent"></rich-text>
+				</view>
+			</scroll-view>
+		</u-modal>
+		<!-- 发现新版本弹出 -->
+		<u-modal v-model="downLoadShow" title="正在下载新版本" confirm-text="取消下载" @confirm="cancelDownload">
+			<view class="textClass">
+				<text class="text_content">请勿关闭APP,下载完成后请安装APP</text>
 			</view>
+			<view class="lineClass">
+				<u-line-progress :percent="percent" :show-percent="true" :striped-active="true"></u-line-progress>
+			</view>
+
 		</u-modal>
 	</view>
 </template>
@@ -106,21 +120,31 @@
 				advertisingMap: [], //公开项目
 				information: [], //新闻列表
 				protocolStatus: false, //隐藏弹出层，f为不弹，t为弹
-				upgradeStatus: false, //升级弹出层，f为不弹，t为弹
+
 				currentDate: '', //当前时间
-				upgradeContent:'',
+				upgradeContent: '',
 				quickEntryData: [], //乡村美景数组
-				bannerImage : '',//首页banner图片
-				version:'', //应用版本参数
-				
+				bannerImage: '', //首页banner图片
+				version: '', //应用版本参数
+
 				//------------------------5个区域请求次数，限制只请求3次，如果还是无数据就提示---------------------
-				LoatIndex:0, //轮播图请求次数
-				LoatIndex2:0, //轮播图请求次数
-				LoatIndex3:0, //轮播图请求次数
-				LoatIndex4:0, //轮播图请求次数
-				LoatIndex5:0, //轮播图请求次数
+				LoatIndex: 0, //轮播图请求次数
+				LoatIndex2: 0, //轮播图请求次数
+				LoatIndex3: 0, //轮播图请求次数
+				LoatIndex4: 0, //轮播图请求次数
+				LoatIndex5: 0, //轮播图请求次数
 				//------------------------------------------------------------------------------------------
-				
+				//------------------------下载参数---------------------
+				downShow: false, //新版本弹框
+				downLoadShow: false, //下载进度条
+				downContent: '', //进度显示内容
+				downloadTask: '', //下载任务
+				percent: 0, //下载进度
+
+				//------------------------------------------------------------------------------------------
+
+
+
 				functionArray: [{
 					array: [{
 						name: '一村一档', //功能名称
@@ -155,54 +179,55 @@
 
 		onLoad: function() {
 			var a = uni.getStorageSync('guidePageData')
-			if( a !== true){
+			if (a !== true) {
 				this.cacheLoadData();
 				uni.navigateTo({
 					url: 'guidePage',
 				})
-			}else{
+			} else {
+				// #ifdef APP-PLUS
+				let pro = uni.getStorageSync('protocol')
+				if (pro !== true) {
+					this.protocolStatus = true;
+				}
+				this.version = plus.runtime.version;
+				this.checkClick();
+				//#endif
 				this.cacheLoadData();
 			}
-			// #ifdef APP-PLUS
-			this.version=plus.runtime.version;
-			this.checkClick();
-			//#endif
+
 			// this.getTodayDate();
 			// #ifdef MP-WEIXIN
 			// 校验小程序登录
 			// this.getLoginState();
 			//#endif
 		},
-		
-		onShow:function(){
-			// let pro = uni.getStorageSync('protocol')
-			// if (pro !== true) {
-			// 	this.protocolStatus = true;
-			// }
+
+		onShow: function() {
+			
 		},
-		
-		onPullDownRefresh:function(){
+
+		onPullDownRefresh: function() {
 			this.cacheLoadData();
 		},
-		
 		methods: {
 			//加载缓存数据
-			cacheLoadData : function(){
+			cacheLoadData: function() {
 				//轮播图缓存
 				uni.getStorage({
-					key:'rotationData',
+					key: 'rotationData',
 					success: (res) => {
-						this.rotationChart  = res.data
+						this.rotationChart = res.data
 						this.rotationLoadData();
 					},
 					fail: (err) => {
 						this.rotationLoadData();
 					}
 				})
-				
+
 				//banner缓存
 				uni.getStorage({
-					key:'bannerData',
+					key: 'bannerData',
 					success: (res) => {
 						// console.log('拿到缓存了',res)
 						this.bannerImage = res.data.image
@@ -212,10 +237,10 @@
 						this.bannerLoadData();
 					}
 				})
-				
+
 				//跑马灯缓存
 				uni.getStorage({
-					key:'lampData',
+					key: 'lampData',
 					success: (res) => {
 						// console.log('拿到缓存了',res)
 						this.information = [];
@@ -226,12 +251,12 @@
 						this.lampLoadData();
 					}
 				})
-				
+
 				//乡村美景缓存
 				uni.getStorage({
-					key:'countrysideData',
+					key: 'countrysideData',
 					success: (res) => {
-						console.log('拿到缓存了',res)
+						console.log('拿到缓存了', res)
 						this.quickEntryData = res.data;
 						this.countrysideLoadData();
 					},
@@ -239,11 +264,11 @@
 						this.countrysideLoadData();
 					}
 				})
-				
-				
+
+
 				//公开项目缓存
 				uni.getStorage({
-					key:'projectData',
+					key: 'projectData',
 					success: (res) => {
 						// console.log('拿到缓存了',res)
 						this.advertisingMap = res.data;
@@ -253,48 +278,48 @@
 						this.projectLoadData();
 					}
 				})
-				
+
 			},
-			
+
 			//轮播图请求
-			rotationLoadData:function(){
+			rotationLoadData: function() {
 				//轮播图
 				uni.request({
 					url: this.$home.KyInterface.getImage.Url,
 					method: this.$home.KyInterface.getImage.method,
-					data:{
-						type : '1' 
+					data: {
+						type: '1'
 					},
 					success: (res) => {
 						console.log('轮播区', res)
-						if(res.data.data == ''){
-							if(this.LoatIndex <= 3){
+						if (res.data.data == '') {
+							if (this.LoatIndex <= 3) {
 								this.LoatIndex = 0;
 								uni.showToast({
-									title:'服务器异常，请联系客服',
-									icon:'none'
+									title: '服务器异常，请联系客服',
+									icon: 'none'
 								})
-							}else{
-								this.LoatIndex = this.LoatIndex +1;
+							} else {
+								this.LoatIndex = this.LoatIndex + 1;
 								this.rotationLoadData();
 							}
-							
-						}else{
-							if(res.data.data.length >= 2){
+
+						} else {
+							if (res.data.data.length >= 2) {
 								this.rotationChart = res.data.data
 								uni.setStorage({
-									key : 'rotationData',
-									data : res.data.data,
+									key: 'rotationData',
+									data: res.data.data,
 								})
-							}else{
+							} else {
 								this.rotationChart = [];
 								this.rotationChart.push(res.data.data)
 								uni.setStorage({
-									key : 'rotationData',
-									data : this.rotationChart,
+									key: 'rotationData',
+									data: this.rotationChart,
 								})
 							}
-							
+
 						}
 					},
 					fail: function() {
@@ -305,34 +330,34 @@
 					}
 				})
 			},
-			
+
 			//banner请求
-			bannerLoadData:function(){
+			bannerLoadData: function() {
 				//banner图
 				uni.request({
 					url: this.$home.KyInterface.getImage.Url,
 					method: this.$home.KyInterface.getImage.method,
-					data:{
-						type : '2' 
+					data: {
+						type: '2'
 					},
 					success: (res) => {
 						// console.log('banner', res)
-						if(res.data.data == ''){
-							if(this.LoatIndex2 <= 3){
+						if (res.data.data == '') {
+							if (this.LoatIndex2 <= 3) {
 								this.LoatIndex2 = 0;
 								uni.showToast({
-									title:'服务器异常，请联系客服',
-									icon:'none'
+									title: '服务器异常，请联系客服',
+									icon: 'none'
 								})
-							}else{
-								this.LoatIndex2 = this.LoatIndex2 +1;
+							} else {
+								this.LoatIndex2 = this.LoatIndex2 + 1;
 								this.bannerLoadData();
 							}
-						}else{
+						} else {
 							this.bannerImage = res.data.data.image
 							uni.setStorage({
-								key : 'bannerData',
-								data : res.data.data,
+								key: 'bannerData',
+								data: res.data.data,
 							})
 						}
 					},
@@ -344,35 +369,35 @@
 					}
 				})
 			},
-			
+
 			//跑马灯请求
-			lampLoadData:function(){
+			lampLoadData: function() {
 				//跑马灯
 				uni.request({
 					url: this.$home.KyInterface.getMarquee.Url,
 					method: this.$home.KyInterface.getMarquee.method,
-					data:{
-						location : '首页'
+					data: {
+						location: '首页'
 					},
 					success: (res) => {
 						// console.log('跑马灯',res)
-						if(res.data.data == ''){
-							if(this.LoatIndex3 <= 3){
+						if (res.data.data == '') {
+							if (this.LoatIndex3 <= 3) {
 								this.LoatIndex3 = 0;
 								uni.showToast({
-									title:'服务器异常，请联系客服',
-									icon:'none'
+									title: '服务器异常，请联系客服',
+									icon: 'none'
 								})
-							}else{
-								this.LoatIndex3 = this.LoatIndex3 +1;
+							} else {
+								this.LoatIndex3 = this.LoatIndex3 + 1;
 								this.lampLoadData();
 							}
-						}else{
+						} else {
 							this.information = [];
 							this.information.push(res.data.data.content)
 							uni.setStorage({
-								key : 'lampData',
-								data : res.data.data,
+								key: 'lampData',
+								data: res.data.data,
 							})
 						}
 					},
@@ -384,34 +409,34 @@
 					}
 				})
 			},
-			
+
 			//乡村美景请求
-			countrysideLoadData:function(){
+			countrysideLoadData: function() {
 				//乡村美景
 				uni.request({
 					url: this.$home.KyInterface.getEconomy.Url,
 					method: this.$home.KyInterface.getEconomy.method,
 					success: (res) => {
 						// console.log('乡村美景',res)
-						if(res.data.data == ''){
-							if(this.LoatIndex4 <= 3){
+						if (res.data.data == '') {
+							if (this.LoatIndex4 <= 3) {
 								this.LoatIndex4 = 0;
 								uni.showToast({
-									title:'服务器异常，请联系客服',
-									icon:'none'
+									title: '服务器异常，请联系客服',
+									icon: 'none'
 								})
-							}else{
-								this.LoatIndex4 = this.LoatIndex4 +1;
+							} else {
+								this.LoatIndex4 = this.LoatIndex4 + 1;
 								this.countrysideLoadData();
 							}
-						}else{
+						} else {
 							this.quickEntryData = res.data.data;
 							uni.setStorage({
-								key : 'countrysideData',
-								data : res.data.data,
+								key: 'countrysideData',
+								data: res.data.data,
 							})
 						}
-						
+
 					},
 					fail: function() {
 						uni.showToast({
@@ -421,34 +446,34 @@
 					}
 				})
 			},
-			
+
 			//公开项目请求
-			projectLoadData:function(){
+			projectLoadData: function() {
 				//公开项目
 				uni.request({
 					url: this.$home.KyInterface.getProject.Url,
 					method: this.$home.KyInterface.getProject.method,
 					success: (res) => {
 						// console.log('公开项目',res)
-						if(res.data.data == ''){
-							if(this.LoatIndex5 <= 3){
+						if (res.data.data == '') {
+							if (this.LoatIndex5 <= 3) {
 								this.LoatIndex5 = 0;
 								uni.showToast({
-									title:'服务器异常，请联系客服',
-									icon:'none'
+									title: '服务器异常，请联系客服',
+									icon: 'none'
 								})
-							}else{
-								this.LoatIndex5 = this.LoatIndex5 +1;
+							} else {
+								this.LoatIndex5 = this.LoatIndex5 + 1;
 								this.projectLoadData();
 							}
-						}else{
+						} else {
 							this.advertisingMap = res.data.data;
 							uni.setStorage({
-								key : 'projectData',
-								data : res.data.data,
+								key: 'projectData',
+								data: res.data.data,
 							})
 						}
-						
+
 					},
 					fail: function() {
 						uni.showToast({
@@ -458,7 +483,7 @@
 					}
 				})
 			},
-			
+
 
 			//获取时间
 			getTodayDate() {
@@ -514,21 +539,21 @@
 					url: this.$GrzxInter.Route.privacyService.url + '?title=隐私政策',
 				})
 			},
-			
+
 			//页面跳转
-			navigateToClick:function(index,e){
+			navigateToClick: function(index, e) {
 				console.log(index)
 				console.log(e)
-				if(index == 0){
+				if (index == 0) {
 					uni.navigateTo({
-						url:'../../pages_SMJJ/pages/shuimeiEconomy/se_detailsPage?id=' +e,
+						url: '../../pages_SMJJ/pages/shuimeiEconomy/se_detailsPage?id=' + e,
 					})
-				}else if(index == 1){
+				} else if (index == 1) {
 					uni.navigateTo({
-						url: 'pages_FBRCP/pages/agricultureProducts/ap_details?id=' +e,
+						url: 'pages_FBRCP/pages/agricultureProducts/ap_details?id=' + e,
 					})
 				}
-				
+
 			},
 			// #ifdef MP-WEIXIN
 			getLoginState() {
@@ -554,88 +579,131 @@
 				})
 			},
 			//#endif
-			
+
 			//版本数字转换
-			toNum:function(a){
-				var a=a.toString();
+			toNum: function(a) {
+				var a = a.toString();
 				//也可以这样写 var c=a.split(/\./);
-				var c=a.split('.');
-				var num_place=["","0","00","000","0000"],r=num_place.reverse();
-				for (var i=0;i<c.length;i++){ 
-					var len=c[i].length;       
-					c[i]=r[len]+c[i];  
-				} 
-				var res= c.join(''); 
-				return res; 
+				var c = a.split('.');
+				var num_place = ["", "0", "00", "000", "0000"],
+					r = num_place.reverse();
+				for (var i = 0; i < c.length; i++) {
+					var len = c[i].length;
+					c[i] = r[len] + c[i];
+				}
+				var res = c.join('');
+				return res;
 			},
-			
+
 			//版本对比
-			cpr_version:function(a,b){
+			cpr_version: function(a, b) {
 				//返回true，有新版本
 				//返回false，无新版本
-				var oldVersion=this.toNum(a);
-				var newVersion=this.toNum(b);   
-				if(oldVersion < newVersion){
+				var oldVersion = this.toNum(a);
+				var newVersion = this.toNum(b);
+				if (oldVersion < newVersion) {
 					return true;
-				}else{
+				} else {
 					return false;
 				}
 			},
-			
+
 			//请求接口，获取版本信息
-			checkClick:function(){
+			checkClick: function() {
 				uni.request({
 					url: this.$GrzxInter.Interface.getVersion.value,
 					method: this.$GrzxInter.Interface.getVersion.method,
 					success: (res) => {
-						console.log(res,"版本号");
-						if(res.data.status){
+						console.log(res, "版本号");
+						if (res.data.status) {
 							// console.log('系统版本',this.version)
 							// console.log('服务器',res.data.data.version)
-							if(this.cpr_version(this.version,res.data.data.version)){
+							if (this.cpr_version(this.version, res.data.data.version)) {
 								// console.log('我进来了')
-								this.upgradeStatus = true;
+								this.downShow = true;
 								this.upgradeContent = res.data.data.content;
 							}
 						}
 					},
 					fail: () => {
-						
+
 					},
 				});
 			},
-			
 			//--------------------------下载按钮--------------------------
-			confirmClick:function(){
-				console.log("下载");
-				var wgtUrl="http://27.148.155.9:9248/LoadAppWebsite/zxxc_gxb.wgt";  
-				plus.nativeUI.showWaiting("下载wgt文件...");  
-				plus.downloader.createDownload( wgtUrl, {filename:"_doc/update/"}, function(d,status){  
-				    if ( status == 200 ) {   
-				        console.log("下载wgt成功："+d.filename);  
-				        var path = d.filename;
-						plus.nativeUI.showWaiting("安装wgt文件...");  
-						plus.runtime.install(path,{},function(){  
-						    plus.nativeUI.closeWaiting();  
-						    console.log("安装wgt文件成功！");  
-						    plus.nativeUI.alert("应用资源更新完成！",function(){  
-						        plus.runtime.restart();  
-						    });  
-						},function(e){  
-						    plus.nativeUI.closeWaiting();  
-						    console.log("安装wgt文件失败["+e.code+"]："+e.message);  
-						    plus.nativeUI.alert("安装wgt文件失败["+e.code+"]："+e.message);  
-						});  
-				    } else {  
-						console.log(status,"打印");
-				        console.log("下载wgt失败！");  
-				        plus.nativeUI.alert("下载wgt失败！");  
-				    }  
-				    plus.nativeUI.closeWaiting();  
-				}).start();  
+			downloadApk: function() {
+				this.downShow = false;
+				this.downLoadShow = true;
+				console.log("下载apk");
+				var that = this;
+				that.downloadTask = uni.downloadFile({
+					url: 'http://27.148.155.9:9248/LoadAppWebsite/振兴乡村APP.apk',
+					success: (downloadResult) => {
+						console.log(downloadResult, "下载文件apk");
+						if (downloadResult.statusCode === 200) {
+							this.downLoadShow = false;
+							uni.showToast({
+								title: '下载完成',
+								icon: 'none',
+							});
+							plus.runtime.install(
+								downloadResult.tempFilePath, {
+									force: true
+								},
+								// function() {
+								// 	uni.showToast({
+								// 		title: '应用更新完成稍后将重启应用',
+								// 		icon:'none'
+								// 	});
+								// 	setTimeout(() => {
+								// 		plus.runtime.restart();
+								// 	}, 1000);
+								// },
+								function(e) {
+									uni.showToast({
+										icon: 'none',
+										title: e
+									});
+								}
+							);
+						} else {
+							uni.showToast({
+								title: '应用下载失败',
+								icon: 'none'
+							});
+						}
+					},
+					fail(e) {
+						uni.showToast({
+							title: e,
+							icon: 'none'
+						});
+					},
+					complete: () => {
+						setTimeout(() => {
+							uni.hideLoading();
+						}, 1000);
+					}
+				});
+				// 监听下载进度
+				that.downloadTask.onProgressUpdate((e) => {
+					that.percent = e.progress;
+				})
 			},
 
-
+			//--------------------------后台下载--------------------------
+			bgDownloadApk() {
+				this.downShow = false;
+			},
+			//--------------------------取消下载--------------------------
+			cancelDownload() {
+				this.downLoadShow = false;
+				uni.showToast({
+					title: '亲~你取消更新APP啦！下次记得更新哦~',
+					icon: 'none'
+				})
+				this.downloadTask.abort();
+			},
 		}
 	}
 </script>
@@ -779,7 +847,7 @@
 			margin-left: 28upx;
 		}
 	}
-	
+
 	//六宫格样式
 	.sixBackground {
 		display: flex;
@@ -787,7 +855,7 @@
 		flex-direction: row; //换行对齐
 		flex-wrap: wrap; //循环换行
 		padding: 20upx;
-	
+
 		//黑色暗幕，在图片上方覆盖一层渐变黑
 		.darkCurtain {
 			position: absolute;
@@ -798,7 +866,7 @@
 			margin: 12upx 12upx;
 			background: rgba(7, 17, 27, 0.1);
 		}
-	
+
 		image {
 			width: 212upx;
 			height: 144upx;
@@ -806,7 +874,7 @@
 			opacity: 1.5;
 			margin: 12upx 12upx;
 		}
-	
+
 		.sixView {
 			position: absolute;
 			text-overflow: ellipsis; //文章超出宽度隐藏并用...表示
@@ -816,7 +884,7 @@
 			max-width: 192upx;
 			margin-left: 24upx;
 			margin-top: -74upx;
-	
+
 			.sixText1 {
 				font-weight: bold;
 				font-size: 30upx;
@@ -826,7 +894,8 @@
 
 	//弹出层-通用字体样式
 	.h_popupText {
-		font-size: 26rpx;
+		height: 400upx;
+		font-size: 28rpx;
 		color: $u-content-color;
 		line-height: 1.7;
 		padding: 30rpx;
@@ -845,18 +914,37 @@
 		padding-left: 16upx;
 		padding-top: 6upx;
 	}
-	
+
 	//公示项目
-	.gs_view{
-		background: #FFFFFF; 
+	.gs_view {
+		background: #FFFFFF;
 		padding: 32upx 0 80upx 0;
-		.gs_title{
-			margin: 0upx 32upx 32upx 32upx; 
-			font-size: 34upx; 
+
+		.gs_title {
+			margin: 0upx 32upx 32upx 32upx;
+			font-size: 34upx;
 			font-weight: bold;
 		}
-		.gs_swiper{
+
+		.gs_swiper {
 			margin-top: 32upx;
+		}
+	}
+
+	//进度条样式
+	.lineClass {
+		width: 90%;
+		margin: 20upx 5% 40upx 5%;
+	}
+
+	.textClass {
+		width: 100%;
+		text-align: center;
+		padding: 16upx 0 0 8upx;
+
+		.text_content {
+			color: #FD5745;
+			font-size: 30upx;
 		}
 	}
 
