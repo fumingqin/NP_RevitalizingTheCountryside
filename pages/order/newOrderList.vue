@@ -37,7 +37,7 @@
 								<view class="at_button at_btDelete" v-if="item.state=='4'" @click="busLocation(item)">车辆位置</view>
 								<!-- #endif -->
 								<view class="at_button at_btDelete" v-if="item.state=='7'||item.state=='等待确认'" @tap="open3(item.orderNumber,'2')">取消</view>
-								<view class="at_button at_btDelete" v-if="item.state=='4'||item.state=='尚未取票'" @tap="open2(item.orderNumber)">退票</view>
+								<view class="at_button at_btDelete" v-if="item.state=='4'||item.state=='尚未取票'" @tap="open2(item.orderNumber,'2')">退票</view>
 								<view class="at_button at_btDelete" v-if="item.state=='4'||item.state=='已取票'" @click="KyComplain(item)">投诉</view>
 								<view class="at_button at_btToPay" v-if="item.state=='7'" @tap="keYunPay(item,item.carType)">去支付</view>
 								<view class="at_button at_btToPay" v-if="item.state=='尚未支付'||item.state=='等待确认'" @tap="keYunPay(item,item.carType)">去支付</view>
@@ -62,11 +62,11 @@
 							<text class="at_contentText">终点：&nbsp;{{item.endAddress}}</text>
 						</view>
 						<view class="at_buttonView">
+							<view class="at_button at_btDelete" @click="cancleOrder(item)" v-if="taxiOrderState(item.state)=='进行中'">取消</view>
 							<view class="at_button at_btQrCode" @click="CallAgain(item)" v-if="taxiOrderState(item.state)=='已完成'|| taxiOrderState(item.state)=='已取消'">再次呼叫</view>
-							<view class="at_button at_btDetails" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</view>
 							<view class="at_button at_btDelete" @click="czcComplaint(item)" v-if="taxiOrderState(item.state)=='已完成'">投诉</view>
 							<view class="at_button at_btToPay" @click="czcGotoPay(item.orderNumber)" v-if="taxiOrderState(item.state)=='未支付'">去支付</view>
-							<view class="at_button at_btDelete" @click="cancleOrder(item)" v-if="taxiOrderState(item.state)=='进行中'">取消</view>
+							<view class="at_button at_btDetails" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</view>
 						</view>
 					</view>
 				</view>
@@ -199,10 +199,10 @@
 								<text class="at_contentText">终点：&nbsp;{{item.endAddress}}</text>
 							</view>
 							<view class="at_buttonView">
-								<view class="at_button at_btQrCode" @click="CallAgain(item)" v-if="taxiOrderState(item.state)=='已完成'|| taxiOrderState(item.state)=='已取消'">再次呼叫</view>
-								<view class="at_button at_btDetails" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</view>
-								<view class="at_button at_btDelete" @click="czcComplaint(item)" v-if="taxiOrderState(item.state)=='已完成'">投诉</view>
 								<view class="at_button at_btDelete" @click="cancleOrder(item)" v-if="taxiOrderState(item.state)=='进行中'">取消</view>
+								<view class="at_button at_btQrCode" @click="CallAgain(item)" v-if="taxiOrderState(item.state)=='已完成'|| taxiOrderState(item.state)=='已取消'">再次呼叫</view>
+								<view class="at_button at_btDelete" @click="czcComplaint(item)" v-if="taxiOrderState(item.state)=='已完成'">投诉</view>
+								<view class="at_button at_btDetails" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</view>
 							</view>
 						</view>
 					</view>
@@ -298,9 +298,9 @@
 								<text class="at_contentText">终点：&nbsp;{{item.endAddress}}</text>
 							</view>
 							<view class="at_buttonView">
-								<view class="at_button at_btDetails" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</view>
-								<view class="at_button at_btDelete" @click="czcComplaint(item)" v-if="taxiOrderState(item.state)=='已完成'">投诉</view>
 								<view class="at_button at_btDelete" @click="cancleOrder(item)" v-if="taxiOrderState(item.state)=='进行中'">取消</view>
+								<view class="at_button at_btDelete" @click="czcComplaint(item)" v-if="taxiOrderState(item.state)=='已完成'">投诉</view>
+								<view class="at_button at_btDetails" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</view>
 							</view>
 						</view>
 					</view>
@@ -396,10 +396,10 @@
 								<text class="at_contentText">终点：&nbsp;{{item.endAddress}}</text>
 							</view>
 							<view class="at_buttonView">
-								<view class="at_button at_btDetails" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</view>
+								<view class="at_button at_btDelete" @click="cancleOrder(item)" v-if="taxiOrderState(item.state)=='进行中'">取消</view>
 								<view class="at_button at_btDelete" @click="czcComplaint(item)" v-if="taxiOrderState(item.state)=='已完成'">投诉</view>
 								<view class="at_button at_btToPay" @click="czcGotoPay(item.orderNumber)" v-if="taxiOrderState(item.state)=='未支付'">去支付</view>
-								<view class="at_button at_btDelete" @click="cancleOrder(item)" v-if="taxiOrderState(item.state)=='进行中'">取消</view>
+								<view class="at_button at_btDetails" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</view>
 							</view>
 						</view>
 					</view>
@@ -490,10 +490,10 @@
 								<text class="at_contentText">终点：&nbsp;{{item.endAddress}}</text>
 							</view>
 							<view class="at_buttonView">
-								<view class="at_button at_btQrCode" @click="CallAgain(item)" v-if="taxiOrderState(item.state)=='已完成'|| taxiOrderState(item.state)=='已取消'">再次呼叫</view>
-								<view class="at_button at_btDetails" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</view>
-								<view class="at_button at_btDelete" @click="czcComplaint(item)" v-if="taxiOrderState(item.state)=='已完成'">投诉</view>
 								<view class="at_button at_btDelete" @click="cancleOrder(item)" v-if="taxiOrderState(item.state)=='进行中'">取消</view>
+								<view class="at_button at_btQrCode" @click="CallAgain(item)" v-if="taxiOrderState(item.state)=='已完成'|| taxiOrderState(item.state)=='已取消'">再次呼叫</view>
+								<view class="at_button at_btDelete" @click="czcComplaint(item)" v-if="taxiOrderState(item.state)=='已完成'">投诉</view>
+								<view class="at_button at_btDetails" @click="going(item)" v-if="taxiOrderState(item.state)=='进行中'|| taxiOrderState(item.state)=='已完成' || taxiOrderState(item.state)=='待计价'">详情</view>
 							</view>
 						</view>
 					</view>
@@ -621,6 +621,7 @@
 	import uniPopup2 from "@/components/Order/uni-popup/uni-popup2.vue";
 	import emptyData from "@/components/Order/emptyData/emptyData.vue"; //无数据时显示内容
 	import $KyInterface from "@/common/Ctky.js"
+	import $taxi from '../../common/Czc.js';
 	import $lyfw from '@/common/LYFW/LyfwFmq.js' //旅游服务
 	export default {
 		components: {
@@ -637,6 +638,7 @@
 				selector: '全部',
 				current: 0,
 				index: 1,
+				exitindex: 0, //订单判断值
 				info: [], //请求服务器订单列表
 				userInfo: '', //个人信息
 				finishArr: [],
@@ -701,6 +703,7 @@
 				this.getTicketPaymentInfo_ticketIssue(this.ctkyOrderNum);
 			}
 			this.getOpenID();
+			this.selectorChange();
 		},
 		onShow: function() {
 			//客运刷新状态
@@ -1069,8 +1072,10 @@
 				})
 			},
 			//-------------------------打开退票弹框-------------------------
-			open2: function(e) {
+			open2: function(e,exitindex) {
 				var that = this;
+				that.exitindex = exitindex;
+				console.log(that.exitindex)
 				that.ticketOrderNumber = e;
 				that.$refs.popup2.open()
 			},
@@ -1476,14 +1481,6 @@
 					this.rSelect.splice(this.rSelect.indexOf(e), 1); //取消
 				}
 			},
-			//-------------------------退票-------------------------
-			refund: function() {
-				uni.showLoading({
-					title: '请求退票中...'
-				})
-				var that = this
-				that.refund_getTicketPaymentInfo(that.ticketOrderNumber)
-			},
 			//-------------------------关闭取消弹框-------------------------
 			close3() {
 				this.$refs.popup3.close()
@@ -1558,6 +1555,7 @@
 							for (var i = 0; i < res.data.data.length; i++) {
 								that.info.push(res.data.data[i]);
 							}
+							console.log('景区',that.info);
 							for (var i = 0; i < res.data.data.length; i++) {
 								if (res.data.data[i].orderType == '已完成' || res.data.data[i].orderType == '已使用') {
 									that.finishArr.push(res.data.data[i]);
@@ -1647,18 +1645,19 @@
 					title: '请求退票中...'
 				})
 				var that = this
-				if (this.exitindex == '2') {
+				console.log('aaaa',that.exitindex);
+				if (that.exitindex == '2') {
 					//请求费率
 					// this.GetBounceChargeByOrderNumber(that.ticketOrderNumber)
 					// that.ky_currentType = '客运退票';
 					//先查询订单状态-->执行费率查询-->执行退票
 					that.refund_getTicketPaymentInfo(that.ticketOrderNumber)
-				} else if (this.exitindex == 'cs2tui') {
+				} else if (that.exitindex == 'cs2tui') {
 					//先检测订单支付状态再执行退票操作
-					this.cs_refundStateCheck(that.csRefundInfo)
+					that.cs_refundStateCheck(that.csRefundInfo)
 				} else if (that.exitindex == '3') {
 					console.log('景区门票')
-					console.log(this.exitindex)
+					console.log(that.exitindex)
 					uni.request({
 						url: $lyfw.Interface.spt_BounceTickets.value,
 						method: $lyfw.Interface.spt_BounceTickets.method,
@@ -1681,45 +1680,8 @@
 								uni.showToast({
 									title: '退票成功',
 								})
-								this.close2()
-								this.selectorChange()
-								uni.startPullDownRefresh()
-							}
-
-						},
-						fail: function() {
-							uni.showToast({
-								title: '退票失败，网络异常',
-								icon: 'none',
-							})
-							uni.hideLoading()
-						}
-					})
-				} else if (this.exitindex == '5') {
-					console.log('旅游产品')
-					uni.request({
-						url: $lyfw.Interface.lyky_BounceTickets.value,
-						method: $lyfw.Interface.lyky_BounceTickets.method,
-						data: {
-							orderNumber: that.ticketOrderNumber,
-						},
-						header: {
-							'content-type': 'application/json'
-						},
-						success: (e) => {
-							console.log(e)
-							if (e.data.status == false) {
-								uni.hideLoading()
-								uni.showToast({
-									title: '退票失败，服务器异常，请联系客服！',
-									icon: 'none',
-								})
-							} else if (e.data.status == true) {
-								uni.hideLoading()
-								uni.showToast({
-									title: '退票成功',
-								})
-								this.close2()
+								that.close2()
+								that.selectorChange()
 								uni.startPullDownRefresh()
 							}
 
@@ -1812,48 +1774,6 @@
 							})
 						}
 					})
-				} else if (this.exitindex == '2') { //客运取消
-					// this.keYunCancelTicket(this.ticketOrderNumber);
-					//客运取消之前先检测当前车票状态
-					this.cancel_getTicketPaymentInfo(this.ticketOrderNumber);
-				} else if (this.exitindex == 'cs2') { //定制巴士取消
-					this.Cs_cancelStateCheck(this.ticketOrderNumber);
-				} else if (this.exitindex == '5') {
-					uni.request({
-						url: $lyfw.Interface.lyky_CancelTickets.value,
-						method: $lyfw.Interface.lyky_CancelTickets.method,
-						data: {
-							orderNumber: this.ticketOrderNumber
-						},
-						header: {
-							'content-type': 'application/json'
-						},
-						success: (e) => {
-							// console.log(e)
-							if (e.data.msg == '订单取消成功') {
-								uni.showToast({
-									title: '订单取消成功',
-									icon: 'none'
-								})
-								this.close3();
-								uni.startPullDownRefresh()
-							} else if (e.data.msg == '订单取消失败') {
-								uni.showToast({
-									title: '订单取消失败',
-									icon: 'none'
-								})
-								this.close3();
-								uni.startPullDownRefresh()
-							}
-						},
-						fail() {
-							uni.showToast({
-								title: '取消失败！请检查网络状态',
-								icon: 'none',
-								duration: 1500,
-							})
-						}
-					})
 				}
 			},
 
@@ -1863,62 +1783,6 @@
 					uni.request({
 						url: $lyfw.Interface.spt_DeleteTickets.value,
 						method: $lyfw.Interface.spt_DeleteTickets.method,
-						data: {
-							orderNumber: this.ticketOrderNumber
-						},
-						header: {
-							'content-type': 'application/json'
-						},
-						success: (e) => {
-							// console.log(e)
-							uni.showToast({
-								title: '删除成功',
-								icon: 'success',
-								duration: 1500,
-							})
-							this.close4();
-							uni.startPullDownRefresh()
-						},
-						fail() {
-							uni.showToast({
-								title: '删除失败！订单已删除',
-								icon: 'none',
-								duration: 1500,
-							})
-						}
-					})
-				} else if (this.exitindex == '4') {
-					uni.request({
-						url: $bcfw.Interface.spt_DeleteTickets.value,
-						method: $bcfw.Interface.spt_DeleteTickets.method,
-						data: {
-							or_number: this.ticketOrderNumber
-						},
-						header: {
-							'content-type': 'application/json'
-						},
-						success: (e) => {
-							// console.log(e)
-							uni.showToast({
-								title: '删除成功',
-								icon: 'success',
-								duration: 1500,
-							})
-							this.close4();
-							uni.startPullDownRefresh()
-						},
-						fail() {
-							uni.showToast({
-								title: '删除失败！订单已删除',
-								icon: 'none',
-								duration: 1500,
-							})
-						}
-					})
-				} else if (this.exitindex == '5') {
-					uni.request({
-						url: $lyfw.Interface.lyky_DeleteTickets.value,
-						method: $lyfw.Interface.lyky_DeleteTickets.method,
 						data: {
 							orderNumber: this.ticketOrderNumber
 						},

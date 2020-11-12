@@ -442,7 +442,7 @@
 								pdfName:JSON.stringify(array3),
 								pdfFile:JSON.stringify(array2),
 								introduce:that.model.centent,
-								userId:100012,
+								userId:res.data.userId,
 							},
 							success: (res) => {
 								console.log(res)
@@ -504,7 +504,7 @@
 								video: '',
 								pdfFile:JSON.stringify(array2),
 								pdfName:JSON.stringify(array3),
-								userId: 100012,
+								userId: res.data.userId,
 								introduce:that.model.centent,
 							},
 							success: (res) => {
