@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<view style="padding: 32upx 0;">
-			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.order_state !== '已取消'"></uni-steps>
-			<uni-steps :options="stepsList2" :active="StepsIndex" v-if="stepsData.order_state == '已取消'" activeColor="#FA3534"></uni-steps>
+					<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.state == '已发布' || stepsData.state == '已完成'"></uni-steps>
+			<uni-steps :options="stepsList2" :active="StepsIndex" v-if="stepsData.state == '已取消'" activeColor="#FA3534"></uni-steps>
 		</view>
 		<!-- 申请信息 -->
 		<!-- <view class="deta_view">
@@ -74,6 +74,11 @@
 		<view style="width: 100%; height: 112upx;"></view>
 
 		<!-- 功能按钮 -->
+		<view class="operButton" v-if="stepsData.state == '已发布'">
+			<view class="buttonView1" hover-class="btn_Click" @click="TelephoneClick(0)">联系发布人</view>
+			<view class="buttonView2" hover-class="btn_Click" @click="TelephoneClick(1)">联系考评人</view>
+		</view>
+		
 		<view class="operButton" v-if="stepsData.state !== '已发布'">
 			<view class="buttonView1" hover-class="btn_Click" @click="TelephoneClick(0)">联系发布人</view>
 			<view class="buttonView2" hover-class="btn_Click" @click="TelephoneClick(1)">联系考评人</view>
@@ -254,7 +259,7 @@
 					success: (res) => {
 						console.log(res)
 						this.stepsData = res.data.data;
-						if (res.data.data.state == '已派员') {
+						if (res.data.data.state == '已发布') {
 							this.StepsIndex = 1
 						} else if (res.data.data.state == '已完成' || res.data.data.state == '已取消') {
 							this.StepsIndex = 2
@@ -462,10 +467,12 @@
 			},
 			//资讯时间
 			informationDate: function(e) {
-				// console.log(e)
-				// var tsetDate = e.replace('T',' ')
-				var a = e.substr(0, 10)
-				return a;
+				if(e !== undefined){
+					var a = e.substr(0, 10)
+					return a;
+				}else{
+					return '';
+				}
 			},
 			//拨打申请人电话
 			TelephoneClick: function(e) {
