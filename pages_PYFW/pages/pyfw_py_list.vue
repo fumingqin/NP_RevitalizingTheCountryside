@@ -125,6 +125,9 @@
 							uni.stopPullDownRefresh()
 							uni.hideLoading()
 							this.modalStatus = true;
+						}else if(res.data.status == false){
+							uni.stopPullDownRefresh()
+							uni.hideLoading()
 						}else{
 							if (this.headCurrent == 0) {
 								this.informationList = res.data.data.filter(item => {
@@ -161,8 +164,12 @@
 			informationDate: function(e) {
 				// console.log(e)
 				// var tsetDate = e.replace('T',' ')
-				var a = e.substr(5, 11)
-				return a;
+				if(e !== undefined){
+					var a = e.substr(5, 11)
+					return a;
+				}else{
+					return '';
+				}
 			},
 
 			//点击tab切换

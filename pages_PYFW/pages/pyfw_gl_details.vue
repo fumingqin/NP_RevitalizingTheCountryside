@@ -60,7 +60,7 @@
 				<view class="stationList" :style="{ 'height':scrollHeight }" v-if="SearchStatus">
 					<block v-for="(item,index) in commissionerSearchList" :key="index">
 						<view class="listItem"  @click="Listclick(item)">
-							<rich-text :nodes="item.number +' - '+ item.good_type +' - '+ item.name +' - '+ item.telephone"></rich-text>
+							<rich-text :nodes="item.number +' - '+ item.technology_type +' - '+ item.name +' - '+ item.telephone"></rich-text>
 						</view>
 					</block>
 				</view>
@@ -69,7 +69,7 @@
 				<view class="stationList" :style="{ 'height':scrollHeight }" v-if="commissionerStatus">
 					<block v-for="(item,index) in commissionerList" :key="index">
 						<view class="listItem" @click="Listclick(item)">
-							<rich-text :nodes="item.number +' - '+ item.good_type +' - '+ item.name +' - '+ item.telephone"></rich-text>
+							<rich-text :nodes="item.number +' - '+ item.technology_type +' - '+ item.name +' - '+ item.telephone"></rich-text>
 						</view>
 					</block>
 				</view>
