@@ -244,8 +244,8 @@
 								method: this.$fbxm.KyInterface.warnProject.method,
 								data: {
 									id: this.id,
-									// userId:this.userInfo.userId,
-									userId: 100004,
+									userId:this.userInfo.userId,
+									// userId: 100004,
 									ruralId: this.groupTitle.ruralId
 								},
 								success: (res) => {
