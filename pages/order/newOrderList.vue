@@ -891,7 +891,11 @@
 					// }
 				}
 			},
-			open3(e) {
+			open3:function(e,exitindex) {
+				console.log(e)
+				console.log(exitindex)
+				
+				this.exitindex = exitindex;
 				this.ticketOrderNumber = e;
 				this.$refs.popup3.open()
 			},
@@ -1485,50 +1489,87 @@
 			close3() {
 				this.$refs.popup3.close()
 			},
-			//-------------------------取消-------------------------
+			
+			//-------------------------景区门票-取消-------------------------
 			cancel: function() {
-				
-					if (this.exitindex == '3') {
-						uni.request({
-							url: $lyfw.Interface.spt_CancelTickets.value,
-							method: $lyfw.Interface.spt_CancelTickets.method,
-							data: {
-								orderNumber: this.ticketOrderNumber
-							},
-							header: {
-								'content-type': 'application/json'
-							},
-							success: (e) => {
-								// console.log(e)
-								if (e.data.msg == '订单取消成功') {
-									uni.showToast({
-										title: '订单取消成功',
-										icon: 'none'
-									})
-									this.close3();
-									uni.startPullDownRefresh()
-								} else if (e.data.msg == '订单取消失败') {
-									uni.showToast({
-										title: '订单取消失败',
-										icon: 'none'
-									})
-									this.close3();
-									uni.startPullDownRefresh()
-								}
-							},
-							fail() {
+				if (this.exitindex == '2') {//客运取消
+					// this.keYunCancelTicket(this.ticketOrderNumber);
+					//客运取消之前先检测当前车票状态
+					this.cancel_getTicketPaymentInfo(this.ticketOrderNumber);
+				}else if (this.exitindex == '3') {
+					uni.request({
+						url: $lyfw.Interface.spt_CancelTickets.value,
+						method: $lyfw.Interface.spt_CancelTickets.method,
+						data: {
+							orderNumber: this.ticketOrderNumber
+						},
+						header: {
+							'content-type': 'application/json'
+						},
+						success: (e) => {
+							// console.log(e)
+							if (e.data.msg == '订单取消成功') {
 								uni.showToast({
-									title: '取消失败！请检查网络状态',
-									icon: 'none',
-									duration: 1500,
+									title: '订单取消成功',
+									icon: 'none'
 								})
+								this.close3();
+								uni.startPullDownRefresh()
+							} else if (e.data.msg == '订单取消失败') {
+								uni.showToast({
+									title: '订单取消失败',
+									icon: 'none'
+								})
+								this.close3();
+								uni.startPullDownRefresh()
 							}
-						})
-					} else if (this.exitindex == '2') {//客运取消
-						// this.keYunCancelTicket(this.ticketOrderNumber);
-						//客运取消之前先检测当前车票状态
-						this.cancel_getTicketPaymentInfo(this.ticketOrderNumber);
-					}
+						},
+						fail() {
+							uni.showToast({
+								title: '取消失败！请检查网络状态',
+								icon: 'none',
+								duration: 1500,
+							})
+						}
+					})
+				} else if (this.exitindex == '4') {
+					console.log(this.ticketOrderNumber);
+					uni.request({
+						url: $bcfw.Interface.spt_CancelTickets.value,
+						method: $bcfw.Interface.spt_CancelTickets.method,
+						data: {
+							or_number: this.ticketOrderNumber
+						},
+						header: {
+							'content-type': 'application/json'
+						},
+						success: (e) => {
+							console.log(e)
+							if (e.data.status == true) {
+								uni.showToast({
+									title: '订单取消成功',
+									icon: 'none'
+								})
+								this.close3();
+								uni.startPullDownRefresh()
+							} else if (e.data.status == false) {
+								uni.showToast({
+									title: '订单取消失败',
+									icon: 'none'
+								})
+								this.close3();
+								uni.startPullDownRefresh()
+							}
+						},
+						fail() {
+							uni.showToast({
+								title: '取消失败！请检查网络状态',
+								icon: 'none',
+								duration: 1500,
+							})
+						}
+					})
+				}
 			},
 			//------------------------------------------------客运结束------------------------------------------------
 			onClickItem(e) { //tab点击事件
@@ -1699,83 +1740,7 @@
 
 			},
 
-			//-------------------------景区门票-取消-------------------------
-			cancel: function() {
-				if (this.exitindex == '3') {
-					uni.request({
-						url: $lyfw.Interface.spt_CancelTickets.value,
-						method: $lyfw.Interface.spt_CancelTickets.method,
-						data: {
-							orderNumber: this.ticketOrderNumber
-						},
-						header: {
-							'content-type': 'application/json'
-						},
-						success: (e) => {
-							// console.log(e)
-							if (e.data.msg == '订单取消成功') {
-								uni.showToast({
-									title: '订单取消成功',
-									icon: 'none'
-								})
-								this.close3();
-								uni.startPullDownRefresh()
-							} else if (e.data.msg == '订单取消失败') {
-								uni.showToast({
-									title: '订单取消失败',
-									icon: 'none'
-								})
-								this.close3();
-								uni.startPullDownRefresh()
-							}
-						},
-						fail() {
-							uni.showToast({
-								title: '取消失败！请检查网络状态',
-								icon: 'none',
-								duration: 1500,
-							})
-						}
-					})
-				} else if (this.exitindex == '4') {
-					console.log(this.ticketOrderNumber);
-					uni.request({
-						url: $bcfw.Interface.spt_CancelTickets.value,
-						method: $bcfw.Interface.spt_CancelTickets.method,
-						data: {
-							or_number: this.ticketOrderNumber
-						},
-						header: {
-							'content-type': 'application/json'
-						},
-						success: (e) => {
-							console.log(e)
-							if (e.data.status == true) {
-								uni.showToast({
-									title: '订单取消成功',
-									icon: 'none'
-								})
-								this.close3();
-								uni.startPullDownRefresh()
-							} else if (e.data.status == false) {
-								uni.showToast({
-									title: '订单取消失败',
-									icon: 'none'
-								})
-								this.close3();
-								uni.startPullDownRefresh()
-							}
-						},
-						fail() {
-							uni.showToast({
-								title: '取消失败！请检查网络状态',
-								icon: 'none',
-								duration: 1500,
-							})
-						}
-					})
-				}
-			},
+			
 
 			//-------------------------景区门票-删除-------------------------
 			del: function() {
