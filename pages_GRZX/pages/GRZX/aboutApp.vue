@@ -53,7 +53,7 @@
 	export default{
 		data(){
 			return{
-				title:'乡村振兴',
+				title:'振兴乡村',
 				versionNum:'Version ',
 				functionIntroduction:'功能介绍',
 				checkVersion:'检查新版本',
@@ -212,7 +212,8 @@
 				//返回true，有新版本
 				//返回false，无新版本
 				var oldVersion=this.toNum(a);
-				var newVersion=this.toNum(b);   
+				var newVersion=this.toNum(b);
+				console.log(oldVersion,newVersion,"新旧版本");
 				if(oldVersion<newVersion){
 					return true;
 				}else{
