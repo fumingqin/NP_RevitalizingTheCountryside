@@ -433,7 +433,7 @@
 				{
 					"path": "pages/LYFW/agricultureProducts/ovof_edit",
 					"style": {
-						"navigationBarTitleText": "村档管理修改页面"
+						"navigationBarTitleText": "村档管理修改"
 					}
 				},
 				{
@@ -445,7 +445,7 @@
 				}, {
 					"path": "pages/LYFW/agricultureProducts/ovof_detailsPage",
 					"style": {
-						"navigationBarTitleText": "列表详情页面"
+						"navigationBarTitleText": "列表详情"
 					}
 				}, {
 					"path": "pages/LYFW/agricultureProducts/ovof_feedback",
@@ -453,7 +453,7 @@
 				}, {
 					"path": "pages/LYFW/agricultureProducts/ovof_addPage",
 					"style": {
-						"navigationBarTitleText": "村档管理添加页面"
+						"navigationBarTitleText": "村档管理添加"
 					}
 				}
 			]
@@ -1005,34 +1005,46 @@
 				{
 				    "path" : "pages/publishProject/pp_list",
 				    "style" : {
+						"navigationBarTitleText": "项目管理",
 						"enablePullDownRefresh": true
 					}
 				}
 				,{
 				    "path" : "pages/publishProject/PP_addPages",
-				    "style" : {}
+				    "style" : {
+						"navigationBarTitleText": "添加项目"
+					}
 				}
 				,{
 				    "path" : "pages/publishProject/pp_chooseCountryside",
-				    "style" : {}
+				    "style" : {
+						"navigationBarTitleText": "选择乡村名称"
+					}
 				}
 				,{
 				    "path" : "pages/publishProject/pp_choicePersonInCharge",
-				    "style" : {}
+				    "style" : {
+						"navigationBarTitleText": "选择负责人"
+					}
 				}
 				,{
 				    "path" : "pages/publishProject/pp_edits",
-				    "style" : {}
+				    "style" : {
+						"navigationBarTitleText": "修改项目"
+					}
 				}
 				,{
 				    "path" : "pages/publishProject/pp_detailsPage",
 				    "style" : {
+						"navigationBarTitleText": "项目详情",
 						"enablePullDownRefresh": true
 					}
 				}
 				,{
 				    "path" : "pages/publishProject/pp_generalList",
-				    "style" : {}
+				    "style" : {
+						"navigationBarTitleText": "项目监督"
+					}
 				}
 			]
 		},

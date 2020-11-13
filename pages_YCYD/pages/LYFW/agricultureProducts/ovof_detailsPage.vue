@@ -31,7 +31,7 @@
 				<view class="screen">
 					<view class="screenView">
 						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)">
-							项目介绍
+							内容介绍
 						</view>
 						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
 							相关视频

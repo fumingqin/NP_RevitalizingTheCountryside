@@ -10,6 +10,7 @@
 			<view class="deta_title">考评信息</view>
 			<view class="deta_text"><text>考评标题：</text>{{stepsData.title}}</view>
 			<view class="deta_text"><text>考评乡村：</text>{{stepsData.rural_name}}</view>
+			<view class="deta_text"><text>考评时间：</text>{{informationDate(stepsData.reviewTime)}}</view>
 			<view class="deta_text"><text>考评内容：</text>{{stepsData.content}}</view>
 			<!-- <view class="deta_text">
 				<text>相关图片：</text><text v-if="stepsData.image == null">未上传</text>
@@ -232,7 +233,19 @@
 				uni.showToast({
 					title:'提醒成功',
 				})
-			}
+			},
+			//资讯时间
+			informationDate: function(e) {
+				console.log(e)
+				// var tsetDate = e.replace('T',' ')
+				if(e !== undefined){
+					var a = e.substr(0, 10)
+					return a;
+				}else{
+					return '';
+				}
+				
+			},
 		}
 
 	}

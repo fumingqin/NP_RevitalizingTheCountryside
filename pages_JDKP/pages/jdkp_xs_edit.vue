@@ -58,7 +58,7 @@
 
 		<!-- 提交申请 -->
 		<view class="operButton">
-			<text class="buttonView2" @click="submit">提交申请</text>
+			<text class="buttonView2" @click="submit">发布</text>
 		</view>
 
 		<u-popup v-model="VillageShow" mode="center">

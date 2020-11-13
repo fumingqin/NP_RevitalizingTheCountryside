@@ -56,7 +56,7 @@
 						data:0,
 						success:function(){
 							uni.switchTab({
-								url: '../../../../pages/order/OrderList'	
+								url: '../../../../pages/order/newOrderList'	
 							});
 						}
 					})
