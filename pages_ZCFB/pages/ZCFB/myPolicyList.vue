@@ -103,7 +103,7 @@
 					url:this.$zcfb.KyInterface.getPolicyById.Url,
 					method:this.$zcfb.KyInterface.getPolicyById.method,
 					data:{
-						userId:100012,
+						userId:res.data.userId,
 						},
 					success:(res) =>{
 						console.log('列表数据',res)

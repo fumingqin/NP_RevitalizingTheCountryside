@@ -7,7 +7,7 @@
 					<view class="tv_view">
 						<view style="display: flex;">
 							<view style="margin-top: 10upx;">
-								<text class="tv_label" style="background: #007AFF;">乡村动态</text>
+								<text class="tv_label" style="background: #007AFF;">项目监督</text>
 							</view>
 							<view class="tv_title">{{item.title}}</view>
 						</view>
