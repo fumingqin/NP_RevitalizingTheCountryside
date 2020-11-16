@@ -177,6 +177,14 @@
 		},
 
 		onLoad: function() {
+			// #ifdef APP-PLUS
+			let pro = uni.getStorageSync('protocol')
+			if (pro !== true) {
+				this.protocolStatus = true;
+			}
+			this.version = plus.runtime.version;
+			this.checkClick();
+			//#endif
 			var a = uni.getStorageSync('guidePageData')
 			if (a !== true) {
 				this.cacheLoadData();
@@ -184,14 +192,6 @@
 					url: 'guidePage',
 				})
 			} else {
-				// #ifdef APP-PLUS
-				let pro = uni.getStorageSync('protocol')
-				if (pro !== true) {
-					this.protocolStatus = true;
-				}
-				this.version = plus.runtime.version;
-				this.checkClick();
-				//#endif
 				this.cacheLoadData();
 			}
 
@@ -290,6 +290,7 @@
 						type: '1'
 					},
 					success: (res) => {
+						uni.stopPullDownRefresh()
 						console.log('轮播区', res)
 						if (res.data.data == '') {
 							if (this.LoatIndex <= 3) {
@@ -322,6 +323,7 @@
 						}
 					},
 					fail: function() {
+						uni.stopPullDownRefresh()
 						uni.showToast({
 							title: '首页轮播图网络加载异常',
 							icon: 'none'
@@ -340,6 +342,7 @@
 						type: '2'
 					},
 					success: (res) => {
+						uni.stopPullDownRefresh()
 						// console.log('banner', res)
 						if (res.data.data == '') {
 							if (this.LoatIndex2 <= 3) {
@@ -361,6 +364,7 @@
 						}
 					},
 					fail: function() {
+						uni.stopPullDownRefresh()
 						uni.showToast({
 							title: '首页banner加载异常',
 							icon: 'none'
@@ -379,6 +383,7 @@
 						location: '首页'
 					},
 					success: (res) => {
+						uni.stopPullDownRefresh()
 						// console.log('跑马灯',res)
 						if (res.data.data == '') {
 							if (this.LoatIndex3 <= 3) {
@@ -401,6 +406,7 @@
 						}
 					},
 					fail: function() {
+						uni.stopPullDownRefresh()
 						uni.showToast({
 							title: '跑马灯内容加载异常',
 							icon: 'none'
@@ -416,6 +422,7 @@
 					url: this.$home.KyInterface.getEconomy.Url,
 					method: this.$home.KyInterface.getEconomy.method,
 					success: (res) => {
+						uni.stopPullDownRefresh()
 						// console.log('乡村美景',res)
 						if (res.data.data == '') {
 							if (this.LoatIndex4 <= 3) {
@@ -438,6 +445,7 @@
 
 					},
 					fail: function() {
+						uni.stopPullDownRefresh()
 						uni.showToast({
 							title: '乡村美景网络加载异常',
 							icon: 'none'
@@ -453,6 +461,7 @@
 					url: this.$home.KyInterface.getProject.Url,
 					method: this.$home.KyInterface.getProject.method,
 					success: (res) => {
+						uni.stopPullDownRefresh()
 						// console.log('公开项目',res)
 						if (res.data.data == '') {
 							if (this.LoatIndex5 <= 3) {
@@ -475,6 +484,7 @@
 
 					},
 					fail: function() {
+						uni.stopPullDownRefresh()
 						uni.showToast({
 							title: '公开项目网络加载异常',
 							icon: 'none'

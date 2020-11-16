@@ -8,6 +8,7 @@
 		{
 			"path": "pages/home/h_xczx_home",
 			"style": {
+				"enablePullDownRefresh": true,
 				"navigationStyle": "custom",
 				"app-plus": {
 					"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型

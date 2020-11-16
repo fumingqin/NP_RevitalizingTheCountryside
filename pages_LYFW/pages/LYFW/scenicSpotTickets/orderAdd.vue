@@ -878,7 +878,7 @@
 
 	//须知弹框
 	.boxVlew {
-		width: 90%;
+		width: 100%;
 		padding: 16upx 40upx;
 		padding-bottom: 92upx;
 		background: #FFFFFF;
