@@ -4,19 +4,22 @@
 		<u-tabs :list="headList" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
 		
 		<!-- 内容1 -->
-		<view v-if="groupTitle !== ''" class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
+		<view class="infor_view" :class="{'select':selectIndex == index}" v-for="(item,index) in groupTitle" :key="index" @click="selectClick(index)">
 			<view class="view_titleView">
 				<view class="tv_view">
 					<view style="display: flex;">
 						<view style="margin-top: 10upx;">
-							<text class="tv_label" style="background: #007AFF;">乡村动态</text>
+							<text class="tv_label" v-if="item.article_type=='村容村貌'" style="background: #007AFF;">{{item.article_type}}</text>
+							<text class="tv_label" v-if="item.article_type=='环境整治'" style="background: #18B566;">{{item.article_type}}</text>
+							<text class="tv_label" v-if="item.article_type=='企业帮扶'" style="background: #F29100;">{{item.article_type}}</text>
+							<text class="tv_label" v-if="item.article_type=='三化管理'" style="background: #E3424B;">{{item.article_type}}</text>
 						</view>
 						<view class="tv_title">{{item.title}}</view>
 					</view>
 					<!-- <text class="tv_richText">{{item.content}}</text> -->
 					<view class="tv_view2">
-						<!-- <rich-text class="tv_richText" :nodes="item.content"></rich-text> -->
 						<text class="tv_richText">{{item.introduce}}</text>
+						<!-- <rich-text class="tv_richText" :nodes="item.content"></rich-text> -->
 					</view>
 				</view>
 				<image class="tv_image" :src="item.image" mode="aspectFill"></image>
@@ -24,8 +27,8 @@
 			
 			<view class="view_contentView">
 				<text>{{item.nick_name}}</text>
-				<text class="cont_text">{{item.view}}人看过</text>
-				<text class="cont_text">{{informationDate(item.update_time)}}</text>
+				<text class="cont_text">{{item.count}}人看过</text>
+				<text class="cont_text">{{informationDate(item.create_time)}}</text>
 				<text class="cont_icon" style="color: #007AFF;" v-if="item.state=='已上架'">发布中</text>
 				<text class="cont_icon" style="color: #FC4646;" v-if="item.state=='已下架'">未发布</text>
 				<!-- <u-icon class="cont_icon" name="more-dot-fill"></u-icon> -->
@@ -50,10 +53,10 @@
 		</view>
 		
 		<!-- 缺省提示 -->
-		<view style="margin-top: 360upx;" v-if="groupTitle.length==0 || groupTitle ==''">
-			<u-empty text="该分类没有动态哦~" mode="news"></u-empty>
+		<view style="margin-top: 250upx;" v-if="groupTitle.length ==0">
+			<u-empty text="该分类没有相关档案哦~" mode="news"></u-empty>
 		</view>
-	</view>
+	</view>	
 </template>
 
 <script>
@@ -63,9 +66,13 @@
 				headList: [{
 					name: '全部'
 				},{
-					name: '发布中'
+					name: '村容村貌'
 				},{
-					name: '未发布'
+					name: '环境整治'
+				},{
+					name: '企业帮扶'
+				},{
+					name: '三化管理'
 				}], //头部数组
 				headCurrent: 0, //头部tabs下标
 				customStyle: { //button样式
@@ -129,6 +136,18 @@
 						console.log('获取个人信息',this.userInfo)
 						this.ycydData();
 					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../../pages/GRZX/userLogin'
+								})
+							}
+						})
+					}
 				});
 			},
 			
@@ -136,6 +155,7 @@
 			selectClick:function(e){
 				//给选择的下标赋值
 				this.selectIndex = e;
+				// this.release=this.groupTitle[e].state=='已上架'?'下架':'发布';
 				console.log('上车点下标赋值',this.selectIndex)
 				//取出id
 				// this.selectId = this.groupTitle[e].id;
@@ -150,7 +170,6 @@
 				return a;
 			},
 			
-			
 			//----------------------点击tab切换----------------------------
 			headChange: function(e) {
 				this.headCurrent = e;
@@ -160,6 +179,7 @@
 				this.ycydData(e);
 			},
 			
+			
 			//----------------------列表接口--------------------------------
 			ycydData:function(e){
 				uni.showLoading({
@@ -167,11 +187,11 @@
 				})
 				this.groupTitle = [],
 				uni.request({
-					url:this.$xcdt.KyInterface.getDynamicById.Url,
-					method:this.$xcdt.KyInterface.getDynamicById.method,
+					url:this.$ycyd.KyInterface.getArchivesByUserID.Url,
+					method:this.$ycyd.KyInterface.getArchivesByUserID.method,
 					data:{
-						userId:this.userInfo.userId
-						// userId:'100006'
+						userId:this.userInfo.userId,
+						// userId: 100006,
 					},
 					success:(res) =>{
 						console.log('列表数据',res)
@@ -182,19 +202,29 @@
 							}else if (this.headCurrent == 1){
 								this.groupTitle = res.data.data.filter(item => {
 									uni.hideLoading();
-									return item.state == '已上架';
+									return item.article_type == '村容村貌';
 								})
 							}else if (this.headCurrent == 2){
 								this.groupTitle = res.data.data.filter(item => {
 									uni.hideLoading();
-									return item.state == '已下架'
+									return item.article_type == '环境整治'
+								})
+							} else if (this.headCurrent == 3){
+								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
+									return item.article_type == '企业帮扶'
+								})
+							} else if (this.headCurrent == 4){
+								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
+									return item.article_type == '三化管理'
 								})
 							}
+							// this.release=this.groupTitle[0].state=='已上架'?'下架':'发布';
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
-							this.groupTitle=res.data.data;
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 							uni.showToast({
@@ -231,26 +261,27 @@
 			//--------------------------路由跳转------------------------------
 			routeJump:function(e){
 				uni.navigateTo({
-					url:'rd_detailsPage?id=' +e,
+					url:'ovof_detailsPage?id=' +e,
 				})
 			},
 			
 			//--------------------------路由跳转(添加列表文章)------------------------------
-			routeJump2:function(){
+			routeJump2:function(e){
 				uni.navigateTo({
-					url:'./rd_addPage'
+					url:'./ovof_addPage',
 				})
 			},
 			
 			//--------------------------路由跳转(修改列表文章)------------------------------
 			modifyJump:function(item){
 				uni.navigateTo({
-					url: './rd_edit?jumpStatus=' +this.state + '&id=' + item.id
+					url: './ovof_edit?jumpStatus=' +this.state + '&id=' + item.id
 				})
 			},
 			
 			//-----------------------上架------------------------------------
 			onTheShelf: function(e) {
+				console.log(this.selectIndex)
 				if (this.groupTitle[this.selectIndex].state == '已下架') {
 					uni.showModal({
 						title: '你确认发布文章？',
@@ -261,8 +292,8 @@
 									title: '正在发布....'
 								})
 								uni.request({
-									url: this.$xcdt.KyInterface.upAndDown.Url,
-									method: this.$xcdt.KyInterface.upAndDown.method,
+									url: this.$ycyd.KyInterface.upAndDownArchives.Url,
+									method: this.$ycyd.KyInterface.upAndDownArchives.method,
 									data: {
 										id: e
 									},
@@ -309,8 +340,8 @@
 									title: '正在发布....'
 								})
 								uni.request({
-									url: this.$xcdt.KyInterface.upAndDown.Url,
-									method: this.$xcdt.KyInterface.upAndDown.method,
+									url: this.$ycyd.KyInterface.upAndDownArchives.Url,
+									method: this.$ycyd.KyInterface.upAndDownArchives.method,
 									data: {
 										id: e
 									},
@@ -350,6 +381,7 @@
 				}
 			},
 			
+			
 			//-----------------------删除------------------------------------
 			Delete: function(e) {
 				uni.showModal({
@@ -361,26 +393,26 @@
 								title: '正在删除....'
 							})
 							uni.request({
-								url: this.$xcdt.KyInterface.deleteDynamic.Url,
-								method: this.$xcdt.KyInterface.deleteDynamic.method,
+								url: this.$ycyd.KyInterface.deleteArchives.Url,
+								method: this.$ycyd.KyInterface.deleteArchives.method,
 								data: {
 									id: e,
 									userId:this.userInfo.userId
-									// userId:100006
+									// userId: 100006,
 								},
 								success: (res) => {
 									console.log(res)
 									if (res.data.status == true) {
 										uni.hideLoading()
 										uni.showToast({
-											title: '删除成功',
+											title: res.data.msg,
 											icon: 'success'
 										})
 										uni.startPullDownRefresh();
 									} else {
 										uni.hideLoading()
 										uni.showToast({
-											title: '删除失败',
+											title: res.data.msg,
 											icon: 'success'
 										})
 										uni.startPullDownRefresh();
@@ -440,7 +472,7 @@
 				
 				.tv_label{
 					font-size: 24upx; 
-					background: #007AFF; 
+					// background: #007AFF; 
 					color: #FFFFFF; 
 					padding: 4upx 8upx; 
 					border-radius: 4upx;
