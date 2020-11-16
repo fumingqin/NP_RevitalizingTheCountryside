@@ -74,7 +74,7 @@
 			this.loadServiceList();
 		},
 		onShow() {
-			var that = this;
+			// console.log(this.$Src.checkSrc('video','1111.mp4'),"是否正确");
 			this.loadData();
 		},
 		methods: {

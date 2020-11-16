@@ -339,6 +339,7 @@
 			this.jumpStatus = param.jumpStatus;
 			this.id = param.id;
 			if (this.jumpStatus == '修改') {
+				console.log(this.imageList)
 				uni.request({
 					url: this.$ycyd.KyInterface.getArchiveDetailByID.Url,
 					method: this.$ycyd.KyInterface.getArchiveDetailByID.method,
