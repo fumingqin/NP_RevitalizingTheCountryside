@@ -125,6 +125,9 @@
 							uni.stopPullDownRefresh()
 							uni.hideLoading()
 							this.modalStatus = true;
+						}else if(res.data.status == false){
+							uni.stopPullDownRefresh()
+							uni.hideLoading()
 						}else{
 							if (this.headCurrent == 0) {
 								this.informationList = res.data.data.filter(item => {
