@@ -152,6 +152,8 @@
 				}
 			},
 			delImage(index){
+				this.dataList=[];
+				this.$emit('delImage',this.dataList)
 				//第一个是判断app或者h5的 第二个是判断小程序的
 				// if(this.uploads[index].substring(0,4) !== 'http' || this.uploads[index].substring(0,11) == 'http://tmp/'){
 				// 	this.uploads.splice(index,1)
@@ -171,8 +173,7 @@
 					data: {
 						image: this.dataList[index]
 					},
-					success: res => {
-						this.$emit('delImage',res)
+					success: (res) => {
 						if(res.data.status == 1) {
 							uni.showToast({
 								title: '删除成功'
