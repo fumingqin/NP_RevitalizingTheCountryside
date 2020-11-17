@@ -17,6 +17,10 @@
 							<text class="movable_view_Sign_text" style="color: #44f5ff;">{{item.name}}</text>
 						</view>
 					</view>
+					<view style="display: flex; position: absolute; left: 752upx; top: 832upx;">
+						<image class="government_image"  src="../../static/home/archives/zhengfu.png" mode="aspectFit"></image>
+						<text class="government_text" style="color: #FFFFFF;">人民政府</text>
+					</view>
 				</movable-view>
 			</movable-area>
 		</view>
@@ -45,6 +49,17 @@
 				<view class="dis_view_text" :hidden="loadIndex < 2">查询内容：所有</view>
 				<view class="dis_view_text" :hidden="loadIndex < 3">系统状态：正常</view>
 			</view>
+			
+			<!-- 查询流程 -->
+			<view class="dis_view_view" v-if="queryStatus == true">
+				<view class="dis_view_title">查询成功，请点击右侧按钮</view>
+				<view class="dis_view_text">查询乡村：{{loadRuralText}}</view>
+				<view class="dis_view_text">查询内容：所有</view>
+				<view class="dis_view_text">祝您游览愉快~！</view>
+				<image style="position: absolute; bottom: 8upx; right: 24upx; width:200upx; height: 200upx; z-index: 5;" src="../../static/home/archives/chakan.png" mode="aspectFit"></image>
+			</view>
+			
+			
 		</view>
 
 
@@ -61,55 +76,55 @@
 					fixed: 'fix_hukz',
 					status: false,
 					iconSatus: false,
-				}, {
+				},{
 					name: '麻沙镇',
 					nameType: '镇',
 					fixed: 'fix_masz',
 					status: false,
 					iconSatus: false,
-				}, {
+				},{
 					name: '书坊乡',
 					nameType: '村',
 					fixed: 'fix_shufx',
 					status: false,
 					iconSatus: false,
-				}, {
+				},{
 					name: '莒口镇',
 					nameType: '镇',
 					fixed: 'fix_jukz',
 					status: false,
 					iconSatus: false,
-				}, {
+				},{
 					name: '将口镇',
 					nameType: '镇',
 					fixed: 'fix_jiangkz',
 					status: false,
 					iconSatus: false,
-				}, {
+				},{
 					name: '徐市镇',
 					nameType: '镇',
 					fixed: 'fix_xusz',
 					status: false,
 					iconSatus: false,
-				}, {
+				},{
 					name: '崇雒乡',
 					nameType: '村',
 					fixed: 'fix_conglx',
 					status: false,
 					iconSatus: false,
-				}, {
+				},{
 					name: '漳墩镇',
 					nameType: '镇',
 					fixed: 'fix_zhangdz',
 					status: false,
 					iconSatus: false,
-				}, {
+				},{
 					name: '回龙乡',
 					nameType: '村',
 					fixed: 'fix_huilx',
 					status: false,
 					iconSatus: false,
-				}, {
+				},{
 					name: '水吉镇',
 					nameType: '镇',
 					fixed: 'fix_shuijz',
@@ -118,11 +133,15 @@
 				}], //乡村列表
 				contentInputData: '', //搜索
 				imageHeight: '1334upx', //手机屏幕高度
+				// ---------------以下是提示内容参数-------------
 				ruralListIndex: -1, //数组默认值
 				loadStatus: false, //加载状态
 				loadIndex: 0, //加载数值，用于加载展示
 				loadText: '正在查询乡村信息.', //加载文字提示
 				loadRuralText: '', //文字乡村提示
+				
+				// ---------------以下是成功的提示内容参数-------------
+				queryStatus : true,//成功的提示框
 			}
 		},
 		onLoad: function() {
@@ -190,9 +209,8 @@
 						}
 					}
 				}, 1000)
-
-
 			}
+			
 
 		}
 	}
@@ -228,7 +246,15 @@
 			margin-left: 4upx;
 		}
 	}
-
+	
+	.government_image{
+		width: 23upx;
+		height: 23upx;
+	}
+	.government_text{
+		font-size: 18upx;
+		margin-left: 4upx;
+	}
 
 
 

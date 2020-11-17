@@ -17,7 +17,7 @@
 				</view>
 				<view class="grClass">
 					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.avatar" mode="aspectFill"></image>
-					<image v-if="groupTitle.avatar==''" class="txImage" src="../../../../static/GRZX/missing-face.png" mode="aspectFill"></image>
+					<!-- <image v-if="groupTitle.avatar==''" class="txImage" src="../../../../static/GRZX/missing-face.png" mode="aspectFill"></image> -->
 					<view class="grView">
 						<view class="name">{{groupTitle.nick_name}}</view>
 						<text class="number">{{post}}</text>
