@@ -161,6 +161,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/home/archives",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle":"white"
+            }
+            
+        }
     ],
 
 	"subPackages": [
@@ -1134,13 +1144,12 @@
 				"pagePath": "pages/home/h_xczx_home",
 				"text": "首页"
 			},{
-				"pagePath": "pages/GRZX/notice",
-				"text": "通知"
-			},
-			{
+				"pagePath": "pages/home/archives",
+				"text": "档案"
+			},{
 				"pagePath": "pages/home/serve",
 				"text": "服务"
-			}, {
+			},{
 				"pagePath": "pages/order/newOrderList",
 				"text": "订单"
 			},{
