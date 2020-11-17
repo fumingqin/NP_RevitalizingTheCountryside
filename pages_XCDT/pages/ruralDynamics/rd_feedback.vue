@@ -64,20 +64,20 @@
 	export default {
 		data() {
 			return {
-				src:'/pages_YCYD/static/LYFW/agricultureProducts/banner.png',
+				src:'/pages_XCDT/static/LYFW/agricultureProducts/banner.png',
 				commentArea:[{
-					headPortrait:'/pages_YCYD/static/LYFW/agricultureProducts/touxiang.png',
+					headPortrait:'/pages_XCDT/static/LYFW/agricultureProducts/touxiang.png',
 					name:'叮当猫',
 					content:'漳州也是依托旅游拓展经济,希望不要再出什么30天无理由退货了',
 					time:'2020-10-10 21:00',
-					contentImage:['/pages_YCYD/static/LYFW/agricultureProducts/banner.png','/pages_YCYD/static/LYFW/agricultureProducts/banner.png','/pages_YCYD/static/LYFW/agricultureProducts/banner.png',],
+					contentImage:['/pages_XCDT/static/LYFW/agricultureProducts/banner.png','/pages_XCDT/static/LYFW/agricultureProducts/banner.png','/pages_XCDT/static/LYFW/agricultureProducts/banner.png',],
 					replyArea:[{
 						replyingPerson:'漳州达达通小弟',
 						replyContent:'您好！感谢您的意见和建议，同时感谢您的支持，在今后的使用过程中有任何疑问，可随时拨打400-88-96301向',
 					}],
 				},
 				{
-					headPortrait:'/pages_YCYD/static/LYFW/agricultureProducts/touxiang.png',
+					headPortrait:'/pages_XCDT/static/LYFW/agricultureProducts/touxiang.png',
 					name:'叮当猫',
 					content:'漳州也是依托旅游拓展经济,希望不要再出什么30天无理由退货了',
 					time:'2020-10-10 21:00',

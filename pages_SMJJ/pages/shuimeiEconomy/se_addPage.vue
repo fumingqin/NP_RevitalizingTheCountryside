@@ -30,9 +30,9 @@
 				</u-form-item>
 				
 				<!-- 简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="centent">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="content">
 					<view class="viewClass" style="padding:20rpx 30rpx;">
-						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
+						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.content" />
 					</view>
 				</u-form-item>
 				
@@ -156,7 +156,7 @@
 					region: '', //选择来源地value
 					goodsType: '', //选择类型value
 					// cost: '', //价格
-					centent:'',
+					content:'',
 					intro: '', //商品简介
 					imageData: [], //图像日期
 					phone: '',
@@ -261,7 +261,7 @@
 						}
 					],
 					
-					centent: [{
+					content: [{
 							required: true,
 							message: '请填写简介'
 						},
@@ -540,8 +540,9 @@
 				});
 
 			},
-
+			
 			uploadData: function(e) {
+
 				uni.showLoading({
 					title: '提交中...',
 					mask: true,
@@ -556,63 +557,89 @@
 				console.log('6', this.informationDetail.id);
 				console.log('7', arr);
 				//-----------------提交表单数据-----------------------
-				this.$refs.uForm.validate(valid => {
-					if (valid) {
-						// uni.hideLoading();
-						console.log('验证通过');
-						if (this.issueText !== '<p><br></p>') {
-							uni.request({
-								url: this.$smjj.KyInterface.releaseEconomy.Url,
-								method: this.$smjj.KyInterface.releaseEconomy.method,
-								data: {
-									userId: this.userInfo.userId,
-									// userId: 100006,
-									content: e,
-									image: JSON.stringify(this.lists),
-									title: this.model.name,
-									introduce: this.model.centent,
-									video: JSON.stringify(arr)
-								},
-								success: (res) => {
-									console.log(res, "请求完接口");
-									if (res.data.status) {
-										uni.showToast({
-											title: res.data.msg,
-										})
-										setTimeout(function() {
-											uni.navigateBack();
-										}, 1000)
-									} else {
-										uni.showToast({
-											title: res.data.msg,
-											icon: 'none',
-										})
+				if (this.issueText !== '<p><br></p>') {
+					this.$refs.uForm.validate(valid => {
+						if (valid) {
+							// uni.hideLoading();
+							console.log('验证通过');
+							if (this.model.name !== '') {
+								if (this.model.content !== '') {
+									if (this.model.content.length > 5) {
+										uni.request({
+											url: this.$smjj.KyInterface.releaseEconomy.Url,
+											method: this.$smjj.KyInterface.releaseEconomy.method,
+											data: {
+												userId: this.userInfo.userId,
+												// userId: 100006,
+												content: e,
+												image: JSON.stringify(this.lists),
+												title: this.model.name,
+												introduce: this.model.content,
+												video: JSON.stringify(arr)
+											},
+											success: (res) => {
+												console.log(res, "请求完接口");
+												if (res.data.status) {
+													uni.showToast({
+														title: res.data.msg,
+													})
+													setTimeout(function() {
+														uni.navigateBack();
+													}, 1000)
+												} else {
+													uni.showToast({
+														title: res.data.msg,
+														icon: 'none',
+													})
+												}
+											},
+											fail: () => {
+												uni.showToast({
+													title: '提交失败',
+													icon: 'none',
+												})
+											},
+											complete: () => {
+												setTimeout(function() {
+													uni.hideLoading();
+												}, 800)
+											}
+										});
 									}
-								},
-								fail: () => {
-									uni.showToast({
-										title: '提交失败',
-										icon: 'none',
-									})
-								},
-								complete: () => {
-									setTimeout(function() {
-										uni.hideLoading();
-									}, 800)
 								}
-							});
+							}
 						} else {
-							uni.showToast({
-								title: '提交失败,请编辑文章内容',
-								icon: 'none',
-							})
+							//---------------提示内容------------------------
+				
+							uni.hideLoading();
+							console.log('验证失败');
+							if (this.model.name == '') {
+								uni.showToast({
+									title: '提交失败,请编辑标题内容',
+									icon: 'none',
+								})
+							}
+							if (this.model.content == '') {
+								uni.showToast({
+									title: '提交失败,请输入简介',
+									icon: 'none',
+								})
+							}
+							if (this.model.content.length < 5) {
+								uni.showToast({
+									title: '提交失败,简介至少大于5个字',
+									icon: 'none',
+								})
+							}
 						}
-					} else {
-						uni.hideLoading();
-						console.log('验证失败');
-					}
-				});
-			},
+					});
+				} else {
+					uni.showToast({
+						title: '提交失败,请编辑档案简介',
+						icon: 'none',
+					})
+				}
+			},			
 		}
 	}
 </script>
