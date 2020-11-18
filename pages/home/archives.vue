@@ -28,7 +28,7 @@
 
 		<!-- 搜索区域 -->
 		<view class="inf_dis_view">
-			<view class="dis_view_tips" style="color: #dddddd;">注：可通过双指缩放地图大小</view>
+			<view class="dis_view_tips" style="color: #888888;">注：可通过双指缩放地图大小</view>
 			<view class="dis_view_tips" style="color: #19BE6B;">注：可通过点击地图乡村/下方标签查看乡村信息</view>
 			<!-- 输入框 -->
 			<view class="box_inputView">
@@ -47,22 +47,20 @@
 				<view class="dis_view_title">{{loadText}}</view>
 				<view class="dis_view_text" :hidden="loadIndex < 1">查询乡村：{{loadRuralText}}</view>
 				<view class="dis_view_text" :hidden="loadIndex < 2">查询内容：所有</view>
-				<view class="dis_view_text" :hidden="loadIndex < 3">系统状态：正常</view>
+				<view class="dis_view_text" :hidden="loadIndex < 3">查询时长：预计15秒</view>
 			</view>
 			
 			<!-- 查询流程 -->
-			<view class="dis_view_view" v-if="queryStatus == true">
+			<view class="dis_view_view" v-if="queryStatus == 1">
 				<view class="dis_view_title">查询成功，请点击右侧按钮</view>
 				<view class="dis_view_text">查询乡村：{{loadRuralText}}</view>
 				<view class="dis_view_text">查询内容：所有</view>
 				<view class="dis_view_text">祝您游览愉快~！</view>
 				<image style="position: absolute; bottom: 8upx; right: 24upx; width:200upx; height: 200upx; z-index: 5;" src="../../static/home/archives/chakan.png" mode="aspectFit"></image>
 			</view>
-			
-			
 		</view>
 
-
+ 
 	</view>
 </template>
 
@@ -141,7 +139,7 @@
 				loadRuralText: '', //文字乡村提示
 				
 				// ---------------以下是成功的提示内容参数-------------
-				queryStatus : true,//成功的提示框
+				queryStatus : 1,//成功的提示框
 			}
 		},
 		onLoad: function() {
