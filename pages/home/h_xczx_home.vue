@@ -293,12 +293,12 @@
 						uni.stopPullDownRefresh()
 						console.log('轮播区', res)
 						if (res.data.data == '') {
-							if (this.LoatIndex <= 3) {
+							if (this.LoatIndex <= 10) {
 								this.LoatIndex = 0;
-								uni.showToast({
-									title: '服务器异常，请联系客服',
-									icon: 'none'
-								})
+								// uni.showToast({
+								// 	title: '服务器异常，请联系客服',
+								// 	icon: 'none'
+								// })
 							} else {
 								this.LoatIndex = this.LoatIndex + 1;
 								this.rotationLoadData();
@@ -345,12 +345,12 @@
 						uni.stopPullDownRefresh()
 						// console.log('banner', res)
 						if (res.data.data == '') {
-							if (this.LoatIndex2 <= 3) {
+							if (this.LoatIndex2 <= 10) {
 								this.LoatIndex2 = 0;
-								uni.showToast({
-									title: '服务器异常，请联系客服',
-									icon: 'none'
-								})
+								// uni.showToast({
+								// 	title: '服务器异常，请联系客服',
+								// 	icon: 'none'
+								// })
 							} else {
 								this.LoatIndex2 = this.LoatIndex2 + 1;
 								this.bannerLoadData();
@@ -386,12 +386,12 @@
 						uni.stopPullDownRefresh()
 						// console.log('跑马灯',res)
 						if (res.data.data == '') {
-							if (this.LoatIndex3 <= 3) {
+							if (this.LoatIndex3 <= 10) {
 								this.LoatIndex3 = 0;
-								uni.showToast({
-									title: '服务器异常，请联系客服',
-									icon: 'none'
-								})
+								// uni.showToast({
+								// 	title: '服务器异常，请联系客服',
+								// 	icon: 'none'
+								// })
 							} else {
 								this.LoatIndex3 = this.LoatIndex3 + 1;
 								this.lampLoadData();
@@ -425,12 +425,12 @@
 						uni.stopPullDownRefresh()
 						// console.log('乡村美景',res)
 						if (res.data.data == '') {
-							if (this.LoatIndex4 <= 3) {
+							if (this.LoatIndex4 <= 10) {
 								this.LoatIndex4 = 0;
-								uni.showToast({
-									title: '服务器异常，请联系客服',
-									icon: 'none'
-								})
+								// uni.showToast({
+								// 	title: '服务器异常，请联系客服',
+								// 	icon: 'none'
+								// })
 							} else {
 								this.LoatIndex4 = this.LoatIndex4 + 1;
 								this.countrysideLoadData();
@@ -464,12 +464,12 @@
 						uni.stopPullDownRefresh()
 						// console.log('公开项目',res)
 						if (res.data.data == '') {
-							if (this.LoatIndex5 <= 3) {
+							if (this.LoatIndex5 <= 10) {
 								this.LoatIndex5 = 0;
-								uni.showToast({
-									title: '服务器异常，请联系客服',
-									icon: 'none'
-								})
+								// uni.showToast({
+								// 	title: '服务器异常，请联系客服',
+								// 	icon: 'none'
+								// })
 							} else {
 								this.LoatIndex5 = this.LoatIndex5 + 1;
 								this.projectLoadData();

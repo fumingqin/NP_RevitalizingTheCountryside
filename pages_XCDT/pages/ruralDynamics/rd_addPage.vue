@@ -11,15 +11,15 @@
 				</u-form-item>
 
 				<!-- 类型 -->
-				<!-- 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="选择类型" :border-bottom="false" prop="goodsType">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="选择类型" :border-bottom="false" prop="goodsType">
 					<view class="viewClass" style="padding-right: 20rpx;">
 						<u-input :custom-style="tradeNameStyle" :border="border" type="select" :select-open="selectShow" v-model="model.goodsType"
 						 placeholder="请选择选择类型" @click="selectShow = true"></u-input>
 					</view>
-				</u-form-item> -->
+				</u-form-item>
 
 				<!-- 上传图片 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
 					 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
@@ -29,13 +29,17 @@
 				</u-form-item>
 
 				<!-- 上传视频 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
 					<view style="display: block;">
 						<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
 						 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 						<text class="videoClass">*目前该功能暂时只能上传小于200MB的视频</text>
 					</view>
 				</u-form-item>
+				<!-- <view v-if="informationDetail.video!=='' || types!==0" style="display: flex;position: relative;width: 100%;">
+					<text style="position: absolute;width: :;upx;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;font-size: 28upx;">{{informationDetail.video}}</text>
+					<text style="position: absolute;right: 0;color:#007AFF;font-size: 28upx;" @click="deleteVideo(0)">删除</text>
+				</view> -->
 
 				<!-- 简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false" prop="content">
@@ -44,13 +48,14 @@
 					</view>
 				</u-form-item>
 
-				<!-- 商品简介 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="商品简介" :border-bottom="false">
+				<!-- 档案简介 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="档案简介" :border-bottom="false">
 					<view class="viewClass" style="padding: 20rpx;">
 						<view class="container">
 							<editor id="editor" show-img-size :read-only="isEdit" show-img-resize show-img-toolbar class="ql-container"
 							 :placeholder="placeholder" @statuschange="onStatusChange" @ready="onEditorReady">
 							</editor>
+
 						</view>
 
 						<view class="toolbar" @touchend.stop="format" :style="'bottom: ' + (isIOS ? keyboardHeight : 0) + 'px'">
@@ -164,8 +169,8 @@
 					region: '', //选择来源地value
 					goodsType: '', //选择类型value
 					// cost: '', //价格
-					content: '',
 					intro: '', //商品简介
+					content: '',
 					imageData: [], //图像日期
 				},
 				//----------------uview样式--------------------------
@@ -196,16 +201,10 @@
 				//----------------uview表单验证--------------------------
 				rules: {
 					name: [{
-							required: true,
-							message: '请输入商品名称',
-							trigger: 'blur',
-						},
-						{
-							min: 1,
-							message: '请输入商品名称',
-							trigger: ['change', 'blur'],
-						},
-					],
+						required: true,
+						message: '请输入标题内容',
+						trigger: ['change', 'blur'],
+					}],
 					region: [{
 						required: true,
 						message: '请选择商品来源地',
@@ -224,12 +223,12 @@
 					],
 					intro: [{
 							required: true,
-							message: '请填写简介'
+							message: '请填写简介',
 						},
 						{
 							min: 5,
 							message: '简介不能少于5个字',
-							trigger: 'change',
+							trigger: ['change', 'blur'],
 						},
 						// 正则校验示例，此处用正则校验是否中文，此处仅为示例，因为uView有this.$u.test.chinese可以判断是否中文
 						// {
@@ -482,8 +481,9 @@
 
 			//---------------------------上传视频回调-------------------------------
 			successvideo: function(e) {
+				console.log(e)
 				var data = JSON.parse(e.data);
-				// console.log(data)
+				console.log(data)
 				this.videoData = data;
 				console.log('视频上传成功', this.videoData)
 			},
@@ -510,6 +510,7 @@
 				};
 				this.lists.push(a.data)
 				console.log(this.lists)
+				console.log(this.fileList)
 			},
 
 			successData: function() {
@@ -525,7 +526,6 @@
 			},
 
 			uploadData: function(e) {
-
 				uni.showLoading({
 					title: '提交中...',
 					mask: true,
@@ -539,6 +539,7 @@
 				console.log('5', this.model.goodsType);
 				console.log('6', this.informationDetail.id);
 				console.log('7', arr);
+				console.log('6', this.model.content);
 				//-----------------提交表单数据-----------------------
 				if (this.issueText !== '<p><br></p>') {
 					this.$refs.uForm.validate(valid => {
@@ -546,59 +547,68 @@
 							// uni.hideLoading();
 							console.log('验证通过');
 							if (this.model.name !== '') {
-								if (this.model.content !== '') {
-									if (this.model.content.length > 5) {
-										uni.request({
-											url: this.$xcdt.KyInterface.releaseDynamic.Url,
-											method: this.$xcdt.KyInterface.releaseDynamic.method,
-											data: {
-												userId: this.userInfo.userId,
-												// userId: 100006,
-												content: e,
-												image: JSON.stringify(this.lists),
-												title: this.model.name,
-												introduce: this.model.content,
-												video: JSON.stringify(arr)
-											},
-											success: (res) => {
-												console.log(res, "请求完接口");
-												if (res.data.status) {
+								if (this.model.goodsType !== '') {
+									if (this.model.content !== '') {
+										if (this.model.content.length > 5) {
+											uni.request({
+												url: this.$ycyd.KyInterface.releaseArchives.Url,
+												method: this.$ycyd.KyInterface.releaseArchives.method,
+												data: {
+													userId: this.userInfo.userId,
+													// userId: 100006,
+													content: e,
+													image: JSON.stringify(this.lists),
+													title: this.model.name,
+													article_type: this.model.goodsType,
+													introduce: this.model.content,
+													video: JSON.stringify(arr)
+												},
+												success: (res) => {
+													console.log(res, "请求完接口");
+													if (res.data.status) {
+														uni.showToast({
+															title: res.data.msg,
+														})
+														setTimeout(function() {
+															uni.navigateBack();
+														}, 1000)
+													} else {
+														uni.showToast({
+															title: res.data.msg,
+															icon: 'none',
+														})
+													}
+												},
+												fail: () => {
 													uni.showToast({
-														title: res.data.msg,
-													})
-													setTimeout(function() {
-														uni.navigateBack();
-													}, 1000)
-												} else {
-													uni.showToast({
-														title: res.data.msg,
+														title: '提交失败',
 														icon: 'none',
 													})
+												},
+												complete: () => {
+													setTimeout(function() {
+														uni.hideLoading();
+													}, 800)
 												}
-											},
-											fail: () => {
-												uni.showToast({
-													title: '提交失败',
-													icon: 'none',
-												})
-											},
-											complete: () => {
-												setTimeout(function() {
-													uni.hideLoading();
-												}, 800)
-											}
-										});
+											});
+										}
 									}
 								}
 							}
 						} else {
 							//---------------提示内容------------------------
-				
+
 							uni.hideLoading();
 							console.log('验证失败');
 							if (this.model.name == '') {
 								uni.showToast({
 									title: '提交失败,请编辑标题内容',
+									icon: 'none',
+								})
+							}
+							if (this.model.goodsType == '') {
+								uni.showToast({
+									title: '提交失败,请选择类型',
 									icon: 'none',
 								})
 							}

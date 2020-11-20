@@ -71,17 +71,17 @@
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "../../pages_STYH/pages/ecologicalBank/eb_generalList",
-					ImageURL1: "../../static/home/serve/yh.png", //亮
-					ImageURL2: "../../static/home/serve/yh2.png", //暗
-					ItemTitle: "生态银行",
+					clickURL: "../../pages_FBXM/pages/publishProject/pp_generalList",
+					ImageURL1: "../../static/home/serve/xmjd.png", //亮
+					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
+					ItemTitle: "项目监督",
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "../../pages_PYFW/pages/pyfw_py_list",
-					ImageURL1: "../../static/home/serve/tprw.png", //亮
-					ImageURL2: "../../static/home/serve/tprw2.png", //暗
-					ItemTitle: "特派任务",
+					clickURL: "",
+					ImageURL1: "../../static/home/serve/jdkp.png", //亮
+					ImageURL2: "../../static/home/serve/jdkp2.png", //暗
+					ItemTitle: "季度考评",
 					style: "sv_print",
 				},{
 					IsUse: true,
@@ -100,17 +100,17 @@
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "../../pages_FBXM/pages/publishProject/pp_generalList",
-					ImageURL1: "../../static/home/serve/xmjd.png", //亮
-					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
-					ItemTitle: "项目监督",
+					clickURL: "../../pages_STYH/pages/ecologicalBank/eb_generalList",
+					ImageURL1: "../../static/home/serve/yh.png", //亮
+					ImageURL2: "../../static/home/serve/yh2.png", //暗
+					ItemTitle: "生态银行",
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "",
-					ImageURL1: "../../static/home/serve/jdkp.png", //亮
-					ImageURL2: "../../static/home/serve/jdkp2.png", //暗
-					ItemTitle: "季度考评",
+					clickURL: "../../pages_PYFW/pages/pyfw_py_list",
+					ImageURL1: "../../static/home/serve/tprw.png", //亮
+					ImageURL2: "../../static/home/serve/tprw2.png", //暗
+					ItemTitle: "特派任务",
 					style: "sv_print",
 				},{
 					IsUse: true,
@@ -125,6 +125,13 @@
 					ImageURL1: "../../static/home/serve/kprw.png", //亮
 					ImageURL2: "../../static/home/serve/kprw2.png", //暗
 					ItemTitle: "考评任务",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../GRZX/notice",
+					ImageURL1: "../../static/home/serve/kprw.png", //亮
+					ImageURL2: "../../static/home/serve/kprw2.png", //暗
+					ItemTitle: "系统通知",
 					style: "sv_print",
 				}],
 

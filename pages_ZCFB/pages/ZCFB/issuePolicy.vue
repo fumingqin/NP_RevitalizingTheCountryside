@@ -409,6 +409,18 @@
 						title:'请输入政策简介',
 						icon:'none'
 					})
+				}else
+				if(that.$Src.checkSrc('image',that.lists[0])==false){
+					uni.showToast({
+						title:'图片格式不正确，请修改后从新发布',
+						icon:'none'
+					})
+				}else
+				if(that.$Src.checkSrc('pdf',that.localPath)==false){
+					uni.showToast({
+						title:'文件格式不正确，请修改后从新发布',
+						icon:'none'
+					})
 				}
 			},
 

@@ -1,5 +1,8 @@
 <template>
 	<view>
+		<!-- 头部切换栏 -->
+		<u-tabs :list="headList" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
+		
 		<!-- 内容1 -->
 		<view>
 			<view class="infor_view" v-for="(item,index) in groupTitle" :key="index" @click="routeJump(item.id)">
@@ -7,14 +10,17 @@
 					<view class="tv_view">
 						<view style="display: flex;">
 							<view style="margin-top: 10upx;">
-								<text class="tv_label" style="background: #007AFF;">乡村动态</text>
+								<text class="tv_label" v-if="item.article_type=='村容村貌'" style="background: #007AFF;">{{item.article_type}}</text>
+								<text class="tv_label" v-if="item.article_type=='环境整治'" style="background: #18B566;">{{item.article_type}}</text>
+								<text class="tv_label" v-if="item.article_type=='企业帮扶'" style="background: #F29100;">{{item.article_type}}</text>
+								<text class="tv_label" v-if="item.article_type=='三化管理'" style="background: #E3424B;">{{item.article_type}}</text>
 							</view>
 							<view class="tv_title">{{item.title}}</view>
 						</view>
 						<!-- <text class="tv_richText">{{item.content}}</text> -->
 						<view class="tv_view2">
-							<!-- <rich-text class="tv_richText" :nodes="item.content"></rich-text> -->
 							<text class="tv_richText">{{item.introduce}}</text>
+							<!-- <rich-text class="tv_richText" :nodes="item.content"></rich-text> -->
 						</view>
 					</view>
 					<image class="tv_image" :src="item.image" mode="aspectFill"></image>
@@ -22,19 +28,19 @@
 				
 				<view class="view_contentView">
 					<text>{{item.nick_name}}</text>
-					<text class="cont_text">{{item.view}}人看过</text>
-					<text class="cont_text">{{informationDate(item.update_time)}}</text>
+					<text class="cont_text">{{item.count}}人看过</text>
+					<text class="cont_text">{{informationDate(item.create_time)}}</text>
 					<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
 				</view>
 				<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 			</view>
+			<!-- 缺省提示 -->
+			<view style="margin-top: 250upx;" v-if="groupTitle.length ==0">
+				<u-empty text="该分类没有相关档案哦~" mode="news"></u-empty>
+			</view>
 			<!-- <view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
 				<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 			</view> -->
-			<!-- 缺省提示 -->
-			<view style="margin-top: 360upx;" v-if="groupTitle.length==0">
-				<u-empty text="该分类没有动态哦~" mode="news"></u-empty>
-			</view>
 		</view>
 	</view>
 </template>
@@ -43,16 +49,28 @@
 	export default {
 		data() {
 			return {
+				headList: [{
+					name: '全部'
+				},{
+					name: '村容村貌'
+				},{
+					name: '环境整治'
+				},{
+					name: '企业帮扶'
+				},{
+					name: '三化管理'
+				}], //头部数组
+				headCurrent: 0, //头部tabs下标
 				groupTitle:[],
 				selectId:'',//去出id
 				selectIndex:0,//下标
-				// loadingType: 0, //加载更多状态
+				loadingType: 0, //加载更多状态
 				// loadingText:{
 				// 	down :'上拉加载更多',
 				// 	refresh : '正在加载...',
 				// 	nomore : '没有更多了',
 				// },
-				// scenicListIndex:5,//列表默认数量
+				scenicListIndex:5,//列表默认数量
 			}
 		},
 		
@@ -94,7 +112,7 @@
 			// 	this.loadingType = 1;
 				
 			// 	if(this.scenicListIndex < this.groupTitle.length){
-			// 		var a = this.scenicListIndex +6;
+			// 		var a = this.scenicListIndex +5;
 			// 		this.scenicListIndex = a;
 			// 		this.loadingType = 0;
 			// 	}
@@ -114,13 +132,39 @@
 			
 			//----------------------列表接口--------------------------------
 			ycydData:function(){
+				uni.showLoading({
+					title: '加载列表中...',
+				})
 				uni.request({
-					url:this.$xcdt.KyInterface.getDynamic.Url,
-					method:this.$xcdt.KyInterface.getDynamic.method,
+					url:this.$ycyd.KyInterface.getArchives.Url,
+					method:this.$ycyd.KyInterface.getArchives.method,
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.groupTitle = res.data.data
+							if (this.headCurrent == 0) {
+								uni.hideLoading();
+								this.groupTitle = res.data.data
+							}else if (this.headCurrent == 1){
+								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
+									return item.article_type == '村容村貌';
+								})
+							}else if (this.headCurrent == 2){
+								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
+									return item.article_type == '环境整治'
+								})
+							} else if (this.headCurrent == 3){
+								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
+									return item.article_type == '企业帮扶'
+								})
+							} else if (this.headCurrent == 4){
+								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
+									return item.article_type == '三化管理'
+								})
+							}
 							// console.log('列表数据',this.groupTitle)
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
@@ -155,7 +199,7 @@
 			//--------------------------路由跳转------------------------------
 			routeJump:function(e){
 				uni.navigateTo({
-					url:'rd_detailsPage?id=' +e,
+					url:'ovof_detailsPage?id=' +e,
 				})
 			}
 		}

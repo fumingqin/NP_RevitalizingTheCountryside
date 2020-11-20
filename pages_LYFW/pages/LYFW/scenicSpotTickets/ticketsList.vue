@@ -153,7 +153,7 @@
 				cateList: [], //分类数组
 				cateValue: '', //分类筛选值
 				
-				regionWeixin: '请选择', //微信地区数值
+				regionWeixin: '南平市', //微信地区数值
 			}
 		},
 
@@ -171,16 +171,14 @@
 				title:'加载中...',
 				icon:'loading'
 			})
-			if(this.regionWeixin = '请选择'){
-				this.regionWeixin = '南平市'
-			}
 			// #ifdef H5
 			uni.showToast({
-				title:'公众号当前定位无法启用，已默认定位泉州市',
+				title:'公众号当前定位无法启用，已默认定位南平市',
 				icon:'none'
 			})
-			this.regionWeixin = '泉州市'; //h5无法自动定位，采用手动赋值
+			this.regionWeixin = '南平市'; //h5无法自动定位，采用手动赋值
 			// #endif
+			console.log(this.cateId)
 			this.cateId = options.tid;
 			this.loadCateList(options.fid, options.sid);
 			this.Getpostion();
@@ -197,7 +195,7 @@
 		methods: {
 			//请求模拟接口数据
 			lyfwData: function() {
-				// console.log(this.regionWeixin)
+				console.log('请求数据',this.regionWeixin)
 				// 六宫格
 				uni.request({
 					url: $lyfw.Interface.spt_GetticketSearchByrequestArea_Six.value,
@@ -226,6 +224,9 @@
 						// console.log(ee)
 						uni.stopPullDownRefresh();
 						uni.hideLoading()
+					},
+					complete: (e) => {
+						console.log('我请求了',e)
 					}
 				})
 
@@ -247,10 +248,6 @@
 							this.scenicList = '';
 							uni.hideLoading()
 							uni.stopPullDownRefresh();
-							uni.showToast({
-								title: '该地区暂无景点信息',
-								icon: 'none'
-							})
 						}
 					},
 					fail:function(){
@@ -266,15 +263,18 @@
 					uni.getStorage({
 						key: 'wx_position',
 						success: (res) => {
-							// console.log(res)
+							console.log(res)
 							this.regionWeixin = res.data;
+							console.log('第一次加载')
 							this.lyfwData(); //请求接口数据
 						},
-						fail: (res) => {
+						fail: (err) => {
+							console.log(err)
 							uni.showToast({
 								title:'请选择地区',
 								icon:'none'
 							})
+							console.log('第二次加载')
 							this.lyfwData(); //请求接口数据
 						},
 					})
@@ -292,6 +292,7 @@
 					// console.log(e)
 					this.regionWeixin = e.cityName
 					this.$refs.popupRef.close();
+					console.log('第三次加载')
 					this.lyfwData();
 					this.screenIndex = 0;
 					this.searchIndex = 0;
@@ -301,6 +302,7 @@
 						success: (res) => {
 							console.log(res)
 							this.regionWeixin = res.data;
+							console.log('第四次加载')
 							this.lyfwData(); //请求接口数据
 						}
 					})

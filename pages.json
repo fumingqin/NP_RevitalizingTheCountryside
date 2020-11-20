@@ -161,6 +161,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/home/archives",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle":"white"
+            }
+            
+        }
     ],
 
 	"subPackages": [
@@ -424,39 +434,7 @@
 			"root": "pages_YCYD/",
 			"pages": [
 				//----------------------------------通用页面----------------------------------
-				{
-					"path": "pages/LYFW/agricultureProducts/ovof_list",
-					"style": {
-						"navigationBarTitleText": "村档管理列表",
-						"enablePullDownRefresh": true
-					}
-				},
-				{
-					"path": "pages/LYFW/agricultureProducts/ovof_edit",
-					"style": {
-						"navigationBarTitleText": "村档管理修改"
-					}
-				},
-				{
-					"path": "pages/LYFW/agricultureProducts/ovof_generalList",
-					"style": {
-						"navigationBarTitleText": "一村一档列表",
-						"enablePullDownRefresh": true
-					}
-				}, {
-					"path": "pages/LYFW/agricultureProducts/ovof_detailsPage",
-					"style": {
-						"navigationBarTitleText": "列表详情"
-					}
-				}, {
-					"path": "pages/LYFW/agricultureProducts/ovof_feedback",
-					"style": {}
-				}, {
-					"path": "pages/LYFW/agricultureProducts/ovof_addPage",
-					"style": {
-						"navigationBarTitleText": "村档管理添加"
-					}
-				}
+				
 			]
 		},
 		//---------------------------------------------第五个包：政策发布------------------------------------------
@@ -653,6 +631,9 @@
 						"navigationBarTitleText": "乡村动态列表",
 						"enablePullDownRefresh": true
 					}
+				}, {
+					"path": "pages/ruralDynamics/rd_feedback",
+					"style": {}
 				}
 			]
 		},
@@ -1159,13 +1140,12 @@
 				"pagePath": "pages/home/h_xczx_home",
 				"text": "首页"
 			},{
-				"pagePath": "pages/GRZX/notice",
-				"text": "通知"
-			},
-			{
+				"pagePath": "pages/home/archives",
+				"text": "档案"
+			},{
 				"pagePath": "pages/home/serve",
 				"text": "服务"
-			}, {
+			},{
 				"pagePath": "pages/order/newOrderList",
 				"text": "订单"
 			},{

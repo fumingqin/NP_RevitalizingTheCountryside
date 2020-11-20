@@ -104,7 +104,13 @@
 				markersData: {
 					latitude: '', //纬度
 					longitude: '', //经度
-					key: "eb06b78edba8039ed8721c590492a679" //申请的高德地图key（申请的web key）
+					// #ifdef MP-WEIXIN
+					key: "2ffb2901134a8a4375cb728056acf2f0", //申请的高德地图key（申请的web key）
+					// #endif
+					// #ifdef APP-PLUS
+					key: "2ffb2901134a8a4375cb728056acf2f0", //申请的高德地图key（申请的web key）
+					// #endif
+					
 				},
 				gpsCode: '',
 			}
@@ -152,12 +158,8 @@
 				uni.authorize({
 					scope: a,
 					success() { //1.1 允许授权
-						// _this.getLocationInfo();
-						_this.getWarpweft()
-						uni.setStorage({
-							key: 'wx_position',
-							data: '南平市'
-						})
+						_this.getLocationInfo();
+						// _this.getWarpweft()
 					},
 					fail() { //1.2 拒绝授权
 						// console.log("你拒绝了授权，无法获得周边信息")
@@ -254,27 +256,27 @@
 			getWarpweft() {
 				var that = this
 				that.po_tips = '定位中...'
-				uni.getLocation({
-					type: 'wgs84',
-					geocode: true,
-					success: (res)=>{
-						console.log(res);
-						this.position = res.address.city
-						uni.setStorage({
-							key: 'wx_position',
-							data: this.position,
-						})
-						this.po_tips = '重新定位'
-					}
-				})
-				// that.loadCity();//小程序-调用高德
+				// uni.getLocation({
+				// 	type: 'wgs84',
+				// 	geocode: true,
+				// 	success: (res)=>{
+				// 		console.log(res);
+				// 		this.position = res.address.city
+				// 		uni.setStorage({
+				// 			key: 'wx_position',
+				// 			data: this.position,
+				// 		})
+				// 		this.po_tips = '重新定位'
+				// 	}
+				// })
+				that.loadCity();//小程序-调用高德
 			},
 			//把当前位置的经纬度传给高德地图，调用高德API获取当前地理位置
 			loadCity: function() {
 				var myAmapFun = new amapFile.AMapWX({
 					key: this.markersData.key,
 				});
-				console.log(myAmapFun);
+				// console.log(myAmapFun);
 				myAmapFun.getRegeo({
 					success: (data) => {
 						console.log(data)
