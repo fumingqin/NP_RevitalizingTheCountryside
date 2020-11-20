@@ -14,6 +14,7 @@
 			<view class="u-icon-wrap">
 				<u-icon class="u-clear-icon" :size="30" :name="searchIcon" :color="searchIconColor ? searchIconColor : color"></u-icon>
 			</view>
+			<!-- backgroundColor: bgColor, -->
 			<input
 				confirm-type="search"
 				@blur="blur"
@@ -32,7 +33,6 @@
 				:style="[{
 					textAlign: inputAlign,
 					color: color,
-					backgroundColor: bgColor,
 				}, inputStyle]"
 			/>
 			<view class="u-close-wrap" v-if="keyword && clearabled && focused" @tap="clear">

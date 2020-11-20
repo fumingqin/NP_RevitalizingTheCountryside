@@ -591,6 +591,31 @@
 						"navigationBarTitleText": "村名列表"
 					}
 				}
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_homePage",
+				    "style" : {
+						"navigationStyle": "custom",
+						"app-plus": {"titleNView": false} 
+					}
+				}
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_seeMore",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_search",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_list",
+				    "style" : {
+						"navigationStyle": "custom",
+						"app-plus": {
+							"titleNView": false,
+							"background":"#00c34e"
+						} 
+					}
+				}
 
 			]
 		},
@@ -1155,7 +1180,7 @@
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [{
 			"name": "", //模式名称
-			"path": "", //启动页面，必选
+			"path": "pages_WSSC/pages/WSSC/onlineShoppingMall/osm_homePage", //启动页面，必选
 			"query": "" //启动参数，在页面的onLoad函数里面得到
 		}]
 	}
