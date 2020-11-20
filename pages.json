@@ -434,7 +434,42 @@
 			"root": "pages_YCYD/",
 			"pages": [
 				//----------------------------------通用页面----------------------------------
-				
+				{
+					"path": "pages/YCYD/addVillageCrew",
+					"style": {
+						"navigationBarTitleText": "添加职责人员"
+					}
+				},
+				{
+					"path": "pages/YCYD/addVillageHead",
+					"style": {
+						"navigationBarTitleText": "添加村长"
+					}
+				},
+				{
+					"path": "pages/YCYD/addVillageStreet",
+					"style": {
+						"navigationBarTitleText": "添加街道"
+					}
+				},
+				{
+					"path": "pages/YCYD/villageDetails",
+					"style": {
+						"navigationBarTitleText": "档案详情"
+					}
+				},
+				{
+					"path": "pages/YCYD/villageList",
+					"style": {
+						"navigationBarTitleText": "一村一档列表"
+					}
+				},
+				{
+					"path": "pages/YCYD/choice",
+					"style": {
+						"navigationBarTitleText": ""
+					}
+				}
 			]
 		},
 		//---------------------------------------------第五个包：政策发布------------------------------------------
