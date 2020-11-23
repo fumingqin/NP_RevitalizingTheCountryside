@@ -4,25 +4,31 @@
 				<!-- 姓名 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="姓名" :border-bottom="false" prop="name">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入姓名" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入职责人员姓名" v-model="model.name" :type="text"></u-input>
 					</view>
 				</u-form-item>
 				<!-- 年龄 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="年龄" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="年龄" :border-bottom="false" prop="age">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入年龄" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入年龄" v-model="model.age" :type="text"></u-input>
 					</view>
 				</u-form-item>
 				<!-- 电话 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="电话" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="电话" :border-bottom="false" prop="telephone">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入电话" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入电话" v-model="model.telephone" :type="text"></u-input>
+					</view>
+				</u-form-item>
+				<!-- 职责 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="职责" :border-bottom="false" prop="year">
+					<view class="viewClass" style="padding-right: 20rpx;">
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入职位" v-model="model.duty" :type="text"></u-input>
 					</view>
 				</u-form-item>
 				<!-- 任职年限 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="任职年限" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="任职年限" :border-bottom="false" prop="year">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入任职年限" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入任职年限" v-model="model.year" :type="text"></u-input>
 					</view>
 				</u-form-item>
 		</view>
@@ -47,34 +53,18 @@
 				lists: [],
 				fileList:[],
 				policyId:'',
-				imageList: [],
-				showUploadList: true,
 				border: false,
                 sourceTypeIndex: 2,
-                checkedValue:true,
-                checkedIndex:0,
-                cameraIndex: 0,
-                VideoOfImagesShow:true,
 				submissionState: false,
-				color: {
-					r: 255,
-					g: 0,
-					b: 0,
-					a: 0.6
-				},
-				isEdit: false,
-				fontColor: '#000',
-				formats: {},
-				readOnly: false,
 				placeholder: '开始输入...',
 				editorHeight: 300,
 				keyboardHeight: 0,
-				action: 'http://120.24.144.6:8080/api/file/upload',
-				isIOS: false,
 				model: {
-					name: '', //商品名称value
-					intro: '', //商品简介
-					centent:'',
+					name: '', //姓名
+					age: '', //年龄
+					telephone:'',//电话
+					year:'',//任职年数
+					duty:'',//职责
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
@@ -101,12 +91,8 @@
 					paddingRight: '10px',
 					borderRadius: "6px",
 				},
-				pickerShow: false,
 				errorType: ['message'],
 				labelPosition: 'right',
-				maxCount: 3,
-				multiple: true,
-				autoHeight: true,
 			}
 		},
 		onLoad() {
@@ -126,38 +112,17 @@
 			});
 			},
 		methods: {
-			//删除图片提示
-			uploadOnRemove:function(e){
-				this.fileList = undefined;
-				this.lists = [];
-				
-			},
-			//------------上传图片----------------
-			uploadOnsuccess:function(e){
-				console.log('上传成功',e)
-				var a = {
-					data : e.data
-				};
-				this.lists.push(a.data)
-				console.log(this.lists)
-			},
 			
 			submitState: function() {
 				var that = this;
-				if(that.model.name!=''&&that.lists.length>0&&that.filename!=''&&that.model.centent!=''){
+				if(that.model.name!=''){
 					if (this.submissionState == false) {
-						that.editorCtx.getContents({
-							success: (res) => {
-								console.log(res);
-								that.issueText = res.html;
-							}
-						});
 						this.submissionState = true;
-						if(that.policyId!=''){
-							this.updateSubmit(that.issueText);
-						}else{
+						// if(that.policyId!=''){
+						// 	this.updateSubmit(that.issueText);
+						// }else{
 							this.submit(that.issueText);
-						}
+						// }
 					} else if (this.submissionState == true) {
 						uni.showToast({
 							title: '请勿重复点击提交',
@@ -192,10 +157,8 @@
 				}
 			},
 
-			submit: function(e) {
+			submit: function() {
 				var that = this;
-				console.log(that.videoData)
-				console.log(this.videoData)
 				uni.showLoading({
 					title: '提交数据中...'
 				});
@@ -203,33 +166,23 @@
 					key: 'userInfo',
 					success: (res) => {
 						console.log(res)
-
-						// console.log(that.videoData);
-						// array.push(that.videoData);
-						var array2=[];
-						console.log(that.localPath);
-						array2.push(that.localPath);
-						var array3=[];
-						array3.push(that.filename);
 						uni.request({
-							url: that.$zcfb.KyInterface.releasePolicy.Url,
-							method: that.$zcfb.KyInterface.releasePolicy.method,
+							url: that.$newycyd.KyInterface.addVillagePeople.Url,
+							method: that.$newycyd.KyInterface.addVillagePeople.method,
 							data: {
-								title: that.model.name,
-								content: e,
-								image:  JSON.stringify(that.lists),
-								video:'',
-								pdfName:JSON.stringify(array3),
-								pdfFile:JSON.stringify(array2),
-								introduce:that.model.centent,
-								userId:res.data.userId,
+								name: that.model.name,
+								age: that.model.age,
+								telephone: that.model.telephone,
+								year: that.model.year,
+								duty:that.model.duty,
+								ruralId:res.data.rId,
 							},
 							success: (res) => {
 								console.log(res)
 								if (res.data.status) {
 									uni.hideLoading()
 									uni.showToast({
-										title: '提交成功',
+										title: '添加成功',
 										success() {
 											uni.navigateBack({
 												url: './pictureList'
@@ -248,7 +201,7 @@
 								console.log(res)
 								uni.hideLoading()
 								uni.showToast({
-									title: '提交失败',
+									title: '添加失败',
 									icon: 'none'
 								})
 							}
@@ -321,137 +274,6 @@
 				})
 			},
 
-			//------------------富文本--------------
-
-			cancel() {
-				this.isEdit = false;
-			},
-			open() {
-				this.$refs.colorPicker.open();
-				this.isEdit = true;
-				// uni.hideKeyboard();
-			},
-			hideKey() {
-				uni.hideKeyboard();
-			},
-			async confirm(e) {
-				this.isEdit = false;
-				this.fontColor = await e.hex;
-				this.onStatusChange({
-					detail: {
-						color: e.hex
-					}
-				});
-				this.$forceUpdate();
-			},
-			readOnlyChange() {
-				this.readOnly = !this.readOnly
-			},
-			onEditorReady() {
-				uni.createSelectorQuery().select('#editor').context(function(res) {
-					_self.editorCtx = res.context;
-				}).exec();
-			},
-			undo() {
-				this.editorCtx.undo();
-			},
-
-			redo() {
-				this.editorCtx.redo();
-			},
-
-			blur() {
-				this.editorCtx.blur();
-			},
-
-			format(e) {
-				var that = this;
-				// this.hideKey();
-				let {
-					name,
-					value
-				} = e.target.dataset;
-				console.log(name);
-				console.log(value);
-				console.log(e.target.dataset);
-				if (!name) return; // console.log('format', name, value)
-				that.editorCtx.format(name, value);
-			},
-
-			onStatusChange(e) {
-				this.formats = e.detail;
-			},
-
-			insertDivider() {
-				this.editorCtx.insertDivider({
-					success: function() {
-						console.log('insert divider success');
-					}
-				});
-			},
-
-			store(e) {
-
-				this.editorCtx.getContents({
-					success: function(res) {
-						console.log(res);
-						e.currentTarget.id == 1 ? console.log('保存内容:', res.html) : uni.navigateTo({
-							url: `../preview/preview?rich=${encodeURIComponent(res.html)}`
-						});
-					}
-				});
-			},
-
-			clear() {
-				this.editorCtx.clear({
-					success: function(res) {
-						console.log("clear success");
-					}
-				});
-			},
-
-			removeFormat() {
-				this.editorCtx.removeFormat();
-			},
-
-			insertDate() {
-				const date = new Date();
-				const formatDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-				this.editorCtx.insertText({
-					text: formatDate
-				});
-			},
-
-			insertImage() {
-				// const that = this;
-				uni.chooseImage({
-					count: 1,
-					success: (res) =>  {
-						const tempFilePaths = res.tempFilePaths;
-						uni.uploadFile({
-							url: this.$zcfb.KyInterface.upload.Url,
-							filePath: tempFilePaths[0],
-							name: 'file',
-							success: (uploadFileRes) => {
-								console.log("编辑详情的时候返回照片地址", uploadFileRes)
-								const back = JSON.parse(uploadFileRes.data);
-								console.log(back)
-								this.editorCtx.insertImage({
-									src: back.data,
-									data: {
-										id: 'abcd',
-										role: 'god'
-									},
-									width: '80%',
-									success: function() {
-										console.log('insert image success');
-									}
-								})
-							}
-						})
-					}
-				});
-			},
 			Update:function(){
 				var that=this;
 				uni.request({

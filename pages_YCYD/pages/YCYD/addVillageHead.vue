@@ -8,27 +8,35 @@
 					</view>
 				</u-form-item>
 				<!-- 年龄 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="年龄" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="年龄" :border-bottom="false" prop="age">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入年龄" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入年龄" v-model="model.age" :type="text"></u-input>
 					</view>
 				</u-form-item>
 				<!-- 电话 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="电话" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="电话" :border-bottom="false" prop="telephone">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入电话" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入电话" v-model="model.telephone" :type="text"></u-input>
 					</view>
 				</u-form-item>
 				<!-- 任职年限 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="任职年限" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="任职年限" :border-bottom="false" prop="year">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入任职年限" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入任职年限" v-model="model.year" :type="text"></u-input>
 					</view>
 				</u-form-item>
 				<!-- 头像 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传图片" :border-bottom="false" prop="photo">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传头像" :border-bottom="false" prop="photo">
 					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164" height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
 						<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150" >
+							<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
+						</view>
+					</u-upload>
+				</u-form-item>
+				<!-- 头像 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传乡村图片" :border-bottom="false" prop="photo">
+					<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164" height="164" :file-list="fileList2" @on-remove="uploadOnRemove2" @on-success="uploadOnsuccess2">
+						<view slot="addBtn" class="slot-btn2" hover-class="slot-btn__hover" hover-stay-time="150" >
 							<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
 						</view>
 					</u-upload>
@@ -51,44 +59,31 @@
 		},
 		data() {
 			return {
-				addid:2,
-				lists: [],
+				lists: '',
 				fileList:[],
+				lists2: '',
+				fileList2:[],
+				submissionState:false,
 				policyId:'',
 				imageList: [],
 				showUploadList: true,
 				border: false,
-                sourceTypeIndex: 2,
-                checkedValue:true,
-                checkedIndex:0,
-                cameraIndex: 0,
-                VideoOfImagesShow:true,
-				submissionState: false,
-				color: {
-					r: 255,
-					g: 0,
-					b: 0,
-					a: 0.6
-				},
-				isEdit: false,
-				fontColor: '#000',
-				formats: {},
-				readOnly: false,
 				placeholder: '开始输入...',
 				editorHeight: 300,
 				keyboardHeight: 0,
 				action: 'http://120.24.144.6:8080/api/file/upload',
-				isIOS: false,
 				model: {
-					name: '', //商品名称value
-					intro: '', //商品简介
-					centent:'',
+					name: '', //姓名
+					age: '', //年龄
+					telephone:'',//电话
+					year:'',//任职年限
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
 					fontWeight: 'bold',
 					fontSize: '17px',
 					paddingTop: '8px',
+					
 				},
 				buttonStyle: {
 					marginTop: '20px',
@@ -137,35 +132,44 @@
 			//删除图片提示
 			uploadOnRemove:function(e){
 				this.fileList = undefined;
-				this.lists = [];
+				this.lists ='';
 				
 			},
-			//------------上传图片----------------
+			//------------上传头像----------------
 			uploadOnsuccess:function(e){
 				console.log('上传成功',e)
 				var a = {
 					data : e.data
 				};
-				this.lists.push(a.data)
+				this.lists=a.data
 				console.log(this.lists)
+			},
+			//删除图片提示
+			uploadOnRemove2:function(e){
+				this.fileList2 = undefined;
+				this.lists2 ='';
+				
+			},
+			//------------上传乡村图片----------------
+			uploadOnsuccess2:function(e){
+				console.log('上传成功',e)
+				var a = {
+					data : e.data
+				};
+				this.lists2=a.data
+				console.log(this.lists2)
 			},
 			
 			submitState: function() {
 				var that = this;
-				if(that.model.name!=''&&that.lists.length>0&&that.filename!=''&&that.model.centent!=''){
+				if(that.model.name!=''){
 					if (this.submissionState == false) {
-						that.editorCtx.getContents({
-							success: (res) => {
-								console.log(res);
-								that.issueText = res.html;
-							}
-						});
 						this.submissionState = true;
-						if(that.policyId!=''){
-							this.updateSubmit(that.issueText);
-						}else{
-							this.submit(that.issueText);
-						}
+						// if(that.policyId!=''){
+						// 	this.updateSubmit(that.issueText);
+						// }else{
+							this.submit();
+						// }
 					} else if (this.submissionState == true) {
 						uni.showToast({
 							title: '请勿重复点击提交',
@@ -200,10 +204,9 @@
 				}
 			},
 
-			submit: function(e) {
+			
+			submit: function() {
 				var that = this;
-				console.log(that.videoData)
-				console.log(this.videoData)
 				uni.showLoading({
 					title: '提交数据中...'
 				});
@@ -211,33 +214,26 @@
 					key: 'userInfo',
 					success: (res) => {
 						console.log(res)
-
-						// console.log(that.videoData);
-						// array.push(that.videoData);
-						var array2=[];
-						console.log(that.localPath);
-						array2.push(that.localPath);
-						var array3=[];
-						array3.push(that.filename);
+						console.log(that.lists)
+						console.log(that.lists2)
 						uni.request({
-							url: that.$zcfb.KyInterface.releasePolicy.Url,
-							method: that.$zcfb.KyInterface.releasePolicy.method,
+							url: that.$newycyd.KyInterface.addLeader.Url,
+							method: that.$newycyd.KyInterface.addLeader.method,
 							data: {
-								title: that.model.name,
-								content: e,
-								image:  JSON.stringify(that.lists),
-								video:'',
-								pdfName:JSON.stringify(array3),
-								pdfFile:JSON.stringify(array2),
-								introduce:that.model.centent,
-								userId:res.data.userId,
+								name: that.model.name,
+								age: that.model.age,
+								telephone: that.model.telephone,
+								year: that.model.year,
+								avatar:that.lists,
+								image:that.lists2,
+								ruralId:res.data.rId,
 							},
 							success: (res) => {
 								console.log(res)
 								if (res.data.status) {
 									uni.hideLoading()
 									uni.showToast({
-										title: '提交成功',
+										title: '添加成功',
 										success() {
 											uni.navigateBack({
 												url: './pictureList'
@@ -256,7 +252,7 @@
 								console.log(res)
 								uni.hideLoading()
 								uni.showToast({
-									title: '提交失败',
+									title: '添加失败',
 									icon: 'none'
 								})
 							}
@@ -544,6 +540,17 @@
 		background: #FFFFFF;
 		border-radius: 10rpx;
 		margin: 10upx;
+	}
+	.slot-btn2 {
+		width: 88px;
+		height: 88px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background: #FFFFFF;
+		border-radius: 10rpx;
+		margin: 10upx;
+		margin-bottom: 100upx;
 	}
 
 	//自定义上传按钮颜色

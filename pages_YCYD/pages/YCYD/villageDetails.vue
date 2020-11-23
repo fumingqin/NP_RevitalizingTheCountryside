@@ -9,16 +9,15 @@
 		<view class="ovof_dp_background">
 			<view style="width: 750upx;"></view>
 			<view class="ovof_dp_bg_background">
-				<view class="ovof_dp_bg_title">{{groupTitle.title}}</view>
+				<view class="ovof_dp_bg_title">{{groupTitle.city_name}}-{{groupTitle.county_name}}-{{groupTitle.village_name}}</view>
 				<view class="ovof_dp_bg_time">
-					<text class="time">{{gettime(groupTitle.update_time)}}</text>
+					<text class="time">{{gettime(groupTitle.create_time)}}</text>
 				</view>
 				<view class="grClass">
-					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.avatar" mode="aspectFill"></image>
-					<!-- <image v-if="groupTitle.avatar==''" class="txImage" src="../../static/missing-face.png" mode="aspectFill"></image> -->
+					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.head_avatar" mode="aspectFill"></image>
+					<image v-if="groupTitle.avatar==''" class="txImage" src="../../static/missing-face.png" mode="aspectFill"></image>
 					<view class="grView">
-						<view class="name">{{groupTitle.nick_name}}</view>
-						<text class="number">{{post}}</text>
+						<view class="name">{{groupTitle.head_name}}</view>
 					</view>
 				</view>
 			</view>
@@ -29,45 +28,45 @@
 				<view class="screen">
 					<view class="screenView">
 						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)"> 
-							项目介绍
+							职责人员
 						</view>
-						<!-- <view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
-							相关视频
-						</view> -->
-						<view class="screenText" :class="{current:type===2}" @click="tabClick(2)">
-							相关文件
+						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
+							包含街道
 						</view>
 					</view>
 				</view>
 				
 				<u-read-more v-if="type==0" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+					<view class="ditailsView">
+						<view class="detailsname" style="color: #000000;font-size: 30upx;">姓名</view>
+						<view class="detailsage">年龄</view>
+						<view class="detailstele">联系电话</view>
+						<view class="detailsduty">职责</view>
+					</view>
+					<view class="infor_view" v-for="(item,index) in crewinfo" :key="index">
+						<view class="ditailsView">
+							<view class="detailsname">{{item.name}}</view>
+							<view class="detailsage">{{item.age}}</view>
+							<view class="detailstele">{{item.telephone}}</view>
+							<view class="detailsduty">{{item.duty}}</view>
+						</view>
+					</view>
 				</u-read-more>
 				
 				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
-					<view v-if="groupTitle.video!=''">
-						<view class="uploader_video">
-						    <video :src="groupTitle.video[0]" class="video"></video>
-						</view>
+					<view class="ditailsView">
+						<view class="detailsroad">街道名</view>
+						<view class="detailsroadcount">总户数</view>
+						<view class="detailscount">总人口</view>
 					</view>
-					
-				</u-read-more>
-				<u-read-more v-if="type==2" :toggle="toggle" :show-height="showHeight">
-					<view style="margin-bottom: 30upx;">
-						<view style="width: 600upx;text-indent : 0em;">文件名：{{groupTitle.pdfName[0]}}</view>
-						<l-file ref="lFile" @up-success="onSuccess"></l-file>
-						<view>
-							<view style="display: flex;">
-								<view class="at_button" @tap="onOpenDoc(groupTitle.pdfFile[0])">预览</view>
-								<view  class="at_button" @tap="onDown(groupTitle.pdfFile[0])">下载</view>
-							</view>
+					<view class="infor_view" v-for="(item,index) in streetinfo" :key="index">
+						<view class="ditailsView">
+							<view class="detailsroad">{{item.road}}</view>
+							<view class="detailsroadcount">{{item.road_count}}</view>
+							<view class="detailscount">{{item.count}}</view>
 						</view>
 					</view>
 				</u-read-more>
-				
-				<!-- <view>
-					<video id="myVideo" :src="groupTitle." enable-danmu danmu-btn controls></video>
-				</view> -->
 			</view>
 		</view>
 	</view>
@@ -79,6 +78,8 @@
 			return {
 				rotationChart: [], //轮播图
 				groupTitle:[],
+				crewinfo:[],
+				streetinfo:[],
 				title:'农田基础建设项目',
 				time:'2020-02-10',
 				browse:'122',
@@ -108,15 +109,17 @@
 			//加载数据
 			loadData: function() {
 				uni.request({
-					url:this.$zcfb.KyInterface.getPolicyDetailByID.Url,
-					method:this.$zcfb.KyInterface.getPolicyDetailByID.method,
+					url:this.$newycyd.KyInterface.getArchivesByRuralId.Url,
+					method:this.$newycyd.KyInterface.getArchivesByRuralId.method,
 					data:{
-						id : this.id
+						ruralId : 8
 					},
 					success: (res) => {
 						console.log('详情', res)
 						if(res.data.status == true){
 							this.groupTitle=res.data.data;
+							this.crewinfo=res.data.data.duty;
+							this.streetinfo=res.data.data.info;
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
@@ -147,9 +150,8 @@
 			},
 			//-------------------时间切割---------------------------
 			gettime:function(param){
-				console.log(param);
-				if(param==''){
-					return a;
+				if(param==''||param==undefined){
+					return '暂无';
 				}else{
 					let array=param.split(' ');
 					let array2=array[1].split(':');
@@ -234,7 +236,6 @@
 	.u-content{
 		// margin-top: 20upx;
 		background: #FFFFFF;
-		padding-left: 15upx;
 		padding-right: 15upx;
 		width: 100%;
 	}
@@ -347,10 +348,6 @@
 		margin-top: 30upx;
 		margin-bottom: 30upx;
 	}
-	.video{
-	    width: 100%;
-	    height: 100%;
-	}
 	.at_button {
 		text-indent : 0em;
 		padding: 16upx 68upx;
@@ -360,4 +357,48 @@
 		color: #888;
 		margin-right: 24upx;
 	}
+	.ditailsView {
+		position: relative;
+		display: flex;
+		.detailsroad{
+			padding: 8upx 20upx;
+			margin-right: 16upx;
+			// text-align: center;
+			font-size: 30upx;
+		}
+		.detailsage {
+			position: absolute;
+			left: 0;
+			margin-left: 150upx;
+			font-size: 30upx;
+		}
+		.detailstele {
+			position: absolute;
+			left: 0;
+			margin-left: 300upx;
+			font-size: 30upx;
+		}
+		.detailsduty {
+			position: absolute;
+			right: 0;
+			font-size: 30upx;
+		}
+		.detailsroad{
+			padding: 8upx 20upx;
+			margin-right: 16upx;
+			// text-align: center;
+			font-size: 30upx;
+		}
+		.detailsroadcount {
+			position: absolute;
+			left: 0;
+			margin-left: 300upx;
+			font-size: 30upx;
+		}
+		.detailscount {
+			position: absolute;
+			right: 0;
+			font-size: 30upx;
+		}
+		}
 </style>

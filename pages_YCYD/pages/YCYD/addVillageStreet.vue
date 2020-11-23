@@ -8,15 +8,15 @@
 					</view>
 				</u-form-item>
 				<!-- 户数 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="户数" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="户数" :border-bottom="false" prop="roadcount">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入该街道总户数" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入该街道总户数" v-model="model.roadcount" :type="text"></u-input>
 					</view>
 				</u-form-item>
 				<!-- 人数 -->
-				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="人数" :border-bottom="false" prop="name">
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="人数" :border-bottom="false" prop="count">
 					<view class="viewClass" style="padding-right: 20rpx;">
-						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入该街道总人数" v-model="model.name" :type="text"></u-input>
+						<u-input :custom-style="tradeNameStyle" :border="false" placeholder="请输入该街道总人数" v-model="model.count" :type="text"></u-input>
 					</view>
 				</u-form-item>
 		</view>
@@ -53,9 +53,9 @@
 				action: 'http://120.24.144.6:8080/api/file/upload',
 				isIOS: false,
 				model: {
-					name: '', //商品名称value
-					intro: '', //商品简介
-					centent:'',
+					name: '', //街道名称
+					roadcount: '', //户数
+					count:'',//总人数
 				},
 				//----------------uview样式--------------------------
 				customStyle: {
@@ -107,38 +107,17 @@
 			});
 			},
 		methods: {
-			//删除图片提示
-			uploadOnRemove:function(e){
-				this.fileList = undefined;
-				this.lists = [];
-				
-			},
-			//------------上传图片----------------
-			uploadOnsuccess:function(e){
-				console.log('上传成功',e)
-				var a = {
-					data : e.data
-				};
-				this.lists.push(a.data)
-				console.log(this.lists)
-			},
 			
 			submitState: function() {
 				var that = this;
-				if(that.model.name!=''&&that.lists.length>0&&that.filename!=''&&that.model.centent!=''){
+				if(that.model.name!=''){
 					if (this.submissionState == false) {
-						that.editorCtx.getContents({
-							success: (res) => {
-								console.log(res);
-								that.issueText = res.html;
-							}
-						});
 						this.submissionState = true;
-						if(that.policyId!=''){
-							this.updateSubmit(that.issueText);
-						}else{
-							this.submit(that.issueText);
-						}
+						// if(that.policyId!=''){
+						// 	this.updateSubmit(that.issueText);
+						// }else{
+							this.submit();
+						// }
 					} else if (this.submissionState == true) {
 						uni.showToast({
 							title: '请勿重复点击提交',
@@ -161,10 +140,8 @@
 				}
 			},
 
-			submit: function(e) {
+			submit: function() {
 				var that = this;
-				console.log(that.videoData)
-				console.log(this.videoData)
 				uni.showLoading({
 					title: '提交数据中...'
 				});
@@ -172,33 +149,21 @@
 					key: 'userInfo',
 					success: (res) => {
 						console.log(res)
-
-						// console.log(that.videoData);
-						// array.push(that.videoData);
-						var array2=[];
-						console.log(that.localPath);
-						array2.push(that.localPath);
-						var array3=[];
-						array3.push(that.filename);
 						uni.request({
-							url: that.$zcfb.KyInterface.releasePolicy.Url,
-							method: that.$zcfb.KyInterface.releasePolicy.method,
+							url: that.$newycyd.KyInterface.addVillageInfo.Url,
+							method: that.$newycyd.KyInterface.addVillageInfo.method,
 							data: {
-								title: that.model.name,
-								content: e,
-								image:  JSON.stringify(that.lists),
-								video:'',
-								pdfName:JSON.stringify(array3),
-								pdfFile:JSON.stringify(array2),
-								introduce:that.model.centent,
-								userId:res.data.userId,
+								road: that.model.name,
+								roadcount: that.model.roadcount,
+								count: that.model.count,
+								ruralId:res.data.rId,
 							},
 							success: (res) => {
 								console.log(res)
 								if (res.data.status) {
 									uni.hideLoading()
 									uni.showToast({
-										title: '提交成功',
+										title: '添加成功',
 										success() {
 											uni.navigateBack({
 												url: './pictureList'
@@ -217,7 +182,7 @@
 								console.log(res)
 								uni.hideLoading()
 								uni.showToast({
-									title: '提交失败',
+									title: '添加失败',
 									icon: 'none'
 								})
 							}
