@@ -76,9 +76,15 @@ const KyInterface = {
 	},
 	
 	//--------------------------------------接口--------------------------------------
-	deleteArchives:{
-		Url:Url + '/api/village/deleteArchives',
-		name:'删除接口',
+	deleteVillageInfo:{
+		Url:Url + '/api/archives/deleteVillageInfo',
+		name:'删除街道接口',
+		method:'POST',
+	},
+	//--------------------------------------接口--------------------------------------
+	deleteVillagePeople:{
+		Url:Url + '/api/archives/deleteVillagePeople',
+		name:'删除职责人员接口',
 		method:'POST',
 	},
 }

@@ -470,7 +470,16 @@
 						"navigationBarTitleText": ""
 					}
 				}
-			]
+			    ,{
+                    "path" : "pages/YCYD/myVillage",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		//---------------------------------------------第五个包：政策发布------------------------------------------
 		{
