@@ -3,7 +3,7 @@
 		<!-- 顶部搜索框 -->
 		<view class="serchView" style="margin-top: 20upx;">
 			<view class="SearchBar" elevation='5px'>
-				<image class="iconImage" src="../../../static/LYFW/agricultureProducts/sousuo.png"></image>
+				<!-- <image class="iconImage" src="../../../static/LYFW/agricultureProducts/sousuo.png"></image> -->
 				<input class="addressInput" @input="onInput" placeholder="请输入关键字搜索" />
 			</view>
 		</view>
