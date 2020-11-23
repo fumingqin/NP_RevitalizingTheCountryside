@@ -33,7 +33,7 @@ const KyInterface = {
 	},
 	
 	//--------------------------------------接口--------------------------------------
-	getArchiveDetailByID:{
+	getArchivesByRuralId:{
 		Url:Url + '/api/archives/getArchivesByRuralId',
 		name:'一村一档详情',
 		method:'POST',
@@ -48,21 +48,21 @@ const KyInterface = {
 	},
 	
 	//--------------------------------------接口--------------------------------------
-	releaseArchives:{
+	addLeader:{
 		Url:Url + '/api/archives/addLeader',
 		name:'添加村长信息',
 		method:'POST',
 	},
 	
 	//--------------------------------------接口--------------------------------------
-	releaseArchives:{
+	addVillageInfo:{
 		Url:Url + '/api/archives/addVillageInfo',
 		name:'添加街道信息',
 		method:'POST',
 	},
 	
 	//--------------------------------------接口--------------------------------------
-	releaseArchives:{
+	addVillagePeople:{
 		Url:Url + '/api/archives/addVillagePeople',
 		name:'添加职责人员信息',
 		method:'POST',

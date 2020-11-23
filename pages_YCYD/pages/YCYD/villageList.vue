@@ -2,25 +2,26 @@
 	<view>
 			<!-- 内容1 -->
 			<view>
-				<view class="infor_view" v-for="(item,index) in groupTitle" :key="index" @click="details(item.id)">
+				<view class="infor_view" v-for="(item,index) in groupTitle" :key="index" @click="details(item.rural_id)">
 					<view class="view_titleView">
 						<view class="tv_view">
 							<view style="display: flex;">
 								<view style="margin-top: 10upx;">
-									<text class="tv_label">政策发布</text>
+									<text class="tv_label">一村一档</text>
 								</view>
-								<view class="tv_title">{{item.title}}</view>
+								<view class="tv_title">{{item.city_name}}-{{item.county_name}}-{{item.village_name}}</view>
 							</view>
 							<!-- <text class="tv_richText">{{item.content}}</text> -->
 							<view class="tv_view2">
-								<rich-text class="tv_richText" :nodes="item.introduce"></rich-text>
+								<view class="tv_richText">村长：{{item.head_name}}</view>
+								<view class="tv_richText">总人口：{{item.total_people}}人</view>
 							</view>
 						</view>
-						<image class="tv_image" :src="item.image" mode="aspectFill"></image>
+						<image class="tv_image" :src="item.head_image" mode="aspectFill"></image>
 					</view>
 					
 					<view class="view_contentView">
-						<text class="cont_text">上架时间：{{gettime(item.update_time)}}</text>
+						<text class="cont_text">上架时间：{{gettime(item.create_time)}}</text>
 					</view>
 					<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 				</view>
@@ -69,8 +70,8 @@
 			zcfbData:function(){
 
 				uni.request({
-					url:this.$zcfb.KyInterface.getPolicy.Url,
-					method:this.$zcfb.KyInterface.getPolicy.method,
+					url:this.$newycyd.KyInterface.getArchives.Url,
+					method:this.$newycyd.KyInterface.getArchives.method,
 					data:{
 						
 					},
@@ -134,7 +135,7 @@
 			//--------------------------路由跳转------------------------------
 			details:function(e){
 				uni.redirectTo({
-					url:'policyDetails?id=' +e,
+					url:'villageDetails?id=' +e,
 				})
 			}
 		}
@@ -192,10 +193,8 @@
 					.tv_richText{
 						padding-right: 16upx;
 						width: 454upx;
-						// font-weight: bold;
-						font-size: 30upx; 
 						line-height: 1.7;
-						height: 100upx;
+						height: 44upx;
 						text-overflow: -o-ellipsis-lastline;
 						overflow: hidden;
 						text-overflow: ellipsis;
