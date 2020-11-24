@@ -9,20 +9,15 @@
 		<view class="ovof_dp_background">
 			<view style="width: 750upx;"></view>
 			<view class="ovof_dp_bg_background">
-				<view class="ovof_dp_bg_title">{{groupTitle.name}}</view>
+				<view class="ovof_dp_bg_title">{{groupTitle.city_name}}-{{groupTitle.county_name}}-{{groupTitle.village_name}}</view>
 				<view class="ovof_dp_bg_time">
-					<text class="time">{{groupTitle.update_time}}</text>
-					<text class="browse">浏览量:</text>
-					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="groupTitle.count"></u-count-to>
-					<text class="browse">价格:</text>
-					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="groupTitle.prince"></u-count-to>
+					<text class="time">{{gettime(groupTitle.create_time)}}</text>
 				</view>
 				<view class="grClass">
-					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.avatar" mode="aspectFill"></image>
-					<image v-if="groupTitle.avatar==''" class="txImage" src="../../../static/GRZX/missing-face.png" mode="aspectFill"></image>
+					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.head_avatar" mode="aspectFill"></image>
+					<image v-if="groupTitle.avatar==''" class="txImage" src="../../static/missing-face.png" mode="aspectFill"></image>
 					<view class="grView">
-						<view class="name">{{groupTitle.nick_name}}</view>
-						<text class="number">{{post}}</text>
+						<view class="name">{{groupTitle.head_name}}</view>
 					</view>
 				</view>
 			</view>
@@ -33,25 +28,45 @@
 				<view class="screen">
 					<view class="screenView">
 						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)"> 
-							商品介绍
+							职责人员
 						</view>
 						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
-							商品地址
+							包含街道
 						</view>
 					</view>
 				</view>
 				
 				<u-read-more v-if="type==0" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+					<view class="ditailsView">
+						<view class="detailsname" style="color: #000000;font-size: 30upx;">姓名</view>
+						<view class="detailsage">年龄</view>
+						<view class="detailstele">联系电话</view>
+						<view class="detailsduty">职责</view>
+					</view>
+					<view class="infor_view" v-for="(item,index) in crewinfo" :key="index">
+						<view class="ditailsView">
+							<view class="detailsname">{{item.name}}</view>
+							<view class="detailsage">{{item.age}}</view>
+							<view class="detailstele">{{item.telephone}}</view>
+							<view class="detailsduty">{{item.duty}}</view>
+						</view>
+					</view>
 				</u-read-more>
 				
 				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
-					<u-parse :html="groupTitle.taobaoUrl" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+					<view class="ditailsView">
+						<view class="detailsroad">街道名</view>
+						<view class="detailsroadcount">总户数</view>
+						<view class="detailscount">总人口</view>
+					</view>
+					<view class="infor_view" v-for="(item,index) in streetinfo" :key="index">
+						<view class="ditailsView">
+							<view class="detailsroad">{{item.road}}</view>
+							<view class="detailsroadcount">{{item.road_count}}</view>
+							<view class="detailscount">{{item.count}}</view>
+						</view>
+					</view>
 				</u-read-more>
-				
-				<!-- <view>
-					<video id="myVideo" :src="groupTitle." enable-danmu danmu-btn controls></video>
-				</view> -->
 			</view>
 		</view>
 	</view>
@@ -63,6 +78,8 @@
 			return {
 				rotationChart: [], //轮播图
 				groupTitle:[],
+				crewinfo:[],
+				streetinfo:[],
 				title:'农田基础建设项目',
 				time:'2020-02-10',
 				browse:'122',
@@ -73,7 +90,7 @@
 				id:'',
 				// 字符串的形式
 				style: {
-					p: 'letter-spacing: 4rpx;text-align: justify;line-height: 48rpx;font-size:30rpx;text-justify: inter-ideograph; text-indent: 2em;padding-bottom: 20rpx;padding-top: 20rpx;',
+					// p: 'letter-spacing: 4rpx;text-align: justify;line-height: 48rpx;font-size:30rpx;text-justify: inter-ideograph;padding-bottom: 20rpx;padding-top: 20rpx;',
 					span: 'font-size: 30rpx'
 				},
 			}
@@ -92,32 +109,17 @@
 			//加载数据
 			loadData: function() {
 				uni.request({
-					url:this.$wssc.KyInterface.addViews.Url,
-					method:this.$wssc.KyInterface.addViews.method,
+					url:this.$newycyd.KyInterface.getArchivesByRuralId.Url,
+					method:this.$newycyd.KyInterface.getArchivesByRuralId.method,
 					data:{
-						id : this.id
-					},
-					success: (res) => {
-					},
-					fail: function() {
-						uni.showToast({
-							title: '服务器异常',
-							icon: 'none'
-						})
-					}
-				})
-				
-				uni.request({
-					url:this.$wssc.KyInterface.getProductByID.Url,
-					method:this.$wssc.KyInterface.getProductByID.method,
-					data:{
-						id : this.id
+						ruralId : 8
 					},
 					success: (res) => {
 						console.log('详情', res)
 						if(res.data.status == true){
 							this.groupTitle=res.data.data;
-							// console.log('列表数据',this.groupTitle)
+							this.crewinfo=res.data.data.duty;
+							this.streetinfo=res.data.data.info;
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
@@ -128,6 +130,7 @@
 								icon: 'none'
 							})
 						}
+						// console.log('111111111',this.rotationChart)
 					},
 					fail: function() {
 						uni.hideLoading();
@@ -138,13 +141,49 @@
 					}
 				})
 			},
-			
-			
+			onSuccess(res) {
+				console.log('上传成功回调',JSON.stringify(res));
+				uni.showToast({
+					title: JSON.stringify(res),
+					icon: 'none'
+				})
+			},
+			//-------------------时间切割---------------------------
+			gettime:function(param){
+				if(param==''||param==undefined){
+					return '暂无';
+				}else{
+					let array=param.split(' ');
+					let array2=array[1].split(':');
+					var a=array[0]+' '+array2[0]+':'+array2[1];
+					return a;
+					}
+			},
+			//----------------预览--------------------
+			onOpenDoc(e) {
+				let url = e;
+				/* 下载返回临时路径（退出应用失效） */
+				this.$refs.lFile.download(url)
+				.then(path=>{
+					/* 预览 */
+					this.$refs.lFile.open(path);
+				});
+			},
+			//--------------下载---------------------
+				onDown(e) {
+					let url = e;
+					this.$refs.lFile.download(url,'local')
+					.then(path=>{
+						console.log(path);
+					}); 
+				},
 			tabClick(e) {
 				if (e == 0) {
 					this.type = 0;
 				} else if (e == 1) {
 					this.type = 1;
+				}else if (e == 2) {
+					this.type = 2;
 				}
 			},
 		}
@@ -195,9 +234,8 @@
 	}
 	
 	.u-content{
-		margin-top: 20upx;
+		// margin-top: 20upx;
 		background: #FFFFFF;
-		padding-left: 15upx;
 		padding-right: 15upx;
 		width: 100%;
 	}
@@ -263,7 +301,7 @@
 		.screenView {
 			left: 0;
 			display: flex;
-			width: 50%;
+			width: 60%;
 			height: 87upx;
 			z-index: 10;
 			position: sticky;
@@ -280,6 +318,7 @@
 				font-size: 30upx;
 				color: #888;
 				position: relative;
+				margin-left: 10upx;
 
 
 
@@ -301,4 +340,65 @@
 			}
 		}
 	}
+	.uploader_video{
+	    position: relative;
+	    z-index: 1;
+	    width: 200upx;
+	    height: 200upx;
+		margin-top: 30upx;
+		margin-bottom: 30upx;
+	}
+	.at_button {
+		text-indent : 0em;
+		padding: 16upx 68upx;
+		// font-size: 24upx;
+		border-radius: 6upx;
+		border: 1upx solid #888;
+		color: #888;
+		margin-right: 24upx;
+	}
+	.ditailsView {
+		position: relative;
+		display: flex;
+		.detailsroad{
+			padding: 8upx 20upx;
+			margin-right: 16upx;
+			// text-align: center;
+			font-size: 30upx;
+		}
+		.detailsage {
+			position: absolute;
+			left: 0;
+			margin-left: 150upx;
+			font-size: 30upx;
+		}
+		.detailstele {
+			position: absolute;
+			left: 0;
+			margin-left: 300upx;
+			font-size: 30upx;
+		}
+		.detailsduty {
+			position: absolute;
+			right: 0;
+			font-size: 30upx;
+		}
+		.detailsroad{
+			padding: 8upx 20upx;
+			margin-right: 16upx;
+			// text-align: center;
+			font-size: 30upx;
+		}
+		.detailsroadcount {
+			position: absolute;
+			left: 0;
+			margin-left: 300upx;
+			font-size: 30upx;
+		}
+		.detailscount {
+			position: absolute;
+			right: 0;
+			font-size: 30upx;
+		}
+		}
 </style>

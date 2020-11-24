@@ -434,8 +434,52 @@
 			"root": "pages_YCYD/",
 			"pages": [
 				//----------------------------------通用页面----------------------------------
-				
-			]
+				{
+					"path": "pages/YCYD/addVillageCrew",
+					"style": {
+						"navigationBarTitleText": "添加职责人员"
+					}
+				},
+				{
+					"path": "pages/YCYD/addVillageHead",
+					"style": {
+						"navigationBarTitleText": "添加村长"
+					}
+				},
+				{
+					"path": "pages/YCYD/addVillageStreet",
+					"style": {
+						"navigationBarTitleText": "添加街道"
+					}
+				},
+				{
+					"path": "pages/YCYD/villageDetails",
+					"style": {
+						"navigationBarTitleText": "档案详情"
+					}
+				},
+				{
+					"path": "pages/YCYD/villageList",
+					"style": {
+						"navigationBarTitleText": "一村一档列表"
+					}
+				},
+				{
+					"path": "pages/YCYD/choice",
+					"style": {
+						"navigationBarTitleText": ""
+					}
+				}
+			    ,{
+                    "path" : "pages/YCYD/myVillage",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		//---------------------------------------------第五个包：政策发布------------------------------------------
 		{
@@ -531,45 +575,34 @@
 			"pages": [
 				//----------------------------------通用页面----------------------------------
 				{
-					"path": "pages/WSSC/issueGoods",
-					"style": {
-						"navigationBarTitleText": "发布商品"
-					}
-				},
-				{
-					"path": "pages/WSSC/goodsList",
-					"style": {
-						"enablePullDownRefresh": true,
-						"navigationBarTitleText": "商品列表"
-					}
-				},
-				{
-					"path": "pages/WSSC/goodsDetails",
-					"style": {
-						"navigationBarTitleText": "商品详情"
-					}
-				},
-				{
-					"path": "pages/WSSC/myGoodsList",
-					"style": {
-						"enablePullDownRefresh": true,
-						"navigationBarTitleText": "我的发布"
-					}
-				},
-				{
-					"path": "pages/WSSC/checkGoods",
-					"style": {
-						"enablePullDownRefresh": true,
-						"navigationBarTitleText": "审核商品"
-					}
-				},
-				{
-					"path": "pages/WSSC/village",
-					"style": {
-						"navigationBarTitleText": "村名列表"
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_homePage",
+				    "style" : {
+						"navigationStyle": "custom",
+						"app-plus": {"titleNView": false} 
 					}
 				}
-
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_seeMore",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_search",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_list",
+				    "style" : {
+						"navigationStyle": "custom",
+						"app-plus": {
+							"titleNView": false,
+							"background":"#00c34e"
+						} 
+					}
+				}
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_detailsPage",
+				    "style" : {}
+				}
 			]
 		},
 

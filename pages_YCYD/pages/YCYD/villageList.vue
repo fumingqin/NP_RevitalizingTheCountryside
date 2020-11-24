@@ -2,39 +2,32 @@
 	<view>
 			<!-- 内容1 -->
 			<view>
-				<view class="infor_view" v-for="(item,index) in groupTitle" :key="index">
+				<view class="infor_view" v-for="(item,index) in groupTitle" :key="index" @click="details(item.rural_id)">
 					<view class="view_titleView">
 						<view class="tv_view">
 							<view style="display: flex;">
 								<view style="margin-top: 10upx;">
-									<text class="tv_label">{{item.id}}</text>
+									<text class="tv_label">一村一档</text>
 								</view>
-								<view class="tv_title">{{item.name}}</view>
+								<view class="tv_title">{{item.city_name}}-{{item.county_name}}-{{item.village_name}}</view>
 							</view>
 							<!-- <text class="tv_richText">{{item.content}}</text> -->
 							<view class="tv_view2">
-								<rich-text class="tv_richText" :nodes="item.content"></rich-text>
+								<view class="tv_richText">村长：{{item.head_name}}</view>
+								<view class="tv_richText">总人口：{{item.total_people}}人</view>
 							</view>
 						</view>
-						<view>
-						<image class="tv_image" :src="item.image" mode="aspectFill"></image>
-						<text style="font-size: 36upx; color:#FF3904;">￥：{{item.price}}</text>	
-						</view>
+						<image class="tv_image" :src="item.head_image" mode="aspectFill"></image>
 					</view>
 					
 					<view class="view_contentView">
-						<text>{{item.state}}</text>
-						<text class="cont_text">{{gettime(item.update_time)}}</text>
-						<view class="at_buttonView">
-						<view class="at_button at_btDelete" @tap="Check(item.id,0)">审核通过</view>
-						<view class="at_button at_btDelete" @tap="Check(item.id,1)">审核不通过</view>
-						</view>
+						<text class="cont_text">上架时间：{{gettime(item.create_time)}}</text>
 					</view>
 					<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 				</view>
-				<view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
+				<!-- <view style="text-align: center; margin-bottom: 20upx; font-size: 28upx; color: #aaa;margin-top: 30upx;">
 					<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
-				</view>
+				</view> -->
 			</view>
 		</view>
 	</template>
@@ -56,18 +49,16 @@
 				scenicListIndex:5,//列表默认数量}
 				}
 		},
-		onShow() {
+		onLoad() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
-			this.wsscData();
+			this.zcfbData();
 		},
 		
 		onPullDownRefresh: function() {
-			uni.showLoading({
-				title: '加载列表中...',
-			})
-			this.wsscData();
+
+			this.zcfbData();
 		},
 		
 		onReachBottom() {
@@ -76,25 +67,18 @@
 		
 		methods: {
 			//----------------------列表接口--------------------------------
-			wsscData:function(){
-				this.groupTitle=[];
-				uni.showLoading({
-					title: '加载列表中...',
-				})
-				uni.getStorage({
-					key: 'userInfo',
-					success: (res) => {
-						console.log(res);
+			zcfbData:function(){
+
 				uni.request({
-					url:this.$wssc.KyInterface.getAuditProduct.Url,
-					method:this.$wssc.KyInterface.getAuditProduct.method,
+					url:this.$newycyd.KyInterface.getArchives.Url,
+					method:this.$newycyd.KyInterface.getArchives.method,
 					data:{
-						userId:100000,
-						},
+						
+					},
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
-							this.groupTitle=res.data.data;
+							this.groupTitle = res.data.data;
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
@@ -107,6 +91,7 @@
 						}
 					},
 					fail(res) {
+						uni.stopPullDownRefresh();
 						uni.hideLoading();
 						uni.showToast({
 							title: '服务器异常',
@@ -126,8 +111,6 @@
 						},3000);
 					}
 				})
-				}
-				})
 			},
 			//-------------加载更多----------------
 			getMore(){
@@ -142,47 +125,7 @@
 					this.loadingType = 2;
 				}
 			},
-			//--------------审核--------------
-			Check:function(e,a){
-				uni.showLoading({
-					title: '审核中...',
-				})
-			uni.getStorage({
-				key: 'userInfo',
-				success: (res) => {
-					console.log(res);
-				uni.request({
-					url:this.$wssc.KyInterface.auditProduct.Url,
-					method:this.$wssc.KyInterface.auditProduct.method,
-					data:{
-						id:e,
-						state:a,
-						userId:100000,
-					},
-					success:(res) =>{
-						console.log(res)
-						if(res.data.status){
-							uni.hideLoading();
-							this.wsscData();
-						}else{
-							uni.showToast({
-								title: '修改失败',
-								icon: 'none'
-							})
-						}
-					},
-					fail(res) {
-						uni.hideLoading();
-						uni.showToast({
-							title: '服务器异常',
-							icon: 'none'
-						})
-						// console.log(res)
-					}
-				})
-				}
-				})
-			},
+			
 			//-------------------时间切割---------------------------
 			gettime:function(param){
 					let array=param.split(' ');
@@ -191,8 +134,8 @@
 			},
 			//--------------------------路由跳转------------------------------
 			details:function(e){
-				uni.navigateTo({
-					url:'goodsDetails?id=' +e,
+				uni.redirectTo({
+					url:'villageDetails?id=' +e,
 				})
 			}
 		}
@@ -250,10 +193,8 @@
 					.tv_richText{
 						padding-right: 16upx;
 						width: 454upx;
-						// font-weight: bold;
-						font-size: 30upx; 
 						line-height: 1.7;
-						height: 100upx;
+						height: 44upx;
 						text-overflow: -o-ellipsis-lastline;
 						overflow: hidden;
 						text-overflow: ellipsis;
@@ -276,7 +217,7 @@
 			color: #AAAAAA; 
 			padding: 22upx 0; 
 			.cont_text{
-				margin-left: 20upx;
+				// margin-left: 20upx;
 			}
 			.cont_icon{
 				float: right; 
@@ -285,20 +226,4 @@
 			}
 		}
 	}
-	.at_buttonView {
-			display: flex;
-			float: right;
-	
-			// 按钮
-			.at_button {
-				padding: 10upx 10upx;
-				font-size: 20upx;
-				border-radius: 6upx;
-			}
-			.at_btDelete {
-				border: 1upx solid #888;
-				color: #888;
-				margin-right: 12upx;
-			}
-		}
 </style>
