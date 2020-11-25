@@ -1,7 +1,6 @@
 <template>
 	<view>
 		<view v-for="(item, index) in tweetArticle" :key="index" class="boxClass">
-			<view >
 				<view class="timeClass">{{item.create_time}}</view>
 				<view class="boxClass1" @click="selete(item)">
 					<view class="titleClass generalStyle">{{item.title}}</view>
@@ -14,7 +13,6 @@
 						<text class="more-icon jdticon icon-you"></text>
 					</view>
 				</view>
-			</view>
 		</view>
 		
 		<!-- 缺省提示 -->
@@ -30,7 +28,6 @@
 		data() {
 			return {
 				tweetArticle: [], //推文列表
-				level: 0, //权限等级
 				userInfo: '', //用户信息
 			}
 		},
@@ -52,11 +49,6 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						this.loadData();
-						if (this.userInfo.duty == '村级职责人员') {
-							this.level = 1;
-						} else if (this.userInfo.duty == '县级职责人员' || this.userInfo.duty == '市级职责人员') {
-							this.level = 2;
-						}
 						uni.hideLoading()
 						console.log('获取个人信息', this.userInfo)
 					},
@@ -80,6 +72,9 @@
 				uni.request({
 					url: this.$home.KyInterface.getNotice.Url,
 					method: this.$home.KyInterface.getNotice.method,
+					data:{
+						duty : this.userInfo.duty
+					},
 					success: (res) => {
 						console.log('公告通知', res)
 						this.tweetArticle = res.data.data;
