@@ -9,7 +9,7 @@
 								<view style="margin-top: 10upx;">
 									<text class="tv_label">一村一档</text>
 								</view>
-								<view class="tv_title">{{item.city_name}}-{{item.county_name}}-{{item.village_name}}</view>
+								<view class="tv_title">{{item.county_name}}-{{item.village_name}}</view>
 							</view>
 							<!-- <text class="tv_richText">{{item.content}}</text> -->
 							<view class="tv_view2">
@@ -177,7 +177,7 @@
 				.tv_title{
 					position: relative;
 					font-weight: bold; 
-					font-size: 34upx; 
+					font-size: 30upx; 
 					margin-left: 12upx; 
 					line-height: 1.7;
 					width: 320upx;
