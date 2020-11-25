@@ -474,8 +474,7 @@
                     "path" : "pages/YCYD/myVillage",
                     "style" :                                                                                    
                 {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
+                    "navigationBarTitleText": "人员信息管理"
                 }
                 
                 }

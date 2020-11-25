@@ -279,7 +279,7 @@
 								year: that.model.year,
 								avatar:that.lists,
 								image:that.lists2,
-								ruralId:58,
+								ruralId:res.data.rId,
 							},
 							success: (res) => {
 								console.log(res)
@@ -336,7 +336,7 @@
 								year: that.model.year,
 								avatar:that.lists,
 								image:that.lists2,
-								ruralId:58,
+								ruralId:res.data.rId,
 							},
 							success: (res) => {
 								console.log(res)

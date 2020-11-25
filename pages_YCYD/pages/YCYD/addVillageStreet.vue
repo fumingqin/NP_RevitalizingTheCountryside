@@ -180,7 +180,7 @@
 								road: that.model.name,
 								roadcount: that.model.roadcount,
 								count: that.model.count,
-								ruralId:58,
+								ruralId:res.data.rId,
 							},
 							success: (res) => {
 								console.log(res)
@@ -233,7 +233,7 @@
 								road: that.model.name,
 								roadcount: that.model.roadcount,
 								count: that.model.count,
-								ruralId:58,
+								ruralId:res.data.rId,
 							},
 							success: (res) => {
 								console.log(res)

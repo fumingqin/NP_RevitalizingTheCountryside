@@ -51,6 +51,9 @@
 							<view class="detailsduty">{{item.duty}}</view>
 						</view>
 					</view>
+					<view v-if="crewinfo.length==0">
+						<u-empty :isShow="crewinfo.length==0" text="暂无数据" textColor="#999999"></u-empty>
+					</view>
 				</u-read-more>
 				
 				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
@@ -65,6 +68,9 @@
 							<view class="detailsroadcount">{{item.road_count}}</view>
 							<view class="detailscount">{{item.count}}</view>
 						</view>
+					</view>
+					<view v-if="streetinfo.length==0">
+						<u-empty :isShow="streetinfo.length==0" text="暂无数据" textColor="#999999"></u-empty>
 					</view>
 				</u-read-more>
 			</view>
