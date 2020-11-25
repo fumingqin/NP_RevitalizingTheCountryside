@@ -31,7 +31,7 @@ export default {
 			userInfo:'',	//用户信息
 			
 			DriverID : '2000001',		//司机ID
-			DriverName:'测试司机',		//司机姓名
+			DriverName:'司机',		//司机姓名
 			OrderID: '100000',			//订单ID
 		}
 	},

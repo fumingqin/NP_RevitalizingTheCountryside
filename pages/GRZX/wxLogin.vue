@@ -83,7 +83,7 @@
 				this[key] = e.detail.value;
 			},
 			
-			//测试................................................
+			//................................................
 			// bindPhone(){
 			// 	var userInfo=uni.getStorageSync('appUserInfo')	//验证码和手机号
 			// 	this.login(this.type,userInfo,'15260769755');

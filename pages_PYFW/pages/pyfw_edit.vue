@@ -103,7 +103,7 @@
 				showUploadList: true, //图片展示数组状态
 				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
 				fileList: [], //图片数组
-				fileListTest: [], //图片测试数组
+				fileListTest: [], //图片数组
 
 				techShow: false, //技术类型选项栏开启状态
 

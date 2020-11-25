@@ -131,8 +131,8 @@
 				},{
 					IsUse: true,
 					clickURL: "../GRZX/notice",
-					ImageURL1: "../../static/home/serve/kprw.png", //亮
-					ImageURL2: "../../static/home/serve/kprw2.png", //暗
+					ImageURL1: "../../static/home/serve/xttz.png", //亮
+					ImageURL2: "../../static/home/serve/xttz2.png", //暗
 					ItemTitle: "系统通知",
 					style: "sv_print",
 				}],
