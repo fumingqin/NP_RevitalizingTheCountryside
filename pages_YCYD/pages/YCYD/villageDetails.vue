@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 轮播区 -->
-		<u-swiper :list="groupTitle.image" :height="422" indicator-pos="bottomRight">
+		<u-swiper :list="imageinfo" :height="422" indicator-pos="bottomRight">
 			<u-loading slot="loading"></u-loading>
 			<view slot="error" style="font-size: 24rpx;">加载失败</view>
 		</u-swiper>
@@ -80,6 +80,7 @@
 				groupTitle:[],
 				crewinfo:[],
 				streetinfo:[],
+				imageinfo:[],
 				title:'农田基础建设项目',
 				time:'2020-02-10',
 				browse:'122',
@@ -112,11 +113,12 @@
 					url:this.$newycyd.KyInterface.getArchivesByRuralId.Url,
 					method:this.$newycyd.KyInterface.getArchivesByRuralId.method,
 					data:{
-						ruralId : 8
+						ruralId : this.id,
 					},
 					success: (res) => {
 						console.log('详情', res)
 						if(res.data.status == true){
+							this.imageinfo.push(res.data.data.head_image);
 							this.groupTitle=res.data.data;
 							this.crewinfo=res.data.data.duty;
 							this.streetinfo=res.data.data.info;

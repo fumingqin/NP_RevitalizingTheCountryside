@@ -87,6 +87,24 @@ const KyInterface = {
 		name:'删除职责人员接口',
 		method:'POST',
 	},
+	//--------------------------------------接口--------------------------------------
+	updateLeader:{
+		Url:Url + '/api/archives/updateLeader',
+		name:'修改村长信息接口',
+		method:'POST',
+	},
+	//--------------------------------------接口--------------------------------------
+	updateVillagePeople:{
+		Url:Url + '/api/archives/updateVillagePeople',
+		name:'修改职责人员信息接口',
+		method:'POST',
+	},
+	//--------------------------------------接口--------------------------------------
+	updateVillageInfo:{
+		Url:Url + '/api/archives/updateVillageInfo',
+		name:'修改街道信息接口',
+		method:'POST',
+	},
 }
 
 // 接口声明区

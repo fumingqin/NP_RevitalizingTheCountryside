@@ -161,7 +161,7 @@
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_list",
+					clickURL: "../../pages_YCYD/pages/YCYD/myVillage",
 					ImageURL1: "../../static/home/serve/cdgl.png", //亮
 					ImageURL2: "../../static/home/serve/cdgl2.png", //暗
 					ItemTitle: "村档管理",

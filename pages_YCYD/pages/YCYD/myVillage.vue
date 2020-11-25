@@ -98,6 +98,7 @@
 						<u-empty :isShow="villageStreetinfo.length==0" text="暂无数据" textColor="#999999"></u-empty>
 					</view>
 				</view>
+				<view class="btn" @click="entering">录入信息</view>
 			</view>
 		</view>
 	</template>
@@ -129,14 +130,29 @@
 				scenicListIndex:5,//列表默认数量}
 				}
 		},
-		onLoad(param) {
+		onLoad() {
+			uni.getStorage({
+				key: 'userInfo',
+				fail() {
+					uni.showToast({
+						icon: 'none',
+						title: '暂未登录,请登录后查看'
+					})
+					setTimeout(function() {
+						uni.navigateTo({
+							url: '/pages/GRZX/userLogin'
+						})
+					}, 500);
+				}
+			});
 			uni.showLoading({
 				title: '加载列表中...',
 			})
-			this.id = param.id;
+			
+		},
+		onShow() {
 			this.villageData();
 		},
-		
 		onPullDownRefresh: function() {
 
 			this.villageData();
@@ -160,7 +176,7 @@
 					url:this.$newycyd.KyInterface.getArchivesByRuralId.Url,
 					method:this.$newycyd.KyInterface.getArchivesByRuralId.method,
 					data:{
-						ruralId : 8
+						ruralId : 58
 					},
 					success:(res) =>{
 						this.groupTitle=[],
@@ -207,12 +223,17 @@
 					}
 				})
 			},
+			 entering:function(){
+				uni.navigateTo({
+					url:'choice'
+				});
+			 },
 			//-------------------------修改村长-------------------------
 			UpdateHead: function(e) {
 				console.log(e)
 				uni.setStorage({
 					key: 'villageHead',
-					data: res,
+					data: e,
 					success: (res) => {
 						console.log(res)
 						uni.navigateTo({
@@ -233,7 +254,7 @@
 				console.log(e)
 				uni.setStorage({
 					key: 'villageCrew',
-					data: res,
+					data: e,
 					success: (res) => {
 						console.log(res)
 						uni.navigateTo({
@@ -254,7 +275,7 @@
 				console.log(e)
 				uni.setStorage({
 					key: 'villageStreet',
-					data: res,
+					data: e,
 					success: (res) => {
 						console.log(res)
 						uni.navigateTo({
@@ -500,5 +521,20 @@
 				border: 1upx solid #ff0000;
 				color: #ff0000;
 			}
+		}
+		.btn{
+			position: fixed;
+			bottom: 10upx;
+			left: 0;
+			right: 0;
+			padding: 24upx 0;
+			border-radius: 64upx;
+			margin: 0 76upx;
+			background: #FC4646;
+			text-align: center;
+			color: #FFFFFF;
+			font-size: 32upx;
+			font-weight: 400;
+			box-shadow: 0px 0.2px 0px #aaa;
 		}
 </style>
