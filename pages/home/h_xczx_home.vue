@@ -150,7 +150,7 @@
 						name: '一村一档', //功能名称
 						image: '../../static/home/vajra/yicunyidang.png', //功能图标
 						display: true, //是否显示
-						entrance: '../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_generalList', //跳转路径
+						entrance: '../../pages_YCYD/pages/YCYD/villageList', //跳转路径
 					}, {
 						name: '乡村动态',
 						image: '../../static/home/vajra/xiangcundongtai.png',
