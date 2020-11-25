@@ -86,7 +86,7 @@
 				},{
 					IsUse: true,
 					// clickURL: "../../pages_WSSC/pages/WSSC/goodsList",
-					clickURL: "",
+					clickURL: "../../pages_WSSC/pages/WSSC/onlineShoppingMall/osm_homePage",
 					ImageURL1: "../../static/home/serve/sc.png", //亮
 					ImageURL2: "../../static/home/serve/sc2.png", //暗
 					ItemTitle: "网上商城",
