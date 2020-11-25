@@ -204,7 +204,7 @@
 								telephone: that.model.telephone,
 								year: that.model.year,
 								duty:that.model.duty,
-								ruralId:58,
+								ruralId:res.data.rId,
 							},
 							success: (res) => {
 								console.log(res)
@@ -258,7 +258,7 @@
 								telephone: that.model.telephone,
 								year: that.model.year,
 								duty:that.model.duty,
-								ruralId:58,
+								ruralId:res.data.rId,
 							},
 							success: (res) => {
 								console.log(res)
