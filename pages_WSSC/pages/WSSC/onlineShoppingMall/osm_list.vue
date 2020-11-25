@@ -19,6 +19,11 @@
 		<!-- 顶部搜索栏 -->
 		<view class="content">
 			<view class="search">
+				<view style="width: 22%;padding-top: 2upx;display: flex;" @click="returnJump">
+					<u-icon name="arrow-left" color="#fff" size="42"></u-icon>
+					<view class="return">返回</view>
+				</view>
+				
 				<view style="width: 100%;">
 					<u-search placeholder="搜索商品/特产" placeholder-color="#fff" search-icon-color="#fff" input-align="center" :disabled="true"
 					 :show-action="false" bg-color="rgba(0,136,54,0.3)" @click="searchClick"></u-search>
@@ -49,7 +54,7 @@
 						<text :class="{active: priceOrder === 2 && screenIndex === 2}" class="jdticon icon-shang xia"></text>
 					</view>
 				</view>
-				<text :class="{active:screenIndex === 3}" class="cate-item jdticon icon-fenlei1" @click="toggleCateMask('show')"></text>
+				<!-- <text :class="{active:screenIndex === 3}" class="cate-item jdticon icon-fenlei1" @click="toggleCateMask('show')"></text> -->
 			</view>
 
 			<!-- 列表数据 -->
@@ -318,10 +323,10 @@
 			rotationLoadData: function() {
 				//轮播图
 				uni.request({
-					url: this.$home.KyInterface.getImage.Url,
-					method: this.$home.KyInterface.getImage.method,
+					url: this.$wssc.KyInterface.getImage.Url,
+					method: this.$wssc.KyInterface.getImage.method,
 					data: {
-						type: '1'
+						type: '6'
 					},
 					success: (res) => {
 						console.log('轮播区', res)
@@ -433,6 +438,19 @@
 				if (this.goodsListIndex >= this.goodsList.length) {
 					this.loadingType = 2;
 				}
+			},
+			
+			//跳转详情
+			navToDetailPage:function(){
+				uni.navigateTo({
+					url: 'osm_detailsPage'
+				})
+			},
+			
+			returnJump:function(){
+				uni.navigateBack({
+					delta:1,
+				})
 			}
 		}
 	}
@@ -491,6 +509,12 @@
 		margin-left: 30upx;
 		width: 92%;
 	}
+	
+	.return{
+		font-size: 30upx;
+		color: #FFFFFF;
+		padding-top: 10upx;
+	}
 
 	.sh_news {
 		margin-left: 20upx;
@@ -536,7 +560,7 @@
 					transform: translateX(-50%);
 					width: 120upx;
 					height: 0;
-					border-bottom: 4upx solid #06B4FD;
+					border-bottom: 4upx solid #22C704;
 				}
 			}
 		}
@@ -557,7 +581,7 @@
 				color: #888;
 
 				&.active {
-					color: #06B4FD;
+					color: #22C704;
 				}
 
 			}

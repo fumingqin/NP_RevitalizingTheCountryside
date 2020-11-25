@@ -17,7 +17,7 @@
 		<!-- 金刚区 -->
 		<view class="h_vajraDistrict">
 			<view class="vd_item">
-				<view class="item_view" v-for="(item,index) in functionArray" :key="index" v-if="item.display == true" @click="itemClick(item.entrance)">
+				<view class="item_view" v-for="(item,index) in classification" :key="index" @click="itemClick(item.name)">
 					<image class="view_image" :src="item.image" mode="aspectFit"></image>
 					<text class="view_text">{{item.name}}</text>
 				</view>
@@ -111,7 +111,7 @@
 					name: '武夷留香',
 					image: '../../../../static/WSSC/wuyiliuxiang.png',
 					display: true,
-					entrance: '',
+					entrance: './osm_orderList',
 				}, {
 					name: '顺和笋干',
 					image: '../../../../static/WSSC/shungan.png',
@@ -241,6 +241,7 @@
 					},
 				],
 				scrollTop: 0,
+				classification:[],
 			}
 		},
 
@@ -263,15 +264,16 @@
 			rotationLoadData: function() {
 				//轮播图
 				uni.request({
-					url: this.$home.KyInterface.getImage.Url,
-					method: this.$home.KyInterface.getImage.method,
+					url: this.$wssc.KyInterface.getImage.Url,
+					method: this.$wssc.KyInterface.getImage.method,
 					data: {
-						type: '1'
+						type: '0'
 					},
 					success: (res) => {
 						console.log('轮播区', res)
 						if (res.data.status == true) {
-							this.rotationChart = res.data.data
+							this.rotationChart.push(res.data.data.image)
+							console.log('轮播区', this.rotationChart)
 						} else {
 							uni.showToast({
 								title: res.data.msg,
@@ -282,6 +284,37 @@
 					fail: function() {
 						uni.showToast({
 							title: '首页轮播图网络加载异常',
+							icon: 'none'
+						})
+					}
+				})
+				
+				
+				//首页分类
+				uni.request({
+					url: this.$wssc.KyInterface.getMallHomepage.Url,
+					method: this.$wssc.KyInterface.getMallHomepage.method,
+					success: (res) => {
+						console.log('首页分类', res)
+						if (res.data.status == true) {
+							for(let item of res.data.data){
+								var obj = {
+									name: item.title, //功能名称
+									image: JSON.parse(item.image)[0], //功能图标
+								}
+								this.classification.push(obj);
+							}
+							console.log('首页分类', this.classification)
+						} else {
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+					},
+					fail: function() {
+						uni.showToast({
+							title: '首页分类网络加载异常',
 							icon: 'none'
 						})
 					}
