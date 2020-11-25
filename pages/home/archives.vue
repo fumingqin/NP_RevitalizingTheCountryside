@@ -3,22 +3,23 @@
 		<view class="map_view">
 			<image class="map_view_image" :style="{'height':imageHeight}" src="../../static/home/archives/bj.png" mode="aspectFill"></image>
 			<movable-area style="z-index: 2;">
-				<movable-view style="width: 1342upx; height:800upx;" scale-min="0.5" scale-max="2" scale="true" inertia="true" direction='all' scale-value="0.5">
+				<movable-view style="width: 1342upx; height:800upx;" scale-min="0.5" scale-max="2" scale="true" inertia="true"
+				 direction='all' scale-value="0.5">
 					<image class="movable_view_iamge" src="../../static/home/archives/ditu.png"></image>
 					<view v-for="(item,index) in ruralList" :key="index" @click="ruralClick(item.name,index)">
 						<view style="display: flex;" :class="item.fixed" v-if="item.iconSatus == false">
 							<image class="movable_view_Sign_iamge" src="../../static/home/archives/zhen.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
-							<image class="movable_view_Sign_iamge"  src="../../static/home/archives/xiang.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
+							<image class="movable_view_Sign_iamge" src="../../static/home/archives/xiang.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
 							<text class="movable_view_Sign_text" style="color: #FFFFFF;">{{item.name}}</text>
 						</view>
 						<view style="display: flex;" :class="item.fixed" v-if="item.iconSatus == true">
-							<image class="movable_view_Sign_iamge"  src="../../static/home/archives/zhen2.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
-							<image class="movable_view_Sign_iamge"  src="../../static/home/archives/xiang2.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
+							<image class="movable_view_Sign_iamge" src="../../static/home/archives/zhen2.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
+							<image class="movable_view_Sign_iamge" src="../../static/home/archives/xiang2.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
 							<text class="movable_view_Sign_text" style="color: #44f5ff;">{{item.name}}</text>
 						</view>
 					</view>
 					<view style="display: flex; position: absolute; left: 752upx; top: 832upx;">
-						<image class="government_image"  src="../../static/home/archives/zhengfu.png" mode="aspectFit"></image>
+						<image class="government_image" src="../../static/home/archives/zhengfu.png" mode="aspectFit"></image>
 						<text class="government_text" style="color: #FFFFFF;">人民政府</text>
 					</view>
 				</movable-view>
@@ -41,7 +42,7 @@
 					</view>
 				</view>
 			</scroll-view>
-			
+
 			<!-- 查询流程 -->
 			<view class="dis_view_view" v-if="loadStatus == true">
 				<view class="dis_view_title">{{loadText}}</view>
@@ -49,18 +50,262 @@
 				<view class="dis_view_text" :hidden="loadIndex < 2">查询内容：所有</view>
 				<view class="dis_view_text" :hidden="loadIndex < 3">查询时长：预计15秒</view>
 			</view>
-			
-			<!-- 查询流程 -->
+
+			<!-- 查询成功 -->
 			<view class="dis_view_view" v-if="queryStatus == 1">
 				<view class="dis_view_title">查询成功，请点击右侧按钮</view>
 				<view class="dis_view_text">查询乡村：{{loadRuralText}}</view>
 				<view class="dis_view_text">查询内容：所有</view>
 				<view class="dis_view_text">祝您游览愉快~！</view>
-				<image style="position: absolute; bottom: 8upx; right: 24upx; width:200upx; height: 200upx; z-index: 5;" src="../../static/home/archives/chakan.png" mode="aspectFit"></image>
+				<image style="position: absolute; bottom: 8upx; right: 24upx; width:200upx; height: 200upx; z-index: 5;" src="../../static/home/archives/chakan.png"
+				 mode="aspectFit" @click="newsShow = true"></image>
+			</view>
+
+			<!-- 查询失败 -->
+			<view class="dis_view_view" v-if="queryStatus == 2">
+				<view class="dis_view_title" style="color: #FA3534;">查询失败，{{contentsText}}</view>
+				<view class="dis_view_text">查询乡村：{{loadRuralText}}</view>
+				<view class="dis_view_text">查询内容：所有</view>
 			</view>
 		</view>
 
- 
+		<!-- 打开乡村档案弹框-14个模块内容 -->
+		<u-popup v-model="newsShow" mode="bottom" :closeable="true">
+			<view :style="{'height':imageHeight}">
+				<view style="width: 100%; height: 104upx;"></view>
+				
+				<!-- 一村一档 : dynamic -->
+				<view style="padding: 24upx;">
+					<view style="font-weight: bold; font-size: 34upx;">乡村档案</view>
+					<view class="dyn_view">
+						<view class="dyn_text">所属市级：南平市</view>
+						<view class="dyn_text">所属县级：建阳区</view>
+						<view class="dyn_text">村长姓名：建阳区</view>
+						<view class="dyn_text">村长年龄：建阳区</view>
+						<view class="dyn_text">任职工龄：建阳区</view>
+						<view class="dyn_text_view">
+							<view>职责人数：158人</view>
+							<view class="dyn_text_view_text">查看职责人员 ></view>
+						</view>
+						<view class="dyn_text">总户口数：158户</view>
+						<view class="dyn_text_view">
+							<view>总人口数：80580人</view>
+							<view class="dyn_text_view_text">查看人口分布 ></view>
+						</view>
+						
+						<view class="dyn_text">创建时间：2020/11/24</view>
+					</view>
+					
+					<!-- 缺省提示 -->
+					<view class="defaultStyle" :hidden="newsData.feedback.length !== 0">
+						<text>暂时没有动态哦~</text>
+					</view>
+				</view>
+				
+				<!-- 乡村动态 : dynamic -->
+				<view style="padding: 24upx;">
+					<view style="font-weight: bold; font-size: 34upx;">乡村动态</view>
+					<view class="infor_view" v-for="(item,index) in newsData.dynamic " :key="index" @click="detailsClick(2,item.AID)">
+						<view class="view_titleView">
+							<text class="tv_view">
+								<text class="tv_label">{{item.article_type}}</text>
+								<text class="tv_title">{{item.title}}</text>
+							</text>
+							<image class="tv_image" :src="item.image" mode="aspectFill"></image>
+						</view>
+
+						<view class="view_contentView">
+							<text>{{item.nick_name}}</text>
+							<text class="cont_text">{{item.count}}人看过</text>
+							<text class="cont_text">{{informationDate(item.create_time)}}</text>
+							<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
+						</view>
+						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
+					</view>
+
+					<!-- 缺省提示 -->
+					<view class="defaultStyle" :hidden="newsData.feedback.length !== 0">
+						<text>暂时没有动态哦~</text>
+					</view>
+				</view>
+				
+				<!-- 乡村政策 : policy  -->
+				<view style="padding: 24upx;">
+					<view style="font-weight: bold; font-size: 34upx;">乡村政策</view>
+					<view class="infor_view" v-for="(item,index) in newsData.policy " :key="index" @click="detailsClick(3,item.AID)">
+						<view class="view_titleView">
+							<text class="tv_view">
+								<text class="tv_label">{{item.introduce}}</text>
+								<text class="tv_title">{{item.title}}</text>
+							</text>
+							<image class="tv_image" :src="item.image" mode="aspectFill"></image>
+						</view>
+				
+						<view class="view_contentView">
+							<text>{{item.nick_name}}</text>
+							<!-- <text class="cont_text">{{item.view}}人看过</text> -->
+							<text class="cont_text">发布时间：{{informationDate(item.create_time)}}</text>
+							<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
+						</view>
+						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
+					</view>
+				
+					<!-- 缺省提示 -->
+					<view class="defaultStyle" :hidden="newsData.policy.length !== 0">
+						<text>暂时没有信息哦~</text>
+					</view>
+				</view>
+				
+				<!-- 水美经济 : economy  -->
+				<view style="padding: 24upx;">
+					<view style="font-weight: bold; font-size: 34upx;">乡村美景</view>
+					<view class="infor_view" v-for="(item,index) in newsData.economy " :key="index" @click="detailsClick(4,item.AID)">
+						<view class="view_titleView">
+							<text class="tv_view">
+								<text class="tv_label">乡村美景</text>
+								<text class="tv_title">{{item.title}}</text>
+							</text>
+							<image class="tv_image" :src="item.image" mode="aspectFill"></image>
+						</view>
+				
+						<view class="view_contentView">
+							<text>{{item.nick_name}}</text>
+							<text class="cont_text">{{item.view}}人看过</text>
+							<text class="cont_text">{{informationDate(item.create_time)}}</text>
+							<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
+						</view>
+						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
+					</view>
+				
+					<!-- 缺省提示 -->
+					<view class="defaultStyle" :hidden="newsData.economy.length !== 0">
+						<text>暂时没有美景哦~</text>
+					</view>
+				</view>
+				
+				<!-- 项目监督 : project  -->
+				<view style="padding: 24upx;">
+					<view style="font-weight: bold; font-size: 34upx;">项目监督</view>
+					<view class="infor_view" v-for="(item,index) in newsData.project " :key="index" @click="detailsClick(5,item.AID)">
+						<view class="view_titleView">
+							<text class="tv_view">
+								<text class="tv_label">项目监督</text>
+								<text class="tv_title">{{item.title}}</text>
+							</text>
+							<image class="tv_image" :src="item.image" mode="aspectFill"></image>
+						</view>
+				
+						<view class="view_contentView">
+							<text>{{item.nick_name}}</text>
+							<text class="cont_text">{{item.view}}人看过</text>
+							<text class="cont_text">{{item.warnNum}}次警告</text>
+							<text class="cont_text">{{informationDate(item.create_time)}}</text>
+							<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
+						</view>
+						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
+					</view>
+				
+					<!-- 缺省提示 -->
+					<view class="defaultStyle" :hidden="newsData.project.length !== 0">
+						<text>暂时没有项目哦~</text>
+					</view>
+				</view>
+				
+				<!-- 生态银行 : ecology -->
+				<view style="padding: 24upx;">
+					<view style="font-weight: bold; font-size: 34upx;">乡村生态</view>
+					<view class="infor_view" v-for="(item,index) in newsData.ecology " :key="index" @click="detailsClick(6,item.AID)">
+						<view class="view_titleView">
+							<text class="tv_view">
+								<text class="tv_label">生态银行</text>
+								<text class="tv_title">{{item.title}}</text>
+							</text>
+							<image class="tv_image" :src="item.image" mode="aspectFill"></image>
+						</view>
+				
+						<view class="view_contentView">
+							<text>{{item.nick_name}}</text>
+							<text class="cont_text">{{item.view}}人看过</text>
+							<text class="cont_text">{{informationDate(item.create_time)}}</text>
+							<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
+						</view>
+						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
+					</view>
+				
+					<!-- 缺省提示 -->
+					<view class="defaultStyle" :hidden="newsData.ecology.length !== 0">
+						<text>暂时没有信息哦~</text>
+					</view>
+				</view>
+				
+				<!-- 季度考评 : evaluation  -->
+				<view style="padding: 24upx;">
+					<view style="font-weight: bold; font-size: 34upx;">季度考评</view>
+					<view class="jdkp_view" v-for="(item,index) in newsData.evaluation" :key="index" @click="detailsClick(7,item.id)">
+						<view class="jdkp_titleView">
+							<text class="jdkp_tv_view">
+								<text class="jdkp_tv_label" style="background: #007AFF;" v-if="item.state !== '已取消'">{{item.state}}</text>
+								<text class="jdkp_tv_label" style="background: #FA3534;" v-if="item.state == '已取消'">{{item.state}}</text>
+								<text class="jdkp_tv_title">{{item.title}}</text>
+								<text class="jdkp_tv_content"><text style="font-weight: bold;">乡村名：</text>{{item.rural_name}}</text>
+								<text class="jdkp_tv_content"><text style="font-weight: bold;">发布人：</text>{{item.nick_name}}</text>
+								<text class="jdkp_tv_content" selectable=""><text style="font-weight: bold;">考评时间：</text>{{informationDate(item.reviewTime)}}</text>
+							</text>
+						</view>
+					
+						<view class="jdkp_view_contentView">
+							<text>申请时间：{{informationDate(item.create_time)}}</text>
+							<!-- <text class="cont_text"></text> -->
+							<u-icon class="jdkp_cont_icon" name="more-dot-fill"></u-icon>
+						</view>
+						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
+					</view>
+				
+					<!-- 缺省提示 -->
+					<view class="defaultStyle" :hidden="newsData.evaluation.length !== 0">
+						<text>暂时没有考评哦~</text>
+					</view>
+				</view>
+				
+				<!-- 民情反馈 : feedback -->
+				<view style="padding: 24upx;">
+					<view style="font-weight: bold; font-size: 34upx;">民情反馈</view>
+					<view class="serchView">
+						<view class="comment" v-for="(item,index) in newsData.feedback" :key="index">
+							<!-- 评论用户个人信息 -->
+							<view class="personalInformation">
+								<u-avatar :src="item.avatar"></u-avatar>
+								<view class="user">
+									<view class="userName">{{item.nick_name}}</view>
+									<view class="timePublication">{{informationDate(item.create_time)}}</view>
+								</view>
+							</view>
+							<!-- 评论内容 -->
+							<view class="comments">
+								<!-- 评论内容 -->
+								<text class="userComments">{{item.content}}</text>
+								<!-- 评论图片 -->
+								<view v-if="item.image!==''">
+									<image class="commentsImage" :src="item.image" mode="aspectFill"></image>
+								</view>
+								<!-- 回复评论 -->
+								<view class="replyArea" v-if="item.return_content!==''">
+									<text class="replyingPerson">客服回复：<text class="replyContent">{{item.return_content}}</text></text>
+								</view>
+							</view>
+						</view>
+					</view>
+
+					<!-- 缺省提示 -->
+					<view class="defaultStyle" :hidden="newsData.feedback.length !== 0">
+						<text>暂时没有反馈哦~</text>
+					</view>
+				</view>
+
+			</view>
+
+		</u-popup>
+
 	</view>
 </template>
 
@@ -74,55 +319,55 @@
 					fixed: 'fix_hukz',
 					status: false,
 					iconSatus: false,
-				},{
+				}, {
 					name: '麻沙镇',
 					nameType: '镇',
 					fixed: 'fix_masz',
 					status: false,
 					iconSatus: false,
-				},{
+				}, {
 					name: '书坊乡',
 					nameType: '村',
 					fixed: 'fix_shufx',
 					status: false,
 					iconSatus: false,
-				},{
+				}, {
 					name: '莒口镇',
 					nameType: '镇',
 					fixed: 'fix_jukz',
 					status: false,
 					iconSatus: false,
-				},{
+				}, {
 					name: '将口镇',
 					nameType: '镇',
 					fixed: 'fix_jiangkz',
 					status: false,
 					iconSatus: false,
-				},{
+				}, {
 					name: '徐市镇',
 					nameType: '镇',
 					fixed: 'fix_xusz',
 					status: false,
 					iconSatus: false,
-				},{
+				}, {
 					name: '崇雒乡',
 					nameType: '村',
 					fixed: 'fix_conglx',
 					status: false,
 					iconSatus: false,
-				},{
+				}, {
 					name: '漳墩镇',
 					nameType: '镇',
 					fixed: 'fix_zhangdz',
 					status: false,
 					iconSatus: false,
-				},{
+				}, {
 					name: '回龙乡',
 					nameType: '村',
 					fixed: 'fix_huilx',
 					status: false,
 					iconSatus: false,
-				},{
+				}, {
 					name: '水吉镇',
 					nameType: '镇',
 					fixed: 'fix_shuijz',
@@ -137,9 +382,12 @@
 				loadIndex: 0, //加载数值，用于加载展示
 				loadText: '正在查询乡村信息.', //加载文字提示
 				loadRuralText: '', //文字乡村提示
-				
+
 				// ---------------以下是成功的提示内容参数-------------
-				queryStatus : 1,//成功的提示框
+				queryStatus: 0, //成功的提示框
+				contentsText: '', //成功/失败的提示文字
+				newsData: '', //接口成功，返回的乡村数据
+				newsShow: true, //弹框的打开状态
 			}
 		},
 		onLoad: function() {
@@ -158,6 +406,7 @@
 				this.loadRuralText = name;
 				this.loadStatus = false;
 				this.loadIndex = 0;
+				this.queryStatus = 0;
 				if (this.ruralListIndex == index) {
 					this.ruralList[this.ruralListIndex].status = false;
 					this.ruralList[this.ruralListIndex].iconSatus = false;
@@ -186,10 +435,12 @@
 				var b = setInterval(() => {
 					if (this.loadIndex == 3) {
 						clearInterval(b);
+						this.loadData()
 					} else {
 						this.loadIndex = this.loadIndex + 1;
 					}
 				}, 1000)
+
 			},
 
 			//设置加载定时器
@@ -207,8 +458,89 @@
 						}
 					}
 				}, 1000)
-			}
-			
+			},
+
+			//加载数据
+			loadData: function() {
+				this.newsData = '';
+				uni.request({
+					url: this.$home.KyInterface.getDataByVillageName.Url,
+					method: this.$home.KyInterface.getDataByVillageName.method,
+					data: {
+						villageName: this.loadRuralText
+					},
+					success: (res) => {
+						this.loadStatus = false;
+						this.loadIndex = 0;
+						if(res.data.status == true){
+							if (res.data.msg == '当前不存在该村') {
+								this.queryStatus = 2;
+								this.contentsText = res.data.msg;
+								console.log(this.newsData)
+							} else {
+								this.queryStatus = 1;
+								this.newsData = res.data.data;
+								console.log(this.newsData)
+							}
+						}else{
+							this.queryStatus = 1;
+							this.contentsText = '服务器异常';
+							console.log(this.newsData)
+						}
+						
+
+						console.log('成功', res)
+					},
+					fail: (err) => {
+						console.log('失败', err)
+					}
+				})
+			},
+
+			//资讯时间
+			informationDate: function(e) {
+				if (e !== undefined) {
+					var a = e.substr(0, 10)
+					return a;
+				} else {
+					return '';
+				}
+			},
+
+			//跳转方法，乡村动态(1),
+
+			detailsClick: function(module, e) {
+				if (module == 1) {
+					uni.navigateTo({
+						url: 'infor_details?AID=' + e
+					})
+				}else if (module == 2) {
+					uni.navigateTo({
+						url: 'infor_details?AID=' + e
+					})
+				}else if (module == 3) {
+					uni.navigateTo({
+						url: 'infor_details?AID=' + e
+					})
+				}else if (module == 4) {
+					uni.navigateTo({
+						url: 'infor_details?AID=' + e
+					})
+				}else if (module == 5) {
+					uni.navigateTo({
+						url: 'infor_details?AID=' + e
+					})
+				}else if (module == 6) {
+					uni.navigateTo({
+						url: 'infor_details?AID=' + e
+					})
+				}else if (module == 7) {
+					uni.navigateTo({
+						url: 'infor_details?AID=' + e
+					})
+				}
+
+			},
 
 		}
 	}
@@ -218,38 +550,41 @@
 	page {
 		background: #1f4856;
 	}
-	
-	.map_view{
+
+	.map_view {
 		height: 800upx;
-		.map_view_image{
+
+		.map_view_image {
 			width: 100%;
-			z-index: 1; 
+			z-index: 1;
 			position: absolute;
 		}
-		
-		.movable_view_iamge{
-			width: 1342upx; 
-			height:378px; 
-			padding:400upx 0upx 0upx 80upx; 
+
+		.movable_view_iamge {
+			width: 1342upx;
+			height: 378px;
+			padding: 400upx 0upx 0upx 80upx;
 			position: relative;
 		}
-		
-		.movable_view_Sign_iamge{
-			width: 23upx; 
-			height: 23upx; 
-			padding-top:3upx;
+
+		.movable_view_Sign_iamge {
+			width: 23upx;
+			height: 23upx;
+			padding-top: 3upx;
 		}
-		.movable_view_Sign_text{
-			font-size: 18upx; 
+
+		.movable_view_Sign_text {
+			font-size: 18upx;
 			margin-left: 4upx;
 		}
 	}
-	
-	.government_image{
+
+	.government_image {
 		width: 23upx;
 		height: 23upx;
 	}
-	.government_text{
+
+	.government_text {
 		font-size: 18upx;
 		margin-left: 4upx;
 	}
@@ -290,16 +625,17 @@
 			border: 1upx solid #19BE6B;
 		}
 	}
-	
+
 	//搜索区域样式
 	.inf_dis_view {
 		z-index: 3;
 		position: sticky;
 		top: 0;
-		.dis_view_tips{
-			padding: 12upx 24upx; 
+
+		.dis_view_tips {
+			padding: 12upx 24upx;
 		}
-		
+
 		.dis_view_view {
 			padding: 10upx 24upx;
 
@@ -314,10 +650,224 @@
 				margin: 10upx 0;
 			}
 		}
+	}
+
+	//无数据提示样式
+	.defaultStyle {
+		width: 100%;
+		text-align: center;
+		padding: 24upx 0;
+	}
+
+	
+	//--------------------------------------一村一档-----------------------------------------------
+	.dyn_view{
+		margin-top: 32upx;
+		font-size: 30upx;
+		.dyn_text{
+			padding: 8upx 0;
+		}
+		.dyn_text_view{
+			position: relative;
+			padding: 8upx 0;
+			.dyn_text_view_text{
+				color: #18B566; 
+				font-size: 28upx;
+				position: absolute; 
+				right: 0; 
+				bottom: 6upx;
+			}
+		}
+	}
+	
+	
+	
+	//----------------------------------------乡村动态样式----------------------------------------
+	.infor_view {
+		// padding: 0 32upx;
+		margin-top: 32upx;
+
+		.view_titleView {
+			display: flex;
+
+			.tv_view {
+				padding-right: 32upx;
+				width: 468upx;
+
+				.tv_label {
+					font-size: 24upx;
+					background: #007AFF;
+					color: #FFFFFF;
+					padding: 4upx 8upx;
+					border-radius: 4upx;
+				}
+
+				.tv_title {
+					font-weight: bold;
+					font-size: 34upx;
+					margin-left: 12upx;
+					line-height: 1.7;
+				}
+			}
+
+			.tv_image {
+				width: 220upx;
+				height: 160upx;
+				border-radius: 8upx;
+			}
+		}
+
+		.view_contentView {
+			font-size: 24upx;
+			color: #AAAAAA;
+			padding: 16upx 0;
+			margin-bottom: 16upx;
+
+			.cont_text {
+				margin-left: 20upx;
+			}
+
+			.cont_icon {
+				float: right;
+				padding: 12upx 0;
+				margin-right: 16upx;
+			}
+		}
+	}
+	
+	//----------------------------------------季度考评样式----------------------------------------
+	.jdkp_view {
+		// padding: 0 32upx;
+		margin-top: 32upx;
+	
+		.jdkp_titleView {
+			display: flex;
+	
+			.jdkp_tv_view {
+				padding-right: 32upx;
+	
+				.jdkp_tv_label {
+					font-size: 24upx;
+					color: #FFFFFF;
+					padding: 6upx 8upx;
+					// border-radius: 4upx;
+				}
+	
+				.jdkp_tv_title {
+					padding-top: 12upx;
+					font-weight: bold;
+					font-size: 34upx;
+					margin-left: 12upx;
+					line-height: 1.8;
+				}
+	
+				.jdkp_tv_content {
+					display: block;
+					font-size: 28upx;
+					margin-top: 6upx;
+					line-height: 1.7;
+				}
+			}
+	
+			.jdkp_tv_image {
+				width: 220upx;
+				height: 160upx;
+				// border-radius: 8upx;
+			}
+		}
+	
+		.jdkp_view_contentView {
+			font-size: 24upx;
+			color: #AAAAAA;
+			padding: 16upx 0;
+			margin-bottom: 16upx;
+	
+			.jdkp_cont_text {
+				margin-left: 20upx;
+			}
+	
+			.jdkp_cont_icon {
+				float: right;
+				padding: 12upx 0;
+				margin-right: 16upx;
+			}
+		}
+	}
+
+	//----------------------------------------民情反馈样式----------------------------------------
+	.serchView {
+		padding-bottom: 20rpx;
 
 	}
 
+	.comment {
+		padding-top: 40upx;
+		padding-bottom: 12upx;
+		border-bottom: 1upx solid #EAEAEA;
+	}
 
+	.personalInformation {
+		display: flex;
+	}
+
+	.user {
+		padding-left: 18upx;
+	}
+
+	.userName {
+		color: #333333;
+		font-size: 32upx;
+		font-weight: bold;
+		padding-top: 6upx;
+	}
+
+	.timePublication {
+		color: #999999;
+		font-size: 26upx;
+		padding-top: 10upx;
+	}
+
+	.comments {
+		// display: block;
+		width: 100%;
+		margin: 12upx 0;
+
+		.userComments {
+			// width: 86%;
+			font-size: 30upx;
+			color: #333333;
+			text-align: justify;
+			line-height: 48rpx;
+		}
+
+		.commentsImage {
+			width: 204upx;
+			height: 204upx;
+			padding: 0 8upx;
+			margin-top: 20upx;
+		}
+
+		//回复区域
+		.replyArea {
+			padding: 26upx;
+			background: #F5F9FB;
+			margin-top: 20upx;
+			width: 100%;
+			border-radius: 5px;
+			text-align: justify;
+			line-height: 48rpx;
+
+			.replyingPerson {
+				font-size: 30upx;
+				color: #576B95;
+
+				.replyContent {
+					font-size: 30upx;
+					color: #999999;
+				}
+			}
+		}
+	}
 
 	//-----------------------从这里开始是乡村的地图固定坐标---------------------------------------
 	.fix_hukz {
