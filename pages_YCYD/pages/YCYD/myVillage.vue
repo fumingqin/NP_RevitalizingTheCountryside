@@ -171,12 +171,14 @@
 			},
 			//----------------------列表接口--------------------------------
 			villageData:function(){
-
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
 				uni.request({
 					url:this.$newycyd.KyInterface.getArchivesByRuralId.Url,
 					method:this.$newycyd.KyInterface.getArchivesByRuralId.method,
 					data:{
-						ruralId : 58
+						ruralId : res.data.rId,
 					},
 					success:(res) =>{
 						this.groupTitle=[],
@@ -221,6 +223,8 @@
 							}
 						},3000);
 					}
+				})
+				}
 				})
 			},
 			 entering:function(){
