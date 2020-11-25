@@ -112,14 +112,16 @@
 					ImageURL2: "../../static/home/serve/tprw2.png", //暗
 					ItemTitle: "特派任务",
 					style: "sv_print",
-				},{
-					IsUse: true,
-					clickURL: "",
-					ImageURL1: "../../static/home/serve/ncp.png", //亮
-					ImageURL2: "../../static/home/serve/ncp2.png", //暗
-					ItemTitle: "农产品",
-					style: "sv_print",
-				},{
+				},
+				// {
+				// 	IsUse: true,
+				// 	clickURL: "",
+				// 	ImageURL1: "../../static/home/serve/ncp.png", //亮
+				// 	ImageURL2: "../../static/home/serve/ncp2.png", //暗
+				// 	ItemTitle: "农产品",
+				// 	style: "sv_print",
+				// },
+				{
 					IsUse: true,
 					clickURL: "../../pages_JDKP/pages/jdkp_kpr_list",
 					ImageURL1: "../../static/home/serve/kprw.png", //亮
@@ -161,7 +163,7 @@
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "../../pages_YCYD/pages/LYFW/agricultureProducts/ovof_list",
+					clickURL: "../../pages_YCYD/pages/YCYD/myVillage",
 					ImageURL1: "../../static/home/serve/cdgl.png", //亮
 					ImageURL2: "../../static/home/serve/cdgl2.png", //暗
 					ItemTitle: "村档管理",

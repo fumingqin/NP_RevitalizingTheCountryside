@@ -474,8 +474,7 @@
                     "path" : "pages/YCYD/myVillage",
                     "style" :                                                                                    
                 {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
+                    "navigationBarTitleText": "人员信息管理"
                 }
                 
                 }
@@ -601,6 +600,14 @@
 				}
 				,{
 				    "path" : "pages/WSSC/onlineShoppingMall/osm_detailsPage",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_payment",
+				    "style" : {}
+				}
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_orderList",
 				    "style" : {}
 				}
 			]

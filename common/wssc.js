@@ -86,6 +86,20 @@ const KyInterface = {
 		name:'编辑政策接口',
 		method:'POST',
 	},
+	
+	//--------------------------------------编辑接口--------------------------------------
+	getImage:{
+		Url:Url + '/api/manage/getImage',
+		name:'获取图片',
+		method:'POST',
+	},
+	
+	//--------------------------------------编辑接口--------------------------------------
+	getMallHomepage:{
+		Url:Url + '/api/shopMall/getMallHomepage',
+		name:'获取商城首页的分类',
+		method:'POST',
+	},
 }
 
 // 接口声明区

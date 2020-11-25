@@ -37,7 +37,7 @@
 			<view class="deta_title">发布人信息</view>
 			<view class="deta_text"><text>发布人：</text>{{stepsData.nick_name}}</view>
 			<view class="deta_text"><text>发布时间：</text>{{informationDate(stepsData.update_time)}}</view>
-			<view class="deta_text"><text>发布人电话：</text>{{stepsData.phoneNumber}}</view>
+			<view class="deta_text"><text>发布人电话：</text>{{phoneConvert(publisherPhone)}}</view>
 		</view>
 
 		<!-- 考评人信息 -->
@@ -45,7 +45,7 @@
 			<view class="deta_title">考评人信息</view>
 			<view class="deta_text"><text>编号：</text>{{stepsData.examiner_number}}</view>
 			<view class="deta_text"><text>姓名：</text>{{stepsData.examiner_name}}</view>
-			<view class="deta_text"><text>电话：</text>{{stepsData.examiner_phone}}</view>
+			<view class="deta_text"><text>电话：</text>{{phoneConvert(assessorPhone)}}</view>
 		</view>
 
 		<!-- 特派员信息 -->
@@ -74,12 +74,12 @@
 		<view style="width: 100%; height: 112upx;"></view>
 
 		<!-- 功能按钮 -->
-		<view class="operButton" v-if="stepsData.state == '已发布'">
+		<view class="operButton" v-if="stepsData.state == '已发布' && userInfo.duty == '村级职责人员' ">
 			<view class="buttonView1" hover-class="btn_Click" @click="TelephoneClick(0)">联系发布人</view>
 			<view class="buttonView2" hover-class="btn_Click" @click="TelephoneClick(1)">联系考评人</view>
 		</view>
 		
-		<view class="operButton" v-if="stepsData.state !== '已发布'">
+		<view class="operButton" v-if="stepsData.state !== '已发布' && userInfo.duty == '村级职责人员'">
 			<view class="buttonView1" hover-class="btn_Click" @click="TelephoneClick(0)">联系发布人</view>
 			<view class="buttonView2" hover-class="btn_Click" @click="TelephoneClick(1)">联系考评人</view>
 		</view>
@@ -183,6 +183,12 @@
 				}], //时间轴的标题数组
 				StepsIndex: -1, //绿条时间轴的下标数值
 				stepsData: '', //详情数据
+				
+				//-------------------以下是显示的电话号码参数-----------------
+				publisherPhone: '',//发布人电话
+				assessorPhone : '',//考评人电话
+				
+				
 				id: '', //任务id
 				PersonShow: false, //人员名单弹窗状态值
 				userInfo: '', //用户信息
@@ -196,6 +202,7 @@
 				commissionerSearchList: [], //特派员搜索列表
 				commissionerID: '', //特派员ID
 				scrollHeight: '800upx', //弹框高度默认值
+				
 
 			}
 		},
@@ -259,6 +266,8 @@
 					success: (res) => {
 						console.log(res)
 						this.stepsData = res.data.data;
+						this.publisherPhone = res.data.data.phoneNumber;
+						this.assessorPhone = res.data.data.examiner_phone;
 						if (res.data.data.state == '已发布') {
 							this.StepsIndex = 1
 						} else if (res.data.data.state == '已完成' || res.data.data.state == '已取消') {
@@ -491,7 +500,7 @@
 				} else {
 					if(this.stepsData.examiner_phone == ''){
 						uni.showToast({
-							title:'相关发布人电话错误，请联系客服处理',
+							title:'相关考评人电话错误，请联系客服处理',
 							icon:'none'
 						})
 					}else{
@@ -502,8 +511,12 @@
 				}
 
 			},
-
-
+			
+			//电话转换
+			phoneConvert : function(e){
+				var a = e.substr(0,3) + '****' + e.substr(7,11)
+				return a 
+			}
 
 		}
 
