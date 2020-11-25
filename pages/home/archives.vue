@@ -33,8 +33,19 @@
 			<view class="dis_view_tips" style="color: #19BE6B;">注：可通过点击地图乡村/下方标签查看乡村信息</view>
 			<!-- 输入框 -->
 			<view class="box_inputView">
-				<input class="inputStyle" v-model="contentInputData" type="text" placeholder="请输入关键字,目前仅支持建阳区内乡村" />
+				<input class="inputStyle" v-model="contentInputData" type="text" placeholder="请输入关键字,目前仅支持建阳区内乡村" @input="onInput" />
 			</view>
+
+			<!-- 搜索列表 -->
+			<view class="stationList" :style="{ 'height':scrollHeight }" v-if="SearchStatus">
+				<block v-for="(item,index) in keywordList" :key="index">
+					<view class="listItem" @click="searchClick(item.village_name)">
+						<rich-text :nodes="item.village_name"></rich-text>
+					</view>
+				</block>
+			</view>
+
+
 			<scroll-view style="margin: 16upx 0;" scroll-x>
 				<view style="display: flex;">
 					<view class="box_scrollView" v-for="(item,index) in ruralList" :key="index" @click="ruralClick(item.name,index)">
@@ -69,43 +80,37 @@
 			</view>
 		</view>
 
-		<!-- 打开乡村档案弹框-14个模块内容 -->
-		<u-popup v-model="newsShow" mode="bottom" :closeable="true">
-			<view :style="{'height':imageHeight}">
-				<view style="width: 100%; height: 104upx;"></view>
-				
-				<!-- 一村一档 : dynamic -->
+		<!-- 打开乡村档案弹框-8个模块内容 -->
+		<u-popup v-model="newsShow" mode="bottom" :closeable="true" :safe-area-inset-bottom="true" height="1334upx" border-radius="16">
+			<view>
+				<!-- 一村一档 : village -->
 				<view style="padding: 24upx;">
-					<view style="font-weight: bold; font-size: 34upx;">乡村档案</view>
-					<view class="dyn_view">
-						<view class="dyn_text">所属市级：南平市</view>
-						<view class="dyn_text">所属县级：建阳区</view>
-						<view class="dyn_text">村长姓名：建阳区</view>
-						<view class="dyn_text">村长年龄：建阳区</view>
-						<view class="dyn_text">任职工龄：建阳区</view>
+					<view class="news_viewTitle">| 乡村档案_{{newsData.village.village_name}}</view>
+					<view class="dyn_view" :hidden="newsData.village.village_name == ''">
+						<view class="dyn_text">所属市级：{{newsData.village.city_name}}</view>
+						<view class="dyn_text">所属县级：{{newsData.village.county_name}}</view>
+						<view class="dyn_text">村长姓名：{{newsData.village.head_name}}</view>
+						<view class="dyn_text">村长年龄：{{newsData.village.head_age}}岁</view>
+						<view class="dyn_text">任职工龄：{{newsData.village.head_year}}年</view>
+						<view class="dyn_text">职责人数：{{newsData.village.duty_num}}人</view>
+						<view class="dyn_text">总户口数：{{newsData.village.registered_num}}户</view>
+						<view class="dyn_text">总人口数：{{newsData.village.total_people}}人</view>
 						<view class="dyn_text_view">
-							<view>职责人数：158人</view>
-							<view class="dyn_text_view_text">查看职责人员 ></view>
+							<view>建档时间：{{informationDate(newsData.village.create_time)}}</view>
+							<view class="dyn_text_view_text" @click="detailsClick(1,newsData.ruralId)">查看详细档案 ></view>
 						</view>
-						<view class="dyn_text">总户口数：158户</view>
-						<view class="dyn_text_view">
-							<view>总人口数：80580人</view>
-							<view class="dyn_text_view_text">查看人口分布 ></view>
-						</view>
-						
-						<view class="dyn_text">创建时间：2020/11/24</view>
 					</view>
-					
+
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" :hidden="newsData.feedback.length !== 0">
-						<text>暂时没有动态哦~</text>
+					<view class="defaultStyle" :hidden="newsData.village.village_name !== ''">
+						<text>暂时没有档案哦~</text>
 					</view>
 				</view>
-				
+
 				<!-- 乡村动态 : dynamic -->
 				<view style="padding: 24upx;">
-					<view style="font-weight: bold; font-size: 34upx;">乡村动态</view>
-					<view class="infor_view" v-for="(item,index) in newsData.dynamic " :key="index" @click="detailsClick(2,item.AID)">
+					<view class="news_viewTitle">| 乡村动态</view>
+					<view class="infor_view" v-for="(item,index) in newsData.dynamic " :key="index" @click="detailsClick(2,item.id)">
 						<view class="view_titleView">
 							<text class="tv_view">
 								<text class="tv_label">{{item.article_type}}</text>
@@ -128,11 +133,11 @@
 						<text>暂时没有动态哦~</text>
 					</view>
 				</view>
-				
+
 				<!-- 乡村政策 : policy  -->
 				<view style="padding: 24upx;">
-					<view style="font-weight: bold; font-size: 34upx;">乡村政策</view>
-					<view class="infor_view" v-for="(item,index) in newsData.policy " :key="index" @click="detailsClick(3,item.AID)">
+					<view class="news_viewTitle">| 乡村政策</view>
+					<view class="infor_view" v-for="(item,index) in newsData.policy " :key="index" @click="detailsClick(3,item.id)">
 						<view class="view_titleView">
 							<text class="tv_view">
 								<text class="tv_label">{{item.introduce}}</text>
@@ -140,7 +145,7 @@
 							</text>
 							<image class="tv_image" :src="item.image" mode="aspectFill"></image>
 						</view>
-				
+
 						<view class="view_contentView">
 							<text>{{item.nick_name}}</text>
 							<!-- <text class="cont_text">{{item.view}}人看过</text> -->
@@ -149,17 +154,17 @@
 						</view>
 						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 					</view>
-				
+
 					<!-- 缺省提示 -->
 					<view class="defaultStyle" :hidden="newsData.policy.length !== 0">
 						<text>暂时没有信息哦~</text>
 					</view>
 				</view>
-				
+
 				<!-- 水美经济 : economy  -->
 				<view style="padding: 24upx;">
-					<view style="font-weight: bold; font-size: 34upx;">乡村美景</view>
-					<view class="infor_view" v-for="(item,index) in newsData.economy " :key="index" @click="detailsClick(4,item.AID)">
+					<view class="news_viewTitle">| 乡村美景</view>
+					<view class="infor_view" v-for="(item,index) in newsData.economy " :key="index" @click="detailsClick(4,item.id)">
 						<view class="view_titleView">
 							<text class="tv_view">
 								<text class="tv_label">乡村美景</text>
@@ -167,7 +172,7 @@
 							</text>
 							<image class="tv_image" :src="item.image" mode="aspectFill"></image>
 						</view>
-				
+
 						<view class="view_contentView">
 							<text>{{item.nick_name}}</text>
 							<text class="cont_text">{{item.view}}人看过</text>
@@ -176,17 +181,17 @@
 						</view>
 						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 					</view>
-				
+
 					<!-- 缺省提示 -->
 					<view class="defaultStyle" :hidden="newsData.economy.length !== 0">
 						<text>暂时没有美景哦~</text>
 					</view>
 				</view>
-				
+
 				<!-- 项目监督 : project  -->
 				<view style="padding: 24upx;">
-					<view style="font-weight: bold; font-size: 34upx;">项目监督</view>
-					<view class="infor_view" v-for="(item,index) in newsData.project " :key="index" @click="detailsClick(5,item.AID)">
+					<view class="news_viewTitle">| 项目监督</view>
+					<view class="infor_view" v-for="(item,index) in newsData.project " :key="index" @click="detailsClick(5,item.id)">
 						<view class="view_titleView">
 							<text class="tv_view">
 								<text class="tv_label">项目监督</text>
@@ -194,7 +199,7 @@
 							</text>
 							<image class="tv_image" :src="item.image" mode="aspectFill"></image>
 						</view>
-				
+
 						<view class="view_contentView">
 							<text>{{item.nick_name}}</text>
 							<text class="cont_text">{{item.view}}人看过</text>
@@ -204,17 +209,17 @@
 						</view>
 						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 					</view>
-				
+
 					<!-- 缺省提示 -->
 					<view class="defaultStyle" :hidden="newsData.project.length !== 0">
 						<text>暂时没有项目哦~</text>
 					</view>
 				</view>
-				
+
 				<!-- 生态银行 : ecology -->
 				<view style="padding: 24upx;">
-					<view style="font-weight: bold; font-size: 34upx;">乡村生态</view>
-					<view class="infor_view" v-for="(item,index) in newsData.ecology " :key="index" @click="detailsClick(6,item.AID)">
+					<view class="news_viewTitle">| 乡村生态</view>
+					<view class="infor_view" v-for="(item,index) in newsData.ecology " :key="index" @click="detailsClick(6,item.id)">
 						<view class="view_titleView">
 							<text class="tv_view">
 								<text class="tv_label">生态银行</text>
@@ -222,7 +227,7 @@
 							</text>
 							<image class="tv_image" :src="item.image" mode="aspectFill"></image>
 						</view>
-				
+
 						<view class="view_contentView">
 							<text>{{item.nick_name}}</text>
 							<text class="cont_text">{{item.view}}人看过</text>
@@ -231,16 +236,16 @@
 						</view>
 						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 					</view>
-				
+
 					<!-- 缺省提示 -->
 					<view class="defaultStyle" :hidden="newsData.ecology.length !== 0">
 						<text>暂时没有信息哦~</text>
 					</view>
 				</view>
-				
+
 				<!-- 季度考评 : evaluation  -->
 				<view style="padding: 24upx;">
-					<view style="font-weight: bold; font-size: 34upx;">季度考评</view>
+					<view class="news_viewTitle">| 季度考评</view>
 					<view class="jdkp_view" v-for="(item,index) in newsData.evaluation" :key="index" @click="detailsClick(7,item.id)">
 						<view class="jdkp_titleView">
 							<text class="jdkp_tv_view">
@@ -252,7 +257,7 @@
 								<text class="jdkp_tv_content" selectable=""><text style="font-weight: bold;">考评时间：</text>{{informationDate(item.reviewTime)}}</text>
 							</text>
 						</view>
-					
+
 						<view class="jdkp_view_contentView">
 							<text>申请时间：{{informationDate(item.create_time)}}</text>
 							<!-- <text class="cont_text"></text> -->
@@ -260,16 +265,16 @@
 						</view>
 						<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 					</view>
-				
+
 					<!-- 缺省提示 -->
 					<view class="defaultStyle" :hidden="newsData.evaluation.length !== 0">
 						<text>暂时没有考评哦~</text>
 					</view>
 				</view>
-				
+
 				<!-- 民情反馈 : feedback -->
 				<view style="padding: 24upx;">
-					<view style="font-weight: bold; font-size: 34upx;">民情反馈</view>
+					<view class="news_viewTitle">| 民情反馈</view>
 					<view class="serchView">
 						<view class="comment" v-for="(item,index) in newsData.feedback" :key="index">
 							<!-- 评论用户个人信息 -->
@@ -301,7 +306,6 @@
 						<text>暂时没有反馈哦~</text>
 					</view>
 				</view>
-
 			</view>
 
 		</u-popup>
@@ -376,6 +380,10 @@
 				}], //乡村列表
 				contentInputData: '', //搜索
 				imageHeight: '1334upx', //手机屏幕高度
+				//---------------以下是输入框监听参数--------------
+				SearchStatus: false, //搜索列表框
+				keywordList: [], //搜索关键字列表
+
 				// ---------------以下是提示内容参数-------------
 				ruralListIndex: -1, //数组默认值
 				loadStatus: false, //加载状态
@@ -386,8 +394,19 @@
 				// ---------------以下是成功的提示内容参数-------------
 				queryStatus: 0, //成功的提示框
 				contentsText: '', //成功/失败的提示文字
-				newsData: '', //接口成功，返回的乡村数据
-				newsShow: true, //弹框的打开状态
+				newsData: {
+					village: {
+						create_time: undefined
+					},
+					dynamic : [],
+					policy : [],
+					economy : [],
+					project : [],
+					ecology : [],
+					evaluation : [],
+					feedback : [],
+				}, //接口成功，返回的乡村数据
+				newsShow: false, //弹框的打开状态
 			}
 		},
 		onLoad: function() {
@@ -400,6 +419,22 @@
 			})
 		},
 		methods: {
+			//搜索框点击查询
+			searchClick: function(name) {
+				var index = this.ruralList.findIndex((item) => item.name == name)
+				console.log(index)
+				if (index == -1) {
+					uni.showToast({
+						title: '暂无' + name + '的乡村信息',
+						icon: 'none',
+						duration: 3000
+					})
+				} else {
+					this.SearchStatus = false;
+					this.ruralClick(name, index)
+				}
+
+			},
 
 			//点击乡村显示效果
 			ruralClick: function(name, index) {
@@ -462,7 +497,6 @@
 
 			//加载数据
 			loadData: function() {
-				this.newsData = '';
 				uni.request({
 					url: this.$home.KyInterface.getDataByVillageName.Url,
 					method: this.$home.KyInterface.getDataByVillageName.method,
@@ -472,7 +506,7 @@
 					success: (res) => {
 						this.loadStatus = false;
 						this.loadIndex = 0;
-						if(res.data.status == true){
+						if (res.data.status == true) {
 							if (res.data.msg == '当前不存在该村') {
 								this.queryStatus = 2;
 								this.contentsText = res.data.msg;
@@ -482,12 +516,12 @@
 								this.newsData = res.data.data;
 								console.log(this.newsData)
 							}
-						}else{
+						} else {
 							this.queryStatus = 1;
 							this.contentsText = '服务器异常';
 							console.log(this.newsData)
 						}
-						
+
 
 						console.log('成功', res)
 					},
@@ -507,36 +541,72 @@
 				}
 			},
 
-			//跳转方法，乡村动态(1),
+			//关键字搜索
+			onInput: function(e) {
+				console.log('监听输入', e)
+				//以下示例截取淘宝的关键字，请替换成你的接口
+				if (e.detail.value != '') {
+					this.SearchStatus = true;
+				} else {
+					this.SearchStatus = false;
+				}
+				uni.request({
+					url: this.$home.KyInterface.getVillageByKey.Url,
+					method: this.$home.KyInterface.getVillageByKey.method,
+					data: {
+						key: e.detail.value
+					},
+					success: (res) => {
+						console.log('搜索', res)
+						if (res.data.status) {
+							this.keywordList = res.data.data;
+						} else {
+							uni.showToast({
+								title: '服务器搜索异常',
+								icon: 'none'
+							})
+						}
+					},
+					fail: (err) => {
+						uni.showToast({
+							title: '服务器异常',
+							icon: 'none'
+						})
+					}
+				})
+			},
 
+
+			//跳转方法，一村一档(1)，乡村动态（2），乡村政策（3），水美经济（4），项目监督（5），生态银行（6），季度考评（7）
 			detailsClick: function(module, e) {
+				console.log('点击跳转')
 				if (module == 1) {
 					uni.navigateTo({
-						url: 'infor_details?AID=' + e
+						url: '../../pages_YCYD/pages/YCYD/villageDetails?id=' + e
 					})
-				}else if (module == 2) {
+				} else if (module == 2) {
 					uni.navigateTo({
-						url: 'infor_details?AID=' + e
+						url: '../../pages_XCDT/pages/ruralDynamics/rd_detailsPage?id=' + e
 					})
-				}else if (module == 3) {
+				} else if (module == 3) {
 					uni.navigateTo({
-						url: 'infor_details?AID=' + e
+						url: '../../pages_ZCFB/pages/ZCFB/policyDetails?id=' + e
 					})
-				}else if (module == 4) {
+				} else if (module == 4) {
 					uni.navigateTo({
-						url: 'infor_details?AID=' + e
+						url: '../../pages_SMJJ/pages/shuimeiEconomy/se_detailsPage?id=' + e
 					})
-				}else if (module == 5) {
+				} else if (module == 5) {
 					uni.navigateTo({
-						url: 'infor_details?AID=' + e
+						url: '../../pages_FBXM/pages/publishProject/pp_detailsPage?id=' + e
 					})
-				}else if (module == 6) {
+				} else if (module == 6) {
 					uni.navigateTo({
-						url: 'infor_details?AID=' + e
+						url: '../../pages_STYH/pages/ecologicalBank/eb_detailsPage?id=' + e
 					})
-				}else if (module == 7) {
+				} else if (module == 7) {
 					uni.navigateTo({
-						url: 'infor_details?AID=' + e
+						url: '../../pages_JDKP/pages/jdkp_cj_details?id=' + e
 					})
 				}
 
@@ -606,6 +676,24 @@
 		}
 	}
 
+	//关键字列表
+	.stationList {
+		background-color: #FFFFFF;
+		line-height: 80rpx;
+		box-sizing: border-box;
+		font-size: 28rpx;
+		margin: 8upx 24upx;
+		border-radius: 60upx;
+		padding: 8upx 18upx;
+
+		.listItem {
+			padding: 12rpx 0;
+			margin-left: 20rpx;
+			border-bottom: 1rpx solid #eeeeee;
+			width: 92%;
+		}
+	}
+
 	//滑动区域
 	.box_scrollView {
 		margin: 40upx 0;
@@ -659,29 +747,37 @@
 		padding: 24upx 0;
 	}
 
-	
+	.news_viewTitle {
+		font-weight: bold;
+		font-size: 34upx;
+		color: #18B566;
+	}
+
 	//--------------------------------------一村一档-----------------------------------------------
-	.dyn_view{
+	.dyn_view {
 		margin-top: 32upx;
 		font-size: 30upx;
-		.dyn_text{
+
+		.dyn_text {
 			padding: 8upx 0;
 		}
-		.dyn_text_view{
+
+		.dyn_text_view {
 			position: relative;
 			padding: 8upx 0;
-			.dyn_text_view_text{
-				color: #18B566; 
+
+			.dyn_text_view_text {
+				color: #007AFF;
 				font-size: 28upx;
-				position: absolute; 
-				right: 0; 
+				position: absolute;
+				right: 0;
 				bottom: 6upx;
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	//----------------------------------------乡村动态样式----------------------------------------
 	.infor_view {
 		// padding: 0 32upx;
@@ -734,25 +830,25 @@
 			}
 		}
 	}
-	
+
 	//----------------------------------------季度考评样式----------------------------------------
 	.jdkp_view {
 		// padding: 0 32upx;
 		margin-top: 32upx;
-	
+
 		.jdkp_titleView {
 			display: flex;
-	
+
 			.jdkp_tv_view {
 				padding-right: 32upx;
-	
+
 				.jdkp_tv_label {
 					font-size: 24upx;
 					color: #FFFFFF;
 					padding: 6upx 8upx;
 					// border-radius: 4upx;
 				}
-	
+
 				.jdkp_tv_title {
 					padding-top: 12upx;
 					font-weight: bold;
@@ -760,7 +856,7 @@
 					margin-left: 12upx;
 					line-height: 1.8;
 				}
-	
+
 				.jdkp_tv_content {
 					display: block;
 					font-size: 28upx;
@@ -768,24 +864,24 @@
 					line-height: 1.7;
 				}
 			}
-	
+
 			.jdkp_tv_image {
 				width: 220upx;
 				height: 160upx;
 				// border-radius: 8upx;
 			}
 		}
-	
+
 		.jdkp_view_contentView {
 			font-size: 24upx;
 			color: #AAAAAA;
 			padding: 16upx 0;
 			margin-bottom: 16upx;
-	
+
 			.jdkp_cont_text {
 				margin-left: 20upx;
 			}
-	
+
 			.jdkp_cont_icon {
 				float: right;
 				padding: 12upx 0;
