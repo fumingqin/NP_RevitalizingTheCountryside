@@ -105,6 +105,12 @@ const KyInterface = {
 		name:'修改街道信息接口',
 		method:'POST',
 	},
+	//--------------------------------------接口--------------------------------------
+	getArchivesByKey:{
+		Url:Url + '/api/archives/getArchivesByKey',
+		name:'搜索村档案接口',
+		method:'POST',
+	},
 }
 
 // 接口声明区

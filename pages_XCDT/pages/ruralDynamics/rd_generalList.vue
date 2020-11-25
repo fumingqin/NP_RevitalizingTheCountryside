@@ -199,7 +199,7 @@
 			//--------------------------路由跳转------------------------------
 			routeJump:function(e){
 				uni.navigateTo({
-					url:'ovof_detailsPage?id=' +e,
+					url:'rd_detailsPage?id=' +e,
 				})
 			}
 		}
