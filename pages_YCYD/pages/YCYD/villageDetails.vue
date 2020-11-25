@@ -124,7 +124,7 @@
 					success: (res) => {
 						console.log('详情', res)
 						if(res.data.status == true){
-							this.imageinfo.push(res.data.data.head_image);
+							this.imageinfo.push(res.data.data.image);
 							this.groupTitle=res.data.data;
 							this.crewinfo=res.data.data.duty;
 							this.streetinfo=res.data.data.info;
@@ -400,12 +400,13 @@
 		.detailsroadcount {
 			position: absolute;
 			left: 0;
-			margin-left: 300upx;
+			margin-left: 200upx;
 			font-size: 30upx;
 		}
 		.detailscount {
 			position: absolute;
 			right: 0;
+			margin-right: 100upx;
 			font-size: 30upx;
 		}
 		}

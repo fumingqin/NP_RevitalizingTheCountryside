@@ -261,21 +261,21 @@
 			//--------------------------路由跳转------------------------------
 			routeJump:function(e){
 				uni.navigateTo({
-					url:'ovof_detailsPage?id=' +e,
+					url:'rd_detailsPage?id=' +e,
 				})
 			},
 			
 			//--------------------------路由跳转(添加列表文章)------------------------------
 			routeJump2:function(e){
 				uni.navigateTo({
-					url:'./ovof_addPage',
+					url:'./rd_addPage',
 				})
 			},
 			
 			//--------------------------路由跳转(修改列表文章)------------------------------
 			modifyJump:function(item){
 				uni.navigateTo({
-					url: './ovof_edit?jumpStatus=' +this.state + '&id=' + item.id
+					url: './rd_edit?jumpStatus=' +this.state + '&id=' + item.id
 				})
 			},
 			
