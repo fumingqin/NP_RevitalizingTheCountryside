@@ -14,7 +14,7 @@
 		<!--引用组件-->
 		<u-skeleton :loading="loading" :animation="true" bgColor="#FFF"></u-skeleton>
 		
-		<view class="myBox">
+		<!-- <view class="myBox">
 			<view class="boxClass2">
 				<view class="itemclass1" @click="navTo(0)" hover-class="btn_Click">
 					<image src="../../static/GRZX/icon/hyjl.png" class="imgStyle1" mode="aspectFill"></image>
@@ -29,7 +29,7 @@
 					<text class="myFont">我的编号</text>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<!-- 广告 -->
 		<image :src="advert" class="advertClass" lazy-load="true"></image>
 		
@@ -193,19 +193,19 @@
 				switch(e) {
 					case 0:
 						uni.showToast({
-							title: '正在开发中...',
+							title: '敬请期待',
 							icon:'none'
 						});
 						break;
 					case 1:
 						uni.showToast({
-							title: '正在开发中...',
+							title: '敬请期待',
 							icon:'none'
 						});
 						break;
 					case 2:
 						uni.showToast({
-							title: '正在开发中...',
+							title: '敬请期待',
 							icon:'none'
 						});
 						break;
@@ -276,7 +276,7 @@
 					// 	url: this.$GrzxInter.Route.infoList.url,
 					// })
 					uni.showToast({
-						title: '正在开发中...',
+						title: '敬请期待',
 						icon:'none'
 					});
 				}else{
