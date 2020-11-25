@@ -561,6 +561,7 @@
 						if (res.data.status) {
 							this.keywordList = res.data.data;
 						} else {
+							this.SearchStatus = false;
 							uni.showToast({
 								title: '服务器搜索异常',
 								icon: 'none'
@@ -568,8 +569,9 @@
 						}
 					},
 					fail: (err) => {
+						this.SearchStatus = false;
 						uni.showToast({
-							title: '服务器异常',
+							title: '服务器搜索异常',
 							icon: 'none'
 						})
 					}
