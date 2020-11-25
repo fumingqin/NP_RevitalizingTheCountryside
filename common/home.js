@@ -45,6 +45,20 @@ const KyInterface = {
 		name:'公告资讯',
 		method:'POST',
 	}, 
+	
+	//--------------------------------------获取地图乡村数据--------------------------------------
+	getDataByVillageName:{
+		Url: Url + '/api/map/getDataByVillageName',
+		name:'获取地图乡村数据',
+		method:'POST',
+	}, 
+	
+	//----------------------------------------------------------------------------
+	getVillageByKey:{
+		Url: Url + '/api/map/getVillageByKey',
+		name:'搜索关键字',
+		method:'POST',
+	}, 
 }
 
 export default {

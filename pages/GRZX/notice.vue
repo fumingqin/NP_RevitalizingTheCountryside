@@ -1,84 +1,129 @@
 <template>
-	<view> 
+	<view>
 		<view v-for="(item, index) in tweetArticle" :key="index" class="boxClass">
-			<view class="timeClass">{{item.create_time}}</view>
-			<view class="boxClass1" @click="selete(item)">
-				<view class="titleClass generalStyle">{{item.title}}</view>
-				<view class="imgClass generalStyle">
-					<image :src="item.image" style="width: 100%;" mode="widthFix" role="img"></image>
-				</view>
-				<!-- <rich-text class="textClass generalStyle" :nodes="item.content"></rich-text> -->
-				<view class="detailClass generalStyle">
-					<text class="detailText">查看详情</text>
-					<text class="more-icon jdticon icon-you"></text>
+			<view >
+				<view class="timeClass">{{item.create_time}}</view>
+				<view class="boxClass1" @click="selete(item)">
+					<view class="titleClass generalStyle">{{item.title}}</view>
+					<view class="imgClass generalStyle">
+						<image :src="item.image" style="width: 100%;" mode="widthFix" role="img"></image>
+					</view>
+					<!-- <rich-text class="textClass generalStyle" :nodes="item.content"></rich-text> -->
+					<view class="detailClass generalStyle">
+						<text class="detailText">查看详情</text>
+						<text class="more-icon jdticon icon-you"></text>
+					</view>
 				</view>
 			</view>
 		</view>
+		
+		<!-- 缺省提示 -->
+		<view style="margin-top: 360upx;" v-if="tweetArticle.length == 0">
+			<u-empty text="暂无系统通知哦~" mode="message"></u-empty>
+		</view>
+		
 	</view>
 </template>
 
 <script>
-	export default{
-		data(){
-			return{
-				tweetArticle:[],	//推文列表
+	export default {
+		data() {
+			return {
+				tweetArticle: [], //推文列表
+				level: 0, //权限等级
+				userInfo: '', //用户信息
 			}
 		},
-		onLoad(){
-			
+		onLoad() {
+
 		},
-		onShow(){
-			this.loadData();
+		onShow() {
+			this.userData();
 		},
-		methods:{
+		methods: {
+
+			//-------------------------------乘客数据读取-------------------------------
+			userData: function() {
+				uni.showLoading({
+					title: '加载信息中...'
+				})
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.userInfo = res.data;
+						this.loadData();
+						if (this.userInfo.duty == '村级职责人员') {
+							this.level = 1;
+						} else if (this.userInfo.duty == '县级职责人员' || this.userInfo.duty == '市级职责人员') {
+							this.level = 2;
+						}
+						uni.hideLoading()
+						console.log('获取个人信息', this.userInfo)
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title: '您暂未登录，已为您跳转登录页面',
+							icon: 'none',
+							success: () => {
+								uni.navigateTo({
+									url: '../../pages/GRZX/userLogin',
+								})
+							}
+						})
+					}
+				});
+			},
 			//------------------加载通知----------------
-			loadData:function(){
+			loadData: function() {
 				var that = this;
 				uni.request({
-					url:this.$home.KyInterface.getNotice.Url,
-					method:this.$home.KyInterface.getNotice.method,
-					success:(res)=>{
-						// console.log('公告通知',res)
+					url: this.$home.KyInterface.getNotice.Url,
+					method: this.$home.KyInterface.getNotice.method,
+					success: (res) => {
+						console.log('公告通知', res)
 						this.tweetArticle = res.data.data;
 						// console.log(this.tweetArticle)
 					},
-					fail:function(err){
+					fail: function(err) {
 						console.log(err)
 						uni.showToast({
-							title:'公告通知',
-							icon:'none'
+							title: '公告通知',
+							icon: 'none'
 						})
 					}
 				})
 			},
-			
+
 			//------------------选择通知----------------
-			selete(e){
+			selete(e) {
 				uni.setStorage({
-					key:'detailTweet',
-					data:e
+					key: 'detailTweet',
+					data: e
 				})
 				uni.navigateTo({
-					url:'detailTweet'
+					url: 'detailTweet'
 				})
 			},
-			
+
 		}
-		
+
 	}
 </script>
 
 <style lang="scss">
-	page{
+	page {
 		background-color: #F5F9FA;
 	}
-	.boxClass{
+
+	.boxClass {
 		display: flex;
 		flex-direction: column;
 		margin-top: 24upx;
 		margin-bottom: 30upx;
 	}
-	.boxClass1{
+
+	.boxClass1 {
 		width: 92%;
 		background-color: #FFFFFF;
 		margin-top: 20upx;
@@ -86,17 +131,22 @@
 		//margin-bottom: 20upx;
 		border-radius: 10upx;
 	}
-	.generalStyle{
+
+	.generalStyle {
 		width: 92%;
 		margin-left: 4%;
 	}
-	.titleClass{	//标题
+
+	.titleClass {
+		//标题
 		font-size: 32upx;
 		color: #333333;
 		line-height: 90upx;
 		height: 90upx;
 	}
-	.textClass{		//正文
+
+	.textClass {
+		//正文
 		font-size: 28upx;
 		color: #333333;
 		line-height: 50upx;
@@ -105,25 +155,32 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
-		
+
 	}
-	.imgClass{		//图片
-	
+
+	.imgClass {
+		//图片
+
 	}
-	.more-icon{
+
+	.more-icon {
 		font-size: 32upx;
 		padding-left: 79%;
 	}
-	.detailClass{
+
+	.detailClass {
 		height: 80upx;
 		line-height: 77upx;
 		// border-top: 1rpx solid #DDDDDD;
 	}
-	.detailText{
+
+	.detailText {
 		font-size: 24upx;
 		color: #707070;
 	}
-	.timeClass{		//时间
+
+	.timeClass {
+		//时间
 		color: #707070;
 		font-size: 28upx;
 		height: 40upx;
