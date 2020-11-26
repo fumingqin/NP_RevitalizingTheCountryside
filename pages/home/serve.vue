@@ -86,7 +86,7 @@
 				},{
 					IsUse: true,
 					// clickURL: "../../pages_WSSC/pages/WSSC/goodsList",
-					clickURL: "",
+					clickURL: "../../pages_WSSC/pages/WSSC/onlineShoppingMall/osm_homePage",
 					ImageURL1: "../../static/home/serve/sc.png", //亮
 					ImageURL2: "../../static/home/serve/sc2.png", //暗
 					ItemTitle: "网上商城",
@@ -131,8 +131,8 @@
 				},{
 					IsUse: true,
 					clickURL: "../GRZX/notice",
-					ImageURL1: "../../static/home/serve/kprw.png", //亮
-					ImageURL2: "../../static/home/serve/kprw2.png", //暗
+					ImageURL1: "../../static/home/serve/xttz.png", //亮
+					ImageURL2: "../../static/home/serve/xttz2.png", //暗
 					ItemTitle: "系统通知",
 					style: "sv_print",
 				}],
@@ -145,14 +145,15 @@
 					ImageURL2: "../../static/home/serve/kjtpy2.png", //暗
 					ItemTitle: "特派服务",
 					style: "sv_print",
-				}, {
-					IsUse: true,
-					clickURL: "",
-					ImageURL1: "../../static/home/serve/sphy.png", //亮
-					ImageURL2: "../../static/home/serve/sphy2.png", //暗
-					ItemTitle: "视频会议",
-					style: "sv_print",
 				},
+				// {
+				// 	IsUse: true,
+				// 	clickURL: "",
+				// 	ImageURL1: "../../static/home/serve/sphy.png", //亮
+				// 	ImageURL2: "../../static/home/serve/sphy2.png", //暗
+				// 	ItemTitle: "视频会议",
+				// 	style: "sv_print",
+				// },
 				{
 					IsUse: true,
 					// clickURL: "../../pages_WSSC/pages/WSSC/checkGoods",

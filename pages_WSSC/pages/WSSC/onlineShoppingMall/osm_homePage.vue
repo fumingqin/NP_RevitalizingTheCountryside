@@ -2,6 +2,11 @@
 	<view>
 		<!-- 顶部搜索栏 -->
 		<view class="search">
+			<view style="width: 22%;padding-top: 2upx;display: flex;" @click="returnJump">
+				<u-icon name="arrow-left" color="#fff" size="42"></u-icon>
+				<view class="return">返回</view>
+			</view>
+			
 			<view style="width: 100%;">
 				<u-search placeholder="搜索" :disabled="true" :show-action="false" bg-color="rgba(255,255,255,0.9)" @click="searchClick"></u-search>
 			</view>
@@ -20,6 +25,10 @@
 				<view class="item_view" v-for="(item,index) in classification" :key="index" @click="itemClick(item.name)">
 					<image class="view_image" :src="item.image" mode="aspectFit"></image>
 					<text class="view_text">{{item.name}}</text>
+				</view>
+				<view class="item_view" @click="itemClick2">
+					<image class="view_image" src="../../../../static/WSSC/genduo.png" mode="aspectFit"></image>
+					<text class="view_text">查看更多</text>
 				</view>
 			</view>
 		</view>
@@ -270,10 +279,10 @@
 						type: '0'
 					},
 					success: (res) => {
-						console.log('轮播区', res)
+						// console.log('轮播区', res)
 						if (res.data.status == true) {
 							this.rotationChart.push(res.data.data.image)
-							console.log('轮播区', this.rotationChart)
+							// console.log('轮播区', this.rotationChart)
 						} else {
 							uni.showToast({
 								title: res.data.msg,
@@ -331,15 +340,28 @@
 					})
 				} else {
 					uni.navigateTo({
-						url: entrance,
+						url: 'osm_list',
 					})
 				}
+			},
+			
+			//点击跳转
+			itemClick2: function() {
+				uni.navigateTo({
+					url:'./osm_seeMore'
+				})
 			},
 			
 			//点击搜索跳转
 			searchClick:function(){
 				uni.navigateTo({
 					url:'osm_search'
+				})
+			},
+			
+			returnJump:function(){
+				uni.navigateBack({
+					delta:1,
 				})
 			},
 
@@ -377,8 +399,14 @@
 		display: flex;
 		z-index: 999;
 		margin-top: 74upx;
-		margin-left: 30upx;
+		margin-left: 20upx;
 		width: 92%;
+	}
+	
+	.return{
+		font-size: 30upx;
+		color: #FFFFFF;
+		padding-top: 10upx;
 	}
 
 	.sh_news {

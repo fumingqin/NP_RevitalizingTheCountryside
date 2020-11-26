@@ -19,7 +19,6 @@
         /* 模块配置 */
         "modules" : {
             "Maps" : {},
-            "OAuth" : {},
             "Payment" : {},
             "Share" : {},
             "VideoPlayer" : {},
