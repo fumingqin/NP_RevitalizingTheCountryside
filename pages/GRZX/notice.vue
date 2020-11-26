@@ -138,6 +138,7 @@
 		color: #333333;
 		line-height: 90upx;
 		height: 90upx;
+		font-weight: bold;
 	}
 
 	.textClass {
