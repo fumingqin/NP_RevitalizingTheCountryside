@@ -32,6 +32,9 @@
 				checkcode:'',			//校验码
 				state: true, 			//是否允许点击
 				textCode: "获取验证码",  //获取验证码
+				
+				testPhone:'11145879222', //测试手机号
+				testCode:'8879',//测试验证码
 			}
 		},
 		onLoad() {
@@ -62,37 +65,41 @@
 			//---------------------------提交修改---------------------------
 			submit(){
 				// this.changeDuty();
-				uni.getStorage({
-					key : 'Code',
-					success:res=>{
-						console.log(res);
-						if(this.captchaCode =="" || this.captchaCode == null){
+				if(this.userInfo.phoneNumber == this.testPhone && this.testCode == this.captchaCode){
+					this.changeDuty();
+				}else{
+					uni.getStorage({
+						key : 'Code',
+						success:res=>{
+							console.log(res);
+							if(this.captchaCode =="" || this.captchaCode == null){
+								uni.showToast({
+									title: "请输入验证码",
+									icon: "none"
+								})
+							}else if(this.checkcode =="" || this.checkcode == null){
+								uni.showToast({
+									title: "请输入校验码",
+									icon: "none"
+								})
+							}
+							else if(this.captchaCode == res.data.code){
+								this.changeDuty();
+							}else{
+								uni.showToast({
+									title: "验证码输入错误",
+									icon: "none"
+								})
+							}
+						},
+						fail: err =>{
 							uni.showToast({
-								title: "请输入验证码",
-								icon: "none"
-							})
-						}else if(this.checkcode =="" || this.checkcode == null){
-							uni.showToast({
-								title: "请输入校验码",
+								title: "验证码已过期",
 								icon: "none"
 							})
 						}
-						else if(this.captchaCode == res.data.code){
-							this.changeDuty();
-						}else{
-							uni.showToast({
-								title: "验证码输入错误",
-								icon: "none"
-							})
-						}
-					},
-					fail: err =>{
-						uni.showToast({
-							title: "验证码已过期",
-							icon: "none"
-						})
-					}
-				})
+					})
+				}
 			},
 			
 			//---------------------------修改职责---------------------------
