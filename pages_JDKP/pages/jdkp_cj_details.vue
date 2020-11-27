@@ -623,8 +623,8 @@
 			border-radius: 60upx;
 
 			.inputStyle {
-				height: 96upx;
-				padding: 0 44upx;
+				// height: 96upx;
+				padding: 26upx 44upx 26upx 44upx;
 				font-size: 30upx;
 			}
 		}

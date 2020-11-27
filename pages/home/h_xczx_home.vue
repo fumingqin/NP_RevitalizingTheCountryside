@@ -325,7 +325,7 @@
 					fail: function() {
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '服务器网络异常',
+							title: '网络异常，请下拉刷新页面',
 							icon: 'none'
 						})
 					}
@@ -366,7 +366,7 @@
 					fail: function() {
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '服务器网络异常',
+							title: '网络异常，请下拉刷新页面',
 							icon: 'none'
 						})
 					}
@@ -408,7 +408,7 @@
 					fail: function() {
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '服务器网络异常',
+							title: '网络异常，请下拉刷新页面',
 							icon: 'none'
 						})
 					}
@@ -447,7 +447,7 @@
 					fail: function() {
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '服务器网络异常',
+							title: '网络异常，请下拉刷新页面',
 							icon: 'none'
 						})
 					}
@@ -486,7 +486,7 @@
 					fail: function() {
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '服务器网络异常',
+							title: '网络异常，请下拉刷新页面',
 							icon: 'none'
 						})
 					}
