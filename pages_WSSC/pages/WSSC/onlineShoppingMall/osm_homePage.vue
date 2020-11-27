@@ -111,58 +111,6 @@
 			return {
 				rotationChart: [], //轮播图
 				count: 2, //徽标指数
-				functionArray: [{
-					name: '武夷岩茶', //功能名称
-					image: '../../../../static/WSSC/cha.png', //功能图标
-					display: true, //是否显示
-					entrance: './osm_list', //跳转路径
-				}, {
-					name: '武夷留香',
-					image: '../../../../static/WSSC/wuyiliuxiang.png',
-					display: true,
-					entrance: './osm_orderList',
-				}, {
-					name: '顺和笋干',
-					image: '../../../../static/WSSC/shungan.png',
-					display: true,
-					entrance: '',
-				}, {
-					name: '建阳桔柚',
-					image: '../../../../static/WSSC/lugan.png',
-					display: true,
-					entrance: '',
-				}, {
-					name: '五夫白莲',
-					image: '../../../../static/WSSC/bailian.png',
-					display: true,
-					entrance: '',
-				}, {
-					name: '建瓯栗子', //功能名称
-					image: '../../../../static/WSSC/lizi.png', //功能图标
-					display: true, //是否显示
-					entrance: '', //跳转路径
-				}, {
-					name: '顺昌菌菇',
-					image: '../../../../static/WSSC/jungu.png',
-					display: true,
-					entrance: '',
-				}, {
-					name: '武夷熏鹅',
-					image: '../../../../static/WSSC/xunya.png',
-					display: true,
-					entrance: '',
-				}, {
-					name: '建瓯光饼',
-					image: '../../../../static/WSSC/guangbing.png',
-					display: true,
-					entrance: '',
-				}, {
-					name: '查看更多',
-					image: '../../../../static/WSSC/genduo.png',
-					display: true,
-					entrance: './osm_seeMore',
-				}], //功能数组
-				
 				realTimeInfo: [{
 						title: '土特产',
 						content: '农家土货',
@@ -331,18 +279,11 @@
 			},
 
 			//点击跳转
-			itemClick: function(entrance) {
+			itemClick: function(name) {
 				// console.log(entrance)
-				if (entrance == '') {
-					uni.showToast({
-						title: '敬请期待',
-						icon: 'none'
-					})
-				} else {
-					uni.navigateTo({
-						url: 'osm_list',
-					})
-				}
+				uni.navigateTo({
+					url: 'osm_list?name=' + name,
+				})
 			},
 			
 			//点击跳转

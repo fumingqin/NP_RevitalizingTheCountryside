@@ -9,22 +9,22 @@
 		<view class="u-menu-wrap">
 			<scroll-view scroll-y scroll-with-animation class="u-tab-view menu-scroll-view" :scroll-top="scrollTop"
 			 :scroll-into-view="itemId">
-				<view v-for="(item,index) in tabbar" :key="index" class="u-tab-item" :class="[current == index ? 'u-tab-item-active' : '']"
+				<view v-for="(item,index) in list" :key="index" class="u-tab-item" :class="[current == index ? 'u-tab-item-active' : '']"
 				 @tap.stop="swichMenu(index)">
 					<text class="u-line-1">{{item.name}}</text>
 				</view>
 			</scroll-view>
 			<scroll-view :scroll-top="scrollRightTop" scroll-y scroll-with-animation class="right-box" @scroll="rightScroll">
 				<view class="page-view">
-					<view class="class-item" :id="'item' + index" v-for="(item , index) in tabbar" :key="index">
+					<view class="class-item" :id="'item' + index" v-for="(item , index) in list" :key="index">
 						<view class="item-title">
 							<!-- <text>{{item.name}}</text> -->
-							<image style="width: 100%; height: 220upx;margin: 20upx 0;" :src="item.guanggao" mode="aspectFill"></image>
+							<image style="width: 100%; height: 220upx;margin: 20upx 0 0 0;" src="http://120.24.144.6:8081/30327a28540c43498660cf3c6d4af407.png" mode="aspectFill"></image>
 						</view>
 						<view class="item-container">
-							<view class="thumb-box" v-for="(item1, index1) in item.foods" :key="index1">
-								<image class="item-menu-image" :src="item1.icon" mode=""></image>
-								<view class="item-menu-name">{{item1.name}}</view>
+							<view class="thumb-box" v-for="(item1, index1) in item.food" :key="index1">
+								<image class="item-menu-image" :src="item1.image" mode="aspectFit"></image>
+								<view class="item-menu-name">{{item1.title}}</view>
 							</view>
 						</view>
 					</view>
@@ -49,16 +49,42 @@
 				arr: [],
 				scrollRightTop: 0, // 右边栏目scroll-view的滚动条高度
 				timer: null, // 定时器
-				
+				list:[],
 			}
 		},
 		onLoad() {
-			
+			this.listData();
 		},
 		onReady() {
 			this.getMenuItemTop()
 		},
 		methods: {
+			//---------------列表数据----------------
+			listData:function(){
+				uni.request({
+					url: this.$wssc.KyInterface.getMallSelectSort.Url,
+					method: this.$wssc.KyInterface.getMallSelectSort.method,
+					success: (res) => {
+						console.log('轮播区', res)
+						if (res.data.status == true) {
+							this.list = res.data.data
+							console.log(this.list)
+						} else {
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+					},
+					fail: function() {
+						uni.showToast({
+							title: '首页轮播图网络加载异常',
+							icon: 'none'
+						})
+					}
+				})
+			},
+			
 			// 点击左边的栏目切换
 			async swichMenu(index) {
 				if(this.arr.length == 0) {
@@ -256,7 +282,7 @@
 	}
 
 	.class-item:last-child {
-		min-height: 100vh;
+		// min-height: 100vh;
 	}
 
 	.item-title {
@@ -274,6 +300,7 @@
 	.item-container {
 		display: flex;
 		flex-wrap: wrap;
+		padding-bottom: 20upx;
 	}
 
 	.thumb-box {

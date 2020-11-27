@@ -94,10 +94,10 @@
 				//以下示例截取淘宝的关键字，请替换成你的接口
 				uni.showLoading();
 				uni.request({
-					url:this.$mqfk.KyInterface.getFeedbackByKeyword.Url,
-					method:this.$mqfk.KyInterface.getFeedbackByKeyword.method,
+					url:this.$wssc.KyInterface.getHomepageByKey.Url,
+					method:this.$wssc.KyInterface.getHomepageByKey.method,
 					data:{
-						keyword:keyword
+						key:keyword
 					},
 					success: (res) => {
 						uni.hideLoading();
@@ -119,16 +119,14 @@
 					keywordArr = [];
 				for (var i = 0; i < len; i++) {
 					var content = keywords[i].content;
-					var create_time = keywords[i].create_time;
-					var title = keywords[i].title;
+					var name = keywords[i].name;
 					//定义高亮#9f9f9f
-					var html = title.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
+					var html = name.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
 					html = '<div>' + html + '</div>';
 					var tmpObj = {
 						content: content,
 						htmlStr: html,
-						create_time:create_time,
-						title:title
+						name:name
 					};
 					keywordArr.push(tmpObj)
 					// console.log(keywordArr)
@@ -145,31 +143,17 @@
 				console.log(key)
 				var array = {
 					content: key.content,
-					title: key.title,
-					create_time: key.create_time,
+					name: key.name,
 				}
 				if(this.historyLines) {
 					for(let i = 0; i <= this.historyLines.length;i++){
 						this.historyLines.splice(i,1);
 					}
-					this.historyLines.unshift(array.title);
+					this.historyLines.unshift(array.name);
 				}
-				uni.setStorage({
-					key:'historyLines',
-					data:this.historyLines,
+				uni.navigateTo({
+					url: './osm_list?name='+this.historyLines
 				})
-				uni.setStorage({
-					key: 'listTitleData',
-					data: array,
-					success() {
-						uni.navigateTo({
-							url: '../../../../pages_MQFK/pages/publicFeedback/pf_details'
-						})
-					},
-					fail() {
-						
-					}
-				});
 			},
 			
 			//---------------------------------清除历史---------------------------------
