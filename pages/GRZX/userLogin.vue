@@ -8,7 +8,7 @@
 			<!-- 手机号 -->
 			<view class="inputItem phoneNum">
 				<image src="../../static/GRZX/shouji.png" class="iconClass1"></image>
-				<input type="number" placeholder="手机号码" maxlength="11" class="inputClass" v-model="phoneNumber" @input="inputChange1" />
+				<input type="number" placeholder="手机号码" maxlength="11" class="inputClass" v-model="phoneNumber" @input="inputChange1" @blur="changePhone"/>
 			</view>
 			<!-- 验证码 -->
 			<view class="inputItem Captcha">
@@ -41,6 +41,9 @@
 				system: '', 	// 系统版本
 				platform: '',   // 平台
 				whetherClick:true,//是否允许点击
+				
+				testPhone:'11145879222', //测试手机号
+				testCode:'8879',//测试验证码
 			}
 		},
 		onLoad(options) {
@@ -142,7 +145,9 @@
 				var phone = this.phoneNumber;
 				var captcha = this.captchaCode;
 				var reg=(/^1(3|4|5|6|7|8|9)\d{9}$/);
-				if (phone == null || phone == "") {
+				if(phone == this.testPhone){
+					that.requestInter(phone, captcha);
+				}else if (phone == null || phone == "") {
 					uni.showToast({
 						title: "请输入手机号码",
 						icon: "none"
@@ -188,7 +193,9 @@
 										})
 									}else{
 										uni.setStorageSync('userInfo', data);
-										uni.removeStorageSync('captchaCode');
+										if(phone != that.testPhone){
+											uni.removeStorageSync('captchaCode');
+										}
 										that.successReturn(); //登陆成功后返回
 									}
 								}
@@ -505,6 +512,16 @@
 					})
 				}
 			},
+			
+			changePhone(){
+				if(this.phoneNumber == this.testPhone){
+					uni.setStorageSync('captchaCode',
+						{
+							code: this.testCode,
+							phone: this.testPhone,
+						})
+				}
+			},
 
 			//-------------------------------------获取验证码的请求----------------------------
 			getCode: function(timer, second, phoneNumber) {
@@ -538,13 +555,15 @@
 								icon: "none"
 							})
 						} else { //成功发送验证码
-							uni.setStorage({
-								key: 'captchaCode',
-								data: {
-									code: res.data.data,
-									phone: phoneNumber,
-								}
-							})
+							if(that.phoneNumber != that.testPhone){
+								uni.setStorage({
+									key: 'captchaCode',
+									data: {
+										code: res.data.data,
+										phone: phoneNumber,
+									}
+								})
+							}
 							uni.showToast({
 								title: "验证码已发送，仅在5分钟内有效!",
 								icon: "none"

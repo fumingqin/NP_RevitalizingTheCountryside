@@ -129,9 +129,9 @@
                 "iosStyle" : "common",
                 "androidStyle" : "default",
                 "android" : {
-                    "hdpi" : "",
-                    "xhdpi" : "",
-                    "xxhdpi" : ""
+                    "hdpi" : "C:/Users/32589/Desktop/启动图PNG/480x762.png",
+                    "xhdpi" : "C:/Users/32589/Desktop/启动图PNG/振兴乡村启动图720x1242.png",
+                    "xxhdpi" : "C:/Users/32589/Desktop/启动图PNG/振兴乡村启动图1080x1882.png"
                 }
             }
         },

@@ -325,7 +325,7 @@
 					fail: function() {
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '首页轮播图网络加载异常',
+							title: '服务器网络异常',
 							icon: 'none'
 						})
 					}
@@ -366,7 +366,7 @@
 					fail: function() {
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '首页banner加载异常',
+							title: '服务器网络异常',
 							icon: 'none'
 						})
 					}
@@ -408,7 +408,7 @@
 					fail: function() {
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '跑马灯内容加载异常',
+							title: '服务器网络异常',
 							icon: 'none'
 						})
 					}
@@ -447,7 +447,7 @@
 					fail: function() {
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '乡村美景网络加载异常',
+							title: '服务器网络异常',
 							icon: 'none'
 						})
 					}
@@ -486,7 +486,7 @@
 					fail: function() {
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '公开项目网络加载异常',
+							title: '服务器网络异常',
 							icon: 'none'
 						})
 					}

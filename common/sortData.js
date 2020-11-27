@@ -2,7 +2,8 @@
 //参数2：字段名
 //参数3：顺序：0，倒序：1
 
-function SortData(arr,title,sort) {
+function SortData(list,title,sort) {
+	var arr = list;
 	if (Array.isArray(arr)) {
 		for (var i = 0; i < arr.length - 1; i++) {
 			var minIdex = i;
