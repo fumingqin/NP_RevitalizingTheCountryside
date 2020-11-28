@@ -483,14 +483,14 @@
 											res.data.data.sex="女";
 										}
 										var list1={
-											id:res.data.data.id, //乘车人id
-											user_type:res.data.data.user_type,   //用户类别 成人/儿童 
-											name:res.data.data.name,   //用户姓名   
-											sex:res.data.data.sex,   //用户性别   
-										  	code:res.data.data.code,   //用户身份证   
-										  	phone:res.data.data.phone,   //用户手机号   
-										  	default_self:res.data.data.default_self,   //用户是否本人 true/false 
-										  	emergency_content:res.data.data.emergency_content, //是否设置为紧急联系人 true/false
+											PassengerId:res.data.data.id, //乘车人id
+											userType:res.data.data.user_type,   //用户类别 成人/儿童 
+											userName:res.data.data.name,   //用户姓名   
+											userSex:res.data.data.sex,   //用户性别   
+										  	userCodeNum:res.data.data.code,   //用户身份证   
+										  	userPhoneNum:res.data.data.phone,   //用户手机号   
+										  	userDefault:res.data.data.default_self,   //用户是否本人 true/false 
+										  	userEmergencyContact:res.data.data.emergency_content, //是否设置为紧急联系人 true/false
 											hiddenIndex:1,  //1代表选中
 										}
 										passList.push(list1);

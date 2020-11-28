@@ -94,7 +94,7 @@
 					key:"passengerList",
 					success(res2) {
 						for(var j=0;j<res2.data.length;j++){
-							list.push(res2.data[j].id);
+							list.push(res2.data[j].PassengerId);
 						}
 					}
 				})
@@ -235,7 +235,22 @@
 						icon:"none"
 					})
 				}else{
-					uni.setStorageSync('passengerList',array);
+					var list = [];
+					for(var item of array){
+						var obj = {
+							PassengerId:item.id, //乘车人id
+							userType:item.user_type,   //用户类别 成人/儿童 
+							userName:item.name,   //用户姓名   
+							userSex:item.sex,   //用户性别   
+						  	userCodeNum:item.code,   //用户身份证   
+						  	userPhoneNum:item.phone,   //用户手机号   
+						  	userDefault:item.default_self,   //用户是否本人 true/false 
+						  	userEmergencyContact:item.emergency_content, //是否设置为紧急联系人 true/false
+							hiddenIndex:1,  //1代表选中
+						}
+						list.push(obj);
+					}
+					uni.setStorageSync('passengerList',list);
 					uni.navigateBack();	
 				}			
 			}
