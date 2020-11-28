@@ -100,6 +100,20 @@ const KyInterface = {
 		name:'获取商城首页的分类',
 		method:'POST',
 	},
+	
+	//--------------------------------------编辑接口--------------------------------------
+	getMallSelectSort:{
+		Url:Url + '/api/shopMall/getMallSelectSort',
+		name:'获取选择商品分类',
+		method:'POST',
+	},
+	
+	//--------------------------------------编辑接口--------------------------------------
+	getHomepageByKey:{
+		Url:Url + '/api/shopMall/getHomepageByKey',
+		name:'获取选择商品分类',
+		method:'POST',
+	},
 }
 
 // 接口声明区
