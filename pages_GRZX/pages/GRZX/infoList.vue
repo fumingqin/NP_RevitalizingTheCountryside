@@ -3,16 +3,16 @@
 		<!-- 常用乘车人 -->
 		<view v-if="state==1&&show" class="mt">
 			<view class="boxClass" v-for="(item, index) in passengerList" :key="index" @click="editPassenger(item)">  <!--个人中心页面进入 -->
-				<view class="nameClass">{{item.userName}}</view>
-				<view class="sexClass">{{item.userSex}}</view>
+				<view class="nameClass">{{item.name}}</view>
+				<view class="sexClass">{{item.sex}}</view>
 				<view class="codeClass fontStyle">证件号</view>
-				<view class="codeNumClass fontStyle">{{item.userCodeNum}}</view>
+				<view class="codeNumClass fontStyle">{{item.code}}</view>
 				<view class="phoneClass fontStyle">联系电话</view>
-				<view class="phoneNumClass fontStyle">{{item.userPhoneNum}}</view>
+				<view class="phoneNumClass fontStyle">{{item.phone}}</view>
 				<view class="redBox">
-					<view class="typeClass">{{item.userType}}</view>
-					<text style="font-size: 24upx;color: #2C2D2D;line-height: 57upx;margin-left: 20upx;">{{item.userauditState}}</text>
-					<text v-if="item.userDefault==true" class="fontClass" style="width: 80upx;">本人</text>
+					<view class="typeClass">{{item.user_type}}</view>
+					<text style="font-size: 24upx;color: #2C2D2D;line-height: 57upx;margin-left: 20upx;">{{item.code_type}}</text>
+					<text v-if="item.default_self==true" class="fontClass" style="width: 80upx;">本人</text>
 				</view>
 				<view class="btnRight">
 					<image src="../../static/GRZX/btnRight.png" style="width: 100%;height: 100%;"></image>
@@ -25,16 +25,16 @@
 		
 		<view v-if="state==2&&show" class="mt">
 			<view class="boxClass" v-for="(item, index) in passengerList" :key="index" @click="selete(item)">  <!--个人中心页面进入 -->
-				<view class="nameClass">{{item.userName}}</view>
-				<view class="sexClass">{{item.userSex}}</view>
+				<view class="nameClass">{{item.name}}</view>
+				<view class="sexClass">{{item.sex}}</view>
 				<view class="codeClass fontStyle">身份证</view>
-				<view class="codeNumClass fontStyle">{{item.userCodeNum}}</view>
+				<view class="codeNumClass fontStyle">{{item.code}}</view>
 				<view class="phoneClass fontStyle">联系电话</view>
-				<view class="phoneNumClass fontStyle">{{item.userPhoneNum}}</view>
+				<view class="phoneNumClass fontStyle">{{item.phone}}</view>
 				<view class="redBox">
-					<view class="typeClass">{{item.userType}}</view>
-					<text style="font-size: 24upx;color: #2C2D2D;line-height: 57upx;margin-left: 20upx;">{{item.userauditState}}</text>
-					<text v-if="item.userDefault==true" class="fontClass" style="width: 80upx;">本人</text>
+					<view class="typeClass">{{item.user_type}}</view>
+					<text style="font-size: 24upx;color: #2C2D2D;line-height: 57upx;margin-left: 20upx;">{{item.code_type}}</text>
+					<text v-if="item.default_self==true" class="fontClass" style="width: 80upx;">本人</text>
 				</view>
 				<view v-if="item.deleteIndex==0" class="btnCheck"> 
 					<image src="../../static/GRZX/btnUncheck.png" style="width: 100%;height: 100%;"></image>
@@ -126,7 +126,7 @@
 					key:"passengerList",
 					success(res2) {
 						for(var j=0;j<res2.data.length;j++){
-							list.push(res2.data[j].passengerId);
+							list.push(res2.data[j].id);
 						}
 					}
 				})
@@ -150,20 +150,20 @@
 									title: res1.data.msg,
 									icon:'none',
 								});
-								if(res1.data.status){
+								if(res1.data.status && res1.data.data.length !=0){
 									that.show = true;
 									var  obj = new Object();
 									for (let item of res1.data.data){
-										var index = list.indexOf(item.PassengerId);
+										var index = list.indexOf(item.id);
 										obj = {
-											userName:item.UserName,
-											userDefault:item.IsuserDefault,
-											passengerId:item.PassengerId,
-											userCodeNum:item.UserCodeNum,
-											userPhoneNum:item.UserPhoneNum,
-											userSex:item.UserSex == 0?'男':'女',
-											userType:item.UserType,
-											userauditState:item.UserauditState,
+											name:item.name,
+											default_self:item.default_self,
+											id:item.id,
+											code:item.code,
+											phone:item.phone,
+											sex:item.sex == 0?'男':'女',
+											user_type:item.user_type,
+											code_type:item.code_type,
 											deleteIndex:0,
 											hiddenIndex:index>-1?1:0,
 										}
@@ -175,7 +175,7 @@
 										if(array[i].hiddenIndex==1){
 											list1.push(array[i]);
 										}
-										if(array[i].userDefault==true){
+										if(array[i].default_self==true){
 											defaultList.unshift(array[i]);//置顶
 										}else{
 											defaultList.push(array[i]);
@@ -288,7 +288,7 @@
 						url:that.$GrzxInter.Interface.deletuserInfoList.value,
 						data:{
 							userId:that.userId,
-							passengerId:deleteList[j].passengerId,
+							id:deleteList[j].id,
 						},
 						method:that.$GrzxInter.Interface.deletuserInfoList.method,
 						success(res) {

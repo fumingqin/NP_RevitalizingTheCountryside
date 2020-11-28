@@ -115,6 +115,25 @@ const Interface = {
 		pages: [],
 	},
 
+	userInfoList: {
+		value: Url + '/api/passenger/userInfoList',
+		name: '获取乘车人信息',
+		method: 'POST',
+		pages: [],
+	},
+	changeUserInfo: {
+		value: Url + '/api/passenger/changeUserInfo',
+		name: '修改乘车人信息',
+		method: 'POST',
+		pages: [],
+	},
+	deletuserInfoList: {
+		value: Url + '/api/passenger/deletuserInfoList',
+		name: '删除乘车人信息',
+		method: 'POST',
+		pages: [],
+	},
+
 	//乘车人信息开始
 	// userInfoList: {
 	// 	value: Url1 + '/api/person/userInfoList',

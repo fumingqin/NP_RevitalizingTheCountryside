@@ -2,20 +2,20 @@
 	<view class="content">	
 		<view class="passengerList" v-if="show">
 			<view class="boxClass" v-for="(item, index) in passengerList" :key="index" @click="choosePassenger(item)">  <!--非个人中心页面进入 -->
-				<view class="nameClass">{{item.userName}}</view>
-				<view class="sexClass" name="userSex">{{item.userSex}}</view>
-				<!-- <view class="typeClass">{{item.userType}}</view> -->
+				<view class="nameClass">{{item.name}}</view>
+				<view class="sexClass" name="sex">{{item.sex}}</view>
+				<!-- <view class="typeClass">{{item.user_type}}</view> -->
 				<view class="codeClass fontStyle">证件号</view>
-				<view class="codeNumClass fontStyle">{{item.userCodeNum}}</view>
+				<view class="codeNumClass fontStyle">{{item.code}}</view>
 				<view class="phoneClass fontStyle">联系电话</view>
-				<view class="phoneNumClass fontStyle">{{item.userPhoneNum}}</view>
+				<view class="phoneNumClass fontStyle">{{item.phone}}</view>
 				<view>
 					<image v-if="item.hiddenIndex == 1"  class="checkClass" src="../../static/GRZX/checked.png"></image>
 				</view>
 				<view class="redBox">
-					<view class="typeClass">{{item.userType}}</view>
-					<text style="font-size: 24upx;color: #2C2D2D;line-height: 57upx;margin-left: 20upx;">{{item.userauditState}}</text>
-					<text v-if="item.userDefault==true" class="fontClass" style="width: 80upx;">本人</text>
+					<view class="typeClass">{{item.user_type}}</view>
+					<text style="font-size: 24upx;color: #2C2D2D;line-height: 57upx;margin-left: 20upx;">{{item.code_type}}</text>
+					<text v-if="item.default_self==true" class="fontClass" style="width: 80upx;">本人</text>
 					<!-- <text v-if="item.userEmergencyContact==true" class="fontClass" style="width: 80upx;">联系人</text> -->
 				</view>
 			</view>
@@ -94,7 +94,7 @@
 					key:"passengerList",
 					success(res2) {
 						for(var j=0;j<res2.data.length;j++){
-							list.push(res2.data[j].passengerId);
+							list.push(res2.data[j].id);
 						}
 					}
 				})
@@ -119,16 +119,16 @@
 										that.show = true;
 										var  obj = new Object();
 										for (let item of res1.data.data){
-											var index = list.indexOf(item.PassengerId);
+											var index = list.indexOf(item.id);
 											obj = {
-												userName:item.UserName,
-												userDefault:item.IsuserDefault,
-												passengerId:item.PassengerId,
-												userCodeNum:item.UserCodeNum,
-												userPhoneNum:item.UserPhoneNum,
-												userSex:item.UserSex == 0?'男':'女',
-												userType:item.UserType,
-												userauditState:item.UserauditState,
+												name:item.name,
+												default_self:item.Isdefault_self,
+												id:item.id,
+												code:item.code,
+												phone:item.phone,
+												sex:item.sex == 0?'男':'女',
+												user_type:item.user_type,
+												code_type:item.code_type,
 												deleteIndex:0,
 												hiddenIndex:index>-1?1:0,
 											}
@@ -194,7 +194,7 @@
 			
 			//--------------------------------选择乘车人------------------------------
 			choosePassenger(e){
-				if(!this.selectState && e.userType == "免票儿童"){
+				if(!this.selectState && e.user_type == "免票儿童"){
 					uni.showToast({
 						title: '当前不支持选择免票儿童',
 						icon:'none',

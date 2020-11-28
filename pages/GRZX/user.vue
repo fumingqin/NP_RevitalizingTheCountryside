@@ -272,13 +272,13 @@
 			passengerClick(){
 				let user = uni.getStorageSync('userInfo');
 				if(user.phoneNumber != "" && user.phoneNumber != null){
-					// uni.navigateTo({
-					// 	url: this.$GrzxInter.Route.infoList.url,
-					// })
-					uni.showToast({
-						title: '敬请期待',
-						icon:'none'
-					});
+					uni.navigateTo({
+						url: this.$GrzxInter.Route.infoList.url,
+					})
+					// uni.showToast({
+					// 	title: '敬请期待',
+					// 	icon:'none'
+					// });
 				}else{
 					uni.showToast({
 						title: '请先登录',
