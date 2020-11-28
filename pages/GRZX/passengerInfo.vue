@@ -122,7 +122,7 @@
 											var index = list.indexOf(item.id);
 											obj = {
 												name:item.name,
-												default_self:item.Isdefault_self,
+												default_self:item.default_self,
 												id:item.id,
 												code:item.code,
 												phone:item.phone,
