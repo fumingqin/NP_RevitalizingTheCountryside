@@ -493,7 +493,7 @@
 										  	userEmergencyContact:res.data.data.emergency_content, //是否设置为紧急联系人 true/false
 											hiddenIndex:1,  //1代表选中
 										}
-										passList.push(list1);
+										passList.push(list1); 
 										uni.setStorage({
 											key:'passengerList',
 											data:passList
