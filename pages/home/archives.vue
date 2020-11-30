@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="map_view">
+		<view class="map_view" :style="{'height':viewHeight}" >
 			<image class="map_view_image" :style="{'height':imageHeight}" src="../../static/home/archives/bj.png" mode="aspectFill"></image>
 			<movable-area style="z-index: 2;">
 				<movable-view style="width: 1342upx; height:800upx;" scale-min="0.5" scale-max="2" scale="true" inertia="true"
@@ -81,7 +81,7 @@
 		</view>
 
 		<!-- 打开乡村档案弹框-8个模块内容 -->
-		<u-popup v-model="newsShow" mode="bottom" :closeable="true" :safe-area-inset-bottom="true" height="1334upx" border-radius="16">
+		<u-popup v-model="newsShow" mode="bottom" :closeable="true" :safe-area-inset-bottom="true" height="90%" border-radius="16">
 			<view>
 				<!-- 一村一档 : village -->
 				<view style="padding: 24upx;">
@@ -102,7 +102,7 @@
 					</view>
 
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" :hidden="newsData.village.village_name !== ''">
+					<view class="defaultStyle" v-if="newsData.village.village_name == ''" >
 						<text>暂时没有档案哦~</text>
 					</view>
 				</view>
@@ -129,7 +129,7 @@
 					</view>
 
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" :hidden="newsData.feedback.length !== 0">
+					<view class="defaultStyle" v-if="newsData.dynamic.length == 0">
 						<text>暂时没有动态哦~</text>
 					</view>
 				</view>
@@ -156,7 +156,7 @@
 					</view>
 
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" :hidden="newsData.policy.length !== 0">
+					<view class="defaultStyle" v-if="newsData.policy.length == 0">
 						<text>暂时没有信息哦~</text>
 					</view>
 				</view>
@@ -183,7 +183,7 @@
 					</view>
 
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" :hidden="newsData.economy.length !== 0">
+					<view class="defaultStyle" v-if="newsData.economy.length == 0" >
 						<text>暂时没有美景哦~</text>
 					</view>
 				</view>
@@ -211,7 +211,7 @@
 					</view>
 
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" :hidden="newsData.project.length !== 0">
+					<view class="defaultStyle" v-if="newsData.project.length == 0">
 						<text>暂时没有项目哦~</text>
 					</view>
 				</view>
@@ -238,7 +238,7 @@
 					</view>
 
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" :hidden="newsData.ecology.length !== 0">
+					<view class="defaultStyle" v-if="newsData.ecology.length == 0">
 						<text>暂时没有信息哦~</text>
 					</view>
 				</view>
@@ -267,7 +267,7 @@
 					</view>
 
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" :hidden="newsData.evaluation.length !== 0">
+					<view class="defaultStyle" v-if="newsData.evaluation.length == 0">
 						<text>暂时没有考评哦~</text>
 					</view>
 				</view>
@@ -302,7 +302,7 @@
 					</view>
 
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" :hidden="newsData.feedback.length !== 0">
+					<view class="defaultStyle" v-if="newsData.feedback.length == 0">
 						<text>暂时没有反馈哦~</text>
 					</view>
 				</view>
@@ -363,7 +363,7 @@
 					name: '漳墩镇',
 					nameType: '镇',
 					fixed: 'fix_zhangdz',
-					status: false,
+					status: false, 
 					iconSatus: false,
 				}, {
 					name: '回龙乡',
@@ -380,6 +380,7 @@
 				}], //乡村列表
 				contentInputData: '', //搜索
 				imageHeight: '1334upx', //手机屏幕高度
+				viewHeight : '614upx', //选择区高度
 				//---------------以下是输入框监听参数--------------
 				SearchStatus: false, //搜索列表框
 				keywordList: [], //搜索关键字列表
@@ -414,6 +415,7 @@
 				success: (res) => {
 					console.log(res)
 					this.imageHeight = res.windowHeight + 'px'
+					this.viewHeight = res.windowHeight / 2  + 'px'
 					// console.log(this.imageHeight)
 				}
 			})
@@ -611,7 +613,6 @@
 						url: '../../pages_JDKP/pages/jdkp_cj_details?id=' + e
 					})
 				}
-
 			},
 
 		}
@@ -624,7 +625,7 @@
 	}
 
 	.map_view {
-		height: 800upx;
+		// height: 614upx;
 
 		.map_view_image {
 			width: 100%;
@@ -672,8 +673,8 @@
 		margin: 16upx 24upx;
 
 		.inputStyle {
-			height: 96upx;
-			padding: 0 44upx;
+			// height: 96upx;
+			padding: 26upx 44upx 26upx 44upx;
 			font-size: 30upx;
 		}
 	}

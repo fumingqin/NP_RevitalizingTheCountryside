@@ -4,13 +4,13 @@
 			<view class="box1">
 				<view class="itemClass">
 					<view class="fontStyle">姓名	</view>
-					<input placeholder="与证件姓名一致" class="inputClass" maxlength="6"  name="userName" v-model="user.userName" @blur="nameClick"/> 
+					<input placeholder="与证件姓名一致" class="inputClass" maxlength="6"  name="name" v-model="user.name" @blur="nameClick"/> 
 				</view>
 				<view class="itemClass borderTop">
 					<view class="fontStyle">性别</view>
-					<radio-group class="inputClass" name="userSex">
+					<radio-group class="inputClass" name="sex">
 						<label v-for="(item, index) in sexMode" :key="index" @click="radioClick(index)" > 
-							<radio style="transform: scale(0.7)" :value="user.userSex" :checked="index===user.userSex" />{{item.title}}
+							<radio style="transform: scale(0.7)" :value="user.sex" :checked="index===user.sex" />{{item.title}}
 						</label>  
 					</radio-group>
 				</view>
@@ -21,8 +21,8 @@
 						placeholder="请输入手机号码"
 						maxlength="11"
 						class="inputClass"
-						v-model="user.userPhoneNum"
-						name="userPhoneNum"
+						v-model="user.phone"
+						name="phone"
 						@blur="checkPhone"
 					/>				
 				</view>
@@ -32,8 +32,8 @@
 				<view class="itemClass">
 					<view class="fontStyle" style="font-weight: bold;">证件类型</view>
 					<view class="inputClass">
-						<picker name="codeType"  mode="selector" @change="codeChange" :range="selectCode" :value="code">
-							{{codeType}}
+						<picker name="code_type"  mode="selector" @change="codeChange" :range="selectCode" :value="code">
+							{{code_type}}
 						</picker>	
 					</view>
 				</view>
@@ -43,8 +43,8 @@
 					<input
 						placeholder="请保持与证件号码一致"
 						class="inputClass"
-						v-model="user.userCodeNum"
-						name="userCodeNum"
+						v-model="user.code"
+						name="code"
 						type="idcard"
 						maxlength="18"
 						@blur="checkCodeNum1"
@@ -56,8 +56,8 @@
 					<input
 						placeholder="请保持与证件号码一致"
 						class="inputClass"
-						v-model="user.userCodeNum"
-						name="userCodeNum"
+						v-model="user.code"
+						name="code"
 						@blur="checkCodeNum2"
 						maxlength="9"
 					/>	
@@ -68,8 +68,8 @@
 					<input
 						placeholder="请保持与证件号码一致"
 						class="inputClass"
-						v-model="user.userCodeNum"
-						name="userCodeNum"
+						v-model="user.code"
+						name="code"
 						@blur="checkCodeNum3"
 						maxlength="11"
 					/>	
@@ -80,8 +80,8 @@
 					<input
 						placeholder="请保持与证件号码一致"
 						class="inputClass"
-						v-model="user.userCodeNum"
-						name="userCodeNum"
+						v-model="user.code"
+						name="code"
 						@blur="checkCodeNum4"
 						maxlength="10"
 					/>	
@@ -92,8 +92,8 @@
 					<input
 						placeholder="请保持与证件号码一致"
 						class="inputClass"
-						:value="user.userCodeNum"
-						name="userCodeNum"
+						:value="user.code"
+						name="code"
 						@blur="checkCodeNum5"
 					/>	
 				</view> -->
@@ -121,9 +121,9 @@
 			<view class="personClass">
 				<view class="fontStyle">设置为本人</view>
 				<view class="checkBox">
-					<checkbox-group name="userDefault" @change="checkChange">
+					<checkbox-group name="default_self" @change="checkChange">
 						<label>
-							<checkbox :checked="user.userDefault" :value="user.userDefault"  />
+							<checkbox :checked="user.default_self" :value="user.default_self"  />
 						</label>
 					</checkbox-group>
 				</view>
@@ -143,9 +143,9 @@
 			<view v-if="false" class="emergencyClass">
 				<view class="fontStyle">紧急联系人</view>
 				<view class="checkBox">
-					<checkbox-group name="userEmergencyContact">
+					<checkbox-group name="emergency_content">
 						<label>
-							<checkbox :checked="user.userEmergencyContact" :value="user.userEmergencyContact" />
+							<checkbox :checked="user.emergency_content" :value="user.emergency_content" />
 						</label>
 					</checkbox-group>
 				</view>
@@ -172,25 +172,25 @@
 				selectTypeState:false,		//控制是否有免票儿童
 				selectType:['请选择','成人','半票儿童'],
 				selectCode:['请选择','身份证','护照','港澳通行证','台胞证'],
-				// codeType:'请选择证件类型 >',
-				codeType:'身份证 >',
+				// code_type:'请选择证件类型 >',
+				code_type:'身份证 >',
 				ticketType:'成人 >',
 				selector:'请选择特殊凭证 >',
 				user:{
-					passengerId:'',//乘车人id
-					userName:'',	
-					userSex:0,
-					userPhoneNum:'',
-					userCodeNum:'',
-					userDefault:false,
+					id:0,//乘车人id
+					name:'',	
+					sex:0,
+					phone:'',
+					code:'',
+					default_self:false,
 					show:true,
 					prove:0,
 					type:1,
-					// userEmergencyContact:false,
+					// emergency_content:false,
 					// date:'请选择',
 					// date:'',
 				},
-				userType:'',
+				user_type:'',
 				address:'',
 				userId:'', //账号id
 				code:1,
@@ -258,39 +258,39 @@
 					key:'editPassenger',
 					success:function(res){
 						console.log(res,"res")
-					//----------加载passengerId--------
-						that.user.passengerId=res.data.passengerId;
+					//----------加载id--------
+						that.user.id=res.data.id;
 					//----------加载姓名--------
-						that.user.userName=res.data.userName;
+						that.user.name=res.data.name;
 					//----------加载性别--------
-						if(res.data.userSex=="男"){
-							that.user.userSex=0;
+						if(res.data.sex=="男"){
+							that.user.sex=0;
 						}else{
-							that.user.userSex=1;
+							that.user.sex=1;
 						}
 					//----------加载身份证--------
-						that.user.userCodeNum =res.data.userCodeNum ;
+						that.user.code =res.data.code ;
 					//----------是否为本人--------
-						that.user.userDefault=res.data.userDefault;
-					// that.user.show=!that.user.userDefault;
+						that.user.default_self=res.data.default_self;
+					// that.user.show=!that.user.default_self;
 					//----------是否为紧急联系人--------
-					// that.user.userEmergencyContact=res.data.userEmergencyContact;
+					// that.user.emergency_content=res.data.emergency_content;
 					//----------加载电话号码--------
-						that.user.userPhoneNum=res.data.userPhoneNum;
+						that.user.phone=res.data.phone;
 					//----------加载购票类型--------
-						if(res.data.userType=='军人'||res.data.userType=='教师'||res.data.userType=='学生'){
-							that.selector=res.data.userType+" >";
-							if(res.data.userType=='军人'){
+						if(res.data.user_type=='军人'||res.data.user_type=='教师'||res.data.user_type=='学生'){
+							that.selector=res.data.user_type+" >";
+							if(res.data.user_type=='军人'){
 								that.user.prove=1;
-							}else if(res.data.userType=='教师'){
+							}else if(res.data.user_type=='教师'){
 								that.user.prove=2;
-							}else if(res.data.userType=='学生'){
+							}else if(res.data.user_type=='学生'){
 								that.user.prove=3;
 							}
 							that.ticketType='成人 >';
 							that.user.type=1;
 						}else{
-							that.ticketType=res.data.userType+" >";
+							that.ticketType=res.data.user_type+" >";
 						}
 						if(that.ticketType=='成人 >'){
 							that.user.type=1;
@@ -300,20 +300,20 @@
 							that.user.type=3;
 						}
 					//----------加载证件类型--------	
-						if(res.data.userauditState==""){
-							that.user.codeType="请选择证件类型 >";
+						if(res.data.code_type==""){
+							that.user.codeNumType="请选择证件类型 >";
 							that.code=0;
 						}else{
-							that.codeType=res.data.userauditState+" >";
-							if(res.data.userauditState=='身份证'){
+							that.codeNumType=res.data.code_type+" >";
+							if(res.data.code_type=='身份证'){
 								that.code=1;
-							}else if(res.data.userauditState=='护照'){
+							}else if(res.data.code_type=='护照'){
 								that.code=2;
-							}else if(res.data.userauditState=='港澳通行证'){
+							}else if(res.data.code_type=='港澳通行证'){
 								that.code=3;
-							}else if(res.data.userauditState=='台胞证'){
+							}else if(res.data.code_type=='台胞证'){
 								that.code=4;
-							}else if(res.data.userauditState=='回乡证'){
+							}else if(res.data.code_type=='回乡证'){
 								that.code=5;
 							}
 						}
@@ -342,171 +342,123 @@
 			
 			//------------------选择性别----------------
 			radioClick:function(e){
-				this.user.userSex = e;
+				this.user.sex = e;
 			},
 			//------------------上传乘车人信息----------------
 			formSubmit:function(e){
 				var data1=e.target.value;
 				var that=this;
-				data1.passengerId=that.user.passengerId;
-				if(data1.userDefault==null||data1.userDefault==""){
-					data1.userDefault=false;
+				data1.id=that.user.id;
+				if(data1.default_self==null||data1.default_self==""){
+					data1.default_self=false;
 				}else{
-					data1.userDefault=true;
+					data1.default_self=true;
 				}
 				// -------证件类型----------
-				data1.userauditState=that.codeType;
+				data1.code_type=that.code_type;
 				if(that.selector!="请选择特殊凭证 >"){
-					data1.userType=that.selector;
+					data1.user_type=that.selector;
 				}else{
-					data1.userType=that.ticketType;
+					data1.user_type=that.ticketType;
 				}
 				var	checkState='';//是否开启验证，true开启，false关闭
-				console.log(data1.userType,"购票类型")
-				if(data1.userType=="免票儿童 >"||data1.userType=="半票儿童 >"){
+				console.log(data1.user_type,"购票类型")
+				if(data1.user_type=="免票儿童 >"||data1.user_type=="半票儿童 >"){
 					checkState=false;
 				}else{
 					checkState=that.whetherCheck;
 				}
 				console.log(checkState,"是否开启验证")
 				var reg=(/^1(3|4|5|6|7|8|9)\d{9}$/);
-				if(data1.userName==""||data1.userName==null){
+				if(data1.name==""||data1.name==null){
 					uni.showToast({
 						title:'请输入姓名',
 						icon:'none',
 					})
-				}else if(data1.userName.length<2){
+				}else if(data1.name.length<2){
 					uni.showToast({
 						title:'输入的姓名不能少于2位',
 						icon:'none',
 					})
-				}else if(data1.userPhoneNum==""||data1.userPhoneNum==null){
+				}else if(data1.phone==""||data1.phone==null){
 					uni.showToast({
 						title:'请输入手机号码',
 						icon:'none',
 					})
-				}else if(data1.userPhoneNum.length!=11||!reg.test(data1.userPhoneNum)){
+				}else if(data1.phone.length!=11||!reg.test(data1.phone)){
 					uni.showToast({
 						icon:'none',
 						title:'输入的手机号有误，请检查'
 					})
-				}else if(data1.userauditState=="请选择证件类型 >"){
+				}else if(data1.code_type=="请选择证件类型 >"){
 					uni.showToast({
 						title:'请选择证件类型',
 						icon:'none',
 					})
-				}else if(data1.userCodeNum==""||data1.userCodeNum==null){
+				}else if(data1.code==""||data1.code==null){
 					uni.showToast({
 						title:'请输入证件号',
 						icon:'none',
 					})
-				}else if(data1.userauditState=="身份证 >"&&!that.checkIDCard(data1.userCodeNum)&&checkState){
+				}else if(data1.code_type=="身份证 >"&&!that.checkIDCard(data1.code)&&checkState){
 					uni.showToast({
 						title:'输入的身份证号有误，请检查',
 						icon:'none',
 					})
-				}else if(data1.userauditState=="护照 >"&&!that.checkPass1(data1.userCodeNum)&&checkState){
+				}else if(data1.code_type=="护照 >"&&!that.checkPass1(data1.code)&&checkState){
 					uni.showToast({
 						title:'输入的证件号有误，请检查',
 						icon:'none',
 					})
-				}else if(data1.userauditState=="港澳通行证 >"&&!that.checkPass2(data1.userCodeNum)&&checkState){
+				}else if(data1.code_type=="港澳通行证 >"&&!that.checkPass2(data1.code)&&checkState){
 					uni.showToast({
 						title:'输入的证件号有误，请检查',
 						icon:'none',
 					})
-				}else if(data1.userauditState=="台胞证 >"&&!that.checkPass3(data1.userCodeNum)&&checkState){
+				}else if(data1.code_type=="台胞证 >"&&!that.checkPass3(data1.code)&&checkState){
 					uni.showToast({
 						title:'输入的证件号有误，请检查',
 						icon:'none',
 					})
-				}else if(data1.userType=="请选择购票类型 >"){
+				}else if(data1.user_type=="请选择购票类型 >"){
 					uni.showToast({
 						title:'请选择购票类型',
 						icon:'none',
 					})
-				}else if((data1.userType=="免票儿童 >"||data1.userType=="半票儿童 >") && data1.userDefault == true){
+				}else if((data1.user_type=="免票儿童 >"||data1.user_type=="半票儿童 >") && data1.default_self == true){
 					uni.showToast({
 						title:'儿童不允许设置为本人',
 						icon:'none',
 					})
 				}
 				else{
-					data1.userType = data1.userType.substring(0,data1.userType.length-2);
-					data1.userauditState = data1.userauditState.substring(0,data1.userauditState.length-2);
+					data1.user_type = data1.user_type.substring(0,data1.user_type.length-2);
+					data1.code_type = data1.code_type.substring(0,data1.code_type.length-2);
 					uni.showLoading({
 						title:'保存中...'
 					})
-					that.checkSelf(data1); //检查列表中是否存在本人
+					that.keepPassenger(data1); //检查列表中是否存在本人
 				}
-			},
-			
-			// ------------------检查是否有本人----------------
-			checkSelf:function(data1){
-				var that=this;
-				uni.request({
-					url:that.$GrzxInter.Interface.userInfoList.value,
-					data:{
-						userId:that.userId,
-					},
-					method:that.$GrzxInter.Interface.userInfoList.method,
-					success(listRes) {
-						//判断是否有本人
-						if(data1.userDefault&&listRes.data.data!=null&&listRes.data.data!=""){
-							var defaultList=listRes.data.data.filter(item => {
-								return item.userDefault == true;
-							})
-							if(defaultList.length>0){
-								uni.request({
-									url:that.$GrzxInter.Interface.changeUserInfo.value,
-									data:{
-										userId:that.userId, //1.账号id
-										passengerId:defaultList[0].passengerId, //2.乘车人id
-										userType:defaultList[0].userType,   //3.用户类别 成人/儿童 
-										userName:defaultList[0].userName,   //4.用户姓名   
-										userSex:defaultList[0].userSex,   //5.用户性别   
-									  	userCodeNum:defaultList[0].userCodeNum,   //6.用户身份证   
-									  	userPhoneNum:defaultList[0].userPhoneNum,   //7.用户手机号   
-									  	userDefault:'false',   //8.用户是否本人 true/false 
-									  	userEmergencyContact:'false',   //9.是否设置为紧急联系人 true/false
-										userfrontImg:defaultList[0].fImg,  	//10.证件正面
-										userbackImg:defaultList[0].bImg,	//11.证件主页
-										userauditState:defaultList[0].userauditState,   //12.审核状态
-									},
-									method:that.$GrzxInter.Interface.changeUserInfo.method,
-									success(resd) {
-										console.log(resd,"315")
-										that.keepPassenger(data1); //保存用户信息
-									}
-								})
-							}else{
-								that.keepPassenger(data1); //保存用户信息
-							}	
-						}else{
-							that.keepPassenger(data1); //保存用户信息
-						}
-					}
-				})
 			},
 			
 			// ------------------保存用户信息----------------
 			keepPassenger:function(data1){
 				var that=this;
+				console.log(data1,"data1");
 				uni.request({
 					url:that.$GrzxInter.Interface.changeUserInfo.value,
+					// url:'http://localhost:6480/api/passenger/changeUserInfo',
 					data:{
-						userId:that.userId, //1.账号id
-						passengerId:data1.passengerId, //2.乘车人id   
-						userType:data1.userType,   //3.用户类别 成人/儿童 
-						userName:data1.userName,   //4.用户姓名   
-						userSex:data1.userSex,   //5.用户性别   
-					  	userCodeNum:data1.userCodeNum,   //6.用户身份证   
-					  	userPhoneNum:data1.userPhoneNum,   //7.用户手机号   
-					  	userDefault:data1.userDefault,   //8.用户是否本人 true/false 
-					  	userEmergencyContact:'false',   //9.是否设置为紧急联系人 true/false
-						userfrontImg:data1.fImg,  	//10.证件正面
-						userbackImg:data1.bImg,		//11.证件主页
-						userauditState:data1.userauditState,   //12.审核状态
+						id:data1.id, //2.乘车人id   
+						user_type:data1.user_type,   //3.用户类别 成人/儿童 
+						name:data1.name,   //4.用户姓名   
+						sex:data1.sex,   //5.用户性别   
+					  	code:data1.code,   //6.用户身份证   
+					  	phone:data1.phone,   //7.用户手机号   
+					  	default_self:data1.default_self,   //8.用户是否本人 true/false 
+					  	emergencyContact:'false',   //9.是否设置为紧急联系人 true/false
+						code_type:data1.code_type,   //12.证件类型
+						userId:that.userId,
 					},
 					method:that.$GrzxInter.Interface.changeUserInfo.method,
 					success(res) {
@@ -525,23 +477,23 @@
 										for(var i=0;i<list.data.length;i++){
 											passList.push(list.data[i]);
 										}
-										if(res.data.data.userSex==0){
-											res.data.data.userSex="男";
+										if(res.data.data.sex==0){
+											res.data.data.sex="男";
 										}else{
-											res.data.data.userSex="女";
+											res.data.data.sex="女";
 										}
 										var list1={
-											passengerId:res.data.data.PassengerId, //乘车人id
-											userType:res.data.data.UserType,   //用户类别 成人/儿童 
-											userName:res.data.data.UserName,   //用户姓名   
-											userSex:res.data.data.UserSex,   //用户性别   
-										  	userCodeNum:res.data.data.UserCodeNum,   //用户身份证   
-										  	userPhoneNum:res.data.data.UserPhoneNum,   //用户手机号   
-										  	userDefault:res.data.data.IsuserDefault,   //用户是否本人 true/false 
-										  	userEmergencyContact:res.data.data.IsuserEmergencyContact, //是否设置为紧急联系人 true/false
+											PassengerId:res.data.data.id, //乘车人id
+											userType:res.data.data.user_type,   //用户类别 成人/儿童 
+											userName:res.data.data.name,   //用户姓名   
+											userSex:res.data.data.sex,   //用户性别   
+										  	userCodeNum:res.data.data.code,   //用户身份证   
+										  	userPhoneNum:res.data.data.phone,   //用户手机号   
+										  	userDefault:res.data.data.default_self,   //用户是否本人 true/false 
+										  	userEmergencyContact:res.data.data.emergency_content, //是否设置为紧急联系人 true/false
 											hiddenIndex:1,  //1代表选中
 										}
-										passList.push(list1);
+										passList.push(list1); 
 										uni.setStorage({
 											key:'passengerList',
 											data:passList
@@ -565,11 +517,11 @@
 			//------------------选择证件类型----------------
 			codeChange:function(e){
 				this.code=e.detail.value;
-				this.user.userCodeNum="";
+				this.user.code="";
 				if(e.detail.value==0){
-					this.codeType="请选择证件类型 >";
+					this.code_type="请选择证件类型 >";
 				}else{
-					this.codeType=this.selectCode[e.detail.value]+" >";
+					this.code_type=this.selectCode[e.detail.value]+" >";
 				}
 			},
 			
@@ -598,19 +550,19 @@
 			resetClick:function(e){
 				console.log(e)
 				// this.user.date="请选择";
-				this.user.userSex=0;
+				this.user.sex=0;
 				this.user.show=true;
-				this.user.userName="";
-				this.user.userPhoneNum="";
-				this.user.userCodeNum="";
-				this.codeType="身份证 >";
+				this.user.name="";
+				this.user.phone="";
+				this.user.code="";
+				this.code_type="身份证 >";
 				this.ticketType="成人 >";
 				this.selector="请选择特殊凭证 >";
-				this.user.userDefault=false;
+				this.user.default_self=false;
 				this.code=1;
 				this.user.prove=1;
 				this.user.type=0;
-				// this.user.userEmergencyContact=false;
+				// this.user.emergency_content=false;
 			},
 			
 			//------------------是否选中本人----------------
@@ -620,7 +572,7 @@
 					this.user.show=false;
 				}else{	//未选中
 					this.user.show=true;
-					this.user.userEmergencyContact=false;
+					this.user.emergency_content=false;
 				}
 			},
 			
