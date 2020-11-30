@@ -277,6 +277,38 @@
 					}
 				})
 			},
+			
+			//商品列表
+			productList:function(){
+				// uni.request({
+				// 	url: this.$wssc.KyInterface.getMallHomepage.Url,
+				// 	method: this.$wssc.KyInterface.getMallHomepage.method,
+				// 	success: (res) => {
+				// 		console.log('首页分类', res)
+				// 		if (res.data.status == true) {
+				// 			for(let item of res.data.data){
+				// 				var obj = {
+				// 					name: item.title, //功能名称
+				// 					image: JSON.parse(item.image)[0], //功能图标
+				// 				}
+				// 				this.classification.push(obj);
+				// 			}
+				// 			console.log('首页分类', this.classification)
+				// 		} else {
+				// 			uni.showToast({
+				// 				title: res.data.msg,
+				// 				icon: 'none'
+				// 			})
+				// 		}
+				// 	},
+				// 	fail: function() {
+				// 		uni.showToast({
+				// 			title: '首页分类网络加载异常',
+				// 			icon: 'none'
+				// 		})
+				// 	}
+				// })
+			},
 
 			//点击跳转
 			itemClick: function(name) {
