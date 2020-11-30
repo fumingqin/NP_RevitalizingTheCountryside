@@ -18,6 +18,7 @@
 					<image v-if="groupTitle.avatar==''" class="txImage" src="../../static/missing-face.png" mode="aspectFill"></image>
 					<view class="grView">
 						<view class="name">{{groupTitle.head_name}}</view>
+						<view class="number">{{groupTitle.head_age}}岁&nbsp;&nbsp;任职工龄:{{groupTitle.head_year}}</view>
 					</view>
 				</view>
 			</view>
@@ -35,44 +36,49 @@
 						</view>
 					</view>
 				</view>
-				
-				<u-read-more v-if="type==0" :toggle="toggle" :show-height="showHeight">
-					<view class="ditailsView">
-						<view class="detailsname" style="color: #000000;font-size: 30upx;">姓名</view>
-						<view class="detailsage">年龄</view>
-						<view class="detailstele">联系电话</view>
-						<view class="detailsduty">职责</view>
-					</view>
-					<view class="infor_view" v-for="(item,index) in crewinfo" :key="index">
-						<view class="ditailsView">
-							<view class="detailsname">{{item.name}}</view>
-							<view class="detailsage">{{item.age}}</view>
-							<view class="detailstele">{{item.telephone}}</view>
-							<view class="detailsduty">{{item.duty}}</view>
+					<u-read-more v-if="type==0" :toggle="toggle" :show-height="showHeight">
+						<view>总计：{{crewinfo.length}}人</view>
+						<view style="height: 400upx;">
+						<view  v-if="crewinfo.length!=0" class="ditailsView">
+							<view class="detailsname">姓名</view>
+							<view class="detailsage">年龄</view>
+							<view class="detailstele">联系电话</view>
+							<view class="detailsduty">职责</view>
 						</view>
-					</view>
-					<view v-if="crewinfo.length==0">
-						<u-empty :isShow="crewinfo.length==0" text="暂无数据" textColor="#999999"></u-empty>
-					</view>
-				</u-read-more>
-				
-				<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
-					<view class="ditailsView">
-						<view class="detailsroad">街道名</view>
-						<view class="detailsroadcount">总户数</view>
-						<view class="detailscount">总人口</view>
-					</view>
-					<view class="infor_view" v-for="(item,index) in streetinfo" :key="index">
-						<view class="ditailsView">
-							<view class="detailsroad">{{item.road}}</view>
-							<view class="detailsroadcount">{{item.road_count}}</view>
-							<view class="detailscount">{{item.count}}</view>
+						<view class="infor_view" v-for="(item,index) in crewinfo" :key="index">
+							<view class="ditailsView">
+								<view class="detailsname">{{item.name}}</view>
+								<view class="detailsage">{{item.age}}</view>
+								<view class="detailstele">{{item.telephone}}</view>
+								<view class="detailsduty">{{item.duty}}</view>
+							</view>
 						</view>
-					</view>
-					<view v-if="streetinfo.length==0">
-						<u-empty :isShow="streetinfo.length==0" text="暂无数据" textColor="#999999"></u-empty>
-					</view>
-				</u-read-more>
+						<view v-if="crewinfo.length==0" style="padding-top:150upx;">
+							<u-empty :isShow="crewinfo.length==0" text="暂无数据" textColor="#999999"></u-empty>
+						</view>
+						</view>
+					</u-read-more>
+					
+					<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
+						<view>总人口:{{groupTitle.total_people}}人</view>	
+						<view style="height: 400upx;">
+						<view v-if="streetinfo.length!=0" class="ditailsView">
+							<view class="detailsroad">街道名</view>
+							<view class="detailsroadcount">户数</view>
+							<view class="detailscount">人口</view>
+						</view>
+						<view class="infor_view" v-for="(item,index) in streetinfo" :key="index">
+							<view class="ditailsView">
+								<view class="detailsroad">{{item.road}}</view>
+								<view class="detailsroadcount">{{item.road_count}}</view>
+								<view class="detailscount">{{item.count}}</view>
+							</view>
+						</view>
+						<view v-if="streetinfo.length==0" style="margin-top:150upx;">
+							<u-empty :isShow="streetinfo.length==0" text="暂无数据" textColor="#999999"></u-empty>
+						</view>
+						</view>
+					</u-read-more>
 			</view>
 		</view>
 	</view>
@@ -167,24 +173,6 @@
 					return a;
 					}
 			},
-			//----------------预览--------------------
-			onOpenDoc(e) {
-				let url = e;
-				/* 下载返回临时路径（退出应用失效） */
-				this.$refs.lFile.download(url)
-				.then(path=>{
-					/* 预览 */
-					this.$refs.lFile.open(path);
-				});
-			},
-			//--------------下载---------------------
-				onDown(e) {
-					let url = e;
-					this.$refs.lFile.download(url,'local')
-					.then(path=>{
-						console.log(path);
-					}); 
-				},
 			tabClick(e) {
 				if (e == 0) {
 					this.type = 0;
@@ -368,8 +356,8 @@
 	.ditailsView {
 		position: relative;
 		display: flex;
-		.detailsroad{
-			padding: 8upx 20upx;
+		.detailsname{
+			padding: 8upx 0upx;
 			margin-right: 16upx;
 			// text-align: center;
 			font-size: 30upx;
@@ -392,7 +380,7 @@
 			font-size: 30upx;
 		}
 		.detailsroad{
-			padding: 8upx 20upx;
+			padding: 8upx 0upx;
 			margin-right: 16upx;
 			// text-align: center;
 			font-size: 30upx;
@@ -400,13 +388,13 @@
 		.detailsroadcount {
 			position: absolute;
 			left: 0;
-			margin-left: 200upx;
+			margin-left: 250upx;
 			font-size: 30upx;
 		}
 		.detailscount {
 			position: absolute;
-			right: 0;
-			margin-right: 100upx;
+			left: 0;
+			margin-left: 500upx;
 			font-size: 30upx;
 		}
 		}
