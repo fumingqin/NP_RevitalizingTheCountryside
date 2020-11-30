@@ -112,6 +112,7 @@
 		},
 		data() {
 			return {
+				allData:[],
 				groupTitle:[],
 				people:[],
 				time:[],
@@ -125,7 +126,7 @@
 					nomore : '没有更多了',
 				},
 				scenicListIndex:5,//列表默认数量}
-				}
+			}
 		},
 		onLoad() {
 			uni.showLoading({
@@ -156,10 +157,11 @@
 					success:(res) =>{
 						console.log('列表数据',res)
 						if(res.data.status == true){
+							this.allData = res.data.data;
 							this.groupTitle = res.data.data;
-							this.people=this.$Sort.SortData(res.data.data,"total_people",1);
-							console.log(this.people);
-							this.time=this.$Sort.SortData(res.data.data,"create_time",1);
+							this.groupTitle.sort(function(a, b){
+								return b.ruralId - a.ruralId
+							});
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
@@ -205,7 +207,7 @@
 				if(this.scenicListIndex >= this.groupTitle.length){
 					this.loadingType = 2;
 				}
-			},
+			},									
 			
 			//搜索框-搜索
 			searchNow: function() {
@@ -250,13 +252,32 @@
 			},
 			//tab点击事件
 			onClickItem(e) { 
+				console.log(this.allData,"全部");
 				if (this.current !== e.currentIndex) {
 					this.current = e.currentIndex
+				}
+				if(e.currentIndex == 0){
+					this.groupTitle=this.allData;
+					this.groupTitle.sort(function(a, b){
+						return b.ruralId - a.ruralId
+					});
+				}
+				if(e.currentIndex == 1){
+					this.people = this.allData;
+					this.people.sort(function(a, b){
+						return b.total_people - a.total_people
+					});
+				}
+				if(e.currentIndex == 2){
+					this.time = this.allData;
+					this.time.sort(function(a, b){
+						return Date.parse(b.create_time) - Date.parse(a.create_time)
+					});
 				}
 			},
 			//-------------------时间切割---------------------------
 			gettime:function(param){
-					let array=param.split(' ');
+					let array=param.split('T');
 					var a=array[0];
 					return a;
 			},
