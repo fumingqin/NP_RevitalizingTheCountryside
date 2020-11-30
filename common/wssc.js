@@ -128,6 +128,18 @@ const KyInterface = {
 		name:'检索订单状态',
 		method:'POST',
 	},
+	//--------------------------------------编辑接口--------------------------------------
+	getOrederList:{
+		Url:Url + '/api/order/getOrederList',
+		name:'订单列表',
+		method:'POST',
+	},
+	//--------------------------------------编辑接口--------------------------------------
+	OrderRefund:{
+		Url:Url + '/api/order/OrderRefund',
+		name:'订单退款',
+		method:'POST',
+	},
 }
 
 // 接口声明区

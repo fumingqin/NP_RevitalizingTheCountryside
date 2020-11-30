@@ -10,7 +10,7 @@
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 						<view class="page-box">
-							<view class="order" v-for="(res, index) in orderList" :key="res.id">
+							<view class="order" v-for="(res, index) in orderList" :key="index">
 								<view class="top">
 									<view class="left">
 										<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
@@ -43,8 +43,8 @@
 								</view>
 								<view class="bottom">
 									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
-									<!-- <view class="logistics btn">查看物流</view>
-									<view class="exchange btn">卖了换钱</view>
+									<view class="logistics btn" @click="refund(res.id)">退款</view>
+<!-- 									<view class="exchange btn">卖了换钱</view>
 									<view class="evaluate btn">评价</view> -->
 								</view>
 							</view>
@@ -62,7 +62,7 @@
 										<view class="store">{{ res.store }}</view>
 										<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
 									</view>
-									<view class="right">{{ res.deal }}</view>
+									<view class="right">{{ res.state }}</view>
 								</view>
 								<view class="item" v-for="(item, index) in res.goodsList" :key="index">
 									<view class="left"><image :src="item.goodsUrl" mode="aspectFill"></image></view>
@@ -296,14 +296,66 @@
 			//-----------------------加载接口数据------------------------
 			
 			ddlbData:function(){
-				var a=this.dataList;
-				this.orderList = a.filter(item => {
-					return item.deal == '交易成功';
-				})
-				console.log(this.dataList)
-				this.orderList2 = a.filter(item => {
-					return item.deal == '交易失败';
-				})
+				// var a=this.dataList;
+				// this.orderList = a.filter(item => {
+				// 	return item.deal == '交易成功';
+				// })
+				// console.log(this.dataList)
+				// this.orderList2 = a.filter(item => {
+				// 	return item.deal == '交易失败';
+				// })
+				
+					uni.getStorage({
+						key: 'userInfo',
+						success: (res) => {
+					uni.request({
+						url:this.$wssc.KyInterface.getOrederList.Url,
+						method:this.$wssc.KyInterface.getOrederList.method,
+						data:{
+							userId :100007,
+						},
+						success:(res) =>{
+							console.log('列表数据',res)
+							if(res.data.status == true){
+								for(var i=0;i<res.data.data.length;i++){
+									this.orderList.push(res.data.data[i]);
+									// this.orderList2.push(res.data.data[i].orderList);
+								};
+								console.log(this.orderList);
+								uni.stopPullDownRefresh();
+								uni.hideLoading();
+							}else{
+								uni.stopPullDownRefresh();
+								uni.hideLoading();
+								uni.showToast({
+									title: '暂无列表信息',
+									icon: 'none'
+								})
+							}
+						},
+						fail(res) {
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+							uni.showToast({
+								title: '服务器异常',
+								icon: 'none'
+							})
+							// console.log(res)
+						},
+						complete() {
+							setTimeout(function(){
+								if(this.groupTitle==''){
+									uni.hideLoading();
+									uni.showToast({
+										title: '服务器异常',
+										icon: 'none'
+									})
+								}
+							},3000);
+						}
+					})
+					}
+					})	
 			},
 			
 			// 总价
