@@ -162,13 +162,13 @@
 					ImageURL2: "../../static/home/serve/shsp2.png", //暗
 					ItemTitle: "审核商品",
 					style: "sv_print",
-				},{
-					IsUse: true,
-					clickURL: "../../pages_YCYD/pages/YCYD/myVillage",
-					ImageURL1: "../../static/home/serve/cdgl.png", //亮
-					ImageURL2: "../../static/home/serve/cdgl2.png", //暗
-					ItemTitle: "村档管理",
-					style: "sv_print",
+				// },{
+				// 	IsUse: true,
+				// 	clickURL: "../../pages_YCYD/pages/YCYD/myVillage",
+				// 	ImageURL1: "../../static/home/serve/cdgl.png", //亮
+				// 	ImageURL2: "../../static/home/serve/cdgl2.png", //暗
+				// 	ItemTitle: "村档管理",
+				// 	style: "sv_print",
 				},{
 					IsUse: true,
 					clickURL: "../../pages_XCDT/pages/ruralDynamics/rd_list",
