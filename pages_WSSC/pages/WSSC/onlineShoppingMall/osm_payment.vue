@@ -51,25 +51,156 @@
 		data() {
 			return {
 				payType: 1,
-				orderInfo: {}
+				orderInfo: '',
+				userInfo:'',
 			};
 		},
 		computed: {
 		
 		},
 		onLoad(options) {
-			
+			this.userData();
 		},
 
 		methods: {
+			//-------------------------------乘客数据读取-------------------------------
+			userData: function() {
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.userInfo = res.data;
+						// console.log('获取个人信息', this.userInfo)
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../../pages/GRZX/userLogin'
+								})
+							}
+						})
+					}
+				});
+			},
 			//选择支付方式
 			changePayType(type) {
 				this.payType = type;
 			},
 			//确认支付
-			confirm: async function() {
-				uni.redirectTo({
-					url: '/pages/money/paySuccess'
+			confirm:function() {
+				uni.showLoading({
+					title: '拉起支付中...'
+				})
+				console.log(this.userInfo.userId)
+				console.log(this.userInfo.userName)
+				console.log(this.userInfo.phoneNumber)
+				uni.request({
+					url: this.$wssc.KyInterface.placeOrder.Url,
+					method: this.$wssc.KyInterface.placeOrder.method,
+					data:{
+						userId:this.userInfo.userId,
+						productId:9,
+						quantity:1,
+						totalAmount:0.01,
+						nickName:this.userInfo.userName,
+						phoneNumber:this.userInfo.phoneNumber
+					},
+					success: (res) => {
+						if (res.data.status == true) {
+							uni.hideLoading()
+							// this.orderInfo=objInfo;
+							console.log('支付拉取成功', res)
+							console.log('1111', res.data.data)
+							console.log('1', res.data.data.AppId)
+							console.log('2', res.data.data.Noncestr)
+							console.log('3', res.data.data.PartnerId)
+							console.log('4', res.data.data.PrepayId)
+							console.log('5', res.data.data.Timestamp)
+							console.log('6', res.data.data.Sign)
+							uni.requestPayment({
+								provider: 'wxpay',
+								orderInfo: {
+									appid:res.data.data.AppId,
+									noncestr:res.data.data.Noncestr,
+									package: 'Sign=WXPay',
+									partnerid:res.data.data.PartnerId,
+									prepayid:res.data.data.PrepayId,
+									timestamp:res.data.data.Timestamp,
+									sign:res.data.data.Sign,
+								},
+								success: function(res) {
+									if(res.errMsg == 'requestPayment:ok'){
+										uni.request({
+											url: this.$wssc.KyInterface.checkOrderState.Url,
+											method: this.$wssc.KyInterface.checkOrderState.method,
+											data: {
+												orderNumber: that.orderInfo.BillNO
+											},
+											success: function(res) {
+												console.log(res)
+												if (res.data.status == true) {
+													// uni.redirectTo({
+													// 	url: 'successfulPayment'
+													// })
+												} else {
+													uni.showToast({
+														title: '购买失败',
+														icon: 'none',
+														duration: 3000
+													})
+												}
+											},
+											fail: function() {
+												uni.showToast({
+													title: '购买失败',
+													icon: 'none',
+													duration: 3000
+												})
+											}
+										})
+									}
+								},
+												
+								fail: function(e) {
+									console.log(e)
+									if (e.errMsg == 'requestPayment:fail canceled') {
+										uni.showToast({
+											title: '您放弃了支付',
+											icon: 'none',
+											duration: 3000
+										})
+									} else if (e.errMsg == 'requestPayment:fail errors') {
+										uni.showToast({
+											title: '支付失败，请重试',
+											icon: 'none',
+											duration: 3000
+										})
+									} else {
+										uni.showToast({
+											title: '网络异常，请检查网络后重试',
+											icon: 'none',
+											duration: 3000
+										})
+									}
+												
+								}
+							})
+						} else {
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+					},
+					fail: function() {
+						uni.showToast({
+							title: '支付异常',
+							icon: 'none'
+						})
+					}
 				})
 			},
 		}

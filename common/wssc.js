@@ -114,6 +114,20 @@ const KyInterface = {
 		name:'获取选择商品分类',
 		method:'POST',
 	},
+	
+	//--------------------------------------编辑接口--------------------------------------
+	placeOrder:{
+		Url:Url + '/api/order/placeOrder',
+		name:'支付接口',
+		method:'POST',
+	},
+	
+	//--------------------------------------编辑接口--------------------------------------
+	checkOrderState:{
+		Url:Url + '/api/order/checkOrderState',
+		name:'支付接口',
+		method:'POST',
+	},
 }
 
 // 接口声明区
