@@ -131,6 +131,13 @@
 					{
 						IsUse: true,
 						clickURL: "",
+						ImageURL: "../../static/GRZX/icon/yjfk.png",
+						ItemTitle: "商城订单",
+						style:"YJFKicon",
+					},
+					{
+						IsUse: true,
+						clickURL: "",
 						ImageURL: "../../static/GRZX/icon/set.png",
 						ItemTitle: "设置",
 						style:"SETicon",
