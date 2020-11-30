@@ -6,7 +6,7 @@
 					<uni-segmented-control :current="current" :values="items" @clickItem="onClickItem" style-type="text" active-color="#3DABFC"></uni-segmented-control>
 				</view>
 				<view v-if="current === 0" style="margin-top: 20rpx;">
-				<view class="infor_view" v-if="villageHead.head_id!=0">
+				<view class="infor_view" v-if="villageHead!=''">
 					<view class="view_titleView">
 						<view class="tv_view">
 							<view style="display: flex;">
@@ -32,8 +32,8 @@
 					</view>
 					<u-gap height="4" bg-color="#f9f9f9"></u-gap>
 				</view>
-				<view v-if="villageHead.head_id==0" style="margin-top: 500upx;">
-					<u-empty :isShow="villageHead.head_id==0" text="暂无数据" textColor="#999999"></u-empty>
+				<view v-if="villageHead==''" style="margin-top: 500upx;">
+					<u-empty :isShow="villageHead==''" text="暂无数据" textColor="#999999"></u-empty>
 				</view>
 				</view>
 				<view v-if="current === 1" style="margin-top: 20rpx;">
@@ -98,7 +98,7 @@
 						<u-empty :isShow="villageStreetinfo.length==0" text="暂无数据" textColor="#999999"></u-empty>
 					</view>
 				</view>
-				<view class="btn" @click="entering">录入信息</view>
+				<view class="btn" @click="entering(villageHead.head_id)">录入信息</view>
 			</view>
 		</view>
 	</template>
@@ -174,11 +174,12 @@
 				uni.getStorage({
 					key: 'userInfo',
 					success: (res) => {
+						console.log(res.data.rId)
 				uni.request({
 					url:this.$newycyd.KyInterface.getArchivesByRuralId.Url,
 					method:this.$newycyd.KyInterface.getArchivesByRuralId.method,
 					data:{
-						ruralId : res.data.rId,
+						ruralId :55,
 					},
 					success:(res) =>{
 						this.groupTitle=[],
@@ -187,7 +188,9 @@
 						this.villageStreetinfo=[],
 						console.log('列表数据',res)
 						if(res.data.status == true){
+						if(res.data.data.head_id!=0){
 							this.villageHead=res.data.data;
+						}
 							this.villageCrewinfo=res.data.data.duty;
 							console.log(this.villageCrewinfo)
 							this.villageStreetinfo=res.data.data.info;
@@ -227,9 +230,9 @@
 				}
 				})
 			},
-			 entering:function(){
+			 entering:function(e){
 				uni.navigateTo({
-					url:'choice'
+					url:'choice?id='+e
 				});
 			 },
 			//-------------------------修改村长-------------------------

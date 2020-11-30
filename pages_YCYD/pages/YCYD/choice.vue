@@ -12,14 +12,26 @@
 	export default {
 		data() {
 			return {
-				
+				id:0,
 			}
+		},
+		onLoad(param) {
+		this.id=param.id;
+			console.log(param)
+			console.log(this.id)
 		},
 		methods: {
 			head:function(){
+				if(this.id!=0){
+					uni.showToast({
+						title: '该村已存在村长无法继续添加',
+						icon: 'none'
+					})
+				}else{
 				uni.navigateTo({
 					url:'./addVillageHead'
 				})
+				}
 			},
 			crew:function(){
 				uni.navigateTo({
