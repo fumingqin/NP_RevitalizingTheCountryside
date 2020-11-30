@@ -602,8 +602,7 @@
 				    "path" : "pages/WSSC/onlineShoppingMall/osm_detailsPage",
 				    "style" : {
 						"navigationStyle": "custom",
-						"navigationBarTitleText": "商品详情",
-						"navigationBarTextStyle": "white"
+						"navigationBarTitleText": "商品详情"
 					}
 				}
 				,{

@@ -140,6 +140,12 @@ const KyInterface = {
 		name:'订单退款',
 		method:'POST',
 	},
+	//--------------------------------------编辑接口--------------------------------------
+	getProductList:{
+		Url:Url + '/api/shopMall/getProductList',
+		name:'商品列表',
+		method:'POST',
+	},
 }
 
 // 接口声明区
