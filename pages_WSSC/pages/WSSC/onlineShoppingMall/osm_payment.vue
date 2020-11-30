@@ -94,6 +94,7 @@
 				uni.showLoading({
 					title: '拉起支付中...'
 				})
+				var that=this;
 				console.log(this.userInfo.userId)
 				console.log(this.userInfo.userName)
 				console.log(this.userInfo.phoneNumber)
@@ -111,7 +112,7 @@
 					success: (res) => {
 						if (res.data.status == true) {
 							uni.hideLoading()
-							// this.orderInfo=objInfo;
+							this.orderInfo=res.data.data;
 							console.log('支付拉取成功', res)
 							console.log('1111', res.data.data)
 							console.log('1', res.data.data.AppId)
@@ -132,19 +133,20 @@
 									sign:res.data.data.Sign,
 								},
 								success: function(res) {
+									console.log(res)
 									if(res.errMsg == 'requestPayment:ok'){
 										uni.request({
-											url: this.$wssc.KyInterface.checkOrderState.Url,
-											method: this.$wssc.KyInterface.checkOrderState.method,
+											url: that.$wssc.KyInterface.checkOrderState.Url,
+											method: that.$wssc.KyInterface.checkOrderState.method,
 											data: {
 												orderNumber: that.orderInfo.BillNO
 											},
 											success: function(res) {
 												console.log(res)
 												if (res.data.status == true) {
-													// uni.redirectTo({
-													// 	url: 'successfulPayment'
-													// })
+													uni.redirectTo({
+														url: 'osm_orderList'
+													})
 												} else {
 													uni.showToast({
 														title: '购买失败',

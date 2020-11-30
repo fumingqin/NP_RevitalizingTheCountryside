@@ -11,7 +11,7 @@
 			<view class="ovof_dp_bg_background">
 				<view class="title">
 					<text class="ovof_dp_bg_title">{{title}}</text>
-					<text class="ovof_dp_bg_cost">￥{{cost}}</text>
+					<text class="ovof_dp_bg_cost">￥{{specChildList.price}}</text>
 				</view>
 				<view class="ovof_dp_bg_time">
 					<text class="browse">销售量:</text>
@@ -48,7 +48,7 @@
 					<view class="a-t">
 						<image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image>
 						<view class="right">
-							<text class="price">¥328.00</text>
+							<text class="price">¥{{specChildList.price}}</text>
 							<view class="selected">
 								已选：
 								<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
@@ -61,14 +61,17 @@
 					<view class="attr-list" v-for="(item,index) in specList" :key="index">
 						<text>{{item.name}}</text>
 						<view class="item-list">
-							<text v-for="(childItem, childIndex) in specChildList" :key="childIndex" class="tit" :class="{selected: childItem.selected}"
+							<!-- <text v-for="(childItem, childIndex) in specChildList" :key="childIndex" class="tit" :class="{selected: childItem.selected}"
 							v-if="childItem.pid === item.id" @click="selectSpec(childIndex, childItem.pid)">
 								{{childItem.name}}
+							</text> -->
+							<text class="tit" v-if="specChildList.pid === item.id">
+								{{specChildList.name}}
 							</text>
 						</view>
 					</view>
 					<lxc-count @handleCount="handleCountClick" :index="0" :value="mydata.num" :delayed="100"></lxc-count>
-					<button class="btn" @click="toggleSpec">完成</button>
+					<button class="btn" @click="buyNow">立即购买</button>
 				</view>
 			</view>
 
@@ -94,19 +97,10 @@
 						<u-parse :html="desc" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 					</u-read-more>
 				</view>
-				
-				<!-- <view style="margin: 40upx 0 0 80upx;padding-bottom: 104upx;" v-if="type==1 && video==true">
-					<video id="myVideo" :src="groupTitle.video[0]" enable-danmu danmu-btn controls></video>
-				</view> -->
-
-				<!-- 缺省提示 -->
-				<!-- <view style="padding:200upx 0" v-if="type==1 && video==false">
-					<u-empty text="暂无相关视频哦~" mode="list"></u-empty>
-				</view> -->
 			</view>
 			
 			<!-- 提交订单栏 -->
-			<view class="navigation">
+			<!-- <view class="navigation">
 				<view class="left">
 					<view class="item">
 						<u-icon name="server-fill" :size="40" :color="$u.color['contentColor']"></u-icon>
@@ -125,6 +119,21 @@
 				<view class="right">
 					<view class="cart btn u-line-1">加入购物车</view>
 					<view class="buy btn u-line-1" @click="buyNowJump">立即购买</view>
+				</view>
+			</view> -->
+			
+			<!-- 提交订单栏 -->
+			<view class="navigation">
+				<view class="left">
+					<view class="item">
+						<u-icon name="server-fill" :size="40" :color="$u.color['contentColor']"></u-icon>
+						<view class="text u-line-1">客服</view>
+					</view>
+				</view>
+				<view class="right">
+					<view class="button">
+						<text class="buy btn u-line-1" @click="buyNowJump">立即购买</text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -147,7 +156,6 @@
 				toggle: false,
 				post: '市级职责人员',
 				type: 0,
-				cost: 185,
 				id: '',
 				label: ['诚信商家', '假一赔十', '包邮', ],
 				video: false,
@@ -164,37 +172,43 @@
 						name: '购买数量',
 					},
 				],
-				specChildList: [{
-						id: 1,
-						pid: 1,
-						name: '100克',
-					},
-					{
-						id: 2,
-						pid: 1,
-						name: '200克',
-					},
-					{
-						id: 3,
-						pid: 1,
-						name: '300克',
-					},
-					{
-						id: 4,
-						pid: 1,
-						name: '400克',
-					},
-					{
-						id: 5,
-						pid: 1,
-						name: '500克',
-					},
-					{
-						id: 6,
-						pid: 1,
-						name: '600克',
-					},
-				],
+				specChildList:{
+					id: 1,
+					pid: 1,
+					name: '100克',
+					price:100,
+				},
+				// specChildList: [{
+				// 		id: 1,
+				// 		pid: 1,
+				// 		name: '100克',
+				// 	},
+				// 	{
+				// 		id: 2,
+				// 		pid: 1,
+				// 		name: '200克',
+				// 	},
+				// 	{
+				// 		id: 3,
+				// 		pid: 1,
+				// 		name: '300克',
+				// 	},
+				// 	{
+				// 		id: 4,
+				// 		pid: 1,
+				// 		name: '400克',
+				// 	},
+				// 	{
+				// 		id: 5,
+				// 		pid: 1,
+				// 		name: '500克',
+				// 	},
+				// 	{
+				// 		id: 6,
+				// 		pid: 1,
+				// 		name: '600克',
+				// 	},
+				// ],
 				mydata: [{
 					name: '111',
 					num: 0,
@@ -295,10 +309,21 @@
 			
 			//-----------------------立即购买跳转路由-------------------------
 			buyNowJump:function(){
-				uni.navigateTo({
-					url: './osm_payment'
-				})
-			}
+				this.specClass = 'show';
+			},
+			
+			buyNow:function(){
+				if(this.number!==0){
+					uni.navigateTo({
+						url : 'osm_orderDetails'
+					})
+				}else{
+					uni.showToast({
+						title: '请选择购买数量',
+						icon: 'none',
+					})
+				}
+			},
 		}
 	}
 </script>
@@ -719,6 +744,52 @@
 	}
 	
 	//提交订单栏
+	// .navigation {
+	// 	display: flex;
+	// 	position: fixed;
+	// 	margin-top: 100rpx;
+	// 	border: solid 2rpx #f2f2f2;
+	// 	background-color: #ffffff;
+	// 	padding: 16rpx 0;
+	// 	width: 100%;
+	// 	bottom:0;
+	// 	.left {
+	// 		display: flex;
+	// 		font-size: 20rpx;
+	// 		.item {
+	// 			margin: 0 30rpx;
+	// 			&.car {
+	// 				text-align: center;
+	// 				position: relative;
+	// 				.car-num {
+	// 					position: absolute;
+	// 					top: -10rpx;
+	// 					right: -10rpx;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// 	.right {
+	// 		display: flex;
+	// 		font-size: 28rpx;
+	// 		align-items: center;
+	// 		.btn {
+	// 			line-height: 66rpx;
+	// 			padding: 0 30rpx;
+	// 			border-radius: 36rpx;
+	// 			color: #ffffff;
+	// 		}
+	// 		.cart {
+	// 			background-color: #ed3f14;
+	// 			margin-right: 30rpx;
+	// 		}
+	// 		.buy {
+	// 			background-color: #ff7900;
+	// 		}
+	// 	}
+	// }
+	
+	//提交订单栏
 	.navigation {
 		display: flex;
 		position: fixed;
@@ -748,18 +819,23 @@
 			display: flex;
 			font-size: 28rpx;
 			align-items: center;
-			.btn {
-				line-height: 66rpx;
-				padding: 0 30rpx;
-				border-radius: 36rpx;
-				color: #ffffff;
-			}
-			.cart {
-				background-color: #ed3f14;
-				margin-right: 30rpx;
-			}
-			.buy {
-				background-color: #ff7900;
+			position: relative;
+			width: 100%;
+			
+			.button{
+				width: 100%;
+				text-align: right;
+				margin-right: 20upx;
+				
+				.btn {
+					line-height: 66upx;
+					padding: 14upx 30upx;
+					border-radius: 36upx;
+					color: #ffffff;
+				}
+				.buy {
+					background-color: #ed3f14;
+				}
 			}
 		}
 	}

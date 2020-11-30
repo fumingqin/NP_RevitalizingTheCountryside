@@ -125,7 +125,7 @@ const KyInterface = {
 	//--------------------------------------编辑接口--------------------------------------
 	checkOrderState:{
 		Url:Url + '/api/order/checkOrderState',
-		name:'支付接口',
+		name:'检索订单状态',
 		method:'POST',
 	},
 }

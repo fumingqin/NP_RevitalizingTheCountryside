@@ -610,6 +610,14 @@
 				    "path" : "pages/WSSC/onlineShoppingMall/osm_orderList",
 				    "style" : {}
 				}
+				,{
+				    "path" : "pages/WSSC/onlineShoppingMall/osm_orderDetails",
+				    "style" : {
+						"navigationBarTitleText": "确认订单",
+						"navigationBarBackgroundColor": "#22C704",
+						"navigationBarTextStyle": "white"
+					}
+				}
 			]
 		},
 
