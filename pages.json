@@ -611,7 +611,9 @@
 				}
 				,{
 				    "path" : "pages/WSSC/onlineShoppingMall/osm_orderList",
-				    "style" : {}
+				    "style" : {
+						"enablePullDownRefresh": true
+					}
 				}
 				,{
 				    "path" : "pages/WSSC/onlineShoppingMall/osm_orderDetails",

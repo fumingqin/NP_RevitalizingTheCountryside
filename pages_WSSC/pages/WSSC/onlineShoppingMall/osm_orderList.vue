@@ -42,7 +42,7 @@
 								</view>
 								<view class="bottom">
 									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
-									<view v-if="item.orderList.state=='支付成功'" class="logistics btn" @click="refund(item.id)">退款</view>
+									<view v-if="item.orderList.state=='支付成功'" class="logistics btn" @click="refund(item.orderList.order_number)">退款</view>
 <!-- 									<view class="exchange btn">卖了换钱</view>
 									<view class="evaluate btn">评价</view> -->
 								</view>
@@ -88,7 +88,7 @@
 									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
 									<!-- <view class="logistics btn">查看物流</view>
 									<view class="exchange btn">卖了换钱</view> -->
-									<view class="evaluate btn">付款</view>
+									<view class="evaluate btn" >付款</view>
 								</view>
 							</view>
 						</view>
@@ -269,39 +269,24 @@
 			}
 		},
 		
-		onLoad() {
+		onShow() {
+			uni.showLoading({
+				title: '加载列表中...',
+			})
 			this.ddlbData();
 		},
 		
-		// computed: {
-		// 	// 价格小数
-		// 	priceDecimal() {
-		// 		return val => {
-		// 			if (val !== parseInt(val)) return val.slice(-2);
-		// 			else return '00';
-		// 		};
-		// 	},
-		// 	// 价格整数
-		// 	priceInt() {
-		// 		return val => {
-		// 			if (val !== parseInt(val)) return val.split('T')[0];
-		// 			else return val;
-		// 		};
-		// 	}
-		// },
+		onPullDownRefresh: function() {
+			uni.showLoading({
+				title: '加载列表中...',
+			})
+			this.ddlbData();
+		},
 		
 		methods: {
 			//-----------------------加载接口数据------------------------
 			
 			ddlbData:function(){
-				// var a=this.dataList;
-				// this.orderList = a.filter(item => {
-				// 	return item.deal == '交易成功';
-				// })
-				// console.log(this.dataList)
-				// this.orderList2 = a.filter(item => {
-				// 	return item.deal == '交易失败';
-				// })
 				
 					uni.getStorage({
 						key: 'userInfo',
@@ -314,6 +299,8 @@
 						},
 						success:(res) =>{
 							console.log('列表数据',res)
+							this.orderList=[];
+							this.orderList2=[];
 							if(res.data.status == true){
 								for(var i=0;i<res.data.data.length;i++){
 									if(res.data.data[i].orderList.state!='待支付'){
@@ -359,29 +346,25 @@
 					}
 					})	
 			},
-			refund:function(e){
+			checkOrderState:function(e){
 				uni.request({
-					url:this.$wssc.KyInterface.getOrederList.Url,
-					method:this.$wssc.KyInterface.getOrederList.method,
+					url:this.$wssc.KyInterface.checkOrderState.Url,
+					method:this.$wssc.KyInterface.checkOrderState.method,
 					data:{
 						orderNumber:e,
 					},
 					success:(res) =>{
 						console.log(res)
 						if(res.data.status){
-						if(res.data=='支付成功'){
-							
-						}
-							uni.stopPullDownRefresh();
-							uni.hideLoading();
+							uni.startPullDownRefresh();
 						}else{
-							uni.stopPullDownRefresh();
-							uni.hideLoading();
 							uni.showToast({
-								title: '暂无列表信息',
+								title: '该订单状态异常请联系客服',
 								icon: 'none'
 							})
 						}
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
 					},
 					fail(res) {
 						uni.stopPullDownRefresh();
@@ -405,6 +388,57 @@
 					}
 				})
 			},
+			//---------------------退票---------------------
+			refund: function(e) {
+			    uni.showModal({
+			     title: '您确认退款吗？',
+			     success: (res) => {
+			      console.log(res)
+			      if (res.confirm == true) {
+			       uni.showLoading({
+			        title: '正在退款....'
+			       })
+			       uni.request({
+			        url: this.$wssc.KyInterface.OrderRefund.Url,
+			        method:this.$wssc.KyInterface.OrderRefund.method,
+			        data: {
+						orderNumber:e,
+			        },
+			        success: (res) => {
+			         console.log(res)
+			         if (res.data.status) {
+			          uni.hideLoading()
+			          uni.showToast({
+			           title: '退款成功',
+			           icon: 'success'
+			          })
+					  this.checkOrderState(e);
+			          
+			         } else {
+			          uni.hideLoading()
+			          uni.showToast({
+			           title: '退款失败',
+			           icon: 'success'
+			          })
+			          uni.startPullDownRefresh();
+			         }
+			
+			        },
+			        fail: () => {
+			         uni.hideLoading()
+			         uni.showToast({
+			          title: '服务器异常，请重试',
+			          icon: 'success'
+			         })
+			         uni.startPullDownRefresh();
+			        }
+			       })
+			      } else {
+			
+			      }
+			     }
+			    })
+			   },
 			//-------------------时间切割---------------------------
 			gettime:function(param){
 					let array=param.split('T');
