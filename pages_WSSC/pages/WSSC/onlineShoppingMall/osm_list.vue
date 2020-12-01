@@ -61,17 +61,23 @@
 			<view class="gd_list" :hidden="screenIndex == 3">
 				<view v-for="(item, index) in goodsList" :key="index" v-if="index < goodsListIndex " class="gd_item" @click="navToDetailPage(item)">
 					<view class="gd_wrapper">
-						<image :src="item.image" mode="aspectFill"></image>
+						<!-- <image :src="JSON.parse(item.image)[0]" mode="aspectFill"></image> -->
+						<image :src="JSON.parse(item.image)[0]" mode="aspectFill"></image>
 					</view>
-					<text class="title clamp">{{item.title}}</text>
+					<text class="title clamp">{{item.introduce}}</text>
 					<view class="gd_box">
-						<text class="price">{{item.price}}</text>
-						<text>已售 {{item.sales}}</text>
+						<text class="price">{{item.unit_price}}</text>
+						<text>已售 {{item.sale_volume}}</text>
 					</view>
 				</view>
-				<view style="text-align: center; padding: 24upx 0; font-size: 28upx; color: #aaa;width: 100%;">
+				<view style="text-align: center; padding: 24upx 0; font-size: 28upx; color: #aaa;width: 100%;" v-if="index<6">
 					<text>{{loadingType=== 0 ? loadingText.down : (loadingType === 1 ? loadingText.refresh : loadingText.nomore)}}</text>
 				</view>
+			</view>
+			
+			<!-- 缺省提示 -->
+			<view style="margin-top: 360upx;" v-if="goodsList.length == 0">
+				<u-empty text="暂无数据哦~" mode="list"></u-empty>
 			</view>
 			
 			<!-- 分类面板 -->
@@ -191,124 +197,131 @@
 						name:'建瓯栗子'
 					}],
 				}], //分类数组
-				goodsList: [{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-						title: '惜秦皇汉武，略输文采',
-						price: 1654,
-						sales: 57,
-						ticketId:1,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-						title: '一代天骄，成吉思汗',
-						price: 454,
-						sales: 4,
-						ticketId:2,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-						title: '惜秦皇汉武，略输文采',
-						price: 368,
-						sales: 1,
-						ticketId:3,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-						title: '一代天骄，成吉思汗',
-						price: 123,
-						sales: 88,
-						ticketId:4,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-						title: '惜秦皇汉武，略输文采',
-						price: 56,
-						sales: 3,
-						ticketId:5,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-						title: '一代天骄，成吉思汗',
-						price: 77,
-						sales: 99,
-						ticketId:6,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-						title: '惜秦皇汉武，略输文采',
-						price: 9,
-						sales: 111,
-						ticketId:7,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-						title: '一代天骄，成吉思汗',
-						price: 88,
-						sales: 333,
-						ticketId:8,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-						title: '惜秦皇汉武，略输文采',
-						price: 1111,
-						sales: 56,
-						ticketId:9,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-						title: '一代天骄，成吉思汗',
-						price: 444,
-						sales: 77,
-						ticketId:10,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-						title: '惜秦皇汉武，略输文采',
-						price: 777,
-						sales: 99,
-						ticketId:11,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-						title: '一代天骄，成吉思汗',
-						price: 774,
-						sales: 98,
-						ticketId:12,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-						title: '惜秦皇汉武，略输文采',
-						price: 999,
-						sales: 66,
-						ticketId:13,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-						title: '一代天骄，成吉思汗',
-						price: 33,
-						sales: 57,
-						ticketId:14,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-						title: '惜秦皇汉武，略输文采',
-						price: 434,
-						sales: 34,
-						ticketId:15,
-					},
-					{
-						image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-						title: '一代天骄，成吉思汗',
-						price: 564,
-						sales: 47,
-						ticketId:16,
-					}
-				]
+				// goodsList: [{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
+				// 		title: '惜秦皇汉武，略输文采',
+				// 		price: 1654,
+				// 		sales: 57,
+				// 		ticketId:1,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
+				// 		title: '一代天骄，成吉思汗',
+				// 		price: 454,
+				// 		sales: 4,
+				// 		ticketId:2,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
+				// 		title: '惜秦皇汉武，略输文采',
+				// 		price: 368,
+				// 		sales: 1,
+				// 		ticketId:3,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
+				// 		title: '一代天骄，成吉思汗',
+				// 		price: 123,
+				// 		sales: 88,
+				// 		ticketId:4,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
+				// 		title: '惜秦皇汉武，略输文采',
+				// 		price: 56,
+				// 		sales: 3,
+				// 		ticketId:5,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
+				// 		title: '一代天骄，成吉思汗',
+				// 		price: 77,
+				// 		sales: 99,
+				// 		ticketId:6,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
+				// 		title: '惜秦皇汉武，略输文采',
+				// 		price: 9,
+				// 		sales: 111,
+				// 		ticketId:7,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
+				// 		title: '一代天骄，成吉思汗',
+				// 		price: 88,
+				// 		sales: 333,
+				// 		ticketId:8,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
+				// 		title: '惜秦皇汉武，略输文采',
+				// 		price: 1111,
+				// 		sales: 56,
+				// 		ticketId:9,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
+				// 		title: '一代天骄，成吉思汗',
+				// 		price: 444,
+				// 		sales: 77,
+				// 		ticketId:10,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
+				// 		title: '惜秦皇汉武，略输文采',
+				// 		price: 777,
+				// 		sales: 99,
+				// 		ticketId:11,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
+				// 		title: '一代天骄，成吉思汗',
+				// 		price: 774,
+				// 		sales: 98,
+				// 		ticketId:12,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
+				// 		title: '惜秦皇汉武，略输文采',
+				// 		price: 999,
+				// 		sales: 66,
+				// 		ticketId:13,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
+				// 		title: '一代天骄，成吉思汗',
+				// 		price: 33,
+				// 		sales: 57,
+				// 		ticketId:14,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
+				// 		title: '惜秦皇汉武，略输文采',
+				// 		price: 434,
+				// 		sales: 34,
+				// 		ticketId:15,
+				// 	},
+				// 	{
+				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
+				// 		title: '一代天骄，成吉思汗',
+				// 		price: 564,
+				// 		sales: 47,
+				// 		ticketId:16,
+				// 	}
+				// ],
+				name:'',//商品名字
+				goodsList:[],//列表数据
 			}
 		},
 		
-		onLoad() {
+		onLoad(param) {
+			this.name=param.name;
+		},
+		
+		onShow() {
 			this.rotationLoadData();
+			this.listData();
 		},
 		
 		onReachBottom() {
@@ -346,6 +359,25 @@
 						})
 					}
 				})
+			},
+			
+			
+			//列表
+			listData:function(){
+				uni.request({
+					url:this.$wssc.KyInterface.getHomepageByKey.Url,
+					method:this.$wssc.KyInterface.getHomepageByKey.method,
+					data:{
+						key:this.name
+					},
+					success: (res) => {
+						console.log('列表数据',res);
+						this.goodsList = res.data.data;
+					},
+					fail(res) {
+						uni.hideLoading();
+					}
+				});
 			},
 
 			//------------------点击搜索跳转---------------------------
@@ -441,9 +473,9 @@
 			},
 			
 			//跳转详情
-			navToDetailPage:function(){
+			navToDetailPage:function(e){
 				uni.navigateTo({
-					url: 'osm_detailsPage'
+					url: 'osm_detailsPage?id='+e.id
 				})
 			},
 			

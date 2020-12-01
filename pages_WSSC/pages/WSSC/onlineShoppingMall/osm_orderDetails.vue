@@ -11,23 +11,28 @@
 		
 		<view class="content">
 			<!-- 店名 -->
-			<view class="shopName">
+			<!-- <view class="shopName">
 				<u-icon name="home" size="28"></u-icon>
 				<text class="text">不知道什么店名</text>
-			</view>
+			</view> -->
 			
 			<!-- 商品详情 -->
 			<view class="commodity">
-				<image class="image" src="http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg" mode="aspectFill"></image>
-				<text class="text">{{title}}</text>
+				<image class="image" :src="details.image" mode="aspectFill"></image>
+				<text class="text">{{details.title}}</text>
 			</view>
 			
 			<!-- 商品参数 -->
 			<view class="parameter">
-				<text class="Specifications">规格:{{Specifications}}</text>
+				<text class="Specifications">规格:{{details.saleUnit}}/￥{{details.price2}}</text>
 				<view class="priceNumber">
-					<text class="price">￥{{price}}</text>
-					<text class="number">X{{number}}</text>
+					<text class="price">￥{{details.price2}}</text>
+					<text class="number">X{{details.number}}</text>
+				</view>
+				
+				<view class="priceNumber">
+					<text class="price"></text>
+					<text class="number" style="color: #E3424B;font-weight: bold;">总计：{{details.price}}元</text>
 				</view>
 			</view>
 		</view>
@@ -53,11 +58,7 @@
 	export default {
 		data() {
 			return {
-				langth:1,
-				title:'商品内容商品内容商品内容商品内容商品内容商品内容商品内容商品内容商品内容商品内容商品内容商品内容商品内容商品内容商品内容商品内容',
-				Specifications:'200克',
-				price:38.38,
-				number:1,
+				details:'',
 			}
 		},
 		
@@ -72,6 +73,7 @@
 					key: 'userInfo',
 					success: (res) => {
 						this.userInfo = res.data;
+						this.detailsData();
 						// console.log('获取个人信息', this.userInfo)
 					},
 					fail: (err) => {
@@ -87,6 +89,22 @@
 						})
 					}
 				});
+			},
+			
+			detailsData:function(){
+				uni.getStorage({
+					key: 'detailsData',
+					success: (res) => {
+						console.log(res)
+						this.details=res.data;
+					},
+					fail: () => {
+						uni.showToast({
+							title:'未读取到缓存',
+							icon:'none',
+						})
+					}
+				})
 			},
 			
 			buyNowJump:function(){
@@ -184,7 +202,6 @@
 					text-align: left;
 					font-size: 28upx;
 					font-weight: bold;
-					color: #E3424B;
 				}
 				
 				.number{

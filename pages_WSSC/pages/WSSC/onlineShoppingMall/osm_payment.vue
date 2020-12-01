@@ -2,7 +2,7 @@
 	<view class="app">
 		<view class="price-box">
 			<text>支付金额</text>
-			<text class="price">38.88</text>
+			<text class="price">{{details.price}}</text>
 		</view>
 
 		<view class="pay-type-list">
@@ -53,6 +53,7 @@
 				payType: 1,
 				orderInfo: '',
 				userInfo:'',
+				details:'',
 			};
 		},
 		computed: {
@@ -69,6 +70,7 @@
 					key: 'userInfo',
 					success: (res) => {
 						this.userInfo = res.data;
+						this.detailsData();
 						// console.log('获取个人信息', this.userInfo)
 					},
 					fail: (err) => {
@@ -85,6 +87,23 @@
 					}
 				});
 			},
+			
+			detailsData:function(){
+				uni.getStorage({
+					key: 'detailsData',
+					success: (res) => {
+						console.log(res)
+						this.details=res.data;
+					},
+					fail: () => {
+						uni.showToast({
+							title:'未读取到缓存',
+							icon:'none',
+						})
+					}
+				})
+			},
+			
 			//选择支付方式
 			changePayType(type) {
 				this.payType = type;
@@ -103,9 +122,9 @@
 					method: this.$wssc.KyInterface.placeOrder.method,
 					data:{
 						userId:this.userInfo.userId,
-						productId:9,
-						quantity:1,
-						totalAmount:0.01,
+						productId:this.details.id,
+						quantity:this.details.number,
+						totalAmount:this.details.price,
 						nickName:this.userInfo.userName,
 						phoneNumber:this.userInfo.phoneNumber
 					},

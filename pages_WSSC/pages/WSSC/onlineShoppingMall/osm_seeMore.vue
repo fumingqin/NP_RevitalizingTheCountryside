@@ -22,7 +22,7 @@
 							<image style="width: 100%; height: 220upx;margin: 20upx 0 0 0;" src="http://120.24.144.6:8081/30327a28540c43498660cf3c6d4af407.png" mode="aspectFill"></image>
 						</view>
 						<view class="item-container">
-							<view class="thumb-box" v-for="(item1, index1) in item.food" :key="index1">
+							<view class="thumb-box" v-for="(item1, index1) in item.food" :key="index1" @click="itemClick(item1.title)">
 								<image class="item-menu-image" :src="JSON.parse(item1.image)[0]" mode="aspectFit"></image>
 								<view class="item-menu-name">{{item1.title}}</view>
 							</view>
@@ -85,6 +85,14 @@
 							icon: 'none'
 						})
 					}
+				})
+			},
+			
+			//点击跳转
+			itemClick: function(name) {
+				// console.log(entrance)
+				uni.navigateTo({
+					url: 'osm_list?name=' + name,
 				})
 			},
 			

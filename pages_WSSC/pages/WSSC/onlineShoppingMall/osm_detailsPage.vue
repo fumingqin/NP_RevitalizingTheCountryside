@@ -16,7 +16,7 @@
 				<view class="title">
 					<text class="ovof_dp_bg_title">{{details.introduce}}</text>
 					<text class="ovof_dp_bg_cost" v-if="number==0">¥0</text>
-					<text class="ovof_dp_bg_cost" v-if="number!==0">¥{{calculateQuantity(details.unit_price)}}</text>
+					<text class="ovof_dp_bg_cost" v-if="number!==0">¥{{details.unit_price}}</text>
 				</view>
 				<view class="ovof_dp_bg_time">
 					<text class="browse">销售量:</text>
@@ -51,7 +51,7 @@
 				<view class="mask"></view>
 				<view class="layer attr-content" @click.stop="stopPrevent">
 					<view class="a-t">
-						<image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image>
+						<image :src="details.image"></image>
 						<view class="right">
 							<text class="price" v-if="number==0">¥0</text>
 							<text class="price" v-if="number!==0">¥{{calculateQuantity(details.unit_price)}}</text>
@@ -74,7 +74,7 @@
 						</view>
 					</view> -->
 					<view class="attr-list">
-						<text>规格:{{details.sale_unit}}</text>
+						<text>规格:{{details.sale_unit}}/￥{{details.unit_price}}</text>
 					</view>
 					
 					<view class="attr-list">
@@ -88,7 +88,7 @@
 			<view class="u-content">
 
 				<!-- 顶部滑动 -->
-				<view class="screen">
+				<!-- <view class="screen">
 					<view class="screenView">
 						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)">
 							内容介绍
@@ -97,9 +97,9 @@
 							质检证书
 						</view>
 					</view>
-				</view>
+				</view> -->
 
-				<view v-if="type==0">
+				<view>
 					<view class="d-header">
 						<text>图文详情</text>
 					</view>
@@ -374,8 +374,23 @@
 			
 			buyNow:function(){
 				if(this.number!==0){
-					uni.navigateTo({
-						url : 'osm_orderDetails'
+					var array = {
+						image: this.details.image,
+						title: this.details.introduce,
+						saleUnit: this.details.sale_unit,
+						price: this.quantity,
+						price2:this.details.unit_price,
+						number: this.number,
+						id:this.details.id,
+					}
+					uni.setStorage({
+						key: 'detailsData',
+						data: array,
+						success() {
+							uni.navigateTo({
+								url : 'osm_orderDetails'
+							})
+						},
 					})
 				}else{
 					uni.showToast({
