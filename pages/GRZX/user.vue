@@ -131,9 +131,9 @@
 					{
 						IsUse: true,
 						clickURL: "",
-						ImageURL: "../../static/GRZX/icon/yjfk.png",
+						ImageURL: "../../static/GRZX/icon/sc.png",
 						ItemTitle: "商城订单",
-						style:"YJFKicon",
+						style:"DHKFicon",
 					},
 					{
 						IsUse: true,
@@ -510,7 +510,7 @@
 				width: 40upx;
 				height: 39upx;
 				margin: 40upx 20upx;
-			}
+			} 
 			.CKGLicon{
 				width: 40upx;
 				height: 44upx;
@@ -522,7 +522,7 @@
 				margin: 37upx 20upx;
 			} 
 			.YJFKicon{
-				width: 35upx;
+				width: 35upx; 
 				height: 42upx;
 				margin: 37upx 20upx;
 			}
