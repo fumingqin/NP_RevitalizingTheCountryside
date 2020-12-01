@@ -10,40 +10,39 @@
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 						<view class="page-box">
-							<view class="order" v-for="(res, index) in orderList" :key="index">
+							<view class="order" v-for="(item, index) in orderList" :key="index">
 								<view class="top">
 									<view class="left">
 										<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
-										<view class="store">{{ res.store }}</view>
+										<view class="store">{{ item.userName }}</view>
 										<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
 									</view>
-									<view class="right">{{ res.deal }}</view>
+									<view class="right">{{ item.orderList.state }}</view>
 								</view>
-								<view class="item" v-for="(item, index) in res.goodsList" :key="index">
-									<view class="left"><image :src="item.goodsUrl" mode="aspectFill"></image></view>
+								<view class="item">
+									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
 									<view class="content">
-										<view class="title u-line-2">{{ item.title }}</view>
-										<view class="type">{{ item.type }}</view>
-										<view class="delivery-time">发货时间 {{ item.deliveryTime }}</view>
+										<view class="title u-line-2">{{ item.product.name }}</view>
+										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
 										<view class="price">
-											￥{{ priceInt(item.price) }}
-											<text class="decimal">.{{ priceDecimal(item.price) }}</text>
+											￥{{item.product.unit_price }}
 										</view>
-										<view class="number">x{{ item.number }}</view>
+										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
-								</view>
+									</view>
 								<view class="total">
-									共{{ totalNum(res.goodsList) }}件商品 合计:
+									共{{ item.orderList.quantity }}件商品 合计:
 									<text class="total-price">
-										￥{{ priceInt(totalPrice(res.goodsList)) }}.
-										<text class="decimal">{{ priceDecimal(totalPrice(res.goodsList)) }}</text>
+										￥{{ item.orderList.total_amount}}
 									</text>
 								</view>
 								<view class="bottom">
 									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
-									<view class="logistics btn" @click="refund(res.id)">退款</view>
+									<view v-if="item.orderList.state=='支付成功'" class="logistics btn" @click="refund(item.id)">退款</view>
 <!-- 									<view class="exchange btn">卖了换钱</view>
 									<view class="evaluate btn">评价</view> -->
 								</view>
@@ -55,35 +54,34 @@
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 						<view class="page-box">
-							<view class="order" v-for="(res, index) in orderList2" :key="res.id">
+							<view class="order" v-for="(item, index) in orderList2" :key="index">
 								<view class="top">
 									<view class="left">
 										<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
-										<view class="store">{{ res.store }}</view>
+										<view class="store">{{ item.userName }}</view>
 										<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
 									</view>
-									<view class="right">{{ res.state }}</view>
+									<view class="right">{{ item.orderList.state }}</view>
 								</view>
-								<view class="item" v-for="(item, index) in res.goodsList" :key="index">
-									<view class="left"><image :src="item.goodsUrl" mode="aspectFill"></image></view>
+								<view class="item">
+									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
 									<view class="content">
-										<view class="title u-line-2">{{ item.title }}</view>
-										<view class="type">{{ item.type }}</view>
-										<view class="delivery-time">发货时间 {{ item.deliveryTime }}</view>
+										<view class="title u-line-2">{{ item.product.name }}</view>
+										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
 										<view class="price">
-											￥{{ priceInt(item.price) }}
-											<text class="decimal">.{{ priceDecimal(item.price) }}</text>
+											￥{{item.product.unit_price }}
 										</view>
-										<view class="number">x{{ item.number }}</view>
+										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
-								</view>
+									</view>
 								<view class="total">
-									共{{ totalNum(res.goodsList) }}件商品 合计:
+									共{{ item.orderList.quantity }}件商品 合计:
 									<text class="total-price">
-										￥{{ priceInt(totalPrice(res.goodsList)) }}.
-										<text class="decimal">{{ priceDecimal(totalPrice(res.goodsList)) }}</text>
+										￥{{ item.orderList.total_amount}}
 									</text>
 								</view>
 								<view class="bottom">
@@ -275,22 +273,22 @@
 			this.ddlbData();
 		},
 		
-		computed: {
-			// 价格小数
-			priceDecimal() {
-				return val => {
-					if (val !== parseInt(val)) return val.slice(-2);
-					else return '00';
-				};
-			},
-			// 价格整数
-			priceInt() {
-				return val => {
-					if (val !== parseInt(val)) return val.split('.')[0];
-					else return val;
-				};
-			}
-		},
+		// computed: {
+		// 	// 价格小数
+		// 	priceDecimal() {
+		// 		return val => {
+		// 			if (val !== parseInt(val)) return val.slice(-2);
+		// 			else return '00';
+		// 		};
+		// 	},
+		// 	// 价格整数
+		// 	priceInt() {
+		// 		return val => {
+		// 			if (val !== parseInt(val)) return val.split('T')[0];
+		// 			else return val;
+		// 		};
+		// 	}
+		// },
 		
 		methods: {
 			//-----------------------加载接口数据------------------------
@@ -318,8 +316,12 @@
 							console.log('列表数据',res)
 							if(res.data.status == true){
 								for(var i=0;i<res.data.data.length;i++){
-									this.orderList.push(res.data.data[i]);
-									// this.orderList2.push(res.data.data[i].orderList);
+									if(res.data.data[i].orderList.state!='待支付'){
+										this.orderList.push(res.data.data[i]);
+									}else{
+										this.orderList2.push(res.data.data[i]);
+									}
+									
 								};
 								console.log(this.orderList);
 								uni.stopPullDownRefresh();
@@ -357,23 +359,74 @@
 					}
 					})	
 			},
-			
+			refund:function(e){
+				uni.request({
+					url:this.$wssc.KyInterface.getOrederList.Url,
+					method:this.$wssc.KyInterface.getOrederList.method,
+					data:{
+						orderNumber:e,
+					},
+					success:(res) =>{
+						console.log(res)
+						if(res.data.status){
+						if(res.data=='支付成功'){
+							
+						}
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+						}else{
+							uni.stopPullDownRefresh();
+							uni.hideLoading();
+							uni.showToast({
+								title: '暂无列表信息',
+								icon: 'none'
+							})
+						}
+					},
+					fail(res) {
+						uni.stopPullDownRefresh();
+						uni.hideLoading();
+						uni.showToast({
+							title: '服务器异常',
+							icon: 'none'
+						})
+						// console.log(res)
+					},
+					complete() {
+						setTimeout(function(){
+							if(this.groupTitle==''){
+								uni.hideLoading();
+								uni.showToast({
+									title: '服务器异常',
+									icon: 'none'
+								})
+							}
+						},3000);
+					}
+				})
+			},
+			//-------------------时间切割---------------------------
+			gettime:function(param){
+					let array=param.split('T');
+					var a=array[0]+' '+array[1];
+					return a;
+			},
 			// 总价
-			totalPrice(item) {
-				let price = 0;
-				item.map(val => {
-					price += parseFloat(val.price);
-				});
-				return price.toFixed(2);
-			},
-			// 总件数
-			totalNum(item) {
-				let num = 0;
-				item.map(val => {
-					num += val.number;
-				});
-				return num;
-			},
+			// totalPrice(item) {
+			// 	let price = 0;
+			// 	item.map(val => {
+			// 		price += parseFloat(val.price);
+			// 	});
+			// 	return price.toFixed(2);
+			// },
+			// // 总件数
+			// totalNum(item) {
+			// 	let num = 0;
+			// 	item.map(val => {
+			// 		num += val.number;
+			// 	});
+			// 	return num;
+			// },
 			
 			// -------------------- tab栏切换 --------------------------
 			change(index) {
