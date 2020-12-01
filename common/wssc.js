@@ -146,6 +146,12 @@ const KyInterface = {
 		name:'商品列表',
 		method:'POST',
 	},
+	//--------------------------------------编辑接口--------------------------------------
+	getProductByID:{
+		Url:Url + '/api/shopMall/getProductByID',
+		name:'获取商品详情',
+		method:'POST',
+	},
 }
 
 // 接口声明区

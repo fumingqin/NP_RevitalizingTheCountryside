@@ -5,7 +5,7 @@
 		</view>
 		
 		<!-- 轮播区 -->
-		<u-swiper :list="image" :height="422" indicator-pos="bottomRight">
+		<u-swiper :list="details.image" :height="422" indicator-pos="bottomRight">
 			<u-loading slot="loading"></u-loading>
 			<view slot="error" style="font-size: 24rpx;">加载失败</view>
 		</u-swiper>
@@ -14,9 +14,9 @@
 			<view style="width: 750upx;"></view>
 			<view class="ovof_dp_bg_background">
 				<view class="title">
-					<text class="ovof_dp_bg_title">{{title}}</text>
+					<text class="ovof_dp_bg_title">{{details.introduce}}</text>
 					<text class="ovof_dp_bg_cost" v-if="number==0">¥0</text>
-					<text class="ovof_dp_bg_cost" v-if="number!==0">¥{{calculateQuantity(specChildList.price)}}</text>
+					<text class="ovof_dp_bg_cost" v-if="number!==0">¥{{calculateQuantity(details.unit_price)}}</text>
 				</view>
 				<view class="ovof_dp_bg_time">
 					<text class="browse">销售量:</text>
@@ -54,7 +54,7 @@
 						<image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image>
 						<view class="right">
 							<text class="price" v-if="number==0">¥0</text>
-							<text class="price" v-if="number!==0">¥{{calculateQuantity(specChildList.price)}}</text>
+							<text class="price" v-if="number!==0">¥{{calculateQuantity(details.unit_price)}}</text>
 							<view class="selected">
 								已选：
 								<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
@@ -74,7 +74,7 @@
 						</view>
 					</view> -->
 					<view class="attr-list">
-						<text>规格:{{specChildList.name}}</text>
+						<text>规格:{{details.sale_unit}}</text>
 					</view>
 					
 					<view class="attr-list">
@@ -104,7 +104,7 @@
 						<text>图文详情</text>
 					</view>
 					<u-read-more :toggle="toggle" :show-height="showHeight">
-						<u-parse :html="desc" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
+						<u-parse :html="details.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 					</u-read-more>
 				</view>
 			</view>
@@ -164,7 +164,6 @@
 				browse: '122',
 				showHeight: 600,
 				toggle: false,
-				post: '市级职责人员',
 				type: 0,
 				id: '',
 				label: ['诚信商家', '假一赔十', '包邮', ],
@@ -238,10 +237,16 @@
 						<img style="width:100%;display:block;" src="https://gd1.alicdn.com/imgextra/i1/479184430/O1CN01Tnm1rU1iaz4aVKcwP_!!479184430.jpg_400x400.jpg" />
 					</div>
 				`,
+				id:'',
+				details:'',//获取详情参数
+				quantity:'',//获取价格
 			}
 		},
 
-		onLoad: function() {
+		onLoad: function(param) {
+			this.id = param.id;
+			this.detailsData();
+			console.log(this.id)
 			//规格 默认选中第一条
 			// this.specList.forEach(item => {
 			// 	for (let cItem of this.specChildList) {
@@ -271,6 +276,35 @@
 				}
 			},
 			
+			//详情数据
+			detailsData:function(){
+				uni.request({
+					url: this.$wssc.KyInterface.getProductByID.Url,
+					method: this.$wssc.KyInterface.getProductByID.method,
+					data: {
+						id:this.id
+					},
+					success: (res) => {
+						// console.log('轮播区', res)
+						if (res.data.status == true) {
+							this.details=res.data.data;
+							console.log('获取详情数据', this.details)
+						} else {
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+					},
+					fail: function() {
+						uni.showToast({
+							title: '首页轮播图网络加载异常',
+							icon: 'none'
+						})
+					}
+				})
+			},
+			
 			//返回上一个页面
 			returnJump:function(){
 				uni.navigateBack({
@@ -281,7 +315,9 @@
 			//计算数量价格
 			calculateQuantity:function(e){
 				if(this.number!==0){
-					var a = e*this.number
+					var a = e*this.number;
+					this.quantity=a;
+					console.log(this.quantity)
 					return a;
 				}
 			},
@@ -716,6 +752,7 @@
 			color: #606266;
 			padding-top: 30upx;
 			padding-left: 10upx;
+			padding-bottom: 16upx;
 		}
 
 		.item-list {
