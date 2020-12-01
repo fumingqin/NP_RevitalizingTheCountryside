@@ -1,5 +1,9 @@
 <template>
 	<view>
+		<view class="returnButton" @click="returnJump">
+			<u-icon name="arrow-left" color="#fff" size="42"></u-icon>
+		</view>
+		
 		<!-- 轮播区 -->
 		<u-swiper :list="image" :height="422" indicator-pos="bottomRight">
 			<u-loading slot="loading"></u-loading>
@@ -11,7 +15,8 @@
 			<view class="ovof_dp_bg_background">
 				<view class="title">
 					<text class="ovof_dp_bg_title">{{title}}</text>
-					<text class="ovof_dp_bg_cost">￥{{specChildList.price}}</text>
+					<text class="ovof_dp_bg_cost" v-if="number==0">¥0</text>
+					<text class="ovof_dp_bg_cost" v-if="number!==0">¥{{calculateQuantity(specChildList.price)}}</text>
 				</view>
 				<view class="ovof_dp_bg_time">
 					<text class="browse">销售量:</text>
@@ -48,7 +53,8 @@
 					<view class="a-t">
 						<image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image>
 						<view class="right">
-							<text class="price">¥{{specChildList.price}}</text>
+							<text class="price" v-if="number==0">¥0</text>
+							<text class="price" v-if="number!==0">¥{{calculateQuantity(specChildList.price)}}</text>
 							<view class="selected">
 								已选：
 								<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
@@ -58,19 +64,23 @@
 							</view>
 						</view>
 					</view>
-					<view class="attr-list" v-for="(item,index) in specList" :key="index">
+					<!-- <view class="attr-list" v-for="(item,index) in specList" :key="index">
 						<text>{{item.name}}</text>
 						<view class="item-list">
-							<!-- <text v-for="(childItem, childIndex) in specChildList" :key="childIndex" class="tit" :class="{selected: childItem.selected}"
+							<text v-for="(childItem, childIndex) in specChildList" :key="childIndex" class="tit" :class="{selected: childItem.selected}"
 							v-if="childItem.pid === item.id" @click="selectSpec(childIndex, childItem.pid)">
 								{{childItem.name}}
-							</text> -->
-							<text class="tit" v-if="specChildList.pid === item.id">
-								{{specChildList.name}}
 							</text>
 						</view>
+					</view> -->
+					<view class="attr-list">
+						<text>规格:{{specChildList.name}}</text>
 					</view>
-					<lxc-count @handleCount="handleCountClick" :index="0" :value="mydata.num" :delayed="100"></lxc-count>
+					
+					<view class="attr-list">
+						<text>购买数量</text>
+					</view>
+					<lxc-count @handleCount="handleCountClick" :index="1" :value="number" :delayed="100"></lxc-count>
 					<button class="btn" @click="buyNow">立即购买</button>
 				</view>
 			</view>
@@ -162,7 +172,7 @@
 				comment: 1723,
 				specClass: 'none',
 				specSelected: [], //选择类型
-				number:0,//购买数量
+				number:1,//购买数量
 				specList: [{
 						id: 1,
 						name: '容量',
@@ -211,8 +221,8 @@
 				// ],
 				mydata: [{
 					name: '111',
-					num: 0,
-				}, ],
+					num: 1,
+				}],
 				// 字符串的形式
 				style: {
 					p: 'letter-spacing: 4rpx;text-align: justify;line-height: 48rpx;font-size:30rpx;text-justify: inter-ideograph; text-indent: 2em;padding-bottom: 20rpx;padding-top: 20rpx;',
@@ -233,15 +243,15 @@
 
 		onLoad: function() {
 			//规格 默认选中第一条
-			this.specList.forEach(item => {
-				for (let cItem of this.specChildList) {
-					if (cItem.pid === item.id) {
-						this.$set(cItem, 'selected', true);
-						this.specSelected.push(cItem);
-						break; //forEach不能使用break
-					}
-				}
-			})
+			// this.specList.forEach(item => {
+			// 	for (let cItem of this.specChildList) {
+			// 		if (cItem.pid === item.id) {
+			// 			this.$set(cItem, 'selected', true);
+			// 			this.specSelected.push(cItem);
+			// 			break; //forEach不能使用break
+			// 		}
+			// 	}
+			// })
 		},
 
 		onShow() {
@@ -258,6 +268,21 @@
 					this.type = 0;
 				} else if (e == 1) {
 					this.type = 1;
+				}
+			},
+			
+			//返回上一个页面
+			returnJump:function(){
+				uni.navigateBack({
+					delta:1,
+				})
+			},
+			
+			//计算数量价格
+			calculateQuantity:function(e){
+				if(this.number!==0){
+					var a = e*this.number
+					return a;
 				}
 			},
 
@@ -295,14 +320,13 @@
 				})
 				console.log('选择', this.specSelected)
 			},
-
+			
 			stopPrevent() {
 				return
 			},
 
 			handleCountClick(val, index) {
-				// console.log(val, index)
-				this.mydata[index]['num'] = val;
+				console.log(val, index)
 				this.number=val;
 				console.log('购买数量', this.number)
 			},
@@ -332,6 +356,12 @@
 	//默认背景颜色 
 	page {
 		background-color: #f6f6f6;
+	}
+	
+	.returnButton{
+		position: absolute;
+		margin: 50upx 30upx;
+		z-index: 999;
 	}
 
 	.ovof_dp_background {
@@ -446,7 +476,6 @@
 	//筛选样式
 	.screen {
 		height: 87upx;
-		position: sticky;
 		top: 0;
 		z-index: 1;
 		background: #FFFFFF;
@@ -588,7 +617,7 @@
 			z-index: 99;
 			bottom: 0;
 			width: 100%;
-			min-height: 40vh;
+			min-height: 32vh;
 			border-radius: 10upx 10upx 0 0;
 			background-color: #fff;
 

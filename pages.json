@@ -600,7 +600,10 @@
 				}
 				,{
 				    "path" : "pages/WSSC/onlineShoppingMall/osm_detailsPage",
-				    "style" : {}
+				    "style" : {
+						"navigationStyle": "custom",
+						"navigationBarTitleText": "商品详情"
+					}
 				}
 				,{
 				    "path" : "pages/WSSC/onlineShoppingMall/osm_payment",
