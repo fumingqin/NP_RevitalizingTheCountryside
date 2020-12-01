@@ -266,6 +266,7 @@
 				swiperCurrent: 0,
 				tabsHeight: 0,
 				dx: 0,
+				userInfo:'',
 			}
 		},
 		
@@ -273,17 +274,41 @@
 			uni.showLoading({
 				title: '加载列表中...',
 			})
-			this.ddlbData();
+			this.userData();
 		},
 		
 		onPullDownRefresh: function() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
-			this.ddlbData();
+			this.userData();
 		},
 		
 		methods: {
+			//-------------------------------乘客数据读取-------------------------------
+			userData: function() {
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						this.userInfo = res.data;
+						this.ddlbData();
+						// console.log('获取个人信息', this.userInfo)
+					},
+					fail: (err) => {
+						uni.hideLoading()
+						uni.showToast({
+							title:'您暂未登录，已为您跳转登录页面',
+							icon:'none',
+							success: () => {
+								uni.navigateTo({
+									url : '../../../pages/GRZX/userLogin'
+								})
+							}
+						})
+					}
+				});
+			},
+			
 			//-----------------------加载接口数据------------------------
 			
 			ddlbData:function(){
@@ -295,7 +320,7 @@
 						url:this.$wssc.KyInterface.getOrederList.Url,
 						method:this.$wssc.KyInterface.getOrederList.method,
 						data:{
-							userId :100007,
+							userId :this.userInfo.userId,
 						},
 						success:(res) =>{
 							console.log('列表数据',res)

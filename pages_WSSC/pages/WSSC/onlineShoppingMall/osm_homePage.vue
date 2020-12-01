@@ -73,7 +73,7 @@
 						<view class="demo-shop">
 							{{item.name}}
 						</view>
-						<u-icon name="close-circle-fill" color="#fa3534" size="34" class="u-close" @click="remove(item.id)"></u-icon>
+						<!-- <u-icon name="close-circle-fill" color="#fa3534" size="34" class="u-close" @click="remove(item.id)"></u-icon> -->
 					</view>
 				</template>
 				<template v-slot:right="{rightList}">
@@ -96,7 +96,7 @@
 						<view class="demo-shop">
 							{{item.name}}
 						</view>
-						<u-icon name="close-circle-fill" color="#fa3534" size="34" class="u-close" @click="remove(item.id)"></u-icon>
+						<!-- <u-icon name="close-circle-fill" color="#fa3534" size="34" class="u-close" @click="remove(item.id)"></u-icon> -->
 					</view>
 				</template>
 			</u-waterfall>
@@ -348,9 +348,10 @@
 					let index = this.$u.random(0, this.list.length - 1);
 					// 先转成字符串再转成对象，避免数组对象引用导致数据混乱
 					let item = JSON.parse(JSON.stringify(this.list[index]))
-					item.id = this.$u.guid();
+					// item.id = this.$u.guid();
 					this.flowList.push(item);
 				}
+				console.log('拿到的数据2',this.flowList)
 			},
 			remove(id) {
 				this.$refs.uWaterfall.remove(id);
