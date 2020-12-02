@@ -179,8 +179,8 @@
 			if (pro !== true) {
 				this.protocolStatus = true;
 			}
-			this.version = plus.runtime.version;
-			this.iponeModel = plus.device.vendor;
+			this.version = plus.runtime.version; //获取应用版本号
+			this.iponeModel = plus.device.vendor; //获取手机厂商
 			console.log(this.iponeModel)
 			this.checkClick();
 			//#endif
