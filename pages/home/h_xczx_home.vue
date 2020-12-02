@@ -183,6 +183,8 @@
 				this.protocolStatus = true;
 			}
 			this.version = plus.runtime.version;
+			this.iponeModel = plus.device.vendor;
+			console.log(this.iponeModel)
 			this.checkClick();
 			//#endif
 			var a = uni.getStorageSync('guidePageData')
@@ -641,6 +643,7 @@
 			},
 			//--------------------------下载按钮--------------------------
 			downloadApk: function() {
+				// if()
 				this.downShow = false;
 				this.downLoadShow = true;
 				console.log("下载apk");
