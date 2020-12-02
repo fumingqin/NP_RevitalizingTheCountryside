@@ -7,10 +7,56 @@
 			
 			<!-- 订单列表 -->
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
+				<!-- 全部 -->
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 						<view class="page-box">
-							<view class="order" v-for="(item, index) in orderList" :key="index">
+							<view class="order" v-for="(item, index) in info" :key="index">
+								<view class="top">
+									<view class="left">
+										<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
+										<view class="store">{{ item.userName }}</view>
+										<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
+									</view>
+									<view class="right">{{ item.orderList.state }}</view>
+								</view>
+								<view class="item">
+									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="content">
+										<view class="title u-line-2">{{ item.product.name }}</view>
+										<view class="type">{{ item.product.sale_unit }}</view>
+										<view v-if="item.orderList.state!='已发货'" class="delivery-time">下单时间 {{ gettime(item.product.create_time)}}</view>
+										<view v-if="item.orderList.state=='已发货'" class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="type" v-if="item.product.del_flag==1">已下架</view>
+									</view>
+									<view class="right">
+										<view class="price">
+											￥{{item.product.unit_price }}
+										</view>
+										<view class="number">x{{ item.orderList.quantity }}</view>
+									</view>
+									</view>
+								<view class="total">
+									共{{ item.orderList.quantity }}件商品 合计:
+									<text class="total-price">
+										￥{{ item.orderList.total_amount}}
+									</text>
+								</view>
+								<view class="bottom">
+									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<view v-if="item.orderList.state=='支付成功'" class="logistics btn" @click="refund(item.orderList.order_number)">退款</view>
+<!-- 									<view class="exchange btn">卖了换钱</view>
+									<view class="evaluate btn">评价</view> -->
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+				<!-- 已取消 -->
+				<swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
+						<view class="page-box">
+							<view class="order" v-for="(item, index) in unfinishinfo" :key="index">
 								<view class="top">
 									<view class="left">
 										<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
@@ -42,19 +88,195 @@
 								</view>
 								<view class="bottom">
 									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
-									<view v-if="item.orderList.state=='支付成功'" class="logistics btn" @click="refund(item.orderList.order_number)">退款</view>
-<!-- 									<view class="exchange btn">卖了换钱</view>
-									<view class="evaluate btn">评价</view> -->
+									<!-- <view class="logistics btn">查看物流</view>
+									<view class="exchange btn">卖了换钱</view> -->
+									<view class="evaluate btn" >付款</view>
 								</view>
 							</view>
 						</view>
 					</scroll-view>
 				</swiper-item>
-				
+				<!-- 待付款 -->
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
 						<view class="page-box">
-							<view class="order" v-for="(item, index) in orderList2" :key="index">
+							<view class="order" v-for="(item, index) in unpaidinfo" :key="index">
+								<view class="top">
+									<view class="left">
+										<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
+										<view class="store">{{ item.userName }}</view>
+										<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
+									</view>
+									<view class="right">{{ item.orderList.state }}</view>
+								</view>
+								<view class="item">
+									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="content">
+										<view class="title u-line-2">{{ item.product.name }}</view>
+										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="type" v-if="item.product.del_flag==1">已下架</view>
+									</view>
+									<view class="right">
+										<view class="price">
+											￥{{item.product.unit_price }}
+										</view>
+										<view class="number">x{{ item.orderList.quantity }}</view>
+									</view>
+									</view>
+								<view class="total">
+									共{{ item.orderList.quantity }}件商品 合计:
+									<text class="total-price">
+										￥{{ item.orderList.total_amount}}
+									</text>
+								</view>
+								<view class="bottom">
+									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<!-- <view class="logistics btn">查看物流</view>
+									<view class="exchange btn">卖了换钱</view> -->
+									<view class="evaluate btn" >付款</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+				<!-- 待发货 -->
+				<swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
+						<view class="page-box">
+							<view class="order" v-for="(item, index) in unshipmentsinfo" :key="index">
+								<view class="top">
+									<view class="left">
+										<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
+										<view class="store">{{ item.userName }}</view>
+										<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
+									</view>
+									<view class="right">{{ item.orderList.state }}</view>
+								</view>
+								<view class="item">
+									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="content">
+										<view class="title u-line-2">{{ item.product.name }}</view>
+										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="type" v-if="item.product.del_flag==1">已下架</view>
+									</view>
+									<view class="right">
+										<view class="price">
+											￥{{item.product.unit_price }}
+										</view>
+										<view class="number">x{{ item.orderList.quantity }}</view>
+									</view>
+									</view>
+								<view class="total">
+									共{{ item.orderList.quantity }}件商品 合计:
+									<text class="total-price">
+										￥{{ item.orderList.total_amount}}
+									</text>
+								</view>
+								<view class="bottom">
+									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<!-- <view class="logistics btn">查看物流</view>
+									<view class="exchange btn">卖了换钱</view> -->
+									<view class="evaluate btn" >付款</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+				<!-- 已发货 -->
+				<swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
+						<view class="page-box">
+							<view class="order" v-for="(item, index) in shipmentsinfo" :key="index">
+								<view class="top">
+									<view class="left">
+										<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
+										<view class="store">{{ item.userName }}</view>
+										<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
+									</view>
+									<view class="right">{{ item.orderList.state }}</view>
+								</view>
+								<view class="item">
+									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="content">
+										<view class="title u-line-2">{{ item.product.name }}</view>
+										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="type" v-if="item.product.del_flag==1">已下架</view>
+									</view>
+									<view class="right">
+										<view class="price">
+											￥{{item.product.unit_price }}
+										</view>
+										<view class="number">x{{ item.orderList.quantity }}</view>
+									</view>
+									</view>
+								<view class="total">
+									共{{ item.orderList.quantity }}件商品 合计:
+									<text class="total-price">
+										￥{{ item.orderList.total_amount}}
+									</text>
+								</view>
+								<view class="bottom">
+									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<!-- <view class="logistics btn">查看物流</view>
+									<view class="exchange btn">卖了换钱</view> -->
+									<view class="evaluate btn" >付款</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+				<!-- 已完成 -->
+				<swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
+						<view class="page-box">
+							<view class="order" v-for="(item, index) in finishinfo" :key="index">
+								<view class="top">
+									<view class="left">
+										<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
+										<view class="store">{{ item.userName }}</view>
+										<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
+									</view>
+									<view class="right">{{ item.orderList.state }}</view>
+								</view>
+								<view class="item">
+									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="content">
+										<view class="title u-line-2">{{ item.product.name }}</view>
+										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="type" v-if="item.product.del_flag==1">已下架</view>
+									</view>
+									<view class="right">
+										<view class="price">
+											￥{{item.product.unit_price }}
+										</view>
+										<view class="number">x{{ item.orderList.quantity }}</view>
+									</view>
+									</view>
+								<view class="total">
+									共{{ item.orderList.quantity }}件商品 合计:
+									<text class="total-price">
+										￥{{ item.orderList.total_amount}}
+									</text>
+								</view>
+								<view class="bottom">
+									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<!-- <view class="logistics btn">查看物流</view>
+									<view class="exchange btn">卖了换钱</view> -->
+									<view class="evaluate btn" >付款</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+				<!-- 已超时 -->
+				<swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
+						<view class="page-box">
+							<view class="order" v-for="(item, index) in timeoutinfo" :key="index">
 								<view class="top">
 									<view class="left">
 										<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
@@ -110,17 +332,26 @@
 				},
 				list: [
 					{
-						name: '已付款'
+						name: '全部'
+					},
+					{
+						name: '已取消'
 					},
 					{
 						name: '待付款'
 					},
-					// {
-					// 	name: '待收货'
-					// },
-					// {
-					// 	name: '待评价'
-					// }
+					{
+						name: '待发货'
+					},
+					{
+						name: '已发货'
+					},
+					{
+						name: '已完成'
+					},
+					{
+						name: '已超时'
+					}
 				],
 				dataList: [
 					{
@@ -260,8 +491,13 @@
 						]
 					}
 				],
-				orderList:[],
-				orderList2:[],
+				info:[],//全部
+				finishinfo:[],//已完成
+				unfinishinfo:[],//已取消
+				shipmentsinfo:[],//已发货
+				unshipmentsinfo:[],//待发货
+				unpaidinfo:[],//待支付
+				timeoutinfo:[],//已超时
 				current: 0,
 				swiperCurrent: 0,
 				tabsHeight: 0,
@@ -312,30 +548,43 @@
 			//-----------------------加载接口数据------------------------
 			
 			ddlbData:function(){
-				
+				var that=this;
 					uni.getStorage({
 						key: 'userInfo',
 						success: (res) => {
 					uni.request({
-						url:this.$wssc.KyInterface.getOrederList.Url,
-						method:this.$wssc.KyInterface.getOrederList.method,
+						url:that.$wssc.KyInterface.getOrederList.Url,
+						method:that.$wssc.KyInterface.getOrederList.method,
 						data:{
-							userId :this.userInfo.userId,
+							userId :that.userInfo.userId,
 						},
 						success:(res) =>{
 							console.log('列表数据',res)
-							this.orderList=[];
-							this.orderList2=[];
+							that.info=[];
+							that.finishinfo=[];
+							that.unfinishinfo=[];
+							that.timeoutinfo=[];
+							that.unpaidinfo=[];
+							that.shipmentsinfo=[];
+							that.unshipmentsinfo=[];
 							if(res.data.status == true){
 								for(var i=0;i<res.data.data.length;i++){
-									if(res.data.data[i].orderList.state!='待支付'){
-										this.orderList.push(res.data.data[i]);
-									}else{
-										this.orderList2.push(res.data.data[i]);
+									that.info.push(res.data.data[i])
+									if(res.data.data[i].orderList.state=='待支付'){
+										that.unpaidinfo.push(res.data.data[i]);
+									}else if(res.data.data[i].orderList.state=='支付成功'){
+										that.unshipmentsinfo.push(res.data.data[i]);
+									}else if(res.data.data[i].orderList.state=='已发货'){
+										that.shipmentsinfo.push(res.data.data[i]);
+									}else if(res.data.data[i].orderList.state=='订单超时'){
+										that.timeoutinfo.push(res.data.data[i]);
+									}else if(res.data.data[i].orderList.state=='已取消'|| res.data.data[i].orderList.state=='已退款'){
+										that.unfinishinfo.push(res.data.data[i]);
+									}else if(res.data.data[i].orderList.state=='已完成'){
+										that.finishinfo.push(res.data.data[i]);
 									}
 									
 								};
-								console.log(this.orderList);
 								uni.stopPullDownRefresh();
 								uni.hideLoading();
 							}else{
