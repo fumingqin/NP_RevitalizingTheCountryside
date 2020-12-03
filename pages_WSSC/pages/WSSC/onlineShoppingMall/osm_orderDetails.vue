@@ -18,13 +18,23 @@
 			
 			<!-- 商品详情 -->
 			<view class="commodity">
-				<image class="image" :src="details.image" mode="aspectFill"></image>
-				<text class="text">{{details.title}}</text>
+				<view>
+					<image class="image" :src="details.image" mode="aspectFill"></image>
+				</view>
+				<view style="position: relative;width: 100%;">
+					<view class="text">{{details.title}}</view>
+					<view class="label">
+						<view class="text" style="display: flex;" v-for="(item,index) in label" :key="index">
+							<text class="circle"></text>
+							{{item}}
+						</view>
+					</view>
+				</view>
 			</view>
 			
 			<!-- 商品参数 -->
 			<view class="parameter">
-				<text class="Specifications">规格:{{details.saleUnit}}/￥{{details.price2}}</text>
+				<text class="Specifications">规格：{{details.saleUnit}}/{{details.price2}}元</text>
 				<view class="priceNumber">
 					<text class="price">￥{{details.price2}}</text>
 					<text class="number">X{{details.number}}</text>
@@ -59,6 +69,7 @@
 		data() {
 			return {
 				details:'',
+				label: ['诚信商家', '假一赔十', '包邮', ],
 			}
 		},
 		
@@ -177,8 +188,29 @@
 			}
 			
 			.text{
-				width: 560upx;
+				width: 102%;
 				padding-left: 20upx;
+			}
+			
+			.label {
+				display: flex;
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+			
+				.text {
+					font-size: 28upx;
+					color: #333333;
+					
+					.circle {
+						width: 8upx;
+						height: 8upx;
+						background: #22C704;
+						border-radius: 50%;
+						margin-top: 18upx;
+						margin-right: 10upx;
+					}
+				}
 			}
 		}
 		
