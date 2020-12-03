@@ -158,6 +158,30 @@ const KyInterface = {
 		name:'获取商品分类根据关键字',
 		method:'POST',
 	},
+	//--------------------------------------删除接口--------------------------------------
+	deleteOrder:{
+		Url:Url + '/api/order/deleteOrder',
+		name:'删除接口',
+		method:'POST',
+	},
+	//--------------------------------------取消接口--------------------------------------
+	cancelOrder:{
+		Url:Url + '/api/order/cancelOrder',
+		name:'取消接口',
+		method:'POST',
+	},
+	//--------------------------------------确认收货接口--------------------------------------
+	ConfirmReceipt:{
+		Url:Url + '/api/order/ConfirmReceipt',
+		name:'确认收货接口',
+		method:'POST',
+	},
+	//--------------------------------------确认收货接口--------------------------------------
+	againPay:{
+		Url:Url + '/api/order/againPay',
+		name:'确认收货接口',
+		method:'POST',
+	},
 }
 
 // 接口声明区
