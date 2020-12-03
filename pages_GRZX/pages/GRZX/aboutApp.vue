@@ -71,11 +71,13 @@
 				downShow:false, //显示下载进度条
 				downContent:'',//进度显示内容
 				downloadTask:'', //下载任务
+				iponeModel:'',//手机系统
 			}
 		},
 		onLoad(){
 			// #ifdef APP-PLUS
 			this.version=plus.runtime.version;
+			this.iponeModel = plus.device.vendor; //获取手机厂商
 			//#endif
 			// this.loadService();
 		},
@@ -229,65 +231,73 @@
 			//--------------------------下载按钮--------------------------
 			downloadApk(){
 				console.log("下载apk");
-				this.downShow = true;
-				var that = this;
-				that.downloadTask = uni.downloadFile({
-					url:'http://27.148.155.9:9248/LoadAppWebsite/振兴乡村APP.apk',
-					success(downloadResult) {
-						console.log(downloadResult,"下载文件wgt");
-						if (downloadResult.statusCode === 200) {
-							that.downShow = false;
+				if(this.iponeModel == 'Apple'){
+					this.downShow = false;
+					uni.showToast({
+						title:'苹果用户请手动前往App Store进行更新，敬请谅解！',
+						icon:'none',
+					})
+				}else{
+					this.downShow = true;
+					var that = this;
+					that.downloadTask = uni.downloadFile({
+						url:'http://27.148.155.9:9248/LoadAppWebsite/振兴乡村APP.apk',
+						success(downloadResult) {
+							if (downloadResult.statusCode === 200) {
+								that.downShow = false;
+								uni.showToast({
+									title: '下载完成',
+									icon:'none',
+								});
+								plus.runtime.install(
+									downloadResult.tempFilePath,
+									{
+										force: true
+									},
+									// function() {
+									// 	uni.showToast({
+									// 		title: '应用更新完成稍后将重启应用',
+									// 		icon:'none'
+									// 	});
+									// 	setTimeout(() => {
+									// 		plus.runtime.restart();
+									// 	}, 1000);
+									// },
+									function(e) {
+										uni.showToast({
+											icon: 'none',
+											title: e
+										});
+									}
+								);
+							}else{
+								uni.showToast({
+									title: '应用下载失败',
+									icon:'none'
+								});
+							}
+						},
+						fail(e){
 							uni.showToast({
-								title: '下载完成',
-								icon:'none',
-							});
-							plus.runtime.install(
-								downloadResult.tempFilePath,
-								{
-									force: true
-								},
-								// function() {
-								// 	uni.showToast({
-								// 		title: '应用更新完成稍后将重启应用',
-								// 		icon:'none'
-								// 	});
-								// 	setTimeout(() => {
-								// 		plus.runtime.restart();
-								// 	}, 1000);
-								// },
-								function(e) {
-									uni.showToast({
-										icon: 'none',
-										title: e
-									});
-								}
-							);
-						}else{
-							uni.showToast({
-								title: '应用下载失败',
+								title:e,
 								icon:'none'
 							});
+						},complete:()=>{
+							setTimeout(() => {
+								uni.hideLoading();
+							}, 1000);
 						}
-					},
-					fail(e){
-						uni.showToast({
-							title:e,
-							icon:'none'
-						});
-					},complete:()=>{
-						setTimeout(() => {
-							uni.hideLoading();
-						}, 1000);
-					}
-				});
-				// 监听下载进度
-				that.downloadTask.onProgressUpdate((e)=>{
-					that.percent = e.progress;
-				})
+					});
+					// 监听下载进度
+					that.downloadTask.onProgressUpdate((e)=>{
+						that.percent = e.progress;
+					})
+				}
 			},
 			
 			//--------------------------后台下载--------------------------
 			bgDownloadApk(){
+				
 				this.downShow = false;
 			},
 			//--------------------------取消下载--------------------------
