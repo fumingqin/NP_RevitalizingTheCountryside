@@ -26,7 +26,7 @@
 				</view>
 			</view>
 			<view class="historyListView">
-				<text class="historyText" @tap="historyItemTap(index)" v-for="(item,index) in historyLines" :key="index">{{item}}</text>
+				<text class="historyText" @tap="itemClick2(item)" v-for="(item,index) in historyLines" :key="index">{{item}}</text>
 			</view>
 		</view>
 		
@@ -35,7 +35,8 @@
 				<text class="hs_text">搜索发现</text>
 			</view>
 			<view class="historyListView">
-				<text class="historyText" @tap="historyItemTap(index)" v-for="(item,index) in searchDiscovery" :key="index">{{item}}</text>
+				<text class="historyText" @tap="itemClick2(item)" v-for="(item,index) in searchDiscovery" :key="index" v-if="type==1">{{item}}</text>
+				<text class="historyText" @tap="itemClick2(item)" v-for="(item,index) in searchDiscovery2" :key="index" v-if="type==2">{{item}}</text>
 			</view>
 		</view>
 	</view>
@@ -51,11 +52,16 @@
 				isShowAllList:true,//是否显示联动列表
 				isShowList:false,//是否显示站点列表
 				cacheStatus:false,//历史记录状态
-				searchDiscovery:['我不知道','我知道','发现了什么','不知道发现了什么','懂王败选','拜登吃屎','没有人比我更懂新冠',]
+				searchDiscovery:['土特产','武夷岩茶','武夷留香','顺和笋干','养生保健','五夫白莲','永春芦柑',],
+				searchDiscovery2:['香橙','西柚','红菇',],
+				list:[],//模糊搜索拿到的值
+				type:'',
 			}
 		},
 		
-		onLoad() {
+		onLoad(param) {
+			this.type=param.type;
+			console.log(this.type)
 			this.cacheData();
 			/* 设置当前滚动容器的高，若非窗口的高度，请自行修改 */
 			uni.getSystemInfo({
@@ -68,16 +74,29 @@
 		methods: {
 			//----------------------拿取搜索缓存------------------------
 			cacheData:function(){
-				uni.getStorage({
-					key: 'historyLines',
-					success: (res) => {
-						this.historyLines = res.data;
-						if(this.historyLines.length<=1){
-							this.cacheStatus=true;
-						}
-						console.log('拿取搜索缓存',this.historyLines)
-					},
-				});
+				if(this.type==1){
+					uni.getStorage({
+						key: 'searchache',
+						success: (res) => {
+							this.historyLines = res.data;
+							if(this.historyLines.length<=1){
+								this.cacheStatus=true;
+							}
+							console.log('拿取搜索缓存',this.historyLines)
+						},
+					});
+				}else{
+					uni.getStorage({
+						key: 'searchache2',
+						success: (res) => {
+							this.historyLines = res.data;
+							if(this.historyLines.length<=1){
+								this.cacheStatus=true;
+							}
+							console.log('拿取搜索缓存',this.historyLines)
+						},
+					});
+				}
 			},
 			
 			//-------------------------监听输入-------------------------
@@ -93,22 +112,41 @@
 				this.isShowAllList = false;
 				//以下示例截取淘宝的关键字，请替换成你的接口
 				uni.showLoading();
-				uni.request({
-					url:this.$wssc.KyInterface.getHomepageByKey.Url,
-					method:this.$wssc.KyInterface.getHomepageByKey.method,
-					data:{
-						key:keyword
-					},
-					success: (res) => {
-						uni.hideLoading();
-						console.log('模糊搜索',res);
-						this.keywordList = [];
-						this.keywordList = this.drawCorrelativeKeyword(res.data.data, keyword);
-					},
-					fail(res) {
-						uni.hideLoading();
-					}
-				});
+				if(this.type==1){
+					uni.request({
+						url:this.$wssc.KyInterface.getHomepageByKey.Url,
+						method:this.$wssc.KyInterface.getHomepageByKey.method,
+						data:{
+							key:keyword
+						},
+						success: (res) => {
+							uni.hideLoading();
+							console.log('模糊搜索',res);
+							this.keywordList = [];
+							this.keywordList = this.drawCorrelativeKeyword(res.data.data, keyword);
+						},
+						fail(res) {
+							uni.hideLoading();
+						}
+					});
+				}else{
+					uni.request({
+						url:this.$wssc.KyInterface.getSelectSortByKey.Url,
+						method:this.$wssc.KyInterface.getSelectSortByKey.method,
+						data:{
+							key:keyword
+						},
+						success: (res) => {
+							uni.hideLoading();
+							console.log('模糊搜索',res);
+							this.keywordList = [];
+							this.keywordList = this.drawCorrelativeKeyword(res.data.data, keyword);
+						},
+						fail(res) {
+							uni.hideLoading();
+						}
+					});
+				}
 			},
 			
 			//-------------------------高亮关键字-------------------------
@@ -117,24 +155,42 @@
 				// console.log(keyword);
 				var len = keywords.length,
 					keywordArr = [];
-				for (var i = 0; i < len; i++) {
-					var content = keywords[i].content;
-					var name = keywords[i].name;
-					//定义高亮#9f9f9f
-					var html = name.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
-					html = '<div>' + html + '</div>';
-					var tmpObj = {
-						content: content,
-						htmlStr: html,
-						name:name
-					};
-					keywordArr.push(tmpObj)
-					// console.log(keywordArr)
+				if(this.type==1){
+					for (var i = 0; i < len; i++) {
+						var content = keywords[i].content;
+						var name = keywords[i].name;
+						//定义高亮#9f9f9f
+						var html = name.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
+						html = '<div>' + html + '</div>';
+						var tmpObj = {
+							content: content,
+							htmlStr: html,
+							name:name
+						};
+						keywordArr.push(tmpObj)
+						// console.log(keywordArr)
+					}
+					return keywordArr;
+				}else{
+					for (var i = 0; i < len; i++) {
+						var content = keywords[i].create_by;
+						var name = keywords[i].title;
+						//定义高亮#9f9f9f
+						var html = name.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
+						html = '<div>' + html + '</div>';
+						var tmpObj = {
+							content: content,
+							htmlStr: html,
+							name:name
+						};
+						keywordArr.push(tmpObj)
+						// console.log(keywordArr)
+					}
+					return keywordArr;
 				}
-				return keywordArr;
 			},
 			
-			//-------------------------点击下拉站点-------------------------
+			//-------------------------点击下拉商品-------------------------
 			itemClick(index){
 				console.log(index)
 				var that = this;
@@ -145,21 +201,39 @@
 					content: key.content,
 					name: key.name,
 				}
+				this.list=array;
 				if(this.historyLines) {
 					for(let i = 0; i <= this.historyLines.length;i++){
 						this.historyLines.splice(i,1);
 					}
 					this.historyLines.unshift(array.name);
 				}
+				if(this.type==1){
+					uni.setStorage({
+						key:'searchache',
+						data:this.historyLines,
+					})
+				}else{
+					uni.setStorage({
+						key:'searchache2',
+						data:this.historyLines,
+					})
+				}
 				uni.navigateTo({
-					url: './osm_list?name='+this.historyLines
+					url: './osm_list?name='+array.name
+				})
+			},
+			
+			itemClick2:function(e){
+				uni.navigateTo({
+					url: './osm_list?name='+e
 				})
 			},
 			
 			//---------------------------------清除历史---------------------------------
 			clickHistory: function() {
 				this.historyLines = [];
-				uni.removeStorageSync('historyLines');
+				uni.removeStorageSync('searchache');
 				this.cacheStatus=false;
 			},
 		}

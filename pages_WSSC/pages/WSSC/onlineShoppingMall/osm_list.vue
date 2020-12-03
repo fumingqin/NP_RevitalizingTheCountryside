@@ -81,7 +81,7 @@
 			</view>
 			
 			<!-- 分类面板 -->
-			<view class="cate-mask" :class="cateMaskState===0 ? 'none' : cateMaskState===1 ? 'show' : ''" @click="toggleCateMask">
+			<!-- <view class="cate-mask" :class="cateMaskState===0 ? 'none' : cateMaskState===1 ? 'show' : ''" @click="toggleCateMask">
 				<view class="cate-content">
 					<view style="width: 100%;height: 100%;background: #FFFFFF;">
 						<scroll-view scroll-y class="cate-list">
@@ -95,7 +95,7 @@
 						</scroll-view>
 					</view>
 				</view>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -120,196 +120,8 @@
 					refresh: '正在加载...',
 					nomore: '没有更多了',
 				},
+				type:1,//搜索状态
 				slidingState:0,//滑动状态
-				cateList: [{
-					name:'特产',
-					id:1,
-					child:[{
-						childId:1,
-						name:'武夷岩茶'
-					},
-					{
-						childId:2,
-						name:'武夷留香'
-					},
-					{
-						childId:3,
-						name:'顺和笋干'
-					},
-					{
-						childId:4,
-						name:'建阳桔柚'
-					},
-					{
-						childId:5,
-						name:'五夫白莲'
-					},
-					{
-						childId:6,
-						name:'建瓯栗子'
-					},
-					{
-						childId:7,
-						name:'武夷岩茶'
-					},
-					{
-						childId:8,
-						name:'武夷留香'
-					},
-					{
-						childId:9,
-						name:'顺和笋干'
-					},
-					{
-						childId:10,
-						name:'建阳桔柚'
-					},
-					{
-						childId:11,
-						name:'五夫白莲'
-					},
-					{
-						childId:12,
-						name:'建瓯栗子'
-					},
-					{
-						childId:13,
-						name:'武夷岩茶'
-					},
-					{
-						childId:14,
-						name:'武夷留香'
-					},
-					{
-						childId:15,
-						name:'顺和笋干'
-					},
-					{
-						childId:16,
-						name:'建阳桔柚'
-					},
-					{
-						childId:17,
-						name:'五夫白莲'
-					},
-					{
-						childId:18,
-						name:'建瓯栗子'
-					}],
-				}], //分类数组
-				// goodsList: [{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-				// 		title: '惜秦皇汉武，略输文采',
-				// 		price: 1654,
-				// 		sales: 57,
-				// 		ticketId:1,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-				// 		title: '一代天骄，成吉思汗',
-				// 		price: 454,
-				// 		sales: 4,
-				// 		ticketId:2,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-				// 		title: '惜秦皇汉武，略输文采',
-				// 		price: 368,
-				// 		sales: 1,
-				// 		ticketId:3,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-				// 		title: '一代天骄，成吉思汗',
-				// 		price: 123,
-				// 		sales: 88,
-				// 		ticketId:4,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-				// 		title: '惜秦皇汉武，略输文采',
-				// 		price: 56,
-				// 		sales: 3,
-				// 		ticketId:5,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-				// 		title: '一代天骄，成吉思汗',
-				// 		price: 77,
-				// 		sales: 99,
-				// 		ticketId:6,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-				// 		title: '惜秦皇汉武，略输文采',
-				// 		price: 9,
-				// 		sales: 111,
-				// 		ticketId:7,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-				// 		title: '一代天骄，成吉思汗',
-				// 		price: 88,
-				// 		sales: 333,
-				// 		ticketId:8,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-				// 		title: '惜秦皇汉武，略输文采',
-				// 		price: 1111,
-				// 		sales: 56,
-				// 		ticketId:9,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-				// 		title: '一代天骄，成吉思汗',
-				// 		price: 444,
-				// 		sales: 77,
-				// 		ticketId:10,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-				// 		title: '惜秦皇汉武，略输文采',
-				// 		price: 777,
-				// 		sales: 99,
-				// 		ticketId:11,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-				// 		title: '一代天骄，成吉思汗',
-				// 		price: 774,
-				// 		sales: 98,
-				// 		ticketId:12,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-				// 		title: '惜秦皇汉武，略输文采',
-				// 		price: 999,
-				// 		sales: 66,
-				// 		ticketId:13,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-				// 		title: '一代天骄，成吉思汗',
-				// 		price: 33,
-				// 		sales: 57,
-				// 		ticketId:14,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23343_s.jpg',
-				// 		title: '惜秦皇汉武，略输文采',
-				// 		price: 434,
-				// 		sales: 34,
-				// 		ticketId:15,
-				// 	},
-				// 	{
-				// 		image: 'http://pic1.sc.chinaz.com/Files/pic/pic9/202002/zzpic23344_s.jpg',
-				// 		title: '一代天骄，成吉思汗',
-				// 		price: 564,
-				// 		sales: 47,
-				// 		ticketId:16,
-				// 	}
-				// ],
 				name:'',//商品名字
 				goodsList:[],//列表数据
 			}
@@ -320,8 +132,10 @@
 		},
 		
 		onShow() {
+			uni.showLoading({
+				title: '加载列表中...',
+			})
 			this.rotationLoadData();
-			this.listData();
 		},
 		
 		onReachBottom() {
@@ -345,7 +159,9 @@
 						console.log('轮播区', res)
 						if (res.data.status == true) {
 							this.rotationChart = res.data.data
+							this.listData();
 						} else {
+							this.listData();
 							uni.showToast({
 								title: res.data.msg,
 								icon: 'none'
@@ -353,6 +169,7 @@
 						}
 					},
 					fail: function() {
+						this.listData();
 						uni.showToast({
 							title: '首页轮播图网络加载异常',
 							icon: 'none'
@@ -372,7 +189,16 @@
 					},
 					success: (res) => {
 						console.log('列表数据',res);
-						this.goodsList = res.data.data;
+						if(res.data.status == true){
+							this.goodsList = res.data.data;
+							uni.hideLoading();
+						}else{
+							uni.hideLoading();
+							uni.showToast({
+								title: '暂无列表信息',
+								icon: 'none'
+							})
+						}
 					},
 					fail(res) {
 						uni.hideLoading();
@@ -383,7 +209,7 @@
 			//------------------点击搜索跳转---------------------------
 			searchClick: function() {
 				uni.navigateTo({
-					url: 'osm_search'
+					url: 'osm_search?type='+this.type
 				})
 			},
 
@@ -421,42 +247,42 @@
 				this.goodsList = [];
 				//筛选，数据直接前端筛选了
 				if (this.screenIndex == 0) {
-					sc.sort((a, b) => a.ticketId - b.ticketId)
+					sc.sort((a, b) => a.id - b.id)
 					this.cateId = '';
 				}
 				if (this.screenIndex == 1) {
-					sc.sort((a, b) => b.sales - a.sales)
+					sc.sort((a, b) => b.sale_volume - a.sale_volume)
 					this.cateId = '';
 				}
 				if (this.screenIndex == 2) {
 					sc.sort((a, b) => {
 						if (this.priceOrder == 1) {
-							return a.price - b.price;
+							return a.unit_price - b.unit_price;
 						}
-						return b.price - a.price;
+						return b.unit_price - a.unit_price;
 					})
 					this.cateId = '';
 				}
-				if (this.screenIndex == 3) {
-					let screen = sc.filter(item => {
-						return item.ticketTitle == this.cateValue;
-					})
-					this.goodsListCate = screen;
-					uni.hideLoading()
-				}
+				// if (this.screenIndex == 3) {
+				// 	let screen = sc.filter(item => {
+				// 		return item.ticketTitle == this.cateValue;
+				// 	})
+				// 	this.goodsListCate = screen;
+				// 	uni.hideLoading()
+				// }
 
 				this.goodsList = this.goodsList.concat(sc);
 			},
 
 			//显示分类面板
-			toggleCateMask(type) {
-				let timer = type === 'show' ? 10 : 300;
-				let state = type === 'show' ? 1 : 0;
-				this.cateMaskState = 2;
-				setTimeout(() => {
-					this.cateMaskState = state;
-				}, timer)
-			},
+			// toggleCateMask(type) {
+			// 	let timer = type === 'show' ? 10 : 300;
+			// 	let state = type === 'show' ? 1 : 0;
+			// 	this.cateMaskState = 2;
+			// 	setTimeout(() => {
+			// 		this.cateMaskState = state;
+			// 	}, timer)
+			// },
 			
 			//加载信息
 			getMore(){

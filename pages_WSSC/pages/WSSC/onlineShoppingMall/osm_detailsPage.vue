@@ -245,7 +245,6 @@
 
 		onLoad: function(param) {
 			this.id = param.id;
-			this.detailsData();
 			console.log(this.id)
 			//规格 默认选中第一条
 			// this.specList.forEach(item => {
@@ -260,7 +259,10 @@
 		},
 
 		onShow() {
-
+			uni.showLoading({
+				title: '加载详情中...',
+			})
+			this.detailsData();
 		},
 
 		onUnload() {
@@ -288,8 +290,10 @@
 						// console.log('轮播区', res)
 						if (res.data.status == true) {
 							this.details=res.data.data;
+							uni.hideLoading();
 							console.log('获取详情数据', this.details)
 						} else {
+							uni.hideLoading();
 							uni.showToast({
 								title: res.data.msg,
 								icon: 'none'
@@ -297,6 +301,7 @@
 						}
 					},
 					fail: function() {
+						uni.hideLoading();
 						uni.showToast({
 							title: '首页轮播图网络加载异常',
 							icon: 'none'

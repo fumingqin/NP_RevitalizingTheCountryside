@@ -152,6 +152,12 @@ const KyInterface = {
 		name:'获取商品详情',
 		method:'POST',
 	},
+	//--------------------------------------编辑接口--------------------------------------
+	getSelectSortByKey:{
+		Url:Url + '/api/shopMall/getSelectSortByKey',
+		name:'获取商品分类根据关键字',
+		method:'POST',
+	},
 }
 
 // 接口声明区

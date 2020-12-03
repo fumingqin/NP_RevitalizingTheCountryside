@@ -1,7 +1,7 @@
 <template>
 	<view class="u-wrap">
 		<view class="u-search-box">
-			<view class="u-search-inner">
+			<view class="u-search-inner" @click="searchClick">
 				<u-icon name="search" color="#909399" :size="28"></u-icon>
 				<text class="u-search-text">搜索</text>
 			</view>
@@ -50,9 +50,13 @@
 				scrollRightTop: 0, // 右边栏目scroll-view的滚动条高度
 				timer: null, // 定时器
 				list:[],
+				type:2,//搜索状态
 			}
 		},
-		onLoad() {
+		onShow() {
+			uni.showLoading({
+				title: '加载详情中...',
+			})
 			this.listData();
 		},
 		onReady() {
@@ -68,11 +72,10 @@
 					success: (res) => {
 						console.log('轮播区', res)
 						if (res.data.status == true) {
-							for (let item of res.data.data) {
-								that.list.push(item);
-							}
-							
+							this.list=res.data.data
+							uni.hideLoading();
 						} else {
+							uni.hideLoading();
 							uni.showToast({
 								title: res.data.msg,
 								icon: 'none'
@@ -93,6 +96,13 @@
 				// console.log(entrance)
 				uni.navigateTo({
 					url: 'osm_list?name=' + name,
+				})
+			},
+			
+			//点击搜索跳转
+			searchClick: function() {
+				uni.navigateTo({
+					url: 'osm_search?type='+this.type
 				})
 			},
 			
