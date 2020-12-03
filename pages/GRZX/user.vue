@@ -236,6 +236,9 @@
 					case '意见反馈':
 						this.feedbackClick();
 						break;
+					case '商城订单':
+						this.shoporderList();
+						break;
 					case '设置':
 						uni.navigateTo({
 							url: this.$GrzxInter.Route.set.url,
@@ -267,6 +270,20 @@
 				if(user.phoneNumber != "" && user.phoneNumber != null){
 					uni.navigateTo({
 						url: this.$GrzxInter.Route.feedback.url,
+					})
+				}else{
+					uni.showToast({
+						title: '请先登录',
+						icon:'none'
+					});
+				}
+			},
+			//------------------------------商城订单-----------------------
+			shoporderList() {
+				let user = uni.getStorageSync('userInfo');
+				if(user.phoneNumber != "" && user.phoneNumber != null){
+					uni.navigateTo({
+						url:'/pages_WSSC/pages/WSSC/onlineShoppingMall/osm_orderList',
 					})
 				}else{
 					uni.showToast({
