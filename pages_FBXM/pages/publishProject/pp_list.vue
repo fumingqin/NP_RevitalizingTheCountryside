@@ -16,6 +16,11 @@
 				</view>
 				<image class="tv_image" :src="item.image" mode="aspectFill"></image>
 			</view>
+			
+			<view class="tv_investment" style="padding-top: 10upx;">
+				<text class="it_text">负责人：{{item.personName}}</text>
+				<text class="it_text" style="margin-left: 20upx;">已投资：{{item.ready_investment}}</text>
+			</view>
 
 			<view class="view_contentView">
 				<text>{{item.nick_name}}</text>
@@ -476,6 +481,14 @@
 				width: 220upx;
 				height: 160upx;
 				border-radius: 8upx;
+			}
+		}
+		
+		.tv_investment{
+			font-size: 24upx; 
+			color: #E3424B; 
+			.it_text{
+				
 			}
 		}
 
