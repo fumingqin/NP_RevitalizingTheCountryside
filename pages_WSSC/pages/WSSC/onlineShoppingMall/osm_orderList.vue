@@ -23,7 +23,7 @@
 								</view>
 								<view class="item">
 									<view class="left">
-										<image :src="item.product.image" mode="aspectFill"></image>
+										<image :src="JSON.parse(item.product.image)[0]" mode="aspectFill"></image>
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
@@ -51,11 +51,14 @@
 									</view>
 									<view v-if="item.orderList.state=='支付成功'" class="evaluate btn" @click="refund(item.orderList.order_number)">退款</view>
 									<view v-if="item.orderList.state=='已发货'" class="evaluate btn" @click="shipments(item.orderList.order_number)">确认收货</view>
-									<view v-if="item.orderList.state=='待支付'" class="evaluate btn" @click="cancel(item.orderList.order_number)">取消</view>
-									<view v-if="item.orderList.state=='待支付'" class="evaluate btn" @click="Delete(item.orderList.order_number)">删除</view>
+									<view v-if="item.orderList.state=='待支付'" class="cancelbtn btn" @click="cancel(item.orderList.order_number)">取消</view>
+									<view v-if="item.orderList.state=='待支付'" class="Deletebtn btn" @click="Delete(item.orderList.order_number)">删除</view>
 									<view v-if="item.orderList.state=='待支付'" class="evaluate btn" @click="confirm(item.orderList.order_number)">付款</view>
-									<view v-if="item.orderList.state=='已完成'||item.orderList.state=='已取消'" class="evaluate btn" @click="Delete(item.orderList.order_number)">删除</view>
+									<view v-if="item.orderList.state=='已完成'||item.orderList.state=='已取消'" class="Deletebtn btn" @click="Delete(item.orderList.order_number)">删除</view>
 								</view>
+							</view>
+							<view v-if="info==''" style="margin-top: 500upx;">
+								<u-empty :isShow="info==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -102,8 +105,11 @@
 									</view>
 									<!-- <view class="logistics btn">查看物流</view>
 									<view class="exchange btn">卖了换钱</view> -->
-									<view class="evaluate btn" @click="Delete(item.orderList.order_number)">删除</view>
+									<view class="Deletebtn btn" @click="Delete(item.orderList.order_number)">删除</view>
 								</view>
+							</view>
+							<view v-if="unfinishinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="unfinishinfo==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -150,10 +156,13 @@
 									</view>
 									<!-- <view class="logistics btn">查看物流</view>
 									<view class="exchange btn">卖了换钱</view> -->
-									<view class="evaluate btn" @click="cancel(item.orderList.order_number)">取消</view>
-									<view class="evaluate btn" @click="Delete(item.orderList.order_number)">删除</view>
+									<view class="cancelbtn btn" @click="cancel(item.orderList.order_number)">取消</view>
+									<view class="Deletebtn btn" @click="Delete(item.orderList.order_number)">删除</view>
 									<view class="evaluate btn"@click="confirm(item.orderList.order_number)">付款</view>
 								</view>
+							</view>
+							<view v-if="unpaidinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="unpaidinfo==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -203,6 +212,9 @@
 									<!-- <view class="evaluate btn" >付款</view> -->
 								</view>
 							</view>
+							<view v-if="unshipmentsinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="unshipmentsinfo==''" text="暂无数据" textColor="#999999"></u-empty>
+							</view>
 						</view>
 					</scroll-view>
 				</swiper-item>
@@ -251,6 +263,9 @@
 									<view class="evaluate btn" @click="shipments(item.orderList.order_number)">确认收货</view>
 								</view>
 							</view>
+							<view v-if="shipmentsinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="shipmentsinfo==''" text="暂无数据" textColor="#999999"></u-empty>
+							</view>
 						</view>
 					</scroll-view>
 				</swiper-item>
@@ -297,8 +312,11 @@
 									<!-- <view class="logistics btn">查看物流</view>
 									<view class="exchange btn">卖了换钱</view> -->
 									<!-- <view class="evaluate btn" >付款</view> -->
-									<view class="evaluate btn" @click="Delete(item.orderList.order_number)">删除</view>
+									<view class="Deletebtn btn" @click="Delete(item.orderList.order_number)">删除</view>
 								</view>
+							</view>
+							<view v-if="finishinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="finishinfo==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -347,6 +365,9 @@
 									<view class="exchange btn">卖了换钱</view> -->
 									<!-- <view class="evaluate btn" >付款</view> -->
 								</view>
+							</view>
+							<view v-if="timeoutinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="timeoutinfo==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -1060,6 +1081,14 @@
 					.evaluate {
 						color: $u-type-warning-dark;
 						border-color: $u-type-warning-dark;
+					}
+					.Deletebtn {
+						color:#F43530;
+						border-color:#F43530;
+					}
+					.cancelbtn {
+						color:#C0C0C0;
+						border-color:#C0C0C0;
 					}
 				}
 			
