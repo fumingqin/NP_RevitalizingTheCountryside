@@ -150,7 +150,7 @@
 			informationDate: function(e) {
 				// console.log(e)
 				// var tsetDate = e.replace('T',' ')
-				var a = e.substr(5, 11)
+				var a = e.substr(0, 10)
 				return a;
 			},
 
