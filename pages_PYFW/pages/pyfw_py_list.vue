@@ -165,7 +165,7 @@
 				// console.log(e)
 				// var tsetDate = e.replace('T',' ')
 				if(e !== undefined){
-					var a = e.substr(5, 11)
+					var a = e.substr(0, 10)
 					return a;
 				}else{
 					return '';

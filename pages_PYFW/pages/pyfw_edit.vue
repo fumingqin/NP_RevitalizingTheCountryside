@@ -235,81 +235,88 @@
 				uni.showLoading({
 					title:'提交中...'
 				})
-				//-----------------提交表单数据-----------------------
-				this.$refs.uForm.validate(valid => {
-					if (valid) {
-						console.log('验证通过');
-						var imageListData = [];
-						console.log(this.fileListTest)
-						if(this.fileListTest != ''){
-							if(this.fileListTest.length != 0){
-								for(var i=0; i<this.fileListTest.length; i++){
-									imageListData.push(this.fileListTest[i].url)
-									console.log('循环图片',imageListData)
+				if(this.model.techValue !== ''){
+					//-----------------提交表单数据-----------------------
+					this.$refs.uForm.validate(valid => {
+						if (valid) {
+							console.log('验证通过');
+							var imageListData = [];
+							console.log(this.fileListTest)
+							if(this.fileListTest != ''){
+								if(this.fileListTest.length != 0){
+									for(var i=0; i<this.fileListTest.length; i++){
+										imageListData.push(this.fileListTest[i].url)
+										console.log('循环图片',imageListData)
+									}
 								}
 							}
-						}
-						console.log(this.model.techValue)
-						console.log(this.model.intro)
-						console.log(imageListData)
-						console.log(this.userInfo.userId)
-						console.log(this.userInfo.phoneNumber)
-						console.log(this.VillageData.id)
-						
-						uni.request({
-							url: this.$pyfw.KyInterface.releaseCommissioner.Url,
-							method: this.$pyfw.KyInterface.releaseCommissioner.method,
-							data: {
-								applyType :  this.model.techValue,//问题类型
-								content :  this.model.intro,//问题内容
-								image :  JSON.stringify(imageListData),//相关图片
-								userId : this.userInfo.userId ,//用户id
-								telephone : this.userInfo.phoneNumber,//用户电话
-								villageId : this.VillageData.id,//乡村名id
-							},
-							success: (res) => {
-								console.log(res)
-								if(res.data.status){
-									uni.hideLoading()
-									uni.showToast({
-										title:res.data.msg,
-										success: () => {
-											uni.removeStorage({
-												key:'uploadData'
+							console.log(this.model.techValue)
+							console.log(this.model.intro)
+							console.log(imageListData)
+							console.log(this.userInfo.userId)
+							console.log(this.userInfo.phoneNumber)
+							console.log(this.VillageData.id)
+								uni.request({
+									url: this.$pyfw.KyInterface.releaseCommissioner.Url,
+									method: this.$pyfw.KyInterface.releaseCommissioner.method,
+									data: {
+										applyType :  this.model.techValue,//问题类型
+										content :  this.model.intro,//问题内容
+										image :  JSON.stringify(imageListData),//相关图片
+										userId : this.userInfo.userId ,//用户id
+										telephone : this.userInfo.phoneNumber,//用户电话
+										villageId : this.VillageData.id,//乡村名id
+									},
+									success: (res) => {
+										console.log(res)
+										if(res.data.status){
+											uni.hideLoading()
+											uni.showToast({
+												title:res.data.msg,
+												success: () => {
+													uni.removeStorage({
+														key:'uploadData'
+													})
+													this.fileList = [];
+													this.fileListTest = [];
+													uni.navigateBack()
+												}
+												
 											})
-											this.fileList = [];
-											this.fileListTest = [];
-											uni.navigateBack()
+										}else{
+											uni.hideLoading()
+											uni.showToast({
+												title:'申请失败，请联系客服处理异常',
+												icon:'none'
+											})
 										}
 										
-									})
-								}else{
-									uni.hideLoading()
-									uni.showToast({
-										title:'申请失败，请联系客服处理异常',
-										icon:'none'
-									})
-								}
-								
-							},
-							fail: (err) => {
-								uni.hideLoading()
-								uni.showToast({
-									title:'申请失败，服务器异常，请联系客服处理异常',
-									icon:'none'
+									},
+									fail: (err) => {
+										uni.hideLoading()
+										uni.showToast({
+											title:'申请失败，服务器异常，请联系客服处理异常',
+											icon:'none'
+										})
+										console.log(err)
+									}
 								})
-								console.log(err)
-							}
-						})
-					} else {
-						uni.hideLoading()
-						// console.log('验证失败');
-						uni.showToast({
-							title:'请根据相关红字提醒，填写或选择内容',
-							icon: 'none'
-						})
-					}
-				});
+						} else {
+							uni.hideLoading()
+							// console.log('验证失败');
+							uni.showToast({
+								title:'请根据相关红字提醒，填写或选择内容',
+								icon: 'none'
+							})
+						}
+					});
+				}else{
+					uni.showToast({
+						title:'请选择技术类型',
+						icon:'none'
+					})
+				}
+				
 			},
 
 			//-----------------请求乡村列表-----------------------

@@ -114,13 +114,13 @@
 						ItemTitle: "乘客管理",
 						style:"CKGLicon",
 					},
-					{
-						IsUse: true,
-						clickURL: "",
-						ImageURL: "../../static/GRZX/icon/kf.png",
-						ItemTitle: "QQ客服",
-						style:"DHKFicon",
-					},
+					// {
+					// 	IsUse: true,
+					// 	clickURL: "",
+					// 	ImageURL: "../../static/GRZX/icon/kf.png",
+					// 	ItemTitle: "QQ客服",
+					// 	style:"DHKFicon",
+					// },
 					{
 						IsUse: true,
 						clickURL: "",
