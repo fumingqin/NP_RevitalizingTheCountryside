@@ -5,7 +5,7 @@
 		</view>
 		
 		<!-- 轮播区 -->
-		<u-swiper :list="details.image" :height="422" indicator-pos="bottomRight">
+		<u-swiper :list="details.image" :height="500" indicator-pos="bottomRight">
 			<u-loading slot="loading"></u-loading>
 			<view slot="error" style="font-size: 24rpx;">加载失败</view>
 		</u-swiper>
@@ -19,8 +19,8 @@
 					<text class="ovof_dp_bg_cost" v-if="number!==0">¥{{details.unit_price}}</text>
 				</view>
 				<view class="ovof_dp_bg_time">
-					<text class="browse">销售量:</text>
-					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="browse"></u-count-to>
+					<text class="browse">销售量：</text>
+					<u-count-to font-size="30rpx" color="#888" :start-val="0" :end-val="details.sale_volume"></u-count-to>
 					<!-- <text class="browse" style="padding-left: 30upx;">{{comment}}个评论</text> -->
 				</view>
 
@@ -38,7 +38,7 @@
 							<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
 								{{sItem.name}}
 							</text>
-							<text class="selected-text">数量:{{number}}</text>
+							<text class="selected-text">数量：{{number}}</text>
 						</view>
 						<text class="jdticon icon-you"></text>
 					</view>
@@ -56,11 +56,7 @@
 							<text class="price" v-if="number==0">¥0</text>
 							<text class="price" v-if="number!==0">¥{{calculateQuantity(details.unit_price)}}</text>
 							<view class="selected">
-								已选：
-								<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
-									{{sItem.name}}
-								</text>
-								<text class="selected-text">数量:{{number}}</text>
+								<text class="selected-text">数量：{{number}}</text>
 							</view>
 						</view>
 					</view>
@@ -74,7 +70,7 @@
 						</view>
 					</view> -->
 					<view class="attr-list">
-						<text>规格:{{details.sale_unit}}/￥{{details.unit_price}}</text>
+						<text>规格:{{details.sale_unit}}/{{details.unit_price}}元</text>
 					</view>
 					
 					<view class="attr-list">
@@ -99,7 +95,7 @@
 					</view>
 				</view> -->
 
-				<view>
+				<view style="padding-bottom: 104upx;">
 					<view class="d-header">
 						<text>图文详情</text>
 					</view>
@@ -245,7 +241,6 @@
 
 		onLoad: function(param) {
 			this.id = param.id;
-			this.detailsData();
 			console.log(this.id)
 			//规格 默认选中第一条
 			// this.specList.forEach(item => {
@@ -260,7 +255,10 @@
 		},
 
 		onShow() {
-
+			uni.showLoading({
+				title: '加载详情中...',
+			})
+			this.detailsData();
 		},
 
 		onUnload() {
@@ -288,8 +286,10 @@
 						// console.log('轮播区', res)
 						if (res.data.status == true) {
 							this.details=res.data.data;
+							uni.hideLoading();
 							console.log('获取详情数据', this.details)
 						} else {
+							uni.hideLoading();
 							uni.showToast({
 								title: res.data.msg,
 								icon: 'none'
@@ -297,6 +297,7 @@
 						}
 					},
 					fail: function() {
+						uni.hideLoading();
 						uni.showToast({
 							title: '首页轮播图网络加载异常',
 							icon: 'none'
@@ -418,7 +419,7 @@
 	.ovof_dp_background {
 		position: absolute;
 		z-index: 999;
-		top: 376upx;
+		top: 452upx;
 	}
 
 	.ovof_dp_bg_background {
@@ -673,8 +674,8 @@
 			background-color: #fff;
 
 			.btn {
-				height: 66upx;
-				line-height: 66upx;
+				height: 78upx;
+				line-height: 78upx;
 				border-radius: 100upx;
 				background: #FF6600;
 				font-size: 30upx;

@@ -2,9 +2,10 @@
 	<view>
 		<view class="wrap">
 			<view class="u-tabs-box">
-				<u-tabs-swiper activeColor="#f29100" ref="tabs" :list="list" :current="current" @change="change" :is-scroll="false" swiperWidth="750" :load-text="loadText"></u-tabs-swiper>
+				<u-tabs-swiper activeColor="#f29100" ref="tabs" :list="list" :current="current" @change="change" :is-scroll="false"
+				 swiperWidth="750" :load-text="loadText"></u-tabs-swiper>
 			</view>
-			
+
 			<!-- 订单列表 -->
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
 				<!-- 全部 -->
@@ -21,12 +22,14 @@
 									<view class="right">{{ item.orderList.state }}</view>
 								</view>
 								<view class="item">
-									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="left">
+										<image :src="JSON.parse(item.product.image)[0]" mode="aspectFill"></image>
+									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
 										<view class="type">{{ item.product.sale_unit }}</view>
-										<view v-if="item.orderList.state!='已发货'" class="delivery-time">下单时间 {{ gettime(item.product.create_time)}}</view>
-										<view v-if="item.orderList.state=='已发货'" class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view v-if="item.orderList.state!='已发货'" class="delivery-time">下单时间 {{ gettime(item.orderList.create_time)}}</view>
+										<view v-if="item.orderList.state=='已发货'" class="delivery-time">发货时间 {{ gettime(item.orderList.update_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
@@ -35,7 +38,7 @@
 										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
-									</view>
+								</view>
 								<view class="total">
 									共{{ item.orderList.quantity }}件商品 合计:
 									<text class="total-price">
@@ -43,11 +46,19 @@
 									</text>
 								</view>
 								<view class="bottom">
-									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
-									<view v-if="item.orderList.state=='支付成功'" class="logistics btn" @click="refund(item.orderList.order_number)">退款</view>
-<!-- 									<view class="exchange btn">卖了换钱</view>
-									<view class="evaluate btn">评价</view> -->
+									<view class="more">
+										<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+									</view>
+									<view v-if="item.orderList.state=='支付成功'" class="evaluate btn" @click="refund(item.orderList.order_number)">退款</view>
+									<view v-if="item.orderList.state=='已发货'" class="evaluate btn" @click="shipments(item.orderList.order_number)">确认收货</view>
+									<view v-if="item.orderList.state=='待支付'" class="cancelbtn btn" @click="cancel(item.orderList.order_number)">取消</view>
+									<view v-if="item.orderList.state=='待支付'" class="Deletebtn btn" @click="Delete(item.orderList.order_number)">删除</view>
+									<view v-if="item.orderList.state=='待支付'" class="evaluate btn" @click="confirm(item.orderList.order_number)">付款</view>
+									<view v-if="item.orderList.state=='已完成'||item.orderList.state=='已取消'" class="Deletebtn btn" @click="Delete(item.orderList.order_number)">删除</view>
 								</view>
+							</view>
+							<view v-if="info==''" style="margin-top: 500upx;">
+								<u-empty :isShow="info==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -66,11 +77,13 @@
 									<view class="right">{{ item.orderList.state }}</view>
 								</view>
 								<view class="item">
-									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="left">
+										<image :src="item.product.image" mode="aspectFill"></image>
+									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
 										<view class="type">{{ item.product.sale_unit }}</view>
-										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="delivery-time">下单时间 {{ gettime(item.orderList.create_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
@@ -79,7 +92,7 @@
 										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
-									</view>
+								</view>
 								<view class="total">
 									共{{ item.orderList.quantity }}件商品 合计:
 									<text class="total-price">
@@ -87,11 +100,16 @@
 									</text>
 								</view>
 								<view class="bottom">
-									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<view class="more">
+										<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+									</view>
 									<!-- <view class="logistics btn">查看物流</view>
 									<view class="exchange btn">卖了换钱</view> -->
-									<view class="evaluate btn" >付款</view>
+									<view class="Deletebtn btn" @click="Delete(item.orderList.order_number)">删除</view>
 								</view>
+							</view>
+							<view v-if="unfinishinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="unfinishinfo==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -110,11 +128,13 @@
 									<view class="right">{{ item.orderList.state }}</view>
 								</view>
 								<view class="item">
-									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="left">
+										<image :src="item.product.image" mode="aspectFill"></image>
+									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
 										<view class="type">{{ item.product.sale_unit }}</view>
-										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="delivery-time">下单时间 {{ gettime(item.orderList.create_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
@@ -123,7 +143,7 @@
 										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
-									</view>
+								</view>
 								<view class="total">
 									共{{ item.orderList.quantity }}件商品 合计:
 									<text class="total-price">
@@ -131,11 +151,18 @@
 									</text>
 								</view>
 								<view class="bottom">
-									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<view class="more">
+										<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+									</view>
 									<!-- <view class="logistics btn">查看物流</view>
 									<view class="exchange btn">卖了换钱</view> -->
-									<view class="evaluate btn" >付款</view>
+									<view class="cancelbtn btn" @click="cancel(item.orderList.order_number)">取消</view>
+									<view class="Deletebtn btn" @click="Delete(item.orderList.order_number)">删除</view>
+									<view class="evaluate btn"@click="confirm(item.orderList.order_number)">付款</view>
 								</view>
+							</view>
+							<view v-if="unpaidinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="unpaidinfo==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -154,11 +181,13 @@
 									<view class="right">{{ item.orderList.state }}</view>
 								</view>
 								<view class="item">
-									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="left">
+										<image :src="item.product.image" mode="aspectFill"></image>
+									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
 										<view class="type">{{ item.product.sale_unit }}</view>
-										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="delivery-time">下单时间 {{ gettime(item.orderList.create_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
@@ -167,7 +196,7 @@
 										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
-									</view>
+								</view>
 								<view class="total">
 									共{{ item.orderList.quantity }}件商品 合计:
 									<text class="total-price">
@@ -175,11 +204,16 @@
 									</text>
 								</view>
 								<view class="bottom">
-									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<view class="more">
+										<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+									</view>
 									<!-- <view class="logistics btn">查看物流</view>
 									<view class="exchange btn">卖了换钱</view> -->
-									<view class="evaluate btn" >付款</view>
+									<!-- <view class="evaluate btn" >付款</view> -->
 								</view>
+							</view>
+							<view v-if="unshipmentsinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="unshipmentsinfo==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -198,11 +232,13 @@
 									<view class="right">{{ item.orderList.state }}</view>
 								</view>
 								<view class="item">
-									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="left">
+										<image :src="item.product.image" mode="aspectFill"></image>
+									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
 										<view class="type">{{ item.product.sale_unit }}</view>
-										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="delivery-time">发货时间 {{ gettime(item.orderList.update_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
@@ -211,7 +247,7 @@
 										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
-									</view>
+								</view>
 								<view class="total">
 									共{{ item.orderList.quantity }}件商品 合计:
 									<text class="total-price">
@@ -219,11 +255,16 @@
 									</text>
 								</view>
 								<view class="bottom">
-									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<view class="more">
+										<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+									</view>
 									<!-- <view class="logistics btn">查看物流</view>
 									<view class="exchange btn">卖了换钱</view> -->
-									<view class="evaluate btn" >付款</view>
+									<view class="evaluate btn" @click="shipments(item.orderList.order_number)">确认收货</view>
 								</view>
+							</view>
+							<view v-if="shipmentsinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="shipmentsinfo==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -242,11 +283,13 @@
 									<view class="right">{{ item.orderList.state }}</view>
 								</view>
 								<view class="item">
-									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="left">
+										<image :src="item.product.image" mode="aspectFill"></image>
+									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
 										<view class="type">{{ item.product.sale_unit }}</view>
-										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="delivery-time">下点时间 {{ gettime(item.orderList.update_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
@@ -255,7 +298,7 @@
 										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
-									</view>
+								</view>
 								<view class="total">
 									共{{ item.orderList.quantity }}件商品 合计:
 									<text class="total-price">
@@ -263,11 +306,17 @@
 									</text>
 								</view>
 								<view class="bottom">
-									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<view class="more">
+										<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+									</view>
 									<!-- <view class="logistics btn">查看物流</view>
 									<view class="exchange btn">卖了换钱</view> -->
-									<view class="evaluate btn" >付款</view>
+									<!-- <view class="evaluate btn" >付款</view> -->
+									<view class="Deletebtn btn" @click="Delete(item.orderList.order_number)">删除</view>
 								</view>
+							</view>
+							<view v-if="finishinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="finishinfo==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -286,11 +335,13 @@
 									<view class="right">{{ item.orderList.state }}</view>
 								</view>
 								<view class="item">
-									<view class="left"><image :src="item.product.image" mode="aspectFill"></image></view>
+									<view class="left">
+										<image :src="item.product.image" mode="aspectFill"></image>
+									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
 										<view class="type">{{ item.product.sale_unit }}</view>
-										<view class="delivery-time">发货时间 {{ gettime(item.product.update_time)}}</view>
+										<view class="delivery-time">下单时间 {{ gettime(item.orderList.create_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
@@ -299,7 +350,7 @@
 										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
-									</view>
+								</view>
 								<view class="total">
 									共{{ item.orderList.quantity }}件商品 合计:
 									<text class="total-price">
@@ -307,11 +358,16 @@
 									</text>
 								</view>
 								<view class="bottom">
-									<view class="more"><u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon></view>
+									<view class="more">
+										<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+									</view>
 									<!-- <view class="logistics btn">查看物流</view>
 									<view class="exchange btn">卖了换钱</view> -->
-									<view class="evaluate btn" >付款</view>
+									<!-- <view class="evaluate btn" >付款</view> -->
 								</view>
+							</view>
+							<view v-if="timeoutinfo==''" style="margin-top: 500upx;">
+								<u-empty :isShow="timeoutinfo==''" text="暂无数据" textColor="#999999"></u-empty>
 							</view>
 						</view>
 					</scroll-view>
@@ -330,8 +386,7 @@
 					loading: '努力加载中',
 					nomore: '实在没有了'
 				},
-				list: [
-					{
+				list: [{
 						name: '全部'
 					},
 					{
@@ -353,173 +408,36 @@
 						name: '已超时'
 					}
 				],
-				dataList: [
-					{
-						id: 1,
-						store: '夏日流星限定贩卖',
-						deal: '交易成功',
-						state:1,
-						goodsList: [
-							{
-								goodsUrl: '//img13.360buyimg.com/n7/jfs/t1/103005/7/17719/314825/5e8c19faEb7eed50d/5b81ae4b2f7f3bb7.jpg',
-								title: '【冬日限定】现货 原创jk制服女2020冬装新款小清新宽松软糯毛衣外套女开衫短款百搭日系甜美风',
-								type: '灰色;M',
-								deliveryTime: '付款后30天内发货',
-								price: '348.58',
-								number: 2
-							},
-							{
-								goodsUrl: '//img12.360buyimg.com/n7/jfs/t1/102191/19/9072/330688/5e0af7cfE17698872/c91c00d713bf729a.jpg',
-								title: '【葡萄藤】现货 小清新学院风制服格裙百褶裙女短款百搭日系甜美风原创jk制服女2020新款',
-								type: '45cm;S',
-								deliveryTime: '付款后30天内发货',
-								price: '135.00',
-								number: 1
-							}
-						]
-					},
-					{
-						id: 2,
-						store: '江南皮革厂',
-						deal: '交易失败',
-						state:1,
-						goodsList: [
-							{
-								goodsUrl: '//img14.360buyimg.com/n7/jfs/t1/60319/15/6105/406802/5d43f68aE9f00db8c/0affb7ac46c345e2.jpg',
-								title: '【冬日限定】现货 原创jk制服女2020冬装新款小清新宽松软糯毛衣外套女开衫短款百搭日系甜美风',
-								type: '粉色;M',
-								deliveryTime: '付款后7天内发货',
-								price: '128.05',
-								number: 1
-							}
-						]
-					},
-					{
-						id: 3,
-						store: '三星旗舰店',
-						deal: '交易失败',
-						state:1,
-						goodsList: [
-							{
-								goodsUrl: '//img11.360buyimg.com/n7/jfs/t1/94448/29/2734/524808/5dd4cc16E990dfb6b/59c256f85a8c3757.jpg',
-								title: '三星（SAMSUNG）京品家电 UA65RUF70AJXXZ 65英寸4K超高清 HDR 京东微联 智能语音 教育资源液晶电视机',
-								type: '4K，广色域',
-								deliveryTime: '保质5年',
-								price: '1998',
-								number: 3
-							},
-							{
-								goodsUrl: '//img14.360buyimg.com/n7/jfs/t6007/205/4099529191/294869/ae4e6d4f/595dcf19Ndce3227d.jpg!q90.jpg',
-								title: '美的(Midea)639升 对开门冰箱 19分钟急速净味 一级能效冷藏双开门杀菌智能家用双变频节能 BCD-639WKPZM(E)',
-								type: '容量大，速冻',
-								deliveryTime: '保质5年',
-								price: '2354',
-								number: 1
-							}
-						]
-					},
-					{
-						id: 4,
-						store: '三星旗舰店',
-						deal: '交易失败',
-						state:1,
-						goodsList: [
-							{
-								goodsUrl: '//img10.360buyimg.com/n7/jfs/t22300/31/1505958241/171936/9e201a89/5b2b12ffNe6dbb594.jpg!q90.jpg',
-								title: '法国进口红酒 拉菲（LAFITE）传奇波尔多干红葡萄酒750ml*6整箱装',
-								type: '4K，广色域',
-								deliveryTime: '珍藏10年好酒',
-								price: '1543',
-								number: 3
-							},
-							{
-								goodsUrl: '//img10.360buyimg.com/n7/jfs/t1/107598/17/3766/525060/5e143aacE9a94d43c/03573ae60b8bf0ee.jpg',
-								title: '蓝妹（BLUE GIRL）酷爽啤酒 清啤 原装进口啤酒 罐装 500ml*9听 整箱装',
-								type: '一打',
-								deliveryTime: '口感好',
-								price: '120',
-								number: 1
-							}
-						]
-					},
-					{
-						id: 5,
-						store: '三星旗舰店',
-						deal: '交易成功',
-						state:2,
-						goodsList: [
-							{
-								goodsUrl: '//img12.360buyimg.com/n7/jfs/t1/52408/35/3554/78293/5d12e9cfEfd118ba1/ba5995e62cbd747f.jpg!q90.jpg',
-								title: '企业微信 中控人脸指纹识别考勤机刷脸机 无线签到异地多店打卡机WX108',
-								type: '识别效率高',
-								deliveryTime: '使用方便',
-								price: '451',
-								number: 9
-							}
-						]
-					},
-					{
-						id: 6,
-						store: '三星旗舰店',
-						deal: '交易成功',
-						state:2,
-						goodsList: [
-							{
-								goodsUrl: '//img12.360buyimg.com/n7/jfs/t1/52408/35/3554/78293/5d12e9cfEfd118ba1/ba5995e62cbd747f.jpg!q90.jpg',
-								title: '企业微信 中控人脸指纹识别考勤机刷脸机 无线签到异地多店打卡机WX108',
-								type: '识别效率高',
-								deliveryTime: '使用方便',
-								price: '451',
-								number: 9
-							}
-						]
-					},
-					{
-						id: 7,
-						store: '三星旗舰店',
-						deal: '交易成功',
-						state:1,
-						goodsList: [
-							{
-								goodsUrl: '//img12.360buyimg.com/n7/jfs/t1/52408/35/3554/78293/5d12e9cfEfd118ba1/ba5995e62cbd747f.jpg!q90.jpg',
-								title: '企业微信 中控人脸指纹识别考勤机刷脸机 无线签到异地多店打卡机WX108',
-								type: '识别效率高',
-								deliveryTime: '使用方便',
-								price: '451',
-								number: 9
-							}
-						]
-					}
-				],
-				info:[],//全部
-				finishinfo:[],//已完成
-				unfinishinfo:[],//已取消
-				shipmentsinfo:[],//已发货
-				unshipmentsinfo:[],//待发货
-				unpaidinfo:[],//待支付
-				timeoutinfo:[],//已超时
+				info: [], //全部
+				finishinfo: [], //已完成
+				unfinishinfo: [], //已取消
+				shipmentsinfo: [], //已发货
+				unshipmentsinfo: [], //待发货
+				unpaidinfo: [], //待支付
+				timeoutinfo: [], //已超时
 				current: 0,
 				swiperCurrent: 0,
 				tabsHeight: 0,
 				dx: 0,
-				userInfo:'',
+				userInfo: '',
+				orderInfo:'',
 			}
 		},
-		
+
 		onShow() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
 			this.userData();
 		},
-		
+
 		onPullDownRefresh: function() {
 			uni.showLoading({
 				title: '加载列表中...',
 			})
 			this.userData();
 		},
-		
+
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
 			userData: function() {
@@ -533,112 +451,112 @@
 					fail: (err) => {
 						uni.hideLoading()
 						uni.showToast({
-							title:'您暂未登录，已为您跳转登录页面',
-							icon:'none',
+							title: '您暂未登录，已为您跳转登录页面',
+							icon: 'none',
 							success: () => {
 								uni.navigateTo({
-									url : '../../../pages/GRZX/userLogin'
+									url: '../../../pages/GRZX/userLogin'
 								})
 							}
 						})
 					}
 				});
 			},
-			
+
 			//-----------------------加载接口数据------------------------
-			
-			ddlbData:function(){
-				var that=this;
-					uni.getStorage({
-						key: 'userInfo',
-						success: (res) => {
-					uni.request({
-						url:that.$wssc.KyInterface.getOrederList.Url,
-						method:that.$wssc.KyInterface.getOrederList.method,
-						data:{
-							userId :that.userInfo.userId,
-						},
-						success:(res) =>{
-							console.log('列表数据',res)
-							that.info=[];
-							that.finishinfo=[];
-							that.unfinishinfo=[];
-							that.timeoutinfo=[];
-							that.unpaidinfo=[];
-							that.shipmentsinfo=[];
-							that.unshipmentsinfo=[];
-							if(res.data.status == true){
-								for(var i=0;i<res.data.data.length;i++){
-									that.info.push(res.data.data[i])
-									if(res.data.data[i].orderList.state=='待支付'){
-										that.unpaidinfo.push(res.data.data[i]);
-									}else if(res.data.data[i].orderList.state=='支付成功'){
-										that.unshipmentsinfo.push(res.data.data[i]);
-									}else if(res.data.data[i].orderList.state=='已发货'){
-										that.shipmentsinfo.push(res.data.data[i]);
-									}else if(res.data.data[i].orderList.state=='订单超时'){
-										that.timeoutinfo.push(res.data.data[i]);
-									}else if(res.data.data[i].orderList.state=='已取消'|| res.data.data[i].orderList.state=='已退款'){
-										that.unfinishinfo.push(res.data.data[i]);
-									}else if(res.data.data[i].orderList.state=='已完成'){
-										that.finishinfo.push(res.data.data[i]);
-									}
-									
-								};
-								uni.stopPullDownRefresh();
-								uni.hideLoading();
-							}else{
-								uni.stopPullDownRefresh();
-								uni.hideLoading();
-								uni.showToast({
-									title: '暂无列表信息',
-									icon: 'none'
-								})
-							}
-						},
-						fail(res) {
-							uni.stopPullDownRefresh();
-							uni.hideLoading();
-							uni.showToast({
-								title: '服务器异常',
-								icon: 'none'
-							})
-							// console.log(res)
-						},
-						complete() {
-							setTimeout(function(){
-								if(this.groupTitle==''){
+
+			ddlbData: function() {
+				var that = this;
+				uni.getStorage({
+					key: 'userInfo',
+					success: (res) => {
+						uni.request({
+							url: that.$wssc.KyInterface.getOrederList.Url,
+							method: that.$wssc.KyInterface.getOrederList.method,
+							data: {
+								userId: that.userInfo.userId,
+							},
+							success: (res) => {
+								console.log('列表数据', res)
+								that.info = [];
+								that.finishinfo = [];
+								that.unfinishinfo = [];
+								that.timeoutinfo = [];
+								that.unpaidinfo = [];
+								that.shipmentsinfo = [];
+								that.unshipmentsinfo = [];
+								if (res.data.status == true) {
+									for (var i = 0; i < res.data.data.length; i++) {
+										that.info.push(res.data.data[i])
+										if (res.data.data[i].orderList.state == '待支付') {
+											that.unpaidinfo.push(res.data.data[i]);
+										} else if (res.data.data[i].orderList.state == '支付成功') {
+											that.unshipmentsinfo.push(res.data.data[i]);
+										} else if (res.data.data[i].orderList.state == '已发货') {
+											that.shipmentsinfo.push(res.data.data[i]);
+										} else if (res.data.data[i].orderList.state == '订单超时') {
+											that.timeoutinfo.push(res.data.data[i]);
+										} else if (res.data.data[i].orderList.state == '已取消' || res.data.data[i].orderList.state == '已退款') {
+											that.unfinishinfo.push(res.data.data[i]);
+										} else if (res.data.data[i].orderList.state == '已完成') {
+											that.finishinfo.push(res.data.data[i]);
+										}
+
+									};
+									uni.stopPullDownRefresh();
+									uni.hideLoading();
+								} else {
+									uni.stopPullDownRefresh();
 									uni.hideLoading();
 									uni.showToast({
-										title: '服务器异常',
+										title: '暂无列表信息',
 										icon: 'none'
 									})
 								}
-							},3000);
-						}
-					})
+							},
+							fail(res) {
+								uni.stopPullDownRefresh();
+								uni.hideLoading();
+								uni.showToast({
+									title: '服务器异常',
+									icon: 'none'
+								})
+								// console.log(res)
+							},
+							complete() {
+								setTimeout(function() {
+									if (this.groupTitle == '') {
+										uni.hideLoading();
+										uni.showToast({
+											title: '服务器异常',
+											icon: 'none'
+										})
+									}
+								}, 3000);
+							}
+						})
 					}
-					})	
+				})
 			},
-			checkOrderState:function(e){
+			checkOrderState: function(e) {
 				uni.request({
-					url:this.$wssc.KyInterface.checkOrderState.Url,
-					method:this.$wssc.KyInterface.checkOrderState.method,
-					data:{
-						orderNumber:e,
+					url: this.$wssc.KyInterface.checkOrderState.Url,
+					method: this.$wssc.KyInterface.checkOrderState.method,
+					data: {
+						orderNumber: e,
 					},
-					success:(res) =>{
+					success: (res) => {
 						console.log(res)
-						if(res.data.status){
+						if (res.data.status) {
 							uni.startPullDownRefresh();
-						}else{
+						} else {
 							uni.showToast({
 								title: '该订单状态异常请联系客服',
 								icon: 'none'
 							})
 						}
-							uni.stopPullDownRefresh();
-							uni.hideLoading();
+						uni.stopPullDownRefresh();
+						uni.hideLoading();
 					},
 					fail(res) {
 						uni.stopPullDownRefresh();
@@ -650,113 +568,378 @@
 						// console.log(res)
 					},
 					complete() {
-						setTimeout(function(){
-							if(this.groupTitle==''){
+						setTimeout(function() {
+							if (this.groupTitle == '') {
 								uni.hideLoading();
 								uni.showToast({
 									title: '服务器异常',
 									icon: 'none'
 								})
 							}
-						},3000);
+						}, 3000);
 					}
 				})
 			},
-			//---------------------退票---------------------
+			//---------------------退款---------------------
 			refund: function(e) {
-			    uni.showModal({
-			     title: '您确认退款吗？',
-			     success: (res) => {
-			      console.log(res)
-			      if (res.confirm == true) {
-			       uni.showLoading({
-			        title: '正在退款....'
-			       })
-			       uni.request({
-			        url: this.$wssc.KyInterface.OrderRefund.Url,
-			        method:this.$wssc.KyInterface.OrderRefund.method,
-			        data: {
-						orderNumber:e,
-			        },
-			        success: (res) => {
-			         console.log(res)
-			         if (res.data.status) {
-			          uni.hideLoading()
-			          uni.showToast({
-			           title: '退款成功',
-			           icon: 'success'
-			          })
-					  this.checkOrderState(e);
-			          
-			         } else {
-			          uni.hideLoading()
-			          uni.showToast({
-			           title: '退款失败',
-			           icon: 'success'
-			          })
-			          uni.startPullDownRefresh();
-			         }
-			
-			        },
-			        fail: () => {
-			         uni.hideLoading()
-			         uni.showToast({
-			          title: '服务器异常，请重试',
-			          icon: 'success'
-			         })
-			         uni.startPullDownRefresh();
-			        }
-			       })
-			      } else {
-			
-			      }
-			     }
-			    })
-			   },
-			//-------------------时间切割---------------------------
-			gettime:function(param){
-					let array=param.split('T');
-					var a=array[0]+' '+array[1];
-					return a;
+				uni.showModal({
+					title: '您确认退款吗？',
+					success: (res) => {
+						console.log(res)
+						if (res.confirm == true) {
+							uni.showLoading({
+								title: '正在退款....'
+							})
+							uni.request({
+								url: this.$wssc.KyInterface.OrderRefund.Url,
+								method: this.$wssc.KyInterface.OrderRefund.method,
+								data: {
+									orderNumber: e,
+								},
+								success: (res) => {
+									console.log(res)
+									if (res.data.status) {
+										uni.hideLoading()
+										uni.showToast({
+											title: '退款成功',
+											icon: 'success'
+										})
+										this.checkOrderState(e);
+
+									} else {
+										uni.hideLoading()
+										uni.showToast({
+											title: '退款失败',
+											icon: 'success'
+										})
+										uni.startPullDownRefresh();
+									}
+
+								},
+								fail: () => {
+									uni.hideLoading()
+									uni.showToast({
+										title: '服务器异常，请重试',
+										icon: 'success'
+									})
+									uni.startPullDownRefresh();
+								}
+							})
+						} else {
+
+						}
+					}
+				})
 			},
-			// 总价
-			// totalPrice(item) {
-			// 	let price = 0;
-			// 	item.map(val => {
-			// 		price += parseFloat(val.price);
-			// 	});
-			// 	return price.toFixed(2);
-			// },
-			// // 总件数
-			// totalNum(item) {
-			// 	let num = 0;
-			// 	item.map(val => {
-			// 		num += val.number;
-			// 	});
-			// 	return num;
-			// },
+			//---------------------删除---------------------
+			Delete: function(e) {
+				uni.getStorage({
+					key: 'userInfo',
+					success: (param) => {
+						console.log(param)
+						uni.showModal({
+							title: '您确认删除吗？',
+							success: (res) => {
+								console.log(res)
+								if (res.confirm == true) {
+									uni.showLoading({
+										title: '正在删除....'
+									})
+									uni.request({
+										url: this.$wssc.KyInterface.deleteOrder.Url,
+										method: this.$wssc.KyInterface.deleteOrder.method,
+										data: {
+											orderNumber: e,
+											userId: param.data.userId,
+										},
+										success: (res) => {
+											console.log(res)
+											if (res.data.status) {
+												uni.hideLoading()
+												uni.showToast({
+													title: '删除成功',
+													icon: 'success'
+												})
+												this.checkOrderState(e);
+
+											} else {
+												uni.hideLoading()
+												uni.showToast({
+													title: '删除失败',
+													icon: 'success'
+												})
+												uni.startPullDownRefresh();
+											}
+
+										},
+										fail: () => {
+											uni.hideLoading()
+											uni.showToast({
+												title: '服务器异常，请重试',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										}
+									})
+								}
+							}
+						})
+					}
+				})
+			},
+			//---------------------取消---------------------
+			cancel: function(e) {
+				uni.getStorage({
+					key: 'userInfo',
+					success: (param) => {
+						uni.showModal({
+							title: '您确认取消吗？',
+							success: (res) => {
+								console.log(res)
+								if (res.confirm == true) {
+									uni.showLoading({
+										title: '正在取消....'
+									})
+									uni.request({
+										url: this.$wssc.KyInterface.cancelOrder.Url,
+										method: this.$wssc.KyInterface.cancelOrder.method,
+										data: {
+											orderNumber: e,
+											userId: param.data.userId,
+										},
+										success: (res) => {
+											console.log(res)
+											if (res.data.status) {
+												uni.hideLoading()
+												uni.showToast({
+													title: '取消成功',
+													icon: 'success'
+												})
+												this.checkOrderState(e);
+
+											} else {
+												uni.hideLoading()
+												uni.showToast({
+													title: '取消失败',
+													icon: 'success'
+												})
+												uni.startPullDownRefresh();
+											}
+
+										},
+										fail: () => {
+											uni.hideLoading()
+											uni.showToast({
+												title: '服务器异常，请重试',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										}
+									})
+								} else {
+
+								}
+							}
+						})
+					}
+				})
+			},
+			//---------------------确认收货---------------------
+			shipments: function(e) {
+				uni.getStorage({
+					key: 'userInfo',
+					success: (param) => {
+						console.log(param)
+						uni.showModal({
+							title: '您确认收货吗？',
+							success: (res) => {
+								console.log(res)
+								if (res.confirm == true) {
+									uni.showLoading({
+										title: '请稍等....'
+									})
+									uni.request({
+										url: this.$wssc.KyInterface.ConfirmReceipt.Url,
+										method: this.$wssc.KyInterface.ConfirmReceipt.method,
+										data: {
+											orderNumber: e,
+											userId: param.data.userId,
+										},
+										success: (res) => {
+											console.log(res)
+											if (res.data.status) {
+												uni.hideLoading()
+												uni.showToast({
+													title: '确认成功',
+													icon: 'success'
+												})
+												this.checkOrderState(e);
 			
+											} else {
+												uni.hideLoading()
+												uni.showToast({
+													title: '确认失败',
+													icon: 'success'
+												})
+												uni.startPullDownRefresh();
+											}
+			
+										},
+										fail: () => {
+											uni.hideLoading()
+											uni.showToast({
+												title: '服务器异常，请重试',
+												icon: 'success'
+											})
+											uni.startPullDownRefresh();
+										}
+									})
+								}
+							}
+						})
+					}
+				})
+			},
+			//-------------------支付----------------
+			confirm:function(e) {
+				uni.showLoading({
+					title: '拉起支付中...'
+				})
+				var that=this;
+				uni.request({
+					url: this.$wssc.KyInterface.againPay.Url,
+					method: this.$wssc.KyInterface.againPay.method,
+					data:{
+						userId:this.userInfo.userId,
+						orderNumber:e
+					},
+					success: (res) => {
+						if (res.data.status == true) {
+							uni.hideLoading()
+							this.orderInfo=res.data.data;
+							uni.requestPayment({
+								provider: 'wxpay',
+								orderInfo: {
+									appid:res.data.data.AppId,
+									noncestr:res.data.data.Noncestr,
+									package: 'Sign=WXPay',
+									partnerid:res.data.data.PartnerId,
+									prepayid:res.data.data.PrepayId,
+									timestamp:res.data.data.Timestamp,
+									sign:res.data.data.Sign,
+								},
+								success: function(res) {
+									console.log(res)
+									if(res.errMsg == 'requestPayment:ok'){
+										uni.request({
+											url: that.$wssc.KyInterface.checkOrderState.Url,
+											method: that.$wssc.KyInterface.checkOrderState.method,
+											data: {
+												orderNumber: e,
+											},
+											success: function(res) {
+												console.log(res)
+												if (res.data.status == true) {
+													uni.showToast({
+														title: '支付成功',
+														icon: 'none',
+														duration: 3000
+													})
+												} else {
+													uni.showToast({
+														title: '购买失败',
+														icon: 'none',
+														duration: 3000
+													})
+												}
+												uni.startPullDownRefresh();
+											},
+											fail: function() {
+												uni.showToast({
+													title: '购买失败',
+													icon: 'none',
+													duration: 3000
+												})
+											}
+										})
+									}
+								},
+												
+								fail: function(e) {
+									console.log(e)
+									if (e.errMsg == 'requestPayment:fail canceled') {
+										uni.showToast({
+											title: '您放弃了支付',
+											icon: 'none',
+											duration: 3000
+										})
+									} else if (e.errMsg == 'requestPayment:fail errors') {
+										uni.showToast({
+											title: '支付失败，请重试',
+											icon: 'none',
+											duration: 3000
+										})
+									} else {
+										uni.showToast({
+											title: '网络异常，请检查网络后重试',
+											icon: 'none',
+											duration: 3000
+										})
+									}
+												
+								}
+							})
+						} else {
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none'
+							})
+						}
+					},
+					fail: function() {
+						uni.showToast({
+							title: '支付异常',
+							icon: 'none'
+						})
+					}
+				})
+			},
+			//-------------------时间切割---------------------------
+			gettime: function(param) {
+				let array = param.split('T');
+				var a = array[0] + ' ' + array[1];
+				return a;
+			},
+
 			// -------------------- tab栏切换 --------------------------
 			change(index) {
 				this.swiperCurrent = index;
 				this.current = index;
 				// this.getOrderList(index);
 			},
-			
+
 			reachBottom() {
 				// 此tab为空数据
 				// setTimeout(() => {
 				// 	this.getOrderList(this.current);
 				// }, 1200);
 			},
-			
+
 			//tab滑动过度效果
-			transition({ detail: { dx } }) {
+			transition({
+				detail: {
+					dx
+				}
+			}) {
 				this.$refs.tabs.setDx(dx);
 			},
-			
+
 			//tab滑动动画
-			animationfinish({ detail: { current } }) {
+			animationfinish({
+				detail: {
+					current
+				}
+			}) {
 				this.$refs.tabs.setFinishCurrent(current);
 				this.swiperCurrent = current;
 				this.current = current;
@@ -766,12 +949,13 @@
 </script>
 
 <style>
-/* #ifndef H5 */
-page {
-	height: 100%;
-	background-color: #f2f2f2;
-}
-/* #endif */
+	/* #ifndef H5 */
+	page {
+		height: 100%;
+		background-color: #f2f2f2;
+	}
+
+	/* #endif */
 </style>
 
 <style lang="scss" scoped>
@@ -781,15 +965,15 @@ page {
 		height: calc(100vh - var(--window-top));
 		width: 100%;
 	}
-	
+
 	.swiper-box {
 		flex: 1;
 	}
-	
+
 	.swiper-item {
 		height: 100%;
 	}
-	
+
 	.order {
 		width: 710rpx;
 		background-color: #ffffff;
@@ -798,90 +982,116 @@ page {
 		box-sizing: border-box;
 		padding: 20rpx;
 		font-size: 28rpx;
+
 		.top {
 			display: flex;
 			justify-content: space-between;
+
 			.left {
 				display: flex;
 				align-items: center;
+
 				.store {
 					margin: 0 10rpx;
 					font-size: 32rpx;
 					font-weight: bold;
 				}
 			}
+
 			.right {
 				color: $u-type-warning-dark;
 			}
 		}
+
 		.item {
 			display: flex;
 			margin: 20rpx 0 0;
+
 			.left {
 				margin-right: 20rpx;
+
 				image {
 					width: 200rpx;
 					height: 200rpx;
 					border-radius: 10rpx;
 				}
 			}
+
 			.content {
 				.title {
 					font-size: 28rpx;
 					line-height: 50rpx;
 				}
+
 				.type {
 					margin: 10rpx 0;
 					font-size: 24rpx;
 					color: $u-tips-color;
 				}
+
 				.delivery-time {
 					color: #e5d001;
 					font-size: 24rpx;
 				}
 			}
+
 			.right {
 				margin-left: 10rpx;
 				padding-top: 20rpx;
 				text-align: right;
+
 				.decimal {
 					font-size: 24rpx;
 					margin-top: 4rpx;
 				}
+
 				.number {
 					color: $u-tips-color;
 					font-size: 24rpx;
 				}
 			}
 		}
+
 		.total {
 			margin-top: 20rpx;
 			text-align: right;
 			font-size: 24rpx;
+
 			.total-price {
 				font-size: 32rpx;
 			}
 		}
-		.bottom {
-			display: flex;
-			margin-top: 40rpx;
-			padding: 0 10rpx;
-			justify-content: space-between;
-			align-items: center;
-			.btn {
-				line-height: 52rpx;
-				width: 160rpx;
-				border-radius: 26rpx;
-				border: 2rpx solid $u-border-color;
-				font-size: 26rpx;
-				text-align: center;
-				color: $u-type-info-dark;
-			}
-			.evaluate {
-				color: $u-type-warning-dark;
-				border-color: $u-type-warning-dark;
-			}
+			.bottom {
+					display: flex;
+					margin-top: 40rpx;
+					padding: 0 10rpx;
+					justify-content: space-between;
+					align-items: center;
+			
+					.btn {
+						line-height: 52rpx;
+						width: 160rpx;
+						border-radius: 26rpx;
+						border: 2rpx solid $u-border-color;
+						font-size: 26rpx;
+						text-align: center;
+						color: $u-type-info-dark;
+					}
+			
+					.evaluate {
+						color: $u-type-warning-dark;
+						border-color: $u-type-warning-dark;
+					}
+					.Deletebtn {
+						color:#F43530;
+						border-color:#F43530;
+					}
+					.cancelbtn {
+						color:#C0C0C0;
+						border-color:#C0C0C0;
+					}
+				}
+			
 		}
-	}
-	
+		
 </style>

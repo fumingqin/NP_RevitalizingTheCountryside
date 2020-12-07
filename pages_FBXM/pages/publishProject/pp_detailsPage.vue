@@ -24,6 +24,47 @@
 					</view>
 				</view>
 			</view>
+			
+			<!-- 投资 -->
+			<view class="investment" @click="checkAttention(1)">
+				<view style="position: relative;width: 100%;">
+					<text style="color: #70c778;font-size: 30upx;">查看投资</text>
+					<text style="color: #70c778;font-size: 30upx;position: absolute;right: 0;">></text>
+				</view>
+			</view>
+			
+			<!-- 查看投资popup -->
+			<popup ref="popup" type="bottom">
+				<view class="boxView2">
+					<view class="titleView2">
+						<text class="Nb_text3">投资明细</text>
+						<text class="Nb_text4 jdticon icon-fork" @click="close(1)"></text>
+					</view>
+					<scroll-view class="noticeBox2" scroll-y="ture">
+						<view class="tv_title">
+							<view class="tl_content">
+								<text class="ct_text">负责人</text>
+								<text class="ct_text2">{{groupTitle.personName}}</text>
+							</view>
+							
+							<view class="tl_content">
+								<text class="ct_text">总投资</text>
+								<text class="ct_text2">{{groupTitle.total_investment}}</text>
+							</view>
+							
+							<view class="tl_content">
+								<text class="ct_text">已投资</text>
+								<text class="ct_text2">{{groupTitle.ready_investment}}</text>
+							</view>
+							
+							<view class="tl_content">
+								<text class="ct_text">项目进度</text>
+								<text class="ct_text2">{{groupTitle.project_schedule}}%</text>
+							</view>
+						</view>
+					</scroll-view>
+				</view>
+			</popup>
 
 			<view class="u-content">
 
@@ -46,6 +87,15 @@
 							<text class="numberWarnings" style="color: #F29100;" v-if="groupTitle.warnNum > 3 && groupTitle.warnNum <= 6">警告次数：{{groupTitle.warnNum}}</text>
 							<text class="numberWarnings" style="color: #E3424B;" v-if="groupTitle.warnNum > 6">警告次数：{{groupTitle.warnNum}}</text>
 						</view>
+						
+						<view class="investmentInformation">
+							<view style="font-size: 32upx;">总投资：{{groupTitle.total_investment}}</view>
+							<view style="font-size: 32upx;padding-top: 20upx;">
+								项目进度：
+								<u-line-progress :percent="groupTitle.project_schedule" duration="2000"></u-line-progress>
+							</view>
+						</view>
+						
 						<u-read-more :toggle="toggle" :show-height="showHeight">
 							<u-parse :html="groupTitle.content" :tag-style="style" :lazy-load="true" :show-with-animation="true"></u-parse>
 						</u-read-more>
@@ -85,7 +135,11 @@
 </template>
 
 <script>
+	import popup from "@/components/HOME/uni-popup/uni-popup.vue"; //弹框组件
 	export default {
+		components: {
+			popup
+		},
 		data() {
 			return {
 				rotationChart: [], //轮播图
@@ -208,6 +262,22 @@
 						})
 					}
 				})
+			},
+			
+			//-------------------------------查看须知-----------------------------
+			checkAttention(e) {
+				if (e == 1) {
+					this.$refs.popup.open()
+				} else if (e == 2) {
+					this.$refs.popup2.open()
+				}
+			},
+			close(e) {
+				if (e == 1) {
+					this.$refs.popup.close()
+				} else if (e == 2) {
+					this.$refs.popup2.close()
+				}
 			},
 
 			//----------------预览--------------------
@@ -336,6 +406,14 @@
 			font-size: 30upx;
 			color: #888;
 		}
+	}
+	
+	.investment{
+		display: flex;
+		margin-top: 20upx;
+		background: #FFFFFF;
+		padding:20upx 30upx;
+		width: 100%;
 	}
 
 	.u-content {
@@ -472,7 +550,7 @@
 	.warning {
 		position: relative;
 		width: 100%;
-		margin-top: 50upx;
+		margin-top: 30upx;
 		padding-left: 20upx;
 
 		.numberWarnings {
@@ -513,4 +591,97 @@
 		color: #888;
 		margin-right: 24upx;
 	}
+	
+	//途径点弹框
+	.boxView2 {
+		width: 100%;
+		padding: 16upx 40upx;
+		padding-bottom: 40upx;
+		background: #FFFFFF;
+		z-index: 999;
+	
+		.titleView2 {
+			margin-top: 24upx;
+	
+			//弹框标题
+			.Nb_text3 {
+				position: relative;
+				font-size: 38upx;
+				font-weight: bold;
+				top: 8upx;
+			}
+	
+			//弹框关闭按钮
+			.Nb_text4 {
+				margin-top: 8upx;
+				float: right;
+				color: #333;
+				font-size: 32upx;
+			}
+		}
+	
+		.noticeBox2 {
+			line-height: 32upx;
+			height: 412upx;
+			margin-top: 8upx;
+	
+			.tv_title {
+				display: block;
+				width: 100%;
+				// margin-bottom: 220upx;
+	
+				//售票次数
+				.tl_content {
+					position: relative;
+					padding-top: 56upx;
+					width: 100%;
+	
+					.ct_text {
+						left: 0;
+						font-size: 30upx;
+						padding-left: 20upx;
+					}
+	
+					.ct_text2 {
+						position: absolute;
+						right: 0;
+						font-size: 28upx;
+						padding-right: 20upx;
+					}
+	
+					.ct_text3 {
+						left: 0;
+						font-size: 28upx;
+						padding-left: 20upx;
+						display: flex;
+						text-overflow: ellipsis; //文章超出宽度隐藏并用...表示
+						white-space: nowrap;
+						overflow: hidden;
+						width: 360upx;
+					}
+	
+					.ct_text4 {
+						position: absolute;
+						float: right;
+						right: 0;
+						color: #aaa;
+						font-size: 24upx;
+						text-overflow: ellipsis; //文章超出宽度隐藏并用...表示
+						white-space: nowrap;
+						overflow: hidden;
+						width: 200upx;
+					}
+				}
+			}
+		}
+	}
+	
+	.investmentInformation{
+		position: relative;
+		width: 100%;
+		margin-top: 20upx;
+		padding-left: 20upx;
+		padding-right:20upx;
+	}
+	
 </style>
