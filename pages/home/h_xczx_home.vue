@@ -67,7 +67,7 @@
 					<image :src="item.image"></image>
 					<view class="sixView">
 						<text class="sixText1">{{item.title}}</text>
-					</view>
+					</view>   
 				</view>
 			</view>
 		</view>
