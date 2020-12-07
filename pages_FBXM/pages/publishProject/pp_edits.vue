@@ -59,7 +59,7 @@
 				<!-- 简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false">
 					<view class="viewClass" style="padding:20rpx 30rpx;">
-						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
+						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.content" />
 					</view>
 				</u-form-item>
 
@@ -179,7 +179,7 @@
 				isIOS: false,
 				model: {
 					name: '', //商品名称value
-					centent: '', //简介
+					content: '', //简介
 					village: '', //乡村名
 					personnel: '', //负责人
 				},
@@ -243,7 +243,7 @@
 							trigger: ['change', 'blur'],
 						},
 					],
-					centent: [{
+					content: [{
 							required: true,
 							message: '请填写简介'
 						},
@@ -365,16 +365,12 @@
 					success: (data) => {
 						console.log('修改信息列表', data)
 						this.informationDetail = data.data;
-						if(data.data.video !== null){
-							this.imageList.push(data.data.video[0])	
-						}
 						if(data.data.pdfFile[0] !== null){
 							this.localPath=data.data.pdfFile[0];
 						}
 						this.issueText2 = data.data.content;
 						this.model.name = data.data.title;
-						this.model.phone=data.data.telphone;
-						this.model.centent = data.data.introduce;
+						this.model.content = data.data.introduce;
 						this.filename=data.data.pdfName[0];
 						this.village_name=data.data.ruralName;
 						this.ruralId=data.data.ruralId;
@@ -705,81 +701,119 @@
 				arr2.push(this.filename)
 				console.log('提交的名字',this.filename)
 				console.log('提交数据2',arr2)
-				//-----------------提交表单数据-----------------------
-				this.$refs.uForm.validate(valid => {
-					if (valid) {
-						// uni.hideLoading();
-						console.log('验证通过');
-						if(this.ruralId!==''){
-							if(this.personId!==''){
-								if (this.issueText !== '<p><br></p>') {
-									uni.request({
-										url: this.$fbxm.KyInterface.updateProject.Url,
-										method: this.$fbxm.KyInterface.updateProject.method,
-										data: {
-											id: this.informationDetail.id,
-											userId: this.userInfo.userId,
-											content: e,
-											image: JSON.stringify(this.pictureArray),
-											title: this.model.name,
-											// video: JSON.stringify(this.imageList),
-											pdfFile: JSON.stringify(arr),
-											pdfName: JSON.stringify(arr2),
-											ruralId:this.ruralId,
-											personId:this.personId,
-											introduce: this.model.centent,
-										},
-										success: (res) => {
-											console.log(res, "请求完接口");
-											if (res.data.status) {
-												uni.showToast({
-													title: res.data.msg,
-												})
-												setTimeout(function() {
-													uni.navigateBack();
-												}, 1000)
-											} else {
-												uni.showToast({
-													title: res.data.msg,
-													icon: 'none',
-												})
+				
+				
+				if (this.issueText !== '<p><br></p>') {
+					if(this.lists.length!==0){
+						this.$refs.uForm.validate(valid => {
+							if (valid) {
+								// uni.hideLoading();
+								console.log('验证通过');
+								if(this.village_name!==''){
+									if (this.model.nick_name !== '') {
+										if (this.model.name !== '') {
+											if (this.model.content !== '') {
+												if (this.model.content.length > 5) {
+													uni.request({
+														url: this.$fbxm.KyInterface.updateProject.Url,
+														method: this.$fbxm.KyInterface.updateProject.method,
+														data: {
+															id: this.informationDetail.id,
+															userId: this.userInfo.userId,
+															content: e,
+															image: JSON.stringify(this.pictureArray),
+															title: this.model.name,
+															// video: JSON.stringify(this.imageList),
+															pdfFile: JSON.stringify(arr),
+															pdfName: JSON.stringify(arr2),
+															ruralId:this.ruralId,
+															personId:this.personId,
+															introduce: this.model.content,
+														},
+														success: (res) => {
+															console.log(res, "请求完接口");
+															if (res.data.status) {
+																uni.showToast({
+																	title: res.data.msg,
+																})
+																setTimeout(function() {
+																	uni.navigateBack();
+																}, 1000)
+															} else {
+																uni.showToast({
+																	title: res.data.msg,
+																	icon: 'none',
+																})
+															}
+														},
+														fail: () => {
+															uni.showToast({
+																title: '提交失败',
+																icon: 'none',
+															})
+														},
+														complete: () => {
+															setTimeout(function() {
+																uni.hideLoading();
+															}, 800)
+														}
+													});
+												}
 											}
-										},
-										fail: () => {
-											uni.showToast({
-												title: '提交失败',
-												icon: 'none',
-											})
-										},
-										complete: () => {
-											setTimeout(function() {
-												uni.hideLoading();
-											}, 800)
 										}
-									});
-								} else {
+									}
+								}
+							} else {
+								//---------------提示内容------------------------
+						
+								uni.hideLoading();
+								console.log('验证失败');
+								if (this.model.name == '') {
 									uni.showToast({
-										title: '提交失败,请编辑文章内容',
+										title: '提交失败,请编辑标题内容',
 										icon: 'none',
 									})
 								}
-							}else{
-								uni.showToast({
-									title: '请选择负责人',
-									icon: 'none',
-								})
+								
+								if (this.model.village_name == '') {
+									uni.showToast({
+										title: '提交失败,请选择乡村',
+										icon: 'none',
+									})
+								}
+								
+								if (this.model.nick_name == '') {
+									uni.showToast({
+										title: '提交失败,请选择负责人',
+										icon: 'none',
+									})
+								}
+								if (this.model.content == '') {
+									uni.showToast({
+										title: '提交失败,请输入简介',
+										icon: 'none',
+									})
+								}
+								if (this.model.content.length < 5) {
+									uni.showToast({
+										title: '提交失败,简介至少大于5个字',
+										icon: 'none',
+									})
+								}
 							}
-						}else{
-							uni.showToast({
-								title: '请选择乡村名称',
-								icon: 'none',
-							})
-						}
-					} else {
-						uni.hideLoading();
-						console.log('验证失败');
+						});
+					}else{
+						uni.showToast({
+							title: '提交失败,请上传图片',
+							icon: 'none',
+						})
 					}
-				});
+				} else {
+					uni.showToast({
+						title: '提交失败,请编辑档案简介',
+						icon: 'none',
+					})
+				}
 			},
 		}
 	}

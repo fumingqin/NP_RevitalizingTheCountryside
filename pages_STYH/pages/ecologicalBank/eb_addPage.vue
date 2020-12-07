@@ -31,7 +31,7 @@
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
 					<view style="display: block;">
 						<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
-						 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+						 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo" @delImage="delVideo"></easy-upload>
 						 <text class="videoClass">*目前该功能暂时只能上传小于200MB的视频</text>
 					</view>
 				</u-form-item>
@@ -506,10 +506,17 @@
 
 			//---------------------------上传视频回调-------------------------------
 			successvideo: function(e) {
-				var data = JSON.parse(e.data);
+				console.log(e)
+				var data = JSON.parse(e.datae);
 				// console.log(data)
 				this.videoData = data;
 				console.log('视频上传成功', this.videoData)
+			},
+			
+			delVideo: function(e) {
+				console.log(e)
+				this.imageList = e
+				console.log(this.imageList)
 			},
 
 			//删除图片提示
@@ -584,7 +591,7 @@
 													title: this.model.name,
 													telphone: this.model.phone,
 													introduce: this.model.content,
-													video: JSON.stringify(arr)
+													video: JSON.stringify(this.imageList)
 												},
 												success: (res) => {
 													console.log(res, "请求完接口");

@@ -24,7 +24,7 @@
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
 					<view style="display: block;">
 						<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
-						 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+						 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo" @delImage="delVideo"></easy-upload>
 						 <text class="videoClass">*目前该功能暂时只能上传小于200MB的视频</text>
 					</view>
 				</u-form-item>
@@ -504,6 +504,12 @@
 				this.videoData = data;
 				console.log('视频上传成功', this.videoData)
 			},
+			
+			delVideo: function(e) {
+				console.log(e)
+				this.imageList = e
+				console.log(this.imageList)
+			},
 
 			//删除图片提示
 			uploadOnRemove: function(e) {
@@ -547,92 +553,96 @@
 					title: '提交中...',
 					mask: true,
 				})
-				var arr = [];
-				arr.push(this.videoData.data);
 				console.log('1', this.issueText);
 				console.log('2', this.userInfo.userId);
 				console.log('3', this.pictureArray);
 				console.log('4', this.model.name);
 				console.log('5', this.model.goodsType);
 				console.log('6', this.informationDetail.id);
-				console.log('7', arr);
 				//-----------------提交表单数据-----------------------
 				if (this.issueText !== '<p><br></p>') {
-					this.$refs.uForm.validate(valid => {
-						if (valid) {
-							// uni.hideLoading();
-							console.log('验证通过');
-							if (this.model.name !== '') {
-								if (this.model.content !== '') {
-									if (this.model.content.length > 5) {
-										uni.request({
-											url: this.$smjj.KyInterface.releaseEconomy.Url,
-											method: this.$smjj.KyInterface.releaseEconomy.method,
-											data: {
-												userId: this.userInfo.userId,
-												// userId: 100006,
-												content: e,
-												image: JSON.stringify(this.lists),
-												title: this.model.name,
-												introduce: this.model.content,
-												video: JSON.stringify(arr)
-											},
-											success: (res) => {
-												console.log(res, "请求完接口");
-												if (res.data.status) {
+					if(this.lists.lengt!==0){
+						this.$refs.uForm.validate(valid => {
+							if (valid) {
+								// uni.hideLoading();
+								console.log('验证通过');
+								if (this.model.name !== '') {
+									if (this.model.content !== '') {
+										if (this.model.content.length > 5) {
+											uni.request({
+												url: this.$smjj.KyInterface.releaseEconomy.Url,
+												method: this.$smjj.KyInterface.releaseEconomy.method,
+												data: {
+													userId: this.userInfo.userId,
+													// userId: 100006,
+													content: e,
+													image: JSON.stringify(this.lists),
+													title: this.model.name,
+													introduce: this.model.content,
+													video: JSON.stringify(this.imageList)
+												},
+												success: (res) => {
+													console.log(res, "请求完接口");
+													if (res.data.status) {
+														uni.showToast({
+															title: res.data.msg,
+														})
+														setTimeout(function() {
+															uni.navigateBack();
+														}, 1000)
+													} else {
+														uni.showToast({
+															title: res.data.msg,
+															icon: 'none',
+														})
+													}
+												},
+												fail: () => {
 													uni.showToast({
-														title: res.data.msg,
-													})
-													setTimeout(function() {
-														uni.navigateBack();
-													}, 1000)
-												} else {
-													uni.showToast({
-														title: res.data.msg,
+														title: '提交失败',
 														icon: 'none',
 													})
+												},
+												complete: () => {
+													setTimeout(function() {
+														uni.hideLoading();
+													}, 800)
 												}
-											},
-											fail: () => {
-												uni.showToast({
-													title: '提交失败',
-													icon: 'none',
-												})
-											},
-											complete: () => {
-												setTimeout(function() {
-													uni.hideLoading();
-												}, 800)
-											}
-										});
+											});
+										}
 									}
 								}
+							} else {
+								//---------------提示内容------------------------
+										
+								uni.hideLoading();
+								console.log('验证失败');
+								if (this.model.name == '') {
+									uni.showToast({
+										title: '提交失败,请编辑标题内容',
+										icon: 'none',
+									})
+								}
+								if (this.model.content == '') {
+									uni.showToast({
+										title: '提交失败,请输入简介',
+										icon: 'none',
+									})
+								}
+								if (this.model.content.length < 5) {
+									uni.showToast({
+										title: '提交失败,简介至少大于5个字',
+										icon: 'none',
+									})
+								}
 							}
-						} else {
-							//---------------提示内容------------------------
-				
-							uni.hideLoading();
-							console.log('验证失败');
-							if (this.model.name == '') {
-								uni.showToast({
-									title: '提交失败,请编辑标题内容',
-									icon: 'none',
-								})
-							}
-							if (this.model.content == '') {
-								uni.showToast({
-									title: '提交失败,请输入简介',
-									icon: 'none',
-								})
-							}
-							if (this.model.content.length < 5) {
-								uni.showToast({
-									title: '提交失败,简介至少大于5个字',
-									icon: 'none',
-								})
-							}
-						}
-					});
+						});
+					}else{
+						uni.showToast({
+							title: '提交失败,请上传图片',
+							icon: 'none',
+						})
+					}
 				} else {
 					uni.showToast({
 						title: '提交失败,请编辑档案简介',

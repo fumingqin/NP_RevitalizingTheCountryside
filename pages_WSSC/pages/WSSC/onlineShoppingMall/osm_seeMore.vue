@@ -239,7 +239,7 @@
 		border-radius: 100rpx;
 		display: flex;
 		align-items: center;
-		padding: 10rpx 16rpx;
+		padding: 16rpx;
 	}
 
 	.u-search-text {
