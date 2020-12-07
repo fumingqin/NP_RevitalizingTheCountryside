@@ -110,23 +110,33 @@
 					success: (res) => {
 						console.log(res)
 						this.informationList = '';
-						if (this.headCurrent == 0) {
-							this.informationList = res.data.data
-						} else if (this.headCurrent == 1) {
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '申请中';
-							})
-						} else if (this.headCurrent == 2) {
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '已派员';
-							})
-						} else if (this.headCurrent == 3) {
-							this.informationList = res.data.data.filter(item => {
-								return item.order_state == '已完成' || item.order_state == '申请失败' || item.order_state == '已取消'
-							})
-						}
 						uni.stopPullDownRefresh()
 						uni.hideLoading()
+						if (this.headCurrent == 0) {
+							if(res.data.status !== false){
+								this.informationList = res.data.data
+							}
+						} else if (this.headCurrent == 1) {
+							if(res.data.status !== false){
+								this.informationList = res.data.data.filter(item => {
+									return item.order_state == '申请中';
+								})
+							}
+							
+						} else if (this.headCurrent == 2) {
+							if(res.data.status !== false){
+								this.informationList = res.data.data.filter(item => {
+									return item.order_state == '已派员';
+								})
+							}
+						} else if (this.headCurrent == 3) {
+							if(res.data.status !== false){
+								this.informationList = res.data.data.filter(item => {
+									return item.order_state == '已完成' || item.order_state == '申请失败' || item.order_state == '已取消'
+								})
+							}
+						}
+						
 					},
 					fail: (err) => {
 						uni.hideLoading()
@@ -151,7 +161,7 @@
 			informationDate: function(e) {
 				// console.log(e)
 				// var tsetDate = e.replace('T',' ')
-				var a = e.substr(5, 11)
+				var a = e.substr(0, 10)
 				return a;
 			},
 

@@ -80,7 +80,7 @@
 				
 				<!-- 输入框 -->
 				<view class="box_inputView" >
-					<input class="inputStyle" v-model="contentInputData" type="number" placeholder="填写/选择失败原因"/>
+					<input class="inputStyle" v-model="contentInputData" type="number" placeholder="请填写考评分数 , 0 - 100"/>
 				</view>
 				
 				<!-- 确认按钮 -->
@@ -236,43 +236,52 @@
 				uni.showLoading({
 					title:'提交中...'
 				})
-				uni.request({
-					url: this.$jdkp.KyInterface.addScore.Url,
-					method: this.$jdkp.KyInterface.addScore.method,
-					data: {
-						id: this.id,
-						examinerId : this.stepsData.examinerId,
-						score : this.contentInputData,
-					},
-					success: (res) => {
-						console.log(res)
-						if(res.data.status){
+				if(this.contentInputData > 0 && this.contentInputData < 100){
+					uni.request({
+						url: this.$jdkp.KyInterface.addScore.Url,
+						method: this.$jdkp.KyInterface.addScore.method,
+						data: {
+							id: this.id,
+							examinerId : this.stepsData.examinerId,
+							score : this.contentInputData,
+						},
+						success: (res) => {
+							console.log(res)
+							if(res.data.status){
+								uni.hideLoading()
+								uni.showToast({
+									title:'提交成功',
+									success: () => {
+										this.cancelShow = false;
+										uni.startPullDownRefresh();
+									}
+								})
+							}else{
+								uni.hideLoading()
+								uni.showToast({
+									title:res.data.msg,
+									icon:'none'
+								})
+							}
+							
+						},
+						fail: (err) => {
 							uni.hideLoading()
+							uni.stopPullDownRefresh()
 							uni.showToast({
-								title:'提交成功',
-								success: () => {
-									this.cancelShow = false;
-									uni.startPullDownRefresh();
-								}
-							})
-						}else{
-							uni.hideLoading()
-							uni.showToast({
-								title:res.data.msg,
+								title:'提交数据失败，下拉刷新重试',
 								icon:'none'
 							})
 						}
-						
-					},
-					fail: (err) => {
-						uni.hideLoading()
-						uni.stopPullDownRefresh()
-						uni.showToast({
-							title:'提交数据失败，下拉刷新重试',
-							icon:'none'
-						})
-					}
-				})
+					})
+				}else{
+					uni.showToast({
+						title:'您所填写的分数，不是有效评分',
+						icon:'none'
+					})
+				}
+				
+				
 			},
 			
 			//资讯时间
