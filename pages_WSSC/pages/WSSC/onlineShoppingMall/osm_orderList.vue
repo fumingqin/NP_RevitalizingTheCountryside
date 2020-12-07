@@ -6,8 +6,8 @@
 				 swiperWidth="750" :load-text="loadText"></u-tabs-swiper>
 			</view>
 
-			<!-- 订单列表 -->
-			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
+			<!-- 订单列表 （@transition="transition"）-->
+			<swiper class="swiper-box" :current="swiperCurrent" @animationfinish="animationfinish">
 				<!-- 全部 -->
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="reachBottom">
@@ -78,7 +78,7 @@
 								</view>
 								<view class="item">
 									<view class="left">
-										<image :src="item.product.image" mode="aspectFill"></image>
+										<image :src="JSON.parse(item.product.image)[0]" mode="aspectFill"></image>
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
@@ -129,7 +129,7 @@
 								</view>
 								<view class="item">
 									<view class="left">
-										<image :src="item.product.image" mode="aspectFill"></image>
+										<image :src="JSON.parse(item.product.image)[0]" mode="aspectFill"></image>
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
@@ -182,7 +182,7 @@
 								</view>
 								<view class="item">
 									<view class="left">
-										<image :src="item.product.image" mode="aspectFill"></image>
+										<image :src="JSON.parse(item.product.image)[0]" mode="aspectFill"></image>
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
@@ -233,7 +233,7 @@
 								</view>
 								<view class="item">
 									<view class="left">
-										<image :src="item.product.image" mode="aspectFill"></image>
+										<image :src="JSON.parse(item.product.image)[0]" mode="aspectFill"></image>
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
@@ -284,7 +284,7 @@
 								</view>
 								<view class="item">
 									<view class="left">
-										<image :src="item.product.image" mode="aspectFill"></image>
+										<image :src="JSON.parse(item.product.image)[0]" mode="aspectFill"></image>
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
@@ -336,7 +336,7 @@
 								</view>
 								<view class="item">
 									<view class="left">
-										<image :src="item.product.image" mode="aspectFill"></image>
+										<image :src="JSON.parse(item.product.image)[0]" mode="aspectFill"></image>
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
@@ -807,102 +807,129 @@
 				})
 				var that=this;
 				uni.request({
-					url: this.$wssc.KyInterface.againPay.Url,
-					method: this.$wssc.KyInterface.againPay.method,
-					data:{
-						userId:this.userInfo.userId,
-						orderNumber:e
+					url: that.$wssc.KyInterface.checkOrderState.Url,
+					method: that.$wssc.KyInterface.checkOrderState.method,
+					data: {
+						orderNumber: e,
 					},
-					success: (res) => {
-						if (res.data.status == true) {
-							uni.hideLoading()
-							this.orderInfo=res.data.data;
-							uni.requestPayment({
-								provider: 'wxpay',
-								orderInfo: {
-									appid:res.data.data.AppId,
-									noncestr:res.data.data.Noncestr,
-									package: 'Sign=WXPay',
-									partnerid:res.data.data.PartnerId,
-									prepayid:res.data.data.PrepayId,
-									timestamp:res.data.data.Timestamp,
-									sign:res.data.data.Sign,
+					success: function(res) {
+						console.log(res)
+						if (res.data.data == '订单目前状态为：尚未获取二维码') {
+							uni.request({
+								url: this.$wssc.KyInterface.againPay.Url,
+								method: this.$wssc.KyInterface.againPay.method,
+								data:{
+									userId:this.userInfo.userId,
+									orderNumber:e
 								},
-								success: function(res) {
-									console.log(res)
-									if(res.errMsg == 'requestPayment:ok'){
-										uni.request({
-											url: that.$wssc.KyInterface.checkOrderState.Url,
-											method: that.$wssc.KyInterface.checkOrderState.method,
-											data: {
-												orderNumber: e,
+								success: (res) => {
+									if (res.data.status == true) {
+										uni.hideLoading()
+										this.orderInfo=res.data.data;
+										uni.requestPayment({
+											provider: 'wxpay',
+											orderInfo: {
+												appid:res.data.data.AppId,
+												noncestr:res.data.data.Noncestr,
+												package: 'Sign=WXPay',
+												partnerid:res.data.data.PartnerId,
+												prepayid:res.data.data.PrepayId,
+												timestamp:res.data.data.Timestamp,
+												sign:res.data.data.Sign,
 											},
 											success: function(res) {
 												console.log(res)
-												if (res.data.status == true) {
+												if(res.errMsg == 'requestPayment:ok'){
+													uni.request({
+														url: that.$wssc.KyInterface.checkOrderState.Url,
+														method: that.$wssc.KyInterface.checkOrderState.method,
+														data: {
+															orderNumber: e,
+														},
+														success: function(res) {
+															console.log(res)
+															if (res.data.status == true) {
+																uni.showToast({
+																	title: '支付成功',
+																	icon: 'none',
+																	duration: 3000
+																})
+															} else {
+																uni.showToast({
+																	title: '支付失败',
+																	icon: 'none',
+																	duration: 3000
+																})
+															}
+															uni.startPullDownRefresh();
+														},
+														fail: function() {
+															uni.showToast({
+																title: '购买失败',
+																icon: 'none',
+																duration: 3000
+															})
+														}
+													})
+												}
+											},
+															
+											fail: function(e) {
+												console.log(e)
+												if (e.errMsg == 'requestPayment:fail canceled') {
 													uni.showToast({
-														title: '支付成功',
+														title: '您放弃了支付',
+														icon: 'none',
+														duration: 3000
+													})
+												} else if (e.errMsg == 'requestPayment:fail errors') {
+													uni.showToast({
+														title: '支付失败，请重试',
 														icon: 'none',
 														duration: 3000
 													})
 												} else {
 													uni.showToast({
-														title: '购买失败',
+														title: '网络异常，请检查网络后重试',
 														icon: 'none',
 														duration: 3000
 													})
 												}
-												uni.startPullDownRefresh();
-											},
-											fail: function() {
-												uni.showToast({
-													title: '购买失败',
-													icon: 'none',
-													duration: 3000
-												})
+															
 											}
-										})
-									}
-								},
-												
-								fail: function(e) {
-									console.log(e)
-									if (e.errMsg == 'requestPayment:fail canceled') {
-										uni.showToast({
-											title: '您放弃了支付',
-											icon: 'none',
-											duration: 3000
-										})
-									} else if (e.errMsg == 'requestPayment:fail errors') {
-										uni.showToast({
-											title: '支付失败，请重试',
-											icon: 'none',
-											duration: 3000
 										})
 									} else {
 										uni.showToast({
-											title: '网络异常，请检查网络后重试',
-											icon: 'none',
-											duration: 3000
+											title: res.data.msg,
+											icon: 'none'
 										})
 									}
-												
+								},
+								fail: function() {
+									uni.showToast({
+										title: '支付异常',
+										icon: 'none'
+									})
 								}
 							})
 						} else {
 							uni.showToast({
-								title: res.data.msg,
-								icon: 'none'
+								title: '订单已超时请从新下单',
+								icon: 'none',
+								duration: 3000
 							})
 						}
+						uni.startPullDownRefresh();
 					},
 					fail: function() {
 						uni.showToast({
-							title: '支付异常',
-							icon: 'none'
+							title: '查询失败',
+							icon: 'none',
+							duration: 3000
 						})
 					}
 				})
+				
 			},
 			//-------------------时间切割---------------------------
 			gettime: function(param) {
@@ -1019,8 +1046,9 @@
 
 			.content {
 				.title {
-					font-size: 28rpx;
+					font-size: 34rpx;
 					line-height: 50rpx;
+					font-weight: bold;
 				}
 
 				.type {
@@ -1040,14 +1068,19 @@
 				padding-top: 20rpx;
 				text-align: right;
 
-				.decimal {
+				.price {
 					font-size: 24rpx;
 					margin-top: 4rpx;
+					position: absolute;
+					right: 30px;
 				}
 
 				.number {
 					color: $u-tips-color;
 					font-size: 24rpx;
+					position: absolute;
+					top: 90px;
+					right: 32px;
 				}
 			}
 		}
