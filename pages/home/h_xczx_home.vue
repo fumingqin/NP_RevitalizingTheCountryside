@@ -71,11 +71,11 @@
 				</view>
 			</view>
 		</view>
-		<!-- @click="navigateToClick" -->
+		<!--  -->
 		<!-- 公示项目 -->
 		<view class="gs_view">
 			<view class="gs_title">公示项目</view>
-			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" bg-color="#ffffff"></u-swiper>
+			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" bg-color="#ffffff" @click="navigateToClick"></u-swiper>
 		</view>
 
 		<!-- 隐藏协议弹出 -->
