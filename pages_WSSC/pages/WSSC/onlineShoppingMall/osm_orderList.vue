@@ -428,7 +428,7 @@
 			uni.showLoading({
 				title: '加载列表中...',
 			})
-			this.userData();
+			this.userData(); 
 		},
 
 		onPullDownRefresh: function() {
