@@ -27,14 +27,14 @@
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
-										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="type">{{ item.product.sale_unit }}/{{item.product.unit_price }}元</view>
 										<view v-if="item.orderList.state!='已发货'" class="delivery-time">下单时间 {{ gettime(item.orderList.create_time)}}</view>
 										<view v-if="item.orderList.state=='已发货'" class="delivery-time">发货时间 {{ gettime(item.orderList.update_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
 										<view class="price">
-											￥{{item.product.unit_price }}
+											
 										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
@@ -82,14 +82,11 @@
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
-										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="type">{{ item.product.sale_unit }}/{{item.product.unit_price }}元</view>
 										<view class="delivery-time">下单时间 {{ gettime(item.orderList.create_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
-										<view class="price">
-											￥{{item.product.unit_price }}
-										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
 								</view>
@@ -133,14 +130,11 @@
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
-										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="type">{{ item.product.sale_unit }}/{{item.product.unit_price }}元</view>
 										<view class="delivery-time">下单时间 {{ gettime(item.orderList.create_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
-										<view class="price">
-											￥{{item.product.unit_price }}
-										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
 								</view>
@@ -186,14 +180,11 @@
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
-										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="type">{{ item.product.sale_unit }}/{{item.product.unit_price }}元</view>
 										<view class="delivery-time">下单时间 {{ gettime(item.orderList.create_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
-										<view class="price">
-											￥{{item.product.unit_price }}
-										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
 								</view>
@@ -237,14 +228,11 @@
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
-										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="type">{{ item.product.sale_unit }}/{{item.product.unit_price }}元</view>
 										<view class="delivery-time">发货时间 {{ gettime(item.orderList.update_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
-										<view class="price">
-											￥{{item.product.unit_price }}
-										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
 								</view>
@@ -288,14 +276,11 @@
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
-										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="type">{{ item.product.sale_unit }}/{{item.product.unit_price }}元</view>
 										<view class="delivery-time">下点时间 {{ gettime(item.orderList.update_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
-										<view class="price">
-											￥{{item.product.unit_price }}
-										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
 								</view>
@@ -340,14 +325,11 @@
 									</view>
 									<view class="content">
 										<view class="title u-line-2">{{ item.product.name }}</view>
-										<view class="type">{{ item.product.sale_unit }}</view>
+										<view class="type">{{ item.product.sale_unit }}/{{item.product.unit_price }}元</view>
 										<view class="delivery-time">下单时间 {{ gettime(item.orderList.create_time)}}</view>
 										<view class="type" v-if="item.product.del_flag==1">已下架</view>
 									</view>
 									<view class="right">
-										<view class="price">
-											￥{{item.product.unit_price }}
-										</view>
 										<view class="number">x{{ item.orderList.quantity }}</view>
 									</view>
 								</view>
@@ -1048,24 +1030,25 @@
 				.title {
 					font-size: 34rpx;
 					line-height: 50rpx;
+					width: 400rpx;
 					font-weight: bold;
 				}
 
 				.type {
 					margin: 10rpx 0;
-					font-size: 24rpx;
+					font-size: 28rpx;
 					color: $u-tips-color;
 				}
 
 				.delivery-time {
-					color: #e5d001;
-					font-size: 24rpx;
+					color: $u-tips-color;
+					font-size: 28rpx;
 				}
 			}
 
 			.right {
 				margin-left: 10rpx;
-				padding-top: 20rpx;
+				margin-top: 54rpx;
 				text-align: right;
 
 				.price {
@@ -1078,9 +1061,6 @@
 				.number {
 					color: $u-tips-color;
 					font-size: 24rpx;
-					position: absolute;
-					top: 90px;
-					right: 32px;
 				}
 			}
 		}
