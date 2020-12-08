@@ -6,22 +6,48 @@
 				<movable-view style="width: 1342upx; height:800upx;" scale-min="0.5" scale-max="2" scale="true" inertia="true"
 				 direction='all' scale-value="0.5">
 					<image class="movable_view_iamge" src="../../static/home/archives/ditu.png"></image>
-					<view v-for="(item,index) in ruralList" :key="index" @click="ruralClick(item.name,index)">
-						<view style="display: flex;" :class="item.fixed" v-if="item.iconSatus == false">
-							<image class="movable_view_Sign_iamge" src="../../static/home/archives/zhen.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
-							<image class="movable_view_Sign_iamge" src="../../static/home/archives/xiang.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
-							<text class="movable_view_Sign_text" style="color: #FFFFFF;">{{item.name}}</text>
+					
+					<view v-if="iponeModelStats == false">
+						<view v-for="(item,index) in ruralList" :key="index" @click="ruralClick(item.name,index)" >
+							<view style="display: flex;" :class="item.fixed" v-if="item.iconSatus == false">
+								<image class="movable_view_Sign_iamge" src="../../static/home/archives/zhen.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
+								<image class="movable_view_Sign_iamge" src="../../static/home/archives/xiang.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
+								<text class="movable_view_Sign_text" style="color: #FFFFFF;">{{item.name}}</text>
+							</view>
+							<view style="display: flex;" :class="item.fixed" v-if="item.iconSatus == true">
+								<image class="movable_view_Sign_iamge" src="../../static/home/archives/zhen2.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
+								<image class="movable_view_Sign_iamge" src="../../static/home/archives/xiang2.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
+								<text class="movable_view_Sign_text" style="color: #44f5ff;">{{item.name}}</text>
+							</view>
 						</view>
-						<view style="display: flex;" :class="item.fixed" v-if="item.iconSatus == true">
-							<image class="movable_view_Sign_iamge" src="../../static/home/archives/zhen2.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
-							<image class="movable_view_Sign_iamge" src="../../static/home/archives/xiang2.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
-							<text class="movable_view_Sign_text" style="color: #44f5ff;">{{item.name}}</text>
+						<view style="display: flex; position: absolute; left: 752upx; top: 832upx;">
+							<image class="government_image" src="../../static/home/archives/zhengfu.png" mode="aspectFit"></image>
+							<text class="government_text" style="color: #FFFFFF;">人民政府</text>
 						</view>
 					</view>
-					<view style="display: flex; position: absolute; left: 752upx; top: 832upx;">
-						<image class="government_image" src="../../static/home/archives/zhengfu.png" mode="aspectFit"></image>
-						<text class="government_text" style="color: #FFFFFF;">人民政府</text>
+					
+					<view v-if="iponeModelStats == true">
+						<view v-for="(item,index) in ruralList" :key="index" @click="ruralClick(item.name,index)" >
+							<view style="display: flex;" :class="item.fixedSpecial" v-if="item.iconSatus == false">
+								<image class="movable_view_Sign_iamge" src="../../static/home/archives/zhen.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
+								<image class="movable_view_Sign_iamge" src="../../static/home/archives/xiang.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
+								<text class="movable_view_Sign_text" style="color: #FFFFFF;">{{item.name}}</text>
+							</view>
+							<view style="display: flex;" :class="item.fixedSpecial" v-if="item.iconSatus == true">
+								<image class="movable_view_Sign_iamge" src="../../static/home/archives/zhen2.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
+								<image class="movable_view_Sign_iamge" src="../../static/home/archives/xiang2.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
+								<text class="movable_view_Sign_text" style="color: #44f5ff;">{{item.name}}</text>
+							</view>
+						</view>
+						<view style="display: flex; position: absolute; left: 752upx; top: 746upx;">
+							<image class="government_image" src="../../static/home/archives/zhengfu.png" mode="aspectFit"></image>
+							<text class="government_text" style="color: #FFFFFF;">人民政府</text>
+						</view>
 					</view>
+					
+					
+					
+					
 				</movable-view>
 			</movable-area>
 		</view>
@@ -321,60 +347,70 @@
 					name: '黄坑镇',
 					nameType: '镇',
 					fixed: 'fix_hukz',
+					fixedSpecial: 'fix_hukz2',
 					status: false,
 					iconSatus: false,
 				}, {
 					name: '麻沙镇',
 					nameType: '镇',
 					fixed: 'fix_masz',
+					fixedSpecial: 'fix_masz2',
 					status: false,
 					iconSatus: false,
 				}, {
 					name: '书坊乡',
 					nameType: '村',
 					fixed: 'fix_shufx',
+					fixedSpecial: 'fix_shufx2',
 					status: false,
 					iconSatus: false,
 				}, {
 					name: '莒口镇',
 					nameType: '镇',
 					fixed: 'fix_jukz',
+					fixedSpecial: 'fix_jukz2',
 					status: false,
 					iconSatus: false,
 				}, {
 					name: '将口镇',
 					nameType: '镇',
 					fixed: 'fix_jiangkz',
+					fixedSpecial: 'fix_jiangkz2',
 					status: false,
 					iconSatus: false,
 				}, {
 					name: '徐市镇',
 					nameType: '镇',
 					fixed: 'fix_xusz',
+					fixedSpecial: 'fix_xusz2',
 					status: false,
 					iconSatus: false,
 				}, {
 					name: '崇雒乡',
 					nameType: '村',
 					fixed: 'fix_conglx',
+					fixedSpecial: 'fix_conglx2',
 					status: false,
 					iconSatus: false,
 				}, {
 					name: '漳墩镇',
 					nameType: '镇',
 					fixed: 'fix_zhangdz',
+					fixedSpecial: 'fix_zhangdz2',
 					status: false, 
 					iconSatus: false,
 				}, {
 					name: '回龙乡',
 					nameType: '村',
 					fixed: 'fix_huilx',
+					fixedSpecial: 'fix_huilx2',
 					status: false,
 					iconSatus: false,
 				}, {
 					name: '水吉镇',
 					nameType: '镇',
 					fixed: 'fix_shuijz',
+					fixedSpecial: 'fix_shuijz2',
 					status: false,
 					iconSatus: false,
 				}], //乡村列表
@@ -408,14 +444,25 @@
 					feedback : [],
 				}, //接口成功，返回的乡村数据
 				newsShow: false, //弹框的打开状态
+				iponeModel : '',//机器型号
+				iponeModelStats : false,//演示器状态
 			}
 		},
 		onLoad: function() {
+			this.iponeModel = plus.device.vendor; //获取手机厂商
+			if(this.iponeModel == 'rockchip'){
+				this.iponeModelStats = true;
+			}
 			uni.getSystemInfo({
 				success: (res) => {
 					console.log(res)
 					this.imageHeight = res.windowHeight + 'px'
-					this.viewHeight = res.windowHeight / 2  + 'px'
+					if(this.iponeModel == 'rockchip'){
+						this.viewHeight = res.windowHeight / 2.5  + 'px'
+					}else{
+						this.viewHeight = res.windowHeight / 2 + 'px'
+					}
+					
 					// console.log(this.imageHeight)
 				}
 			})
@@ -974,11 +1021,23 @@
 		left: 206upx;
 		top: 586upx;
 	}
-
+	
+	.fix_hukz2 {
+		position: absolute;
+		left: 206upx;
+		top: 500upx;
+	}
+	
 	.fix_masz {
 		position: absolute;
 		left: 400upx;
 		top: 804upx;
+	}
+	
+	.fix_masz2 {
+		position: absolute;
+		left: 400upx;
+		top: 718upx;
 	}
 
 	.fix_shufx {
@@ -986,29 +1045,58 @@
 		left: 394upx;
 		top: 896upx;
 	}
+	.fix_shufx2 {
+		position: absolute;
+		left: 394upx;
+		top: 810upx;
+	}
 
 	.fix_jukz {
 		position: absolute;
 		left: 540upx;
 		top: 834upx;
 	}
-
+	
+	.fix_jukz2 {
+		position: absolute;
+		left: 540upx;
+		top: 748upx;
+	}
+	
 	.fix_jiangkz {
 		position: absolute;
 		left: 696upx;
 		top: 736upx;
 	}
-
+	
+	.fix_jiangkz2 {
+		position: absolute;
+		left: 696upx;
+		top: 650upx;
+	}
+	
 	.fix_xusz {
 		position: absolute;
 		left: 708upx;
 		top: 1006upx;
 	}
-
+	
+	.fix_xusz2 {
+		position: absolute;
+		left: 708upx;
+		top: 920upx;
+	}
+	
 	.fix_conglx {
 		position: absolute;
 		left: 794upx;
 		top: 684upx;
+	}
+	
+	.fix_conglx2 {
+		position: absolute;
+		left: 794upx;
+		top: 598upx;
 	}
 
 	.fix_zhangdz {
@@ -1016,16 +1104,34 @@
 		left: 1046upx;
 		top: 608upx;
 	}
+	
+	.fix_zhangdz2 {
+		position: absolute;
+		left: 1046upx;
+		top: 522upx;
+	}
 
 	.fix_huilx {
 		position: absolute;
 		left: 1024upx;
 		top: 696upx;
 	}
+	
+	.fix_huilx2 {
+		position: absolute;
+		left: 1024upx;
+		top: 610upx;
+	}
 
 	.fix_shuijz {
 		position: absolute;
 		left: 1016upx;
 		top: 762upx;
+	}
+	
+	.fix_shuijz2 {
+		position: absolute;
+		left: 1016upx;
+		top: 676upx;
 	}
 </style>
