@@ -656,94 +656,101 @@
 				// console.log('7', arr);
 				//-----------------提交表单数据-----------------------
 				if(this.issueText !== '<p><br></p>'){
-					this.$refs.uForm.validate(valid => {
-						if (valid) {
-							// uni.hideLoading();
-							console.log('验证通过');
-							if (this.model.name !== '') {
-								if (this.model.goodsType !== '') {
-									if (this.model.content !== '') {
-										if (this.model.content.length > 5) {
-											uni.request({
-												url: this.$ycyd.KyInterface.updateArchives.Url,
-												method: this.$ycyd.KyInterface.updateArchives.method,
-												data: {
-													id: this.informationDetail.id,
-													userId: this.userInfo.userId,
-													// userId: 100006,
-													content: this.issueText,
-													image: JSON.stringify(this.pictureArray),
-													title: this.model.name,
-													article_type: this.model.goodsType,
-													introduce: this.model.content,
-													video: JSON.stringify(this.imageList)
-												},
-												success: (res) => {
-													console.log(res, "请求完接口");
-													if (res.data.status == true) {
+					if(this.lists.length!==0){
+						this.$refs.uForm.validate(valid => {
+							if (valid) {
+								// uni.hideLoading();
+								console.log('验证通过');
+								if (this.model.name !== '') {
+									if (this.model.goodsType !== '') {
+										if (this.model.content !== '') {
+											if (this.model.content.length > 5) {
+												uni.request({
+													url: this.$ycyd.KyInterface.updateArchives.Url,
+													method: this.$ycyd.KyInterface.updateArchives.method,
+													data: {
+														id: this.informationDetail.id,
+														userId: this.userInfo.userId,
+														// userId: 100006,
+														content: this.issueText,
+														image: JSON.stringify(this.pictureArray),
+														title: this.model.name,
+														article_type: this.model.goodsType,
+														introduce: this.model.content,
+														video: JSON.stringify(this.imageList)
+													},
+													success: (res) => {
+														console.log(res, "请求完接口");
+														if (res.data.status == true) {
+															uni.showToast({
+																title: res.data.msg,
+															})
+															setTimeout(function() {
+																uni.navigateBack();
+																this.pictureArray = [];
+																this.fileList = [];
+																this.lists = [];
+															}, 1000)
+														} else {
+															uni.showToast({
+																title: res.data.msg,
+																icon: 'none',
+															})
+														}
+													},
+													fail: () => {
 														uni.showToast({
-															title: res.data.msg,
-														})
-														setTimeout(function() {
-															uni.navigateBack();
-															this.pictureArray = [];
-															this.fileList = [];
-															this.lists = [];
-														}, 1000)
-													} else {
-														uni.showToast({
-															title: res.data.msg,
+															title: '提交失败',
 															icon: 'none',
 														})
+													},
+													complete: () => {
+														setTimeout(function() {
+															uni.hideLoading();
+														}, 800)
 													}
-												},
-												fail: () => {
-													uni.showToast({
-														title: '提交失败',
-														icon: 'none',
-													})
-												},
-												complete: () => {
-													setTimeout(function() {
-														uni.hideLoading();
-													}, 800)
-												}
-											});
+												});
+											}
 										}
 									}
 								}
+							} else {
+								//---------------提示内容------------------------
+								
+								uni.hideLoading();
+								console.log('验证失败');
+								if (this.model.name == '') {
+									uni.showToast({
+										title: '提交失败,请编辑标题内容',
+										icon: 'none',
+									})
+								}
+								if (this.model.goodsType == '') {
+									uni.showToast({
+										title: '提交失败,请选择类型',
+										icon: 'none',
+									})
+								}
+								if (this.model.content == '') {
+									uni.showToast({
+										title: '提交失败,请输入简介',
+										icon: 'none',
+									})
+								}
+								if (this.model.content.length < 5) {
+									uni.showToast({
+										title: '提交失败,简介至少大于5个字',
+										icon: 'none',
+									})
+								}
 							}
-						} else {
-							//---------------提示内容------------------------
-							
-							uni.hideLoading();
-							console.log('验证失败');
-							if (this.model.name == '') {
-								uni.showToast({
-									title: '提交失败,请编辑标题内容',
-									icon: 'none',
-								})
-							}
-							if (this.model.goodsType == '') {
-								uni.showToast({
-									title: '提交失败,请选择类型',
-									icon: 'none',
-								})
-							}
-							if (this.model.content == '') {
-								uni.showToast({
-									title: '提交失败,请输入简介',
-									icon: 'none',
-								})
-							}
-							if (this.model.content.length < 5) {
-								uni.showToast({
-									title: '提交失败,简介至少大于5个字',
-									icon: 'none',
-								})
-							}
-						}
-					});
+						});
+					}else{
+						uni.showToast({
+							title: '提交失败,请上传图片',
+							icon: 'none',
+						})
+					}
 				} else {
 					uni.showToast({
 						title: '提交失败,请编辑档案简介',

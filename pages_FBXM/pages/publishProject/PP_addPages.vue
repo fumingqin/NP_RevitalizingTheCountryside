@@ -16,7 +16,7 @@
 						<text class="dateClass" style="color: #333333;">{{village_name}}</text>
 					</view>
 				</u-form-item>
-				
+
 				<!-- 负责人 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="负责人" :border-bottom="false">
 					<view class="top_chooseTime" hover-class="ve_hover" @click="SelectPersonInCharge">
@@ -60,7 +60,7 @@
 				<!-- 简介 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="简介" :border-bottom="false">
 					<view class="viewClass" style="padding:20rpx 30rpx;">
-						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.centent" />
+						<u-input type="textarea" :border="border" placeholder="请填写简介内容" maxlength="30" v-model="model.content" />
 					</view>
 				</u-form-item>
 
@@ -180,7 +180,7 @@
 				isIOS: false,
 				model: {
 					name: '', //商品名称value
-					centent: '', //简介
+					content: '', //简介
 					village: '', //乡村名
 					personnel: '', //负责人
 				},
@@ -244,7 +244,7 @@
 							trigger: ['change', 'blur'],
 						},
 					],
-					centent: [{
+					content: [{
 							required: true,
 							message: '请填写简介'
 						},
@@ -285,10 +285,10 @@
 				videoArray: [],
 				localPath: [],
 				filename: '',
-				ruralId:'',
-				village_name:'',
-				personId:'',
-				nick_name:'',
+				ruralId: '',
+				village_name: '',
+				personId: '',
+				nick_name: '',
 			}
 		},
 
@@ -318,7 +318,7 @@
 					}
 				});
 			},
-			
+
 			//---------------------------------点击选择乡村---------------------------------
 			SelectRural() {
 				var that = this;
@@ -330,22 +330,22 @@
 					//清除监听，不清除会消耗资源
 					uni.$off('startstaionChange');
 					//如果重新选择就清空负责人参数
-					that.personId='';
-					that.nick_name='';
-					console.log('乡村id值',that.ruralId)
-					console.log('乡村名称',that.village_name)
+					that.personId = '';
+					that.nick_name = '';
+					console.log('乡村id值', that.ruralId)
+					console.log('乡村名称', that.village_name)
 				});
 				uni.navigateTo({
 					//跳转到下个页面的时候加个字段，判断当前点击的是上车点
 					url: 'pp_chooseCountryside',
 				})
-			
+
 			},
-			
+
 			//---------------------------------点击选择负责人---------------------------------
 			SelectPersonInCharge() {
 				var that = this;
-				if(that.ruralId!==''){
+				if (that.ruralId !== '') {
 					//监听事件,监听下个页面返回的值
 					uni.$on('startstaionChange', function(data) {
 						// data即为传过来的值，给上车点赋值
@@ -353,21 +353,21 @@
 						that.nick_name = data.data2;
 						//清除监听，不清除会消耗资源
 						uni.$off('startstaionChange');
-						console.log('负责人id值',that.personId)
-						console.log('负责人名称',that.nick_name)
+						console.log('负责人id值', that.personId)
+						console.log('负责人名称', that.nick_name)
 					});
 					uni.navigateTo({
 						//跳转到下个页面的时候加个字段，判断当前点击的是上车点
 						url: 'pp_choicePersonInCharge?&ruralId=' + that.ruralId,
 					})
-				}else{
+				} else {
 					uni.showToast({
 						title: '请选择乡村名称',
 						icon: 'none',
 					})
 				}
 			},
-			
+
 
 			//--------------------------------------------
 
@@ -601,87 +601,121 @@
 					mask: true,
 				})
 				var arr = [];
-				arr.push(this.videoData.data);
+				arr.push(this.localPath.data);
+				console.log('1', arr);
 				var arr2 = [];
-				arr2.push(this.localPath.data);
-				console.log('1', arr2);
-				var arr3 = [];
-				arr3.push(this.filename);
-				console.log('2', arr3);
+				arr2.push(this.filename);
+				console.log('2', arr2);
 				//-----------------提交表单数据-----------------------
-				this.$refs.uForm.validate(valid => {
-					if (valid) {
-						// uni.hideLoading();
-						console.log('验证通过');
-						if(this.ruralId!==''){
-							if(this.personId!==''){
-								if (this.issueText !== '<p><br></p>') {
-									uni.request({
-										url: this.$fbxm.KyInterface.releaseProject.Url,
-										method: this.$fbxm.KyInterface.releaseProject.method,
-										data: {
-											userId: this.userInfo.userId,
-											content: e,
-											image: JSON.stringify(this.lists),
-											title: this.model.name,
-											// video: JSON.stringify(arr),
-											pdfFile: JSON.stringify(arr2),
-											pdfName: JSON.stringify(arr3),
-											ruralId:this.ruralId,
-											personId:this.personId,
-											introduce: this.model.centent,
-										},
-										success: (res) => {
-											console.log(res, "请求完接口");
-											if (res.data.status) {
-												uni.showToast({
-													title: res.data.msg,
-												})
-												setTimeout(function() {
-													uni.navigateBack();
-												}, 1000)
-											} else {
-												uni.showToast({
-													title: res.data.msg,
-													icon: 'none',
-												})
+
+				if (this.issueText !== '<p><br></p>') {
+					if(this.lists.length!==0){
+						this.$refs.uForm.validate(valid => {
+							if (valid) {
+								// uni.hideLoading();
+								if (this.ruralId !== '') {
+									if (this.personId !== '') {
+										if (this.model.name !== '') {
+											if (this.model.content !== '') {
+												if (this.model.content.length > 5) {
+													uni.request({
+														url: this.$fbxm.KyInterface.releaseProject.Url,
+														method: this.$fbxm.KyInterface.releaseProject.method,
+														data: {
+															userId: this.userInfo.userId,
+															content: e,
+															image: JSON.stringify(this.lists),
+															title: this.model.name,
+															pdfFile: JSON.stringify(arr),
+															pdfName: JSON.stringify(arr2),
+															ruralId: this.ruralId,
+															personId: this.personId,
+															introduce: this.model.content,
+														},
+														success: (res) => {
+															console.log(res, "请求完接口");
+															if (res.data.status) {
+																uni.showToast({
+																	title: res.data.msg,
+																})
+																setTimeout(function() {
+																	uni.navigateBack();
+																}, 1000)
+															} else {
+																uni.showToast({
+																	title: res.data.msg,
+																	icon: 'none',
+																})
+															}
+														},
+														fail: () => {
+															uni.showToast({
+																title: '提交失败',
+																icon: 'none',
+															})
+														},
+														complete: () => {
+															setTimeout(function() {
+																uni.hideLoading();
+															}, 800)
+														}
+													});
+												}
 											}
-										},
-										fail: () => {
-											uni.showToast({
-												title: '提交失败',
-												icon: 'none',
-											})
-										},
-										complete: () => {
-											setTimeout(function() {
-												uni.hideLoading();
-											}, 800)
 										}
-									});
-								} else {
+									}
+								}
+							} else {
+								//---------------提示内容------------------------
+						
+								uni.hideLoading();
+								console.log('验证失败');
+								if (this.model.name == '') {
 									uni.showToast({
-										title: '提交失败,请编辑文章内容',
+										title: '提交失败,请编辑标题内容',
 										icon: 'none',
 									})
 								}
-							}else{
-								uni.showToast({
-									title: '请选择负责人',
-									icon: 'none',
-								})
+						
+								if (this.ruralId == '') {
+									uni.showToast({
+										title: '提交失败,请选择乡村',
+										icon: 'none',
+									})
+								}
+						
+								if (this.personId == '') {
+									uni.showToast({
+										title: '提交失败,请选择负责人',
+										icon: 'none',
+									})
+								}
+								if (this.model.content == '') {
+									uni.showToast({
+										title: '提交失败,请输入简介',
+										icon: 'none',
+									})
+								}
+								if (this.model.content.length < 5) {
+									uni.showToast({
+										title: '提交失败,简介至少大于5个字',
+										icon: 'none',
+									})
+								}
 							}
-						}else{
-							uni.showToast({
-								title: '请选择乡村名称',
-								icon: 'none',
-							})
-						}
-					} else {
-						uni.hideLoading();
-						console.log('验证失败');
+						});
+					}else{
+						uni.showToast({
+							title: '提交失败,请选择图片',
+							icon: 'none',
+						})
 					}
-				});
+				} else {
+					uni.showToast({
+						title: '提交失败,请编辑档案简介',
+						icon: 'none',
+					})
+				}
 			},
 		}
 	}
@@ -721,7 +755,7 @@
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
 	}
-	
+
 	//选择时间
 	.top_chooseTime {
 		// position: absolute;
@@ -734,7 +768,7 @@
 		border-radius: 14upx;
 		background-color: #FFFFFF;
 		z-index: 2;
-	
+
 		//出发点
 		.dateClass {
 			display: flex;
@@ -743,7 +777,7 @@
 			text-align: left;
 		}
 	}
-	
+
 	//点击态
 	.ve_hover {
 		transition: all .3s; //过度
@@ -752,8 +786,8 @@
 		opacity: 0.9;
 		background: #E4E7ED;
 	}
-	
-	.videoClass{
+
+	.videoClass {
 		color: #FA3534;
 		font-size: 28upx;
 	}
