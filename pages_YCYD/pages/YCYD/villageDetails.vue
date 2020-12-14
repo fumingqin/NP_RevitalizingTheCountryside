@@ -49,7 +49,7 @@
 							<view class="ditailsView">
 								<view class="detailsname">{{item.name}}</view>
 								<view class="detailsage">{{item.age}}</view>
-								<view class="detailstele">{{item.telephone}}</view>
+								<view class="detailstele">{{item.phone}}</view>
 								<view class="detailsduty">{{item.duty}}</view>
 							</view>
 						</view>

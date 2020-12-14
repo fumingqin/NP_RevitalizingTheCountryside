@@ -1144,6 +1144,18 @@
 					}
                 }
             ]
+		},//---------------------------------------------第十七个包：视频会议------------------------------------------
+		{
+			"root": "pages_SPHY/",
+			"pages": [
+				{
+					"path": "pages/sphy_index",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom"
+					}
+				}
+            ]
 		}
 	],
 
