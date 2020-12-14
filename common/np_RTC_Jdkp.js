@@ -90,6 +90,13 @@ const KyInterface = {
 		name: '增加浏览量',
 		method: 'POST',
 	},
+	
+	//--------------------------------------增加浏览量--------------------------------------
+	evaluationScore: {
+		Url: Url + '/api/quarterEvaluate/evaluationScore',
+		name: '增加浏览量',
+		method: 'POST',
+	},
 }
 
 
