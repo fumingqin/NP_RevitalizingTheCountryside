@@ -307,20 +307,24 @@
 				category: 'video',
 				videoArray: [],
 				selectList: [{
-						value: '村容村貌',
-						label: '村容村貌'
+						value: '产品振兴',
+						label: '产品振兴'
 					},
 					{
-						value: '环境整治',
-						label: '环境整治'
+						value: '人才振兴',
+						label: '人才振兴'
 					},
 					{
-						value: '企业帮扶',
-						label: '企业帮扶'
+						value: '文化振兴',
+						label: '文化振兴'
 					},
 					{
-						value: '三化管理',
-						label: '三化管理'
+						value: '生态振兴',
+						label: '生态振兴'
+					},
+					{
+						value: '组织振兴',
+						label: '组织振兴'
 					}
 				],
 			}

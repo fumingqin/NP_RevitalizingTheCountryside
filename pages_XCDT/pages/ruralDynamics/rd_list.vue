@@ -66,13 +66,15 @@
 				headList: [{
 					name: '全部'
 				},{
-					name: '村容村貌'
+					name: '产品振兴'
 				},{
-					name: '环境整治'
+					name: '人才振兴'
 				},{
-					name: '企业帮扶'
+					name: '文化振兴'
 				},{
-					name: '三化管理'
+					name: '生态振兴'
+				},{
+					name: '组织振兴'
 				}], //头部数组
 				headCurrent: 0, //头部tabs下标
 				customStyle: { //button样式
@@ -202,22 +204,27 @@
 							}else if (this.headCurrent == 1){
 								this.groupTitle = res.data.data.filter(item => {
 									uni.hideLoading();
-									return item.article_type == '村容村貌';
+									return item.article_type == '产品振兴';
 								})
 							}else if (this.headCurrent == 2){
 								this.groupTitle = res.data.data.filter(item => {
 									uni.hideLoading();
-									return item.article_type == '环境整治'
+									return item.article_type == '人才振兴'
 								})
 							} else if (this.headCurrent == 3){
 								this.groupTitle = res.data.data.filter(item => {
 									uni.hideLoading();
-									return item.article_type == '企业帮扶'
+									return item.article_type == '文化振兴'
 								})
 							} else if (this.headCurrent == 4){
 								this.groupTitle = res.data.data.filter(item => {
 									uni.hideLoading();
-									return item.article_type == '三化管理'
+									return item.article_type == '生态振兴'
+								})
+							} else if (this.headCurrent == 5){
+								this.groupTitle = res.data.data.filter(item => {
+									uni.hideLoading();
+									return item.article_type == '组织振兴'
 								})
 							}
 							// this.release=this.groupTitle[0].state=='已上架'?'下架':'发布';
