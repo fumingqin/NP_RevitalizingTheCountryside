@@ -43,8 +43,8 @@ const KyInterface = {
 		method: 'POST',
 	},
 	//--------------------------------------获取详情--------------------------------------
-	getEvaluationDetailByID: {
-		Url: Url + '/api/evaluation/getEvaluationDetailByID',
+	getEvaluationById: {
+		Url: Url + '/api/quarterEvaluate/getEvaluationById',
 		name: '获取详情',
 		method: 'POST',
 	},
@@ -62,7 +62,7 @@ const KyInterface = {
 	},
 	//--------------------------------------获取考评人任务--------------------------------------
 	getListByPhone: {
-		Url: Url + '/api/evaluation/getListByPhone',
+		Url: Url + '/api/quarterEvaluate/getListByPhone',
 		name: '获取考评人任务',
 		method: 'POST',
 	},

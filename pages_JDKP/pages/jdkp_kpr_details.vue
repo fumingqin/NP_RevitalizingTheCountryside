@@ -62,31 +62,46 @@
 		</view>
 		
 		<!-- 提交弹框 -->
-		<u-popup v-model="cancelShow" mode="bottom" :closeable="true" >
+		<u-popup v-model="cancelShow" mode="bottom" :closeable="true" height="90%" >
 			<view class="box_Vlew">
 				<view class="box_refundView">
 					<view class="box_refundContentView">
 						<text class="box_refundContentTitle">请为本次考评打分</text>
 					</view>
 				</view>
-				<!-- 滑动区域 -->
-				<scroll-view  style="margin: 32upx 0;" scroll-x>  
-					<view style="display: flex;">
-						<view class="box_scrollView" v-for="(item,index) in contentList" :key="index" @click="choiseListData(index)">
-							<text class="scrollView_text">{{item}}</text>
-						</view>
-					</view>
-				</scroll-view>
 				
-				<!-- 输入框 -->
-				<view class="box_inputView" >
-					<input class="inputStyle" v-model="contentInputData" type="number" placeholder="请填写考评分数 , 0 - 100"/>
+				<view style="display: block;">
+					<view style="display: block;width: 100%;">
+						<view style="margin-bottom: 20upx;">标题</view>
+						<u-input v-model="goodsType" type="text" :border="border" />
+					</view>
+					
+					<view style="display: flex;padding-top: 30upx;">
+						<view style="display: block;width: 30%;">
+							<view style="margin-bottom: 20upx;">最高评分</view>
+							<u-input v-model="goodsType2" type="text" :border="border" />
+						</view>
+						
+						<view style="display: block;width: 30%;margin-left: 20upx;">
+							<view style="margin-bottom: 20upx;">最高评分</view>
+							<u-input v-model="goodsType3" type="text" :border="border" />
+						</view>
+						
+						<!-- <view style="display: block;">
+							<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
+							 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
+								<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
+									<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
+								</view>
+							</u-upload>
+						</view> -->
+					</view>
 				</view>
 				
 				<!-- 确认按钮 -->
-				<view class="box_refundButtonView">
+				<!-- <view class="box_refundButtonView">
 					<text class="box_refundButton" @click="Submit">确认</text>
-				</view>
+				</view> -->
 			</view>
 		</u-popup>
 		
@@ -120,12 +135,15 @@
 				}], //时间轴的标题数组
 				StepsIndex: -1, //绿条时间轴的下标数值		
 				stepsData : '',//存放任务数据
-				
+				border: true,
 				id : '', //任务id
 				cancelShow : false,//提交弹框默认值
 				contentInputData : '',//输入框内容
 				contentList : ['100','90','80','70','60','50','40','30','20','10','0'],//可选失败内容
-			
+				fileList: [],
+				goodsType:'',
+				goodsType2:'',
+				goodsType3:'',
 			}
 		},
 		
@@ -169,8 +187,8 @@
 			//加载列表数据
 			loadData: function(e) {
 				uni.request({
-					url: this.$jdkp.KyInterface.getEvaluationDetailByID.Url,
-					method: this.$jdkp.KyInterface.getEvaluationDetailByID.method,
+					url: this.$jdkp.KyInterface.getEvaluationById.Url,
+					method: this.$jdkp.KyInterface.getEvaluationById.method,
 					data: {
 						id: this.id
 					},
