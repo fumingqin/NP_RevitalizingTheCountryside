@@ -28,7 +28,7 @@
 					</u-form-item>
 
 					<!-- 考评时间 -->
-					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="考评人" :border-bottom="false" prop="">
+					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="考评时间" :border-bottom="false" prop="">
 						<view class="viewClass">
 							<view style="height: 96upx; padding:16upx 0 0 24upx; font-size: 32upx;" @click="onShowDatePicker('date')">{{datestring}}&nbsp;&nbsp;&nbsp;&nbsp;{{Week}}</view>
 							<mx-date-picker :show="showPicker" :type="type" :value="value" :show-tips="true" :begin-text="'入住'" :end-text="'离店'"
@@ -36,7 +36,28 @@
 						</view>
 					</u-form-item>
 
-					<!-- 相关图片 -->
+					<!-- 考评指标 -->
+					<view style="font-size: 17px;font-weight: bold;margin-top:20upx;">考评指标</view>
+					<view style="display: flex;">
+						<view v-for="(item,index) in tesklist" :key="index">
+							<button class="allBtn" @click="open()">{{item.teskname}}</button>
+						</view>
+						<!-- 嵌套弹框组件popup -->
+						<uni-popup ref="popup" type="bottom">
+							<view class="boxVlew">
+								<view class="titleView">
+									<text class="Nb_text1">指标详情</text>
+									<text class="Nb_text2 jdticon icon-fork " @click="close()"></text>
+								</view>
+								<scroll-view class="noticeBox" scroll-y="ture">
+									<text class="Nb_text4">
+										{{item.teskname}}
+									</text>
+								</scroll-view>
+							</view>
+						</uni-popup>
+					</view>
+					
 					<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="相关图片" :border-bottom="false" prop="photo">
 						<view>
 							<u-upload :label-style="uploadStyle" ref="uUpload" :show-upload-list="showUploadList" :action="action" width="164"
@@ -101,9 +122,11 @@
 
 <script>
 	import MxDatePicker from "../../components/HOME/mx-datepicker/mx-datepicker.vue";
+	import uniPopup from "@/pages_JDKP/components/uni-popup/uni-popup.vue"
 	export default {
 		components: {
-			MxDatePicker
+			MxDatePicker,
+			uniPopup
 		}, //注册为子组件
 		data() {
 			return {
@@ -146,7 +169,113 @@
 
 
 				scrollHeight: '800upx', //弹框高度默认值
-
+				tesklist:[{
+					teskid:1,
+					teskname:'任务一',
+					// norm:{
+					// indexid:1,
+					// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+					// indexgrade:3,
+					// },
+					// {
+					// indexid:2,
+					// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+					// indexgrade:3,
+					// },
+					// {
+					// indexid:3,
+					// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+					// indexgrade:3,
+					// },
+					// {
+					// indexid:4,
+					// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+					// indexgrade:3,
+					// },
+					// {
+					// indexid:5,
+					// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+					// indexgrade:3,
+					// },
+					// {
+					// indexid:6,
+					// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+					// indexgrade:3,
+					// },{
+					// indexid:7,
+					// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+					// indexgrade:3,
+					// },
+					// {
+					// indexid:8,
+					// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+					// indexgrade:3,
+					// },
+					// {
+					// indexid:9,
+					// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+					// indexgrade:3,
+					// },
+					// {
+					// indexid:10,
+					// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+					// indexgrade:3,
+					// }
+				},
+				{
+						teskid:2,
+						teskname:'任务二',
+						// {
+						// indexid:1,
+						// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那',
+						// indexgrade:3,
+						// },
+						// {
+						// indexid:2,
+						// indexname:'大家问的我我加点击我懂你的玩电脑玩i',
+						// indexgrade:3,
+						// },
+						// {
+						// indexid:3,
+						// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+						// indexgrade:3,
+						// },
+						// {
+						// indexid:4,
+						// indexname:'大家问的我我加点击我懂你的玩玩ID那我i',
+						// indexgrade:3,
+						// },
+						// {
+						// indexid:5,
+						// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+						// indexgrade:3,
+						// },
+						// {
+						// indexid:6,
+						// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+						// indexgrade:3,
+						// },{
+						// indexid:7,
+						// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+						// indexgrade:3,
+						// },
+						// {
+						// indexid:8,
+						// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+						// indexgrade:3,
+						// },
+						// {
+						// indexid:9,
+						// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+						// indexgrade:3,
+						// },
+						// {
+						// indexid:10,
+						// indexname:'大家问的我我加点击我懂你的玩电脑玩ID那我i',
+						// indexgrade:3,
+						// }
+				}
+				],
 
 				//----------------uview样式--------------------------
 				customStyle: {
@@ -535,6 +664,13 @@
 						break;
 				}
 			},
+			//打开popup下弹框
+			open() {
+				this.$refs.popup.open()
+			},
+			close() {
+				this.$refs.popup.close()
+			}
 
 		}
 	}
@@ -724,5 +860,61 @@
 	//自定义上传按钮颜色
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
+	}
+	.allBtn {
+		padding: 0 20upx;
+		font-size: 26upx;
+		border-radius: 8upx;
+		border: 0.1 solid #06B4FD;
+		margin-right: 30upx;
+		background-color: #fff;
+		color: #666666;
+	}
+	//须知弹框
+	.boxVlew {
+		width: 100%;
+		padding: 16upx 40upx;
+		padding-bottom: 92upx;
+		background: #FFFFFF;
+	
+		.titleView {
+			margin: 24upx 0;
+	
+			//弹框标题
+			.Nb_text1 {
+				position: relative;
+				font-size: 38upx;
+				font-weight: bold;
+				top: 8upx;
+				margin-bottom: 16upx;
+			}
+	
+			//弹框关闭按钮
+			.Nb_text2 {
+				margin-top: 8upx;
+				float: right;
+				color: #333;
+				font-size: 32upx;
+			}
+		}
+	
+		.noticeBox {
+			height: 800upx;
+			line-height: 32upx;
+	
+			.Nb_text3 {
+				display: block;
+				margin-top: 32upx;
+				font-size: 34upx;
+				font-weight: bold;
+			}
+	
+			.Nb_text4 {
+				display: block;
+				line-height: 64upx;
+				margin: 32upx 0;
+				font-size: 30upx;
+			}
+		}
 	}
 </style>

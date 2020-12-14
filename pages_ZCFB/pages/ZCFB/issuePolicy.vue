@@ -365,26 +365,19 @@
 			submitState: function() {
 				var that = this;
 				if(that.model.name!=''&&that.lists.length>0&&that.filename!=''&&that.model.centent!=''){
-					if (this.submissionState == false) {
 						that.editorCtx.getContents({
 							success: (res) => {
 								console.log(res);
 								that.issueText = res.html;
+								that.submissionState = true;
+								if(that.policyId!=''){
+									that.updateSubmit(that.issueText);
+								}else{
+									that.submit(that.issueText);
+								}
 							}
 						});
-						this.submissionState = true;
-						if(that.policyId!=''){
-							this.updateSubmit(that.issueText);
-						}else{
-							this.submit(that.issueText);
-						}
-					} else if (this.submissionState == true) {
-						uni.showToast({
-							title: '请勿重复点击提交',
-							icon: 'none',
-							duration: 2000
-						})
-					}
+						
 				}else
 				if(that.model.name==''){
 					uni.showToast({
@@ -426,8 +419,6 @@
 
 			submit: function(e) {
 				var that = this;
-				console.log(that.videoData)
-				console.log(this.videoData)
 				uni.showLoading({
 					title: '提交数据中...'
 				});
@@ -435,9 +426,6 @@
 					key: 'userInfo',
 					success: (res) => {
 						console.log(res)
-
-						// console.log(that.videoData);
-						// array.push(that.videoData);
 						var array2=[];
 						console.log(that.localPath);
 						array2.push(that.localPath);
@@ -499,8 +487,6 @@
 					key: 'userInfo',
 					success: (res) => {
 						console.log(res)
-						// var array=[];
-						// array.push(that.videoData);
 						var array2=[];
 						array2.push(that.localPath);
 						var array3=[];
@@ -580,8 +566,13 @@
 				this.readOnly = !this.readOnly
 			},
 			onEditorReady() {
+				var that = this;
 				uni.createSelectorQuery().select('#editor').context(function(res) {
+					// console.log(res);
 					_self.editorCtx = res.context;
+					that.editorCtx.setContents({
+						html: that.issueText //this.EditGoodsDetail.content为赋值内容。    
+					})
 				}).exec();
 			},
 			undo() {
