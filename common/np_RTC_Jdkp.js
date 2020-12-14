@@ -91,10 +91,10 @@ const KyInterface = {
 		method: 'POST',
 	},
 	
-	//--------------------------------------增加浏览量--------------------------------------
-	evaluationScore: {
-		Url: Url + '/api/quarterEvaluate/evaluationScore',
-		name: '增加浏览量',
+	//--------------------------------------获取任务--------------------------------------
+	getEvaluationGroup: {
+		Url: Url + '/api/quarterEvaluate/getEvaluationGroup',
+		name: '获取任务',
 		method: 'POST',
 	},
 }

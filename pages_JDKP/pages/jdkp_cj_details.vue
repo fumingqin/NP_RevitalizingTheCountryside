@@ -26,10 +26,42 @@
 			<view class="deta_text"><text>考评乡村：</text>{{stepsData.rural_name}}</view>
 			<view class="deta_text"><text>考评时间：</text>{{informationDate(stepsData.reviewTime)}}</view>
 			<view class="deta_text">
-				<text style="color: #FA3534;">考评内容：（以下）</text>
-				<view style="width: 100%; height: 24upx;"></view>
-				<rich-text :nodes="stepsData.content"></rich-text>
+				<view class="allBtn" @click="open()">查看指标详情</view>
 			</view>
+			
+			<uni-popup ref="popup" type="bottom">
+					<view class="boxVlew">
+						<view class="titleView">
+							<text class="Nb_text1">指标详情</text>
+							<text class="Nb_text2 jdticon icon-fork " @click="close()"></text>
+						</view>
+						<scroll-view class="noticeBox" scroll-y="ture">
+							<view v-for="(item,index) in stepsData.item">
+								<view v-if="stepsData.state!='已发布'">
+									<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
+									<view class="teskView">
+										<view class="teskScore">得分:{{item.score}}(满分为:{{item.itemscore}})</view>
+										<image src="../static/1.png" class="teskimage"></image>
+										<view v-if="item.image==''">
+											<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
+										</view>
+									</view>
+								</view>
+								<view v-if="stepsData.state=='已发布'">
+									<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
+									<view class="teskView">
+										<view class="teskScore">暂无评分</view>
+										<image :src=item.image class="teskimage"></image>
+										<view v-if="item.image==''">
+											<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
+										</view>
+									</view>
+								</view>
+							</view>
+						</scroll-view>
+					</view>
+				</uni-popup>
+			
 		</view>
 
 		<!-- 发布人信息 -->
@@ -160,10 +192,12 @@
 <script>
 	import uniSteps from '../components/uni-steps/uni-steps.vue'; //引入时间轴
 	import previewImage from '../components/kxj-previewImage/kxj-previewImage.vue'; //图片预览
+	import uniPopup from "@/pages_JDKP/components/uni-popup/uni-popup.vue"
 	export default {
 		components: {
 			uniSteps, //声明时间轴组件
-			previewImage //声明图片预览组件
+			previewImage, //声明图片预览组件
+			uniPopup
 		},
 		data() {
 			return {
@@ -258,8 +292,8 @@
 			//加载列表数据
 			loadData: function(e) {
 				uni.request({
-					url: this.$jdkp.KyInterface.getEvaluationDetailByID.Url,
-					method: this.$jdkp.KyInterface.getEvaluationDetailByID.method,
+					url: this.$jdkp.KyInterface.getEvaluationById.Url,
+					method: this.$jdkp.KyInterface.getEvaluationById.method,
 					data: {
 						id: this.id
 					},
@@ -511,13 +545,20 @@
 				}
 
 			},
+			//打开popup下弹框
+				open() {
+					this.$refs.popup.open()
+				},
+				close() {
+					this.$refs.popup.close()
+				},
 			
 			//电话转换
 			phoneConvert : function(e){
 				var a = e.substr(0,3) + '****' + e.substr(7,11)
 				return a 
 			}
-
+			
 		}
 
 	}
@@ -684,6 +725,69 @@
 			padding: 12rpx 0;
 			margin-left: 20rpx;
 			border-bottom: 1rpx solid #eeeeee;
+		}
+	}
+	.allBtn {
+		padding-top: 12upx;
+		font-size: 26upx;
+		background-color: #fff;
+		color: #06B4FD;
+	}
+	.boxVlew {
+		width: 100%;
+		padding: 16upx 40upx;
+		padding-bottom: 92upx;
+		background: #FFFFFF;
+	
+		.titleView {
+			margin: 24upx 0;
+	
+			//弹框标题
+			.Nb_text1 {
+				position: relative;
+				font-size: 38upx;
+				font-weight: bold;
+				top: 8upx;
+				margin-bottom: 16upx;
+			}
+	
+			//弹框关闭按钮
+			.Nb_text2 {
+				margin-top: 8upx;
+				float: right;
+				color: #333;
+				font-size: 32upx;
+			}
+		}
+	
+		.noticeBox {
+			height: 800upx;
+			line-height: 32upx;
+	.teskName{
+		width: 380upx;
+		padding: 8upx 0upx;
+		margin-right: 16upx;
+		// text-align: center;
+		font-size: 32upx;
+		font-weight: bold;
+	}
+			.teskView {
+				position: relative;
+				display: flex;
+				
+				.teskScore {
+					position: absolute;
+					left: 0;
+					margin-left: 420upx;
+					// color: #E3424B;
+					font-size: 26upx;
+				}
+				.teskimage{
+					width: 100upx;
+					height: 100upx;
+				}
+				}
+				
 		}
 	}
 </style>
