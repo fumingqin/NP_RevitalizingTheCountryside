@@ -148,7 +148,7 @@
 			//-------------------时间切割---------------------------
 			gettime:function(param){
 				console.log(param);
-				if(param==''){
+				if(param==''||param==undefined){
 					return a;
 				}else{
 					let array=param.split(' ');
