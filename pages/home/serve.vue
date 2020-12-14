@@ -78,13 +78,6 @@
 					style: "sv_print",
 				},{
 					IsUse: true,
-					clickURL: "",
-					ImageURL1: "../../static/home/serve/jdkp.png", //亮
-					ImageURL2: "../../static/home/serve/jdkp2.png", //暗
-					ItemTitle: "季度考评",
-					style: "sv_print",
-				},{
-					IsUse: true,
 					// clickURL: "../../pages_WSSC/pages/WSSC/goodsList",
 					clickURL: "../../pages_WSSC/pages/WSSC/onlineShoppingMall/osm_homePage",
 					ImageURL1: "../../static/home/serve/sc.png", //亮
@@ -146,14 +139,14 @@
 					ItemTitle: "特派服务",
 					style: "sv_print",
 				},
-				// {
-				// 	IsUse: true,
-				// 	clickURL: "",
-				// 	ImageURL1: "../../static/home/serve/sphy.png", //亮
-				// 	ImageURL2: "../../static/home/serve/sphy2.png", //暗
-				// 	ItemTitle: "视频会议",
-				// 	style: "sv_print",
-				// },
+				{
+					IsUse: true,
+					clickURL: "../../pages_SPHY/pages/sphy_index",
+					ImageURL1: "../../static/home/serve/sphy.png", //亮
+					ImageURL2: "../../static/home/serve/sphy2.png", //暗
+					ItemTitle: "视频会议",
+					style: "sv_print",
+				},
 				{
 					IsUse: true,
 					// clickURL: "../../pages_WSSC/pages/WSSC/checkGoods",

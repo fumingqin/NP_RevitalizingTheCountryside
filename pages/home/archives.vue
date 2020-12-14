@@ -1,14 +1,13 @@
 <template>
 	<view>
-		<view class="map_view" :style="{'height':viewHeight}" >
+		<view class="map_view" :style="{'height':viewHeight}">
 			<image class="map_view_image" :style="{'height':imageHeight}" src="../../static/home/archives/bj.png" mode="aspectFill"></image>
 			<movable-area style="z-index: 2;">
 				<movable-view style="width: 1342upx; height:800upx;" scale-min="0.5" scale-max="2" scale="true" inertia="true"
 				 direction='all' scale-value="0.5">
-					<image class="movable_view_iamge" src="../../static/home/archives/ditu.png"></image>
-					
 					<view v-if="iponeModelStats == false">
-						<view v-for="(item,index) in ruralList" :key="index" @click="ruralClick(item.name,index)" >
+						<image class="movable_view_iamge" src="../../static/home/archives/ditu.png" v-if="iponeModelStats == false"></image>
+						<view v-for="(item,index) in ruralList" :key="index" @click="ruralClick(item.name,index)">
 							<view style="display: flex;" :class="item.fixed" v-if="item.iconSatus == false">
 								<image class="movable_view_Sign_iamge" src="../../static/home/archives/zhen.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
 								<image class="movable_view_Sign_iamge" src="../../static/home/archives/xiang.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
@@ -25,9 +24,10 @@
 							<text class="government_text" style="color: #FFFFFF;">人民政府</text>
 						</view>
 					</view>
-					
+
 					<view v-if="iponeModelStats == true">
-						<view v-for="(item,index) in ruralList" :key="index" @click="ruralClick(item.name,index)" >
+						<image class="movable_view_iamge2" src="../../static/home/archives/ditu.png"></image>
+						<view v-for="(item,index) in ruralList" :key="index" @click="ruralClick(item.name,index)">
 							<view style="display: flex;" :class="item.fixedSpecial" v-if="item.iconSatus == false">
 								<image class="movable_view_Sign_iamge" src="../../static/home/archives/zhen.png" mode="aspectFit" v-if="item.nameType == '镇'"></image>
 								<image class="movable_view_Sign_iamge" src="../../static/home/archives/xiang.png" mode="aspectFit" v-if="item.nameType == '村'"></image>
@@ -39,15 +39,16 @@
 								<text class="movable_view_Sign_text" style="color: #44f5ff;">{{item.name}}</text>
 							</view>
 						</view>
-						<view style="display: flex; position: absolute; left: 752upx; top: 746upx;">
+						<view style="display: flex; position: absolute; left: 752upx; top: 832upx;">
 							<image class="government_image" src="../../static/home/archives/zhengfu.png" mode="aspectFit"></image>
 							<text class="government_text" style="color: #FFFFFF;">人民政府</text>
 						</view>
 					</view>
-					
-					
-					
-					
+
+
+
+
+
 				</movable-view>
 			</movable-area>
 		</view>
@@ -128,7 +129,7 @@
 					</view>
 
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" v-if="newsData.village.village_name == ''" >
+					<view class="defaultStyle" v-if="newsData.village.village_name == ''">
 						<text>暂时没有档案哦~</text>
 					</view>
 				</view>
@@ -209,7 +210,7 @@
 					</view>
 
 					<!-- 缺省提示 -->
-					<view class="defaultStyle" v-if="newsData.economy.length == 0" >
+					<view class="defaultStyle" v-if="newsData.economy.length == 0">
 						<text>暂时没有美景哦~</text>
 					</view>
 				</view>
@@ -397,7 +398,7 @@
 					nameType: '镇',
 					fixed: 'fix_zhangdz',
 					fixedSpecial: 'fix_zhangdz2',
-					status: false, 
+					status: false,
 					iconSatus: false,
 				}, {
 					name: '回龙乡',
@@ -416,7 +417,8 @@
 				}], //乡村列表
 				contentInputData: '', //搜索
 				imageHeight: '1334upx', //手机屏幕高度
-				viewHeight : '614upx', //选择区高度
+				viewHeight: '614upx', //选择区高度
+				viewWidth: '', //页面屏幕宽度
 				//---------------以下是输入框监听参数--------------
 				SearchStatus: false, //搜索列表框
 				keywordList: [], //搜索关键字列表
@@ -435,34 +437,36 @@
 					village: {
 						create_time: undefined
 					},
-					dynamic : [],
-					policy : [],
-					economy : [],
-					project : [],
-					ecology : [],
-					evaluation : [],
-					feedback : [],
+					dynamic: [],
+					policy: [],
+					economy: [],
+					project: [],
+					ecology: [],
+					evaluation: [],
+					feedback: [],
 				}, //接口成功，返回的乡村数据
 				newsShow: false, //弹框的打开状态
-				iponeModel : '',//机器型号
-				iponeModelStats : false,//演示器状态
+				iponeModel: '', //机器型号
+				iponeModelStats: false, //演示器状态
 			}
 		},
 		onLoad: function() {
-			this.iponeModel = plus.device.vendor; //获取手机厂商
-			if(this.iponeModel == 'rockchip'){
-				this.iponeModelStats = true;
-			}
+			// this.iponeModel = plus.device.vendor; //获取手机厂商 
+			// this.iponeEquipment = plus.device.;
+			// if(this.iponeModel == 'rockchip'){
+			// 	this.iponeModelStats = true;
+			// }
 			uni.getSystemInfo({
 				success: (res) => {
 					console.log(res)
 					this.imageHeight = res.windowHeight + 'px'
-					if(this.iponeModel == 'rockchip'){
-						this.viewHeight = res.windowHeight / 2.5  + 'px'
-					}else{
+					this.viewWidth = res.windowWidth + 'px'
+					if (this.iponeModel == 'rockchip') {
+						this.viewHeight = res.windowHeight / 2.5 + 'px'
+					} else {
 						this.viewHeight = res.windowHeight / 2 + 'px'
 					}
-					
+
 					// console.log(this.imageHeight)
 				}
 			})
@@ -684,6 +688,13 @@
 			width: 1342upx;
 			height: 378px;
 			padding: 400upx 0upx 0upx 80upx;
+			position: relative;
+		}
+
+		.movable_view_iamge2 {
+			width: 1342upx;
+			height: 378px;
+			padding: 556upx 0upx 0upx 80upx;
 			position: relative;
 		}
 
@@ -1021,23 +1032,11 @@
 		left: 206upx;
 		top: 586upx;
 	}
-	
-	.fix_hukz2 {
-		position: absolute;
-		left: 206upx;
-		top: 500upx;
-	}
-	
+
 	.fix_masz {
 		position: absolute;
 		left: 400upx;
 		top: 804upx;
-	}
-	
-	.fix_masz2 {
-		position: absolute;
-		left: 400upx;
-		top: 718upx;
 	}
 
 	.fix_shufx {
@@ -1045,70 +1044,39 @@
 		left: 394upx;
 		top: 896upx;
 	}
-	.fix_shufx2 {
-		position: absolute;
-		left: 394upx;
-		top: 810upx;
-	}
 
 	.fix_jukz {
 		position: absolute;
 		left: 540upx;
 		top: 834upx;
 	}
-	
-	.fix_jukz2 {
-		position: absolute;
-		left: 540upx;
-		top: 748upx;
-	}
-	
+
+
 	.fix_jiangkz {
 		position: absolute;
 		left: 696upx;
-		top: 736upx;
+		top: 788upx;
 	}
-	
-	.fix_jiangkz2 {
-		position: absolute;
-		left: 696upx;
-		top: 650upx;
-	}
-	
+
+
 	.fix_xusz {
 		position: absolute;
 		left: 708upx;
 		top: 1006upx;
 	}
-	
-	.fix_xusz2 {
-		position: absolute;
-		left: 708upx;
-		top: 920upx;
-	}
-	
+
+
 	.fix_conglx {
 		position: absolute;
 		left: 794upx;
 		top: 684upx;
 	}
-	
-	.fix_conglx2 {
-		position: absolute;
-		left: 794upx;
-		top: 598upx;
-	}
+
 
 	.fix_zhangdz {
 		position: absolute;
 		left: 1046upx;
 		top: 608upx;
-	}
-	
-	.fix_zhangdz2 {
-		position: absolute;
-		left: 1046upx;
-		top: 522upx;
 	}
 
 	.fix_huilx {
@@ -1116,22 +1084,73 @@
 		left: 1024upx;
 		top: 696upx;
 	}
-	
-	.fix_huilx2 {
-		position: absolute;
-		left: 1024upx;
-		top: 610upx;
-	}
+
 
 	.fix_shuijz {
 		position: absolute;
 		left: 1016upx;
 		top: 762upx;
 	}
-	
+
+	//---------------------------第2地图模板样式-----------------------------------------------
+	.fix_hukz2 {
+		position: absolute;
+		left: 206upx;
+		top: 712upx;
+	}
+
+	.fix_masz2 {
+		position: absolute;
+		left: 400upx;
+		top: 808upx;
+	}
+
+	.fix_shufx2 {
+		position: absolute;
+		left: 394upx;
+		top: 888upx;
+	}
+
+	.fix_jukz2 {
+		position: absolute;
+		left: 540upx;
+		top: 840upx;
+	}
+
+	.fix_jiangkz2 {
+		position: absolute;
+		left: 696upx;
+		top: 736upx;
+	}
+
+	.fix_xusz2 {
+		position: absolute;
+		left: 708upx;
+		top: 986upx;
+	}
+
+	.fix_conglx2 {
+		position: absolute;
+		left: 794upx;
+		top: 768upx;
+	}
+
+	.fix_zhangdz2 {
+		position: absolute;
+		left: 1046upx;
+		top: 718upx;
+	}
+
+
+	.fix_huilx2 {
+		position: absolute;
+		left: 1024upx;
+		top: 786upx;
+	}
+
 	.fix_shuijz2 {
 		position: absolute;
 		left: 1016upx;
-		top: 676upx;
+		top: 818upx;
 	}
 </style>
