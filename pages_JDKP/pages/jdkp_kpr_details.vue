@@ -87,14 +87,16 @@
 							<u-input v-model="goodsType3" type="text" :border="border" />
 						</view>
 						
-						<!-- <view style="display: block;">
-							<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="164"
-							 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess">
+						<view style="display: block;">
+							<!-- <u-upload :action="action" :file-list="fileList"></u-upload> -->
+							<view style="margin-bottom: 2upx;">上传图片</view>
+							<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1" width="120"
+							 height="120" :file-list="fileList">
 								<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
-									<u-icon name="photo" size="60" color="#c0c4cc"></u-icon>
+									<u-icon name="photo" size="40" color="#c0c4cc"></u-icon>
 								</view>
 							</u-upload>
-						</view> -->
+						</view>
 					</view>
 				</view>
 				
@@ -144,6 +146,8 @@
 				goodsType:'',
 				goodsType2:'',
 				goodsType3:'',
+				showUploadList: true,//是否选择图片内部组件预览
+				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
 			}
 		},
 		
@@ -439,5 +443,22 @@
 				padding: 24upx 160upx;
 			}
 		}
+	}
+	
+	//自定义上传按钮
+	.slot-btn {
+		width: 60px;
+		height: 60px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background: #f4f5f6;
+		border-radius: 10rpx;
+		margin: 10upx;
+	}
+	
+	//自定义上传按钮颜色
+	.slot-btn__hover {
+		background-color: rgb(235, 236, 238);
 	}
 </style>
