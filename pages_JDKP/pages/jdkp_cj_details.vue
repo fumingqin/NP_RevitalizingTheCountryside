@@ -25,9 +25,6 @@
 			<view class="deta_text"><text>考评标题：</text>{{stepsData.title}}</view>
 			<view class="deta_text"><text>考评乡村：</text>{{stepsData.rural_name}}</view>
 			<view class="deta_text"><text>考评时间：</text>{{informationDate(stepsData.reviewTime)}}</view>
-			<view class="deta_text">
-				<view class="allBtn" @click="open()">查看指标详情</view>
-			</view>
 			
 			<uni-popup ref="popup" type="bottom">
 					<view class="boxVlew">
@@ -78,6 +75,11 @@
 			<view class="deta_text"><text>编号：</text>{{stepsData.examiner_number}}</view>
 			<view class="deta_text"><text>姓名：</text>{{stepsData.examiner_name}}</view>
 			<view class="deta_text"><text>电话：</text>{{phoneConvert(assessorPhone)}}</view>
+		</view>
+		<view class="deta_view">
+			<view class="deta_text">
+				<view class="allBtn" @click="open()">查看指标详情</view>
+			</view>
 		</view>
 
 		<!-- 特派员信息 -->

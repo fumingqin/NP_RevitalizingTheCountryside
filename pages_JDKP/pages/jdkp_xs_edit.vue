@@ -40,7 +40,9 @@
 					<view style="font-size: 17px;font-weight: bold;margin-top:20upx;">考评指标</view>
 					<view style="display: flex;margin-top: 20upx;" >
 						<view v-for="(item,index) in teskList" :key="index">
-							<button class="allBtn" @click="open(index,item.group.id)">任务{{index+1}}</button>
+							<view class="tu_square" :class="{current2: value===index}" @click="open(index,item.group.id)">
+							<view class="allBtn">任务{{index+1}}</view>
+							</view>
 						</view>
 						<!-- 嵌套弹框组件popup -->
 						<uni-popup ref="popup" type="bottom">
@@ -193,7 +195,7 @@
 				peopleStatus: true, //原列表显示状态
 				peopleSearchStatus: false, //搜索框显示状态
 				AssessorList:[], //考评人信息
-
+				value: 0,
 				//--------------时间参数-----------
 				value: '',
 				showPicker: false,
@@ -609,7 +611,6 @@
 				})
 			},
 
-
 			//---------------------------------获取当前日期---------------------------------
 			getTodayDate() {
 				var date = new Date();
@@ -674,6 +675,7 @@
 			//打开popup下弹框
 			open(e,a) {
 				this.tesknumber=e;
+				this.value = e;
 				this.teskid=a;
 				console.log(a);
 				this.teskState=true;
@@ -872,15 +874,7 @@
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
 	}
-	.allBtn {
-		padding: 0 20upx;
-		font-size: 26upx;
-		border-radius: 8upx;
-		margin-right: 30upx;
-		background-color: #fff;
-		color: #666666;
-	}
-	//须知弹框
+	//弹框
 	.boxVlew {
 		width: 100%;
 		padding: 16upx 40upx;
@@ -932,4 +926,23 @@
 		}
 	}
 	
+		.tu_square {
+			width: 130upx;
+			height: 60upx;
+			margin-left: 26upx;
+			z-index: 28;
+			background: #FFFFFF;
+			border: 1px solid #E2E2E2;
+
+			&.current2 {
+				z-index: 30;
+				background-color: #E0FFE3;
+				border: 1px solid #65C36D;
+			}
+			.allBtn {
+				text-align: center;
+				font-size: 36upx;
+				font-weight: 400;
+			}
+		}
 </style>
