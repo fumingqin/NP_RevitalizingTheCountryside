@@ -35,17 +35,18 @@
 			</view>
 			<view class="deta_text"><text>问题内容：</text>{{stepsData.content}}</view>
 		</view> -->
-
+		<view class="deta_view">
+			<view class="deta_title">考评指标</view>
+			<view class="deta_text">
+				<view class="allBtn" @click="open()">查看指标详情</view>
+			</view>
+		</view>
 		<!-- 执行结果 -->
 		<view class="deta_view" v-if="StepsIndex == 2">
 			<view class="deta_title">考评结果</view>
 			<view class="deta_text"><text>分数：</text>{{stepsData.score}}分</view>
 		</view>
-		<view class="deta_view">
-			<view class="deta_text">
-				<view class="allBtn" @click="open()">查看指标详情</view>
-			</view>
-		</view>
+		
 		<uni-popup ref="popup" type="bottom">
 				<view class="boxVlew">
 					<view class="titleView">
@@ -66,23 +67,11 @@
 									<view v-if="stepsData.state!='已完成'">
 									<view class="teskGrade">评分:暂无评分</view>
 									</view>
-									<view v-if="item.image!=''">
-										<image :src="item.image" class="teskimage"></image>
-									</view>
-									<view v-if="item.image==''">
-										<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
-									</view>
+								<view >
+									<image :src="imageDate(item.image)" class="teskimage" v-if="item.image.length!=0"></image>
+									<image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image>
 								</view>
-							<view v-if="stepsData.state=='已发布'">
-								<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
-								<view class="teskView">
-									<view class="teskScore">暂无评分</view>
-									<image :src="item.image" class="teskimage"></image>
-									<view v-if="item.image==''">
-										<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
-									</view>
 								</view>
-							</view>
 						</view>
 					</scroll-view>
 				</view>
