@@ -345,7 +345,7 @@
 			//-----------------请求任务列表-----------------------
 			teskData: function() {
 				uni.showLoading({
-					title:'请求考评任务中...'
+					title:'搜索指标中...'
 				})
 				uni.request({
 					url: this.$jdkp.KyInterface.getEvaluationGroup.Url,
