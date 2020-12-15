@@ -46,9 +46,6 @@
 						<view v-for="(item,index) in stepsData.item" :key="index">
 								<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
 								<view class="teskView">
-									<view v-if="item.image!=''">
-										<image class="teskimage" :src="item.image"></image>
-									</view>
 									<view class="teskScore">满分:{{item.itemscore}}分</view>
 									<view v-if="stepsData.state=='已完成'">
 									<view class="teskGrade">评分:{{item.score}}分</view>
@@ -57,8 +54,8 @@
 									<view class="teskGrade">评分:暂无评分</view>
 									</view>
 									<view >
-										<image :src="imageDate(item.image)" class="teskimage" v-if="item.image.length!=0"></image>
-										<image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image>
+										<image :src="imageDate(item.image)" class="teskimage"></image>
+										<!-- <image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image> -->
 									</view>
 								</view>
 						</view>
@@ -291,6 +288,15 @@
 			},
 			close() {
 				this.$refs.popup.close()
+			},
+			imageDate: function(e) {
+				if (e == "") {
+					return "暂无"
+				} else {
+					var a = JSON.parse(e);
+					return a[0];
+				}
+			
 			}
 		}
 

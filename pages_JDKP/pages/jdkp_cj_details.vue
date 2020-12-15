@@ -94,8 +94,8 @@
 								<view class="teskGrade">评分:暂无评分</view>
 							</view>
 							<view>
-								<image :src="imageDate(item.image)" class="teskimage" v-if="item.image.length!=0"></image>
-								<image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image>
+								<image :src="imageDate(item.image)" class="teskimage"></image>
+								<!-- <image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image> -->
 							</view>
 						</view>
 					</view>
