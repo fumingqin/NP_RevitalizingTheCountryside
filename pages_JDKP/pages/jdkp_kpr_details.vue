@@ -318,7 +318,7 @@
 				uni.showLoading({
 					title: '提交中...'
 				})
-				let res = this.dataList.every(item => item.image.length && item.score)
+				let res = this.dataList.every(item => item.score)
 				if (res) {
 					uni.hideLoading()
 					console.log('提交成功')
