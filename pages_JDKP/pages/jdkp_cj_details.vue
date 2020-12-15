@@ -70,6 +70,7 @@
 		</view>
 		
 		<view class="deta_view">
+			<view class="deta_title">考评指标</view>
 			<view class="deta_text">
 				<view class="allBtn" @click="open()">查看指标详情</view>
 			</view>
@@ -84,9 +85,6 @@
 						<view v-for="(item,index) in stepsData.item" :key="index">
 								<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
 								<view class="teskView">
-									<view v-if="item.image!=''">
-										<image class="teskimage" :src="item.image"></image>
-									</view>
 									<view class="teskScore">满分:{{item.itemscore}}分</view>
 									<view v-if="stepsData.state=='已完成'">
 									<view class="teskGrade">评分:{{item.score}}分</view>
@@ -94,8 +92,8 @@
 									<view v-if="stepsData.state!='已完成'">
 									<view class="teskGrade">评分:暂无评分</view>
 									</view>
-									<view v-if="item.image!=''">
-										<image :src="item.image" class="teskimage"></image>
+									<view v-if="item.image.lenght!=0">
+										<image :src="imageDate(item.image)" class="teskimage"></image>
 									</view>
 									<view v-if="item.image==''">
 										<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
@@ -561,6 +559,15 @@
 			phoneConvert : function(e){
 				var a = e.substr(0,3) + '****' + e.substr(7,11)
 				return a 
+			},
+			imageDate:function(e){
+				if(e==""){
+					return "暂无图片"
+				}else{
+					var a =JSON.parse(e);
+				return a[0];
+				}
+				
 			}
 			
 		}

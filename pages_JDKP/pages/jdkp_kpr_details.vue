@@ -42,6 +42,7 @@
 			<view class="deta_text"><text>分数：</text>{{stepsData.score}}分</view>
 		</view>
 		<view class="deta_view">
+			<view class="deta_title">考评指标</view>
 			<view class="deta_text">
 				<view class="allBtn" @click="open()">查看指标详情</view>
 			</view>
