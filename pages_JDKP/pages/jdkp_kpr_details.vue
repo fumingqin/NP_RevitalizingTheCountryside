@@ -73,7 +73,7 @@
 				<view style="display: block;padding-top: 30upx;padding-bottom: 30upx;border-bottom: 1upx solid #f4f5f6;" v-for="(item,index) in stepsData.item"
 				 :key="index">
 					<view style="display: block;width: 100%;">
-						<view style="width: 100%;font-size: 32upx;font-weight: bold;">{{item.itemId}}.标题:{{item.itemTitle}}</view>
+						<view style="width: 100%;font-size: 32upx;font-weight: bold;">{{numberData(index)}}.标题:{{item.itemTitle}}</view>
 					</view>
 
 					<view style="display: flex;padding-top: 30upx;">
@@ -269,6 +269,12 @@
 				var c = b.concat(a)
 				this.contentInputData = c;
 			},
+			
+			//编号
+			numberData: function(e) {
+				var a = e+1;
+				return a
+			},
 
 			//输入框下标
 			inputSubscript: function(e,res) {
@@ -318,7 +324,7 @@
 				uni.showLoading({
 					title: '提交中...'
 				})
-				let res = this.dataList.every(item => item.image.length && item.score)
+				let res = this.dataList.every(item => item.score)
 				if (res) {
 					uni.hideLoading()
 					console.log('提交成功')
