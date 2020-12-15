@@ -73,7 +73,7 @@
 				<view style="display: block;padding-top: 30upx;padding-bottom: 30upx;border-bottom: 1upx solid #f4f5f6;" v-for="(item,index) in stepsData.item"
 				 :key="index">
 					<view style="display: block;width: 100%;">
-						<view style="width: 100%;font-size: 32upx;font-weight: bold;">{{item.itemId}}.标题:{{item.itemTitle}}</view>
+						<view style="width: 100%;font-size: 32upx;font-weight: bold;">{{numberData(index)}}.标题:{{item.itemTitle}}</view>
 					</view>
 
 					<view style="display: flex;padding-top: 30upx;">
@@ -268,6 +268,12 @@
 				var b = this.contentInputData;
 				var c = b.concat(a)
 				this.contentInputData = c;
+			},
+			
+			//编号
+			numberData: function(e) {
+				var a = e+1;
+				return a
 			},
 
 			//输入框下标
