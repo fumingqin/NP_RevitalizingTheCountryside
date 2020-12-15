@@ -124,8 +124,8 @@
 						</view> -->
 
 						<view style="display: block;width: 50%;">
-							<view style="margin-bottom: 40upx;">最高评分<text style="color: #FC4646;">(最高评分{{item.score}}分)</text></view>
-							<u-input type="number" :border="border" @click="inputSubscript(index,item.score)" @input="inputData" />
+							<view style="margin-bottom: 40upx;">最高评分<text style="color: #FC4646;">(最高评分{{item.itemscore}}分)</text></view>
+							<u-input type="number" :border="border" @click="inputSubscript(index,item.itemscore)" @input="inputData" />
 						</view>
 
 						<view style="display: block;margin-left: 40upx;">
@@ -244,8 +244,8 @@
 					url: this.$jdkp.KyInterface.getEvaluationById.Url,
 					method: this.$jdkp.KyInterface.getEvaluationById.method,
 					data: {
-						// id: this.id
-						id: 42
+						id: this.id
+						// id: 42
 					},
 					success: (res) => {
 						console.log(res)
@@ -254,7 +254,7 @@
 							var a = {
 								itemId: res.data.data.item[i].itemId,
 								score: '',
-								image: [],
+								image: '[]',
 							}
 							this.dataList.push(a)
 						}
@@ -344,7 +344,7 @@
 				} else {
 					if(this.goodsType!==''){
 						uni.showToast({
-							title: '分数不能大于' + this.stepsData.item[this.inpuIndex].score,
+							title: '分数不能大于' + this.stepsData.item[this.inpuIndex].itemscore,
 							icon: 'none'
 						})
 					}
@@ -377,7 +377,6 @@
 				})
 				let res = this.dataList.every(item => item.score)
 				if (res) {
-					uni.hideLoading()
 					console.log('提交成功')
 					uni.request({
 						url: this.$jdkp.KyInterface.evaluationScore.Url,
