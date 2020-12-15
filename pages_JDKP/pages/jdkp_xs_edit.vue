@@ -38,12 +38,9 @@
 
 					<!-- 考评指标 -->
 					<view style="font-size: 17px;font-weight: bold;margin-top:20upx;">考评指标</view>
-					<view style="display: flex;">
+					<view style="display: flex;margin-top: 20upx;" >
 						<view v-for="(item,index) in teskList" :key="index">
 							<button class="allBtn" @click="open(index,item.group.id)">任务{{index+1}}</button>
-						</view>
-						<view v-if="tesknumber!=-1">
-							<view>当前选择指标为:任务{{tesknumber}}</view>
 						</view>
 						<!-- 嵌套弹框组件popup -->
 						<uni-popup ref="popup" type="bottom">
@@ -66,6 +63,9 @@
 								</scroll-view>
 							</view>
 						</uni-popup>
+					</view>
+					<view v-if="tesknumber!=-1" style="margin-top: 20upx;">
+						<view>当前选择指标为:任务{{tesknumber+1}}</view>
 					</view>
 					
 					<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="相关图片" :border-bottom="false" prop="photo">
@@ -218,7 +218,7 @@
 				scrollHeight: '800upx', //弹框高度默认值
 				teskList:[],
 				teskid:0,
-				tesknumber:0,
+				tesknumber:-1,
 				teskState:false,
 
 				//----------------uview样式--------------------------
