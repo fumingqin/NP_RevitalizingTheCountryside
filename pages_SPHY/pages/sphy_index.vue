@@ -41,7 +41,7 @@
 					duty : '村级职责',
 					phoneNumber : '13489208677'
 				},{
-					name: '刘测试',
+					name: '刘汉良',
 					duty : '普通用户',
 					phoneNumber : '13489208677'
 				}], //人员数组

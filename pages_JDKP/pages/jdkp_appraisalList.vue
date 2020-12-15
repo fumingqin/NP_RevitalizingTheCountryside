@@ -40,8 +40,8 @@
 					title:'加载排名中...'
 				})
 				uni.request({
-					url: this.$jdkp.KyInterface.getEvaluation.Url,
-					method: this.$jdkp.KyInterface.getEvaluation.method,
+					url: this.$jdkp.KyInterface.getEvaluationByCountyId.Url,
+					method: this.$jdkp.KyInterface.getEvaluationByCountyId.method,
 					success: (res) => {
 						this.rankingList = [];
 						for(var i=0; i<res.data.data.length;i++){
