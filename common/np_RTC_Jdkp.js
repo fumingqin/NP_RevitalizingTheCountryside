@@ -13,8 +13,8 @@ const Url = $oSit.Interface.address.xczx_Url;
 //接口对象
 const KyInterface = {
 	//--------------------------------------获取考评榜--------------------------------------
-	getEvaluation: {
-		Url: Url + '/api/evaluation/getEvaluation',
+	getEvaluationByCountyId: {
+		Url: Url + '/api/quarterEvaluate/getEvaluationByCountyId',
 		name: '获取考评榜',
 		method: 'POST',
 	},

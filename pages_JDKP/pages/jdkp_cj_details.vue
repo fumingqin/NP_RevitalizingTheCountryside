@@ -26,38 +26,7 @@
 			<view class="deta_text"><text>考评乡村：</text>{{stepsData.rural_name}}</view>
 			<view class="deta_text"><text>考评时间：</text>{{informationDate(stepsData.reviewTime)}}</view>
 			
-			<uni-popup ref="popup" type="bottom">
-					<view class="boxVlew">
-						<view class="titleView">
-							<text class="Nb_text1">指标详情</text>
-							<text class="Nb_text2 jdticon icon-fork " @click="close()"></text>
-						</view>
-						<scroll-view class="noticeBox" scroll-y="ture">
-							<view v-for="(item,index) in stepsData.item">
-								<view v-if="stepsData.state!='已发布'">
-									<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
-									<view class="teskView">
-										<view class="teskScore">得分:{{item.score}}(满分为:{{item.itemscore}})</view>
-										<image src="../static/1.png" class="teskimage"></image>
-										<view v-if="item.image==''">
-											<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
-										</view>
-									</view>
-								</view>
-								<view v-if="stepsData.state=='已发布'">
-									<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
-									<view class="teskView">
-										<view class="teskScore">暂无评分</view>
-										<image :src=item.image class="teskimage"></image>
-										<view v-if="item.image==''">
-											<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
-										</view>
-									</view>
-								</view>
-							</view>
-						</scroll-view>
-					</view>
-				</uni-popup>
+			
 			
 		</view>
 
@@ -76,11 +45,7 @@
 			<view class="deta_text"><text>姓名：</text>{{stepsData.examiner_name}}</view>
 			<view class="deta_text"><text>电话：</text>{{phoneConvert(assessorPhone)}}</view>
 		</view>
-		<view class="deta_view">
-			<view class="deta_text">
-				<view class="allBtn" @click="open()">查看指标详情</view>
-			</view>
-		</view>
+		
 
 		<!-- 特派员信息 -->
 		<!-- <view class="deta_view">
@@ -103,7 +68,54 @@
 			<view class="deta_title">失败原因</view>
 			<view class="deta_text"><text>内容：</text>该考评任务已被取消</view>
 		</view>
-
+		
+		<view class="deta_view">
+			<view class="deta_text">
+				<view class="allBtn" @click="open()">查看指标详情</view>
+			</view>
+		</view>
+		<uni-popup ref="popup" type="bottom">
+				<view class="boxVlew">
+					<view class="titleView">
+						<text class="Nb_text1">指标详情</text>
+						<text class="Nb_text2 jdticon icon-fork " @click="close()"></text>
+					</view>
+					<scroll-view class="noticeBox" scroll-y="ture">
+						<view v-for="(item,index) in stepsData.item">
+								<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
+								<view class="teskView">
+									<view v-if="item.image!=''">
+										<image class="teskimage" :src="item.image"></image>
+									</view>
+									<view class="teskScore">满分:{{item.itemscore}}分</view>
+									<view v-if="stepsData.state=='已完成'">
+									<view class="teskGrade">评分:{{item.score}}分</view>
+									</view>
+									<view v-if="stepsData.state!='已完成'">
+									<view class="teskGrade">评分:暂无评分</view>
+									</view>
+									<view v-if="item.image!=''">
+										<image :src="item.image" class="teskimage"></image>
+									</view>
+									<view v-if="item.image==''">
+										<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
+									</view>
+								</view>
+							<view v-if="stepsData.state=='已发布'">
+								<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
+								<view class="teskView">
+									<view class="teskScore">暂无评分</view>
+									<image :src="item.image" class="teskimage"></image>
+									<view v-if="item.image==''">
+										<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
+									</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</view>
+			</uni-popup>
+			
 		<!-- 防触底空模块 -->
 		<view style="width: 100%; height: 112upx;"></view>
 
@@ -766,9 +778,8 @@
 			height: 800upx;
 			line-height: 32upx;
 	.teskName{
-		width: 380upx;
+		width: 660upx;
 		padding: 8upx 0upx;
-		margin-right: 16upx;
 		// text-align: center;
 		font-size: 32upx;
 		font-weight: bold;
@@ -776,17 +787,25 @@
 			.teskView {
 				position: relative;
 				display: flex;
-				
-				.teskScore {
-					position: absolute;
-					left: 0;
-					margin-left: 420upx;
-					// color: #E3424B;
-					font-size: 26upx;
-				}
 				.teskimage{
 					width: 100upx;
 					height: 100upx;
+				}
+				.teskScore {
+					position: absolute;
+					left: 0;
+					margin-left: 160upx;
+					margin-top: 20upx;
+					font-size: 26upx;
+					color: #888;
+				}
+				.teskGrade {
+					position: absolute;
+					left: 0;
+					margin-left: 160upx;
+					margin-top: 70upx;
+					font-size: 26upx;
+					color: #ff0000;
 				}
 				}
 				
