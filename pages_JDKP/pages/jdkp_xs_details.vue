@@ -44,21 +44,30 @@
 					</view>
 					<scroll-view class="noticeBox" scroll-y="ture">
 						<view v-for="(item,index) in stepsData.item">
-							<view v-if="stepsData.state!='已发布'">
 								<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
 								<view class="teskView">
-									<view class="teskScore">得分:{{item.score}}(满分为:{{item.itemscore}})</view>
-									<image src="../static/1.png" class="teskimage"></image>
+									<view v-if="item.image!=''">
+										<image class="teskimage" :src="item.image"></image>
+									</view>
+									<view class="teskScore">满分:{{item.itemscore}}分</view>
+									<view v-if="stepsData.state=='已完成'">
+									<view class="teskGrade">评分:{{item.score}}分</view>
+									</view>
+									<view v-if="stepsData.state!='已完成'">
+									<view class="teskGrade">评分:暂无评分</view>
+									</view>
+									<view v-if="item.image!=''">
+										<image :src="item.image" class="teskimage"></image>
+									</view>
 									<view v-if="item.image==''">
 										<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
 									</view>
 								</view>
-							</view>
 							<view v-if="stepsData.state=='已发布'">
 								<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
 								<view class="teskView">
 									<view class="teskScore">暂无评分</view>
-									<image :src=item.image class="teskimage"></image>
+									<image :src="item.image" class="teskimage"></image>
 									<view v-if="item.image==''">
 										<u-empty :isShow="item.image==''" src="../../../pages_JDKP/static/tupian.png" text="暂无图片" textColor="#999999" ></u-empty>
 									</view>
@@ -194,7 +203,7 @@
 					url: this.$jdkp.KyInterface.getEvaluationById.Url,
 					method: this.$jdkp.KyInterface.getEvaluationById.method,
 					data: {
-						id: 53
+						id: this.id
 					},
 					success: (res) => {
 						console.log(res)
@@ -354,12 +363,6 @@
 			font-size: 30upx;
 			padding: 20upx 16upx;
 		}
-		.allBtn {
-			padding-top: 12upx;
-			font-size: 26upx;
-			background-color: #fff;
-			color: #06B4FD;
-		}
 	}
 	
 	//须知弹框
@@ -424,6 +427,12 @@
 			}
 		}
 	}
+	.allBtn {
+		padding-top: 12upx;
+		font-size: 26upx;
+		background-color: #fff;
+		color: #06B4FD;
+	}
 	.boxVlew {
 		width: 100%;
 		padding: 16upx 40upx;
@@ -455,9 +464,8 @@
 			height: 800upx;
 			line-height: 32upx;
 	.teskName{
-		width: 380upx;
+		width: 660upx;
 		padding: 8upx 0upx;
-		margin-right: 16upx;
 		// text-align: center;
 		font-size: 32upx;
 		font-weight: bold;
@@ -465,17 +473,25 @@
 			.teskView {
 				position: relative;
 				display: flex;
-				
-				.teskScore {
-					position: absolute;
-					left: 0;
-					margin-left: 420upx;
-					// color: #E3424B;
-					font-size: 26upx;
-				}
 				.teskimage{
 					width: 100upx;
 					height: 100upx;
+				}
+				.teskScore {
+					position: absolute;
+					left: 0;
+					margin-left: 160upx;
+					margin-top: 20upx;
+					font-size: 26upx;
+					color: #888;
+				}
+				.teskGrade {
+					position: absolute;
+					left: 0;
+					margin-left: 160upx;
+					margin-top: 70upx;
+					font-size: 26upx;
+					color: #ff0000;
 				}
 				}
 				
