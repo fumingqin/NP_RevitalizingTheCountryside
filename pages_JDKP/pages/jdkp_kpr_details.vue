@@ -244,8 +244,8 @@
 					url: this.$jdkp.KyInterface.getEvaluationById.Url,
 					method: this.$jdkp.KyInterface.getEvaluationById.method,
 					data: {
-						// id: this.id
-						id: 42
+						id: this.id
+						// id: 42
 					},
 					success: (res) => {
 						console.log(res)

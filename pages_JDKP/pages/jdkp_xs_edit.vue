@@ -1,13 +1,12 @@
 <template>
 	<view>
-		<view>
 			<view class="content">
 				<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
-					
+
 					<!-- 标题 -->
 					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="标题" :border-bottom="false" prop="intro">
 						<view class="viewClass">
-							<input style="height: 96upx; padding-left: 24upx;" placeholder="如:2020年村级第四季度考评工作" v-model="model.intro"  />
+							<input style="height: 96upx; padding-left: 24upx;" placeholder="如:2020年村级第四季度考评工作" v-model="model.intro" />
 						</view>
 					</u-form-item>
 
@@ -23,7 +22,8 @@
 					<!-- 考评人 -->
 					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="考评人" :border-bottom="false" prop="name">
 						<view class="viewClass">
-							<input style="height: 96upx; padding-left: 24upx;" placeholder="点击选择考评人员" v-model="model.peoplename" disabled="true" @click="peopleShow=true"/>
+							<input style="height: 96upx; padding-left: 24upx;" placeholder="点击选择考评人员" v-model="model.peoplename" disabled="true"
+							 @click="peopleShow=true" />
 						</view>
 					</u-form-item>
 
@@ -36,40 +36,7 @@
 						</view>
 					</u-form-item>
 
-					<!-- 考评指标 -->
-					<view style="font-size: 17px;font-weight: bold;margin-top:20upx;">考评指标</view>
-					<view style="display: flex;margin-top: 20upx;" >
-						<view v-for="(item,index) in teskList" :key="index">
-							<view class="tu_square" :class="{current2: value===index}" @click="open(index,item.group.id)">
-							<view class="allBtn">任务{{index+1}}</view>
-							</view>
-						</view>
-						<!-- 嵌套弹框组件popup -->
-						<uni-popup ref="popup" type="bottom">
-							<view class="boxVlew">
-								<view class="titleView">
-									<text class="Nb_text1">指标详情</text>
-									<text class="Nb_text2 jdticon icon-fork " @click="close()"></text>
-								</view>
-								<scroll-view class="noticeBox" scroll-y="ture">
-									<view  v-if="teskList[tesknumber].index.length!=0" class="teskView">
-										<view class="teskName">指标题目</view>
-										<view class="teskScore">满分</view>
-									</view>
-									<view v-for="(item,index) in teskList[tesknumber].index">
-									<view class="teskView">
-										<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
-										<view class="teskScore">{{item.itemscore}}</view>
-									</view>
-									</view>
-								</scroll-view>
-							</view>
-						</uni-popup>
-					</view>
-					<view v-if="tesknumber!=-1" style="margin-top: 20upx;">
-						<view>当前选择指标为:任务{{tesknumber+1}}</view>
-					</view>
-					
+		
 					<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="相关图片" :border-bottom="false" prop="photo">
 						<view>
 							<u-upload :label-style="uploadStyle" ref="uUpload" :show-upload-list="showUploadList" :action="action" width="164"
@@ -84,6 +51,17 @@
 						</view>
 					</u-form-item> -->
 				</u-form>
+		</view>
+		<!-- 考评指标 -->
+		<view style="z-index: 999;">
+			<view style="font-size: 17px;font-weight: bold;margin-top:40upx; margin-left : 32upx;">考评指标</view>
+			<view v-if="tesknumber!=-1" style="margin-top: 20upx; margin-left : 32upx;" @click="open">所选指标:{{teskList[tesknumber].group.title}}<text style="color: #007AFF;">(点击查看)</text></view>
+			<view style="display: flex;margin-top: 20upx;" v-if="teskList.length != 0">
+				<view v-for="(item,index) in teskList" :key="index" >
+					<view class="tu_square" :class="{current2: valueIndex === index}" @click="openIndex(index,item.group.id)">
+						<view class="allBtn">{{teskList[index].group.title}}</view>
+					</view>
+				</view>
 			</view>
 		</view>
 		<!-- 防触底空模块 -->
@@ -93,6 +71,27 @@
 		<view class="operButton">
 			<text class="buttonView2" @click="submit">发布</text>
 		</view>
+
+		<!-- 嵌套弹框组件popup -->
+		<u-popup v-model="targetShow" mode="bottom" :closeable="true">
+			<view class="boxVlew">
+				<view class="titleView">
+					<text class="Nb_text1">指标详情</text>
+				</view>
+				<scroll-view class="noticeBox" scroll-y="ture">
+					<view class="teskView">
+						<view class="teskName">指标题目</view>
+						<view class="teskScore">满分</view>
+					</view>
+					<view v-for="(item,index) in targetList" :key="index" v-if="tesknumber != -1">
+						<view class="teskView">
+							<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
+							<view class="teskScore">{{item.itemscore}}</view>
+						</view>
+					</view>
+				</scroll-view>
+			</view>
+		</u-popup>
 
 		<u-popup v-model="VillageShow" mode="center">
 			<view>
@@ -127,17 +126,17 @@
 				</view>
 			</view>
 		</u-popup>
-		
+
 		<u-popup v-model="peopleShow" mode="center">
 			<view>
 				<!-- 顶部搜索框 -->
 				<view class="topSerchView">
-				<!-- 	<view class="SearchBar" elevation='5px'>
+					<!-- 	<view class="SearchBar" elevation='5px'>
 						<input class="addressInput" @input="onInput2" placeholder="请输入关键字搜索" />
 					</view> -->
 				</view>
-		
-		
+
+
 				<!-- 搜索列表 -->
 				<!-- <view class="stationList" :style="{ 'height':scrollHeight }" v-if="peopleSearchStatus">
 					<block v-for="(item,index) in peopleSearchList" :key="index">
@@ -155,7 +154,7 @@
 						</view>
 					</block>
 				</view>
-		
+
 				<view class="operButton">
 					<text class="buttonView2" @click="peopleShow = false">关闭弹框</text>
 				</view>
@@ -168,11 +167,9 @@
 
 <script>
 	import MxDatePicker from "../../components/HOME/mx-datepicker/mx-datepicker.vue";
-	import uniPopup from "@/pages_JDKP/components/uni-popup/uni-popup.vue"
 	export default {
 		components: {
-			MxDatePicker,
-			uniPopup
+			MxDatePicker
 		}, //注册为子组件
 		data() {
 			return {
@@ -180,7 +177,7 @@
 					name: '', //乡村名
 					techValue: '', //技术类型
 					intro: '', //问题内容
-					peoplename:'',
+					peoplename: '',
 				},
 				VillageShow: false, //乡村弹框
 				VillageSearchList: [], //关键字查询的乡村
@@ -188,14 +185,14 @@
 				VillageData: '', //乡村名数据缓存
 				VillageStatus: true, //原列表显示状态
 				SearchStatus: false, //搜索框显示状态
-				
-				peopleShow:false,//考评人弹框
+
+				peopleShow: false, //考评人弹框
 				peopleSearchList: [], //关键字查询的乡村
 				peopleData: '', //乡村名数据缓存
 				peopleStatus: true, //原列表显示状态
 				peopleSearchStatus: false, //搜索框显示状态
-				AssessorList:[], //考评人信息
-				value: 0,
+				AssessorList: [], //考评人信息
+				valueIndex: -1,
 				//--------------时间参数-----------
 				value: '',
 				showPicker: false,
@@ -218,11 +215,13 @@
 
 
 				scrollHeight: '800upx', //弹框高度默认值
-				teskList:[],
-				teskid:0,
-				tesknumber:-1,
-				teskState:false,
-
+				teskList: [], 
+				teskid: 0,
+				tesknumber: -1,
+				targetShow: false,	
+				targetList : [{
+					index:[]
+				}],
 				//----------------uview样式--------------------------
 				customStyle: {
 					fontWeight: 'bold',
@@ -310,6 +309,17 @@
 		},
 
 		methods: {
+			//打开指标弹框
+			openIndex:function(e,a) {
+				this.targetList = this.teskList[e].index;
+				console.log(this.targetList)
+				this.tesknumber = e;
+				this.valueIndex = e;
+				this.teskid = a;
+			},
+			open:function(){
+				this.targetShow = true;
+			},
 			//-------------------------------乘客数据读取-------------------------------
 			userData: function() {
 				uni.getStorage({
@@ -334,6 +344,9 @@
 			},
 			//-----------------请求任务列表-----------------------
 			teskData: function() {
+				uni.showLoading({
+					title:'请求考评任务中...'
+				})
 				uni.request({
 					url: this.$jdkp.KyInterface.getEvaluationGroup.Url,
 					method: this.$jdkp.KyInterface.getEvaluationGroup.method,
@@ -347,7 +360,7 @@
 					}
 				})
 			},
-			
+
 			//--------------------------提交表单
 			submit: function() {
 				uni.showLoading({
@@ -367,72 +380,72 @@
 						// 		}
 						// 	}
 						// }
-						if( this.datestring != '请选择考评时间' && this.teskState==true){
+						if (this.datestring != '请选择考评时间' && this.tesknumber != -1) {
 							console.log(this.teskid);
-								uni.request({
-									url: this.$jdkp.KyInterface.releaseEvaluation.Url,
-									method: this.$jdkp.KyInterface.releaseEvaluation.method,
-									data: {
-										title : this.model.intro,
-										content : '乡村季度考评，根据考评结果进行评分',
-										image : '',
-										userId: this.userInfo.userId, //用户id
-										examinerId : this.peopleData.id, //考评人ID
-										ruralId: this.VillageData.id, //乡村名id
-										reviewTime : this.datestring,//考评时间
-										groupId:this.teskid,
-									},
-									success: (res) => {
-										console.log(res)
-										if (res.data.status) {
-											uni.hideLoading()
-											uni.showToast({
-												title: res.data.msg,
-												success: () => {
-													// uni.removeStorage({
-													// 	key: 'uploadData'
-													// })
-													// this.fileList = [];
-													// this.fileListTest = [];
-													setTimeout(function(){
-														uni.navigateBack()
-													},1500)
-												}
-											})
-										} else {
-											uni.hideLoading()
-											uni.showToast({
-												title: res.data.msg,
-												icon: 'none'
-											})
-										}
-								
-									},
-									fail: (err) => {
+							uni.request({
+								url: this.$jdkp.KyInterface.releaseEvaluation.Url,
+								method: this.$jdkp.KyInterface.releaseEvaluation.method,
+								data: {
+									title: this.model.intro,
+									content: '乡村季度考评，根据考评结果进行评分',
+									image: '',
+									userId: this.userInfo.userId, //用户id
+									examinerId: this.peopleData.id, //考评人ID
+									ruralId: this.VillageData.id, //乡村名id
+									reviewTime: this.datestring, //考评时间
+									groupId: this.teskid,
+								},
+								success: (res) => {
+									console.log(res)
+									uni.hideLoading()
+									if (res.data.status) {
+										uni.showToast({
+											title: res.data.msg,
+											success: () => {
+												// uni.removeStorage({
+												// 	key: 'uploadData'
+												// })
+												// this.fileList = [];
+												// this.fileListTest = [];
+												setTimeout(function() {
+													uni.navigateBack()
+												}, 1500)
+											}
+										})
+									} else {
 										uni.hideLoading()
 										uni.showToast({
-											title: '申请失败，服务器异常，请联系客服处理异常',
+											title: res.data.msg,
 											icon: 'none'
 										})
-										console.log(err)
 									}
-								})
-						}else if(this.datestring == '请选择考评时间'){
+
+								},
+								fail: (err) => {
+									uni.hideLoading()
+									uni.showToast({
+										title: '申请失败，服务器异常，请联系客服处理异常',
+										icon: 'none'
+									})
+									console.log(err)
+								}
+							})
+						} else if (this.datestring == '请选择考评时间') {
 							uni.hideLoading()
 							uni.showToast({
 								title: '请选择考评时间',
 								icon: 'none'
 							})
-						}else if(this.teskState == false){
+						} else if (this.tesknumber == -1) {
 							uni.hideLoading()
-							uni.showToast({
-								title: '请选择任务',
+								uni.showToast({
+								title: '请选择考评指标',
 								icon: 'none'
 							})
 						}
 					} else {
-						uni.hideLoading()
 						// console.log('验证失败');
+						uni.hideLoading()
 						uni.showToast({
 							title: '请根据相关红字提醒，填写或选择内容',
 							icon: 'none'
@@ -447,12 +460,10 @@
 					url: this.$pyfw.KyInterface.getVillageList.Url,
 					method: this.$pyfw.KyInterface.getVillageList.method,
 					success: (res) => {
-						uni.hideLoading();
 						// console.log('乡村列表', res);
 						this.VillageList = res.data.data;
 					},
 					fail(res) {
-						uni.hideLoading();
 					}
 				})
 			},
@@ -495,7 +506,7 @@
 					this.peopleStatus = true;
 					this.peopleSearchList = false;
 				}
-			
+
 				uni.showLoading();
 				uni.request({
 					url: this.$pyfw.KyInterface.getVillageListByName.Url,
@@ -524,7 +535,7 @@
 				this.VillageStatus = true;
 				this.SearchStatus = false;
 				this.VillageShow = false;
-				
+
 			},
 			//点击列表内容后，赋值清空状态，关闭弹框
 			Listclick2: function(e) {
@@ -535,7 +546,7 @@
 				this.peopleStatus = true;
 				this.peopleShow = false;
 				this.peopleSearchStatus = false;
-				
+
 			},
 
 
@@ -580,7 +591,7 @@
 			//请求考评人
 			AssessorSuccess: function() {
 				uni.showLoading({
-					
+
 				})
 				uni.request({
 					url: this.$jdkp.KyInterface.getExaminer.Url,
@@ -672,19 +683,8 @@
 						break;
 				}
 			},
-			//打开popup下弹框
-			open(e,a) {
-				this.tesknumber=e;
-				this.value = e;
-				this.teskid=a;
-				console.log(a);
-				this.teskState=true;
-				this.$refs.popup.open()
-			},
-			close() {
-				this.$refs.popup.close()
-			}
-
+	
+			
 		}
 	}
 </script>
@@ -874,16 +874,17 @@
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
 	}
+
 	//弹框
 	.boxVlew {
 		width: 100%;
 		padding: 16upx 40upx;
 		padding-bottom: 92upx;
 		background: #FFFFFF;
-	
+
 		.titleView {
 			margin: 24upx 0;
-	
+
 			//弹框标题
 			.Nb_text1 {
 				position: relative;
@@ -892,7 +893,7 @@
 				top: 8upx;
 				margin-bottom: 16upx;
 			}
-	
+
 			//弹框关闭按钮
 			.Nb_text2 {
 				margin-top: 8upx;
@@ -901,48 +902,51 @@
 				font-size: 32upx;
 			}
 		}
-	
+
 		.noticeBox {
 			height: 800upx;
 			line-height: 32upx;
-	
+
 			.teskView {
 				position: relative;
 				display: flex;
-				.teskName{
+
+				.teskName {
 					width: 500upx;
 					padding: 8upx 0upx;
 					margin-right: 16upx;
 					// text-align: center;
 					font-size: 30upx;
 				}
+
 				.teskScore {
 					position: absolute;
 					right: 0;
 					margin-right: 30upx;
 					font-size: 30upx;
 				}
-				}
+			}
 		}
 	}
-	
-		.tu_square {
-			width: 130upx;
-			height: 60upx;
-			margin-left: 26upx;
-			z-index: 28;
-			background: #FFFFFF;
-			border: 1px solid #E2E2E2;
 
-			&.current2 {
-				z-index: 30;
-				background-color: #E0FFE3;
-				border: 1px solid #65C36D;
-			}
-			.allBtn {
-				text-align: center;
-				font-size: 36upx;
-				font-weight: 400;
-			}
+	.tu_square {
+		margin-left: 32upx;
+		// z-index: 28;
+		background: #FFFFFF;
+		border: 1px solid #E2E2E2;
+		padding: 12upx 24upx;
+		border-radius: 8upx;
+
+		&.current2 {
+			// z-index: 30;
+			background-color: #E0FFE3;
+			border: 1px solid #65C36D;
 		}
+
+		.allBtn {
+			text-align: center;
+			font-size: 36upx;
+			font-weight: 400;
+		}
+	}
 </style>
