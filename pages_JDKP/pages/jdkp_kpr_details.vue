@@ -83,8 +83,8 @@
 						</view> -->
 
 						<view style="display: block;width: 50%;">
-							<view style="margin-bottom: 40upx;">最高评分<text style="color: #FC4646;">(最高评分3分)</text></view>
-							<u-input type="number" :border="border" @click="inputSubscript(index)" @input="inputData" />
+							<view style="margin-bottom: 40upx;">最高评分<text style="color: #FC4646;">(最高评分{{item.score}}分)</text></view>
+							<u-input type="number" :border="border" @click="inputSubscript(index,item.score)" @input="inputData" />
 						</view>
 
 						<view style="display: block;margin-left: 40upx;">
@@ -99,11 +99,14 @@
 						</view>
 					</view>
 				</view>
-
-				<!-- 确认按钮 -->
-				<view class="box_refundButtonView">
-					<text class="box_refundButton" @click="Submit">确认</text>
-				</view>
+				
+				<view style="margin-top: 60upx;"></view>
+				
+			</view>
+			
+			<!-- 确认按钮 -->
+			<view class="operButton" style="z-index: 3;">
+				<view class="buttonView3" style="width: 100%;" hover-class="btn_Click" @click="Submit">确认</view>
 			</view>
 		</u-popup>
 
@@ -146,6 +149,7 @@
 				goodsType: '', //输入框参数
 				uploadList: [], //上传图片数组
 				inpuIndex: '', //输入框下标
+				scoreIndex:'',//最高分
 				uploadIndex: '', //上传图片下标
 				showUploadList: true, //是否选择图片内部组件预览
 				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
@@ -155,9 +159,10 @@
 
 		onLoad: function(e) {
 			this.id = e.id;
+			this.userData();
 		},
 		onShow: function() {
-			this.userData();
+			//this.userData();
 		},
 		onPullDownRefresh: function() {
 			this.loadData();
@@ -196,8 +201,8 @@
 					url: this.$jdkp.KyInterface.getEvaluationById.Url,
 					method: this.$jdkp.KyInterface.getEvaluationById.method,
 					data: {
-						// id: this.id
-						id: 42
+						id: this.id
+						// id: 42
 					},
 					success: (res) => {
 						console.log(res)
@@ -266,17 +271,27 @@
 			},
 
 			//输入框下标
-			inputSubscript: function(e) {
+			inputSubscript: function(e,res) {
 				// console.log('输入框下标',e)
 				this.inpuIndex = e
-				console.log('输入框下标', this.dataList)
+				this.scoreIndex = res
+				console.log('输入框下标', this.inpuIndex)
 			},
 
 			//输入框参数值
 			inputData: function(e) {
 				// console.log('输入框参数',e)
 				this.goodsType = e
-				this.dataList[this.inpuIndex].score = this.goodsType
+				if (this.goodsType <= this.scoreIndex && this.goodsType >= 0) {
+					this.dataList[this.inpuIndex].score = this.goodsType
+				} else {
+					if(this.goodsType!==''){
+						uni.showToast({
+							title: '分数不能大于' + this.stepsData.item[this.inpuIndex].score,
+							icon: 'none'
+						})
+					}
+				}
 				console.log('输入框参数', this.goodsType)
 				console.log('输入框参数2', this.dataList)
 			},
@@ -291,10 +306,10 @@
 			//上传图片成功
 			uploadOnsuccess: function(e) {
 				// console.log('上传图片',e)
-				this.uploadList=[];
+				this.uploadList = [];
 				this.uploadList.push(e.data)
 				this.dataList[this.uploadIndex].image = JSON.stringify(this.uploadList)
-				console.log('上传图片', this.uploadList)
+				// console.log('上传图片', this.uploadList)
 				console.log('插入图片', this.dataList)
 			},
 
@@ -303,42 +318,54 @@
 				uni.showLoading({
 					title: '提交中...'
 				})
-				uni.request({
-					url: this.$jdkp.KyInterface.evaluationScore.Url,
-					method: this.$jdkp.KyInterface.evaluationScore.method,
-					data: {
-						id: this.id,
-						item: this.dataList
-					},
-					success: (res) => {
-						console.log(res)
-						if (res.data.status) {
+				let res = this.dataList.every(item => item.image.length && item.score)
+				if (res) {
+					uni.hideLoading()
+					console.log('提交成功')
+					uni.request({
+						url: this.$jdkp.KyInterface.evaluationScore.Url,
+						method: this.$jdkp.KyInterface.evaluationScore.method,
+						data: {
+							id: this.id,
+							// id: 42,
+							item: this.dataList
+						},
+						success: (res) => {
+							console.log(res)
+							if (res.data.status) {
+								uni.hideLoading()
+								uni.showToast({
+									title: '提交成功',
+									success: () => {
+										this.cancelShow = false;
+										uni.startPullDownRefresh();
+									}
+								})
+							} else {
+								uni.hideLoading()
+								uni.showToast({
+									title: res.data.msg,
+									icon: 'none'
+								})
+							}
+
+						},
+						fail: (err) => {
 							uni.hideLoading()
+							uni.stopPullDownRefresh()
 							uni.showToast({
-								title: '提交成功',
-								success: () => {
-									this.cancelShow = false;
-									uni.startPullDownRefresh();
-								}
-							})
-						} else {
-							uni.hideLoading()
-							uni.showToast({
-								title: res.data.msg,
+								title: '提交数据失败，下拉刷新重试',
 								icon: 'none'
 							})
 						}
-
-					},
-					fail: (err) => {
-						uni.hideLoading()
-						uni.stopPullDownRefresh()
-						uni.showToast({
-							title: '提交数据失败，下拉刷新重试',
-							icon: 'none'
-						})
-					}
-				})
+					})
+				} else {
+					uni.hideLoading()
+					uni.showToast({
+						title: '请打分或者请不要超过最大评分',
+						icon: 'none'
+					})
+				}
 			},
 
 			//资讯时间
