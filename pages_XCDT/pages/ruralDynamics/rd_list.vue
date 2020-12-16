@@ -66,7 +66,7 @@
 				headList: [{
 					name: '全部'
 				},{
-					name: '产品振兴'
+					name: '产业振兴'
 				},{
 					name: '人才振兴'
 				},{
@@ -204,7 +204,7 @@
 							}else if (this.headCurrent == 1){
 								this.groupTitle = res.data.data.filter(item => {
 									uni.hideLoading();
-									return item.article_type == '产品振兴';
+									return item.article_type == '产业振兴';
 								})
 							}else if (this.headCurrent == 2){
 								this.groupTitle = res.data.data.filter(item => {
