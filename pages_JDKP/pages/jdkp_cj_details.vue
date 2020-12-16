@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view style="padding: 32upx 0;">
-					<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.state == '已发布' || stepsData.state == '已完成'"></uni-steps>
+			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.state == '已发布' || stepsData.state == '已完成'"></uni-steps>
 			<uni-steps :options="stepsList2" :active="StepsIndex" v-if="stepsData.state == '已取消'" activeColor="#FA3534"></uni-steps>
 		</view>
 		<!-- 申请信息 -->
@@ -25,11 +25,9 @@
 			<view class="deta_text"><text>考评标题：</text>{{stepsData.title}}</view>
 			<view class="deta_text"><text>考评乡村：</text>{{stepsData.rural_name}}</view>
 			<view class="deta_text"><text>考评时间：</text>{{informationDate(stepsData.reviewTime)}}</view>
-			<view class="deta_text">
-				<text style="color: #FA3534;">考评内容：（以下）</text>
-				<view style="width: 100%; height: 24upx;"></view>
-				<rich-text :nodes="stepsData.content"></rich-text>
-			</view>
+
+
+
 		</view>
 
 		<!-- 发布人信息 -->
@@ -48,6 +46,7 @@
 			<view class="deta_text"><text>电话：</text>{{phoneConvert(assessorPhone)}}</view>
 		</view>
 
+
 		<!-- 特派员信息 -->
 		<!-- <view class="deta_view">
 			<view class="deta_title">特派员信息</view>
@@ -57,6 +56,12 @@
 			<view class="deta_text"><text>擅长内容：</text>{{managerData(stepsData.manager_goodType)}}</view>
 		</view> -->
 
+		<view class="deta_view">
+			<view class="deta_title">考评指标</view>
+			<view class="deta_text">
+				<view class="allBtn" @click="open()">查看指标详情</view>
+			</view>
+		</view>
 		<!-- 执行结果 -->
 		<view class="deta_view" v-if="StepsIndex == 2">
 			<view class="deta_title">考评结果</view>
@@ -70,6 +75,34 @@
 			<view class="deta_text"><text>内容：</text>该考评任务已被取消</view>
 		</view>
 
+
+		<uni-popup ref="popup" type="bottom">
+			<view class="boxVlew">
+				<view class="titleView">
+					<text class="Nb_text1">指标详情</text>
+					<text class="Nb_text2 jdticon icon-fork " @click="close()"></text>
+				</view>
+				<scroll-view class="noticeBox" scroll-y="ture">
+					<view v-for="(item,index) in stepsData.item" :key="index" style="margin:12upx;">
+						<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
+						<view class="teskView">
+							<view class="teskScore">满分:{{item.itemscore}}分</view>
+							<view v-if="stepsData.state=='已完成'">
+								<view class="teskGrade">评分:{{item.score}}分</view>
+							</view>
+							<view v-if="stepsData.state!='已完成'">
+								<view class="teskGrade">评分:暂无评分</view>
+							</view>
+							<view>
+								<image :src="imageDate(item.image)" class="teskimage"></image>
+								<!-- <image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image> -->
+							</view>
+						</view>
+					</view>
+				</scroll-view>
+			</view>
+		</uni-popup>
+
 		<!-- 防触底空模块 -->
 		<view style="width: 100%; height: 112upx;"></view>
 
@@ -78,7 +111,7 @@
 			<view class="buttonView1" hover-class="btn_Click" @click="TelephoneClick(0)">联系发布人</view>
 			<view class="buttonView2" hover-class="btn_Click" @click="TelephoneClick(1)">联系考评人</view>
 		</view>
-		
+
 		<view class="operButton" v-if="stepsData.state !== '已发布' && userInfo.duty == '村级职责人员'">
 			<view class="buttonView1" hover-class="btn_Click" @click="TelephoneClick(0)">联系发布人</view>
 			<view class="buttonView2" hover-class="btn_Click" @click="TelephoneClick(1)">联系考评人</view>
@@ -160,10 +193,12 @@
 <script>
 	import uniSteps from '../components/uni-steps/uni-steps.vue'; //引入时间轴
 	import previewImage from '../components/kxj-previewImage/kxj-previewImage.vue'; //图片预览
+	import uniPopup from "@/pages_JDKP/components/uni-popup/uni-popup.vue"
 	export default {
 		components: {
 			uniSteps, //声明时间轴组件
-			previewImage //声明图片预览组件
+			previewImage, //声明图片预览组件
+			uniPopup
 		},
 		data() {
 			return {
@@ -183,12 +218,12 @@
 				}], //时间轴的标题数组
 				StepsIndex: -1, //绿条时间轴的下标数值
 				stepsData: '', //详情数据
-				
+
 				//-------------------以下是显示的电话号码参数-----------------
-				publisherPhone: '',//发布人电话
-				assessorPhone : '',//考评人电话
-				
-				
+				publisherPhone: '', //发布人电话
+				assessorPhone: '', //考评人电话
+
+
 				id: '', //任务id
 				PersonShow: false, //人员名单弹窗状态值
 				userInfo: '', //用户信息
@@ -202,7 +237,7 @@
 				commissionerSearchList: [], //特派员搜索列表
 				commissionerID: '', //特派员ID
 				scrollHeight: '800upx', //弹框高度默认值
-				
+
 
 			}
 		},
@@ -258,8 +293,8 @@
 			//加载列表数据
 			loadData: function(e) {
 				uni.request({
-					url: this.$jdkp.KyInterface.getEvaluationDetailByID.Url,
-					method: this.$jdkp.KyInterface.getEvaluationDetailByID.method,
+					url: this.$jdkp.KyInterface.getEvaluationById.Url,
+					method: this.$jdkp.KyInterface.getEvaluationById.method,
 					data: {
 						id: this.id
 					},
@@ -476,34 +511,34 @@
 			},
 			//资讯时间
 			informationDate: function(e) {
-				if(e !== undefined){
+				if (e !== undefined) {
 					var a = e.substr(0, 10)
 					return a;
-				}else{
+				} else {
 					return '';
 				}
 			},
 			//拨打申请人电话
 			TelephoneClick: function(e) {
 				if (e == 0) {
-					if(this.stepsData.phoneNumber == ''){
+					if (this.stepsData.phoneNumber == '') {
 						uni.showToast({
-							title:'相关发布人电话错误，请联系客服处理',
-							icon:'none'
+							title: '相关发布人电话错误，请联系客服处理',
+							icon: 'none'
 						})
-					}else{
+					} else {
 						uni.makePhoneCall({
 							phoneNumber: this.stepsData.phoneNumber
 						})
 					}
-					
+
 				} else {
-					if(this.stepsData.examiner_phone == ''){
+					if (this.stepsData.examiner_phone == '') {
 						uni.showToast({
-							title:'相关考评人电话错误，请联系客服处理',
-							icon:'none'
+							title: '相关考评人电话错误，请联系客服处理',
+							icon: 'none'
 						})
-					}else{
+					} else {
 						uni.makePhoneCall({
 							phoneNumber: this.stepsData.examiner_phone
 						})
@@ -511,11 +546,27 @@
 				}
 
 			},
-			
+			//打开popup下弹框
+			open() {
+				this.$refs.popup.open()
+			},
+			close() {
+				this.$refs.popup.close()
+			},
+
 			//电话转换
-			phoneConvert : function(e){
-				var a = e.substr(0,3) + '****' + e.substr(7,11)
-				return a 
+			phoneConvert: function(e) {
+				var a = e.substr(0, 3) + '****' + e.substr(7, 11)
+				return a
+			},
+			imageDate: function(e) {
+				if (e == "") {
+					return "暂无"
+				} else {
+					var a = JSON.parse(e);
+					return a[0];
+				}
+
 			}
 
 		}
@@ -684,6 +735,83 @@
 			padding: 12rpx 0;
 			margin-left: 20rpx;
 			border-bottom: 1rpx solid #eeeeee;
+		}
+	}
+
+	.allBtn {
+		padding-top: 12upx;
+		font-size: 26upx;
+		background-color: #fff;
+		color: #06B4FD;
+	}
+
+	.boxVlew {
+		width: 100%;
+		padding: 16upx 40upx;
+		padding-bottom: 92upx;
+		background: #FFFFFF;
+
+		.titleView {
+			margin: 24upx 0;
+
+			//弹框标题
+			.Nb_text1 {
+				position: relative;
+				font-size: 38upx;
+				font-weight: bold;
+				top: 8upx;
+				margin-bottom: 16upx;
+			}
+
+			//弹框关闭按钮
+			.Nb_text2 {
+				margin-top: 8upx;
+				float: right;
+				color: #333;
+				font-size: 32upx;
+			}
+		}
+
+		.noticeBox {
+			height: 800upx;
+			line-height: 32upx;
+
+			.teskName {
+				width: 660upx;
+				padding: 8upx 0upx;
+				// text-align: center;
+				font-size: 32upx;
+				font-weight: bold;
+			}
+
+			.teskView {
+				position: relative;
+				display: flex;
+
+				.teskimage {
+					width: 100upx;
+					height: 100upx;
+				}
+
+				.teskScore {
+					position: absolute;
+					left: 0;
+					margin-left: 160upx;
+					margin-top: 20upx;
+					font-size: 26upx;
+					color: #888;
+				}
+
+				.teskGrade {
+					position: absolute;
+					left: 0;
+					margin-left: 160upx;
+					margin-top: 70upx;
+					font-size: 26upx;
+					color: #ff0000;
+				}
+			}
+
 		}
 	}
 </style>

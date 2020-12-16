@@ -30,6 +30,38 @@
 			<view class="deta_text"><text>姓名：</text>{{managerData(stepsData.examiner_name)}}</view>
 			<view class="deta_text"><text>电话：</text>{{managerData(stepsData.examiner_phone)}}</view>
 		</view>
+		
+		<!-- 考评指标 -->
+		<view class="deta_view">
+			<view class="deta_title">考评指标</view>
+			<view class="allBtn" @click="open()">查看指标详情</view>
+		</view>
+		<uni-popup ref="popup" type="bottom">
+				<view class="boxVlew">
+					<view class="titleView">
+						<text class="Nb_text1">指标详情</text>
+						<text class="Nb_text2 jdticon icon-fork " @click="close()"></text>
+					</view>
+					<scroll-view class="noticeBox" scroll-y="ture">
+						<view v-for="(item,index) in stepsData.item" :key="index">
+								<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
+								<view class="teskView">
+									<view class="teskScore">满分:{{item.itemscore}}分</view>
+									<view v-if="stepsData.state=='已完成'">
+									<view class="teskGrade">评分:{{item.score}}分</view>
+									</view>
+									<view v-if="stepsData.state!='已完成'">
+									<view class="teskGrade">评分:暂无评分</view>
+									</view>
+									<view >
+										<image :src="imageDate(item.image)" class="teskimage"></image>
+										<!-- <image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image> -->
+									</view>
+								</view>
+						</view>
+					</scroll-view>
+				</view>
+			</uni-popup>
 
 		<!-- 执行结果 -->
 		<view class="deta_view" v-if="StepsIndex == 2">
@@ -74,10 +106,12 @@
 <script>
 	import uniSteps from '../components/uni-steps/uni-steps.vue'; //引入时间轴
 	import previewImage from '../components/kxj-previewImage/kxj-previewImage.vue'; //图片预览
+		import uniPopup from "@/pages_JDKP/components/uni-popup/uni-popup.vue"
 	export default {
 		components: {
 			uniSteps, //声明时间轴组件
-			previewImage //声明图片预览组件
+			previewImage, //声明图片预览组件
+			uniPopup
 		},
 		data() {
 			return {
@@ -99,6 +133,7 @@
 				StepsIndex2: 2, //红条时间轴的下标数值
 				StepsIndex3: 2, //红条时间轴的下标数值
 				stepsData: '', //详情数据
+				teskData:[],
 				id: '', //申请id
 				userInfo: '', //用户信息
 				cancelShow : false, //取消弹框状态值
@@ -150,14 +185,15 @@
 			//加载详情数据
 			loadData: function(e) {
 				uni.request({
-					url: this.$jdkp.KyInterface.getEvaluationDetailByID.Url,
-					method: this.$jdkp.KyInterface.getEvaluationDetailByID.method,
+					url: this.$jdkp.KyInterface.getEvaluationById.Url,
+					method: this.$jdkp.KyInterface.getEvaluationById.method,
 					data: {
 						id: this.id
 					},
 					success: (res) => {
 						console.log(res)
 						this.stepsData = res.data.data;
+						// this.teskData=res,data.data.item;
 						if (res.data.data.state == '已发布') {
 							this.StepsIndex = 1
 						} else if (res.data.data.state == '已完成') {
@@ -246,6 +282,22 @@
 				}
 				
 			},
+			//打开popup下弹框
+			open() {
+				this.$refs.popup.open()
+			},
+			close() {
+				this.$refs.popup.close()
+			},
+			imageDate: function(e) {
+				if (e == "") {
+					return "暂无"
+				} else {
+					var a = JSON.parse(e);
+					return a[0];
+				}
+			
+			}
 		}
 
 	}
@@ -367,6 +419,76 @@
 					padding: 24upx 160upx;
 				}
 			}
+		}
+	}
+	.allBtn {
+		padding-top: 12upx;
+		font-size: 26upx;
+		background-color: #fff;
+		color: #06B4FD;
+	}
+	.boxVlew {
+		width: 100%;
+		padding: 16upx 40upx;
+		padding-bottom: 92upx;
+		background: #FFFFFF;
+	
+		.titleView {
+			margin: 24upx 0;
+	
+			//弹框标题
+			.Nb_text1 {
+				position: relative;
+				font-size: 38upx;
+				font-weight: bold;
+				top: 8upx;
+				margin-bottom: 16upx;
+			}
+	
+			//弹框关闭按钮
+			.Nb_text2 {
+				margin-top: 8upx;
+				float: right;
+				color: #333;
+				font-size: 32upx;
+			}
+		}
+	
+		.noticeBox {
+			height: 800upx;
+			line-height: 32upx;
+	.teskName{
+		width: 660upx;
+		padding: 8upx 0upx;
+		// text-align: center;
+		font-size: 32upx;
+		font-weight: bold;
+	}
+			.teskView {
+				position: relative;
+				display: flex;
+				.teskimage{
+					width: 100upx;
+					height: 100upx;
+				}
+				.teskScore {
+					position: absolute;
+					left: 0;
+					margin-left: 160upx;
+					margin-top: 20upx;
+					font-size: 26upx;
+					color: #888;
+				}
+				.teskGrade {
+					position: absolute;
+					left: 0;
+					margin-left: 160upx;
+					margin-top: 70upx;
+					font-size: 26upx;
+					color: #ff0000;
+				}
+				}
+				
 		}
 	}
 </style>

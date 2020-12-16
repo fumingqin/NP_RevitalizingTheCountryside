@@ -283,7 +283,7 @@
 			},
 			//--------------------------路由跳转------------------------------
 			details:function(e){
-				uni.redirectTo({
+				uni.navigateTo({
 					url:'villageDetails?id=' +e,
 				})
 			}
