@@ -65,7 +65,7 @@
 				
 				serviceList:[], 	//服务功能模块
 				
-				loading: true, // 是否显示骨架屏组件
+				loading: true, // 是否显示骨架屏组件 
 			}
 		},
 		onLoad() {	
