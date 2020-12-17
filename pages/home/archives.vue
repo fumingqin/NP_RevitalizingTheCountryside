@@ -1055,7 +1055,7 @@
 	.fix_jiangkz {
 		position: absolute;
 		left: 696upx;
-		top: 788upx;
+		top: 732upx;
 	}
 
 
@@ -1120,7 +1120,7 @@
 	.fix_jiangkz2 {
 		position: absolute;
 		left: 696upx;
-		top: 736upx;
+		top: 788upx;
 	}
 
 	.fix_xusz2 {
