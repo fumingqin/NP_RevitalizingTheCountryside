@@ -45,9 +45,9 @@
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump2">添加</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="routeJump(groupTitle[selectIndex].id)">详情</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="modifyJump(groupTitle[selectIndex])">修改</u-button>
-					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
-					<!-- <u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">{{release}}</u-button> -->
+					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" v-if="userInfo.duty!=='村级职责人员'" :custom-style="customStyle" @click="Delete(groupTitle[selectIndex].id)">删除</u-button>
 					<u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">上下架</u-button>
+					<!-- <u-button type="success" :ripple="true" shape="square" ripple-bg-color="#909399" size="medium" :custom-style="customStyle" @click="onTheShelf(groupTitle[selectIndex].id)">{{release}}</u-button> -->
 				</scroll-view>
 			</view>
 		</view>
@@ -66,7 +66,7 @@
 				headList: [{
 					name: '全部'
 				},{
-					name: '产品振兴'
+					name: '产业振兴'
 				},{
 					name: '人才振兴'
 				},{
@@ -204,7 +204,7 @@
 							}else if (this.headCurrent == 1){
 								this.groupTitle = res.data.data.filter(item => {
 									uni.hideLoading();
-									return item.article_type == '产品振兴';
+									return item.article_type == '产业振兴';
 								})
 							}else if (this.headCurrent == 2){
 								this.groupTitle = res.data.data.filter(item => {
