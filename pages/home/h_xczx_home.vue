@@ -71,7 +71,7 @@
 				</view>
 			</view>
 		</view>
-		<!--  -->
+		
 		<!-- 公示项目 -->
 		<view class="gs_view">
 			<view class="gs_title">公示项目</view>
