@@ -511,8 +511,8 @@
 								})
 							} else {
 								uni.showModal({
-									title: '考评任务提示',
-									content: '保存中的考评数据(' + ress.data.title + ')与现查看的考评任务(' + this.stepsData.title + ')不相符，是否替代原有的任务数据？',
+									title:'自动保存提示',
+									content:'您的上一个任务信息还未提交，保存中的考评数据(' +ress.data.title +')与现查看的考评数据(' +this.stepsData.title  +')不相符，是否覆盖原有保存的数s据？',
 									success: (res) => {
 										console.log(res)
 										if (res.confirm == true) {
