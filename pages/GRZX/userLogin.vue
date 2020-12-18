@@ -318,7 +318,7 @@
 							this.successReturn(); //登陆成功后返回
 						}else{
 							uni.showToast({
-								title: '手机号或密码错误',
+								title: res.data.msg,
 								icon:'none'
 							});
 						}
