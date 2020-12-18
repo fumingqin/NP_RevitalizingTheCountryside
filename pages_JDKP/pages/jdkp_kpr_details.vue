@@ -127,7 +127,7 @@
 										<u-icon name="photo" size="40" color="#c0c4cc"></u-icon>
 									</view>
 								</u-upload>
-								<image style="width: 100upx; height: 100upx; margin-left: 24upx; padding-top: 8upx;" :src="dataParse(dataList[index].image) " mode="aspectFill" :hidden="dataList[index].image == ''"></image>
+								<image style="width: 100upx; height: 100upx; margin-left: 24upx; padding-top: 8upx;" :src="dataParse(dataList[index].image) " mode="aspectFill" :hidden="dataList[index].image == ''" @click="goImgList(dataParse(dataList[index].image))" ></image>
 							</view>
 						</view>
 					</view>
@@ -545,7 +545,15 @@
 				}
 				
 				
-			}
+			},
+			
+			//保存图片至本地并打开新页面
+			goImgList(e) {
+				uni.setStorageSync('imagePiclist',e);
+				uni.navigateTo({
+					url: 'imgPreview4',
+				})
+			},
 
 		}
 	}
