@@ -129,17 +129,17 @@
 							uni.stopPullDownRefresh()
 							uni.hideLoading()
 						}else{
-							if (this.headCurrent == 0) {
+							if (this.headCurrent == 0&&res.data.data.length!=0) {
 								this.informationList = res.data.data.filter(item => {
 									return item.state == '已发布';
 								})
 								this.commissionerID = res.data.data[0].number;
-							}else if (this.headCurrent == 1){
+							}else if (this.headCurrent == 1&&res.data.data.length!=0){
 								this.informationList = res.data.data.filter(item => {
 									return item.state == '已完成'
 								})
 								this.commissionerID = res.data.data[0].number;
-							}else if (this.headCurrent == 2){
+							}else if (this.headCurrent == 2&&res.data.data.length!=0){
 								this.informationList = res.data.data.filter(item => {
 									return item.state == '已取消'
 								})

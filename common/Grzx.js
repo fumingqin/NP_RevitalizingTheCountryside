@@ -60,7 +60,8 @@ const Interface = {
 		pages: [],
 	},
 	getLoginCode: {
-		value: 'https://appdl.xmjdt.cn:18443/api/person/getLoginCode',
+		//value: 'https://appdl.xmjdt.cn:18443/api/person/getLoginCode',
+		value: Url +'/api/user/getLoginCode',
 		name: '获取手机验证码',
 		method: 'POST',
 		pages: [],

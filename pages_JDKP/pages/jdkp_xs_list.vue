@@ -110,11 +110,11 @@
 						this.informationList = '';
 						if (this.headCurrent == 0) {
 							this.informationList = res.data.data
-						} else if (this.headCurrent == 1) {
+						} else if (this.headCurrent == 1 &&res.data.data.length!=0) {
 							this.informationList = res.data.data.filter(item => {
 								return item.state == '已发布';
 							})
-						} else if (this.headCurrent == 2) {
+						} else if (this.headCurrent == 2&&res.data.data.length!=0) {
 							this.informationList = res.data.data.filter(item => {
 								return item.state == '已完成' || item.state == '已取消' ;
 							})
