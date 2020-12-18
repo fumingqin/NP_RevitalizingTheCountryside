@@ -118,7 +118,7 @@
 							<!-- <u-upload :action="action" :file-list="fileList"></u-upload> -->
 							<view style="margin-bottom: 22upx;">上传图片</view>
 							<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1"
-							 width="90" height="90" @on-success="uploadOnsuccess">
+							 width="90" height="90" :file-list="fileList" @on-success="uploadOnsuccess">
 								<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150" @click="uploadSubscript(index)">
 									<u-icon name="photo" size="40" color="#c0c4cc"></u-icon>
 								</view>
@@ -214,7 +214,7 @@
 						uni.showToast({
 							title: '您暂未登录，已为您跳转登录页面',
 							icon: 'none',
-							success: () => {
+							success: () => { 
 								uni.navigateTo({
 									url: '../../pages/GRZX/userLogin'
 								})
@@ -233,7 +233,7 @@
 						id: this.id
 						// id: 42
 					},
-					success: (res) => {
+					success: (res) => { 
 						console.log(res)
 						this.stepsData = res.data.data;
 						for (let i = 0; i < res.data.data.item.length; i++) {
@@ -244,7 +244,7 @@
 							}
 							this.dataList.push(a)
 						}
-						console.log('插入数组', this.dataList)
+						console.log('插入数组', this.dataList) 
 						if (res.data.data.state == '已发布') {
 							this.StepsIndex = 1
 						} else if (res.data.data.state == '已完成' || res.data.data.state == '已取消') {
@@ -273,7 +273,7 @@
 				},
 
 
-			//拨打申请人电话
+			//拨打申请人电话 
 			TelephoneClick: function() {
 				if (this.stepsData.phoneNumber == '') {
 					uni.showToast({
@@ -348,7 +348,7 @@
 
 			//上传图片成功
 			uploadOnsuccess: function(e) {
-				// console.log('上传图片',e)
+				console.log('上传图片',e)
 				this.uploadList = [];
 				this.uploadList.push(e.data)
 				this.dataList[this.uploadIndex].image = JSON.stringify(this.uploadList)
