@@ -202,9 +202,9 @@
 		onPullDownRefresh: function() {
 			this.loadData();
 		},
-		// onHide: function() {
-		// 	this.keepData()
-		// },
+		onHide: function() {
+			this.keepData()
+		},
 		onUnload: function() {
 			this.keepData()
 		},

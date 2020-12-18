@@ -141,7 +141,7 @@
 
 				<view class="operButton">
 					<text class="buttonView3" @click="ruralChoice">选择该县</text>
-					<text class="buttonView3"style="background: #18B566;" @click="VillageShow = false">关闭弹框</text>
+					<text class="buttonView3" style="background: #18B566;" @click="VillageShow = false">关闭弹框</text>
 				</view>
 			</view>
 		</u-popup>
@@ -817,7 +817,7 @@
 		}
 		.buttonView3 {
 			width: 50%;
-			background: #00ffff;
+			background: #FF6600;
 			color: #FFFFFF;
 			font-size: 32upx;
 			line-height: 3;
