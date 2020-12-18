@@ -97,6 +97,19 @@ const KyInterface = {
 		name: '获取任务',
 		method: 'POST',
 	},
+	//--------------------------------------获取相应的市县村列表--------------------------------------
+	getAddressList: {
+		Url: Url + '/api/quarterEvaluate/getAddressList',
+		name: '获取相应的市县村列表',
+		method: 'POST',
+	},
+	//--------------------------------------根据关键字搜索相应的县村--------------------------------------
+	getCountyVillageByKey: {
+		Url: Url + '/api/quarterEvaluate/getCountyVillageByKey',
+		name: '根据关键字搜索相应的县村',
+		method: 'POST',
+	},
+	
 }
 
 

@@ -1,63 +1,64 @@
 <template>
 	<view>
-			<view class="content">
-				<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
+		<view class="content">
+			<u-form :model="model" :rules="rules" ref="uForm" :errorType="errorType">
 
-					<!-- 标题 -->
-					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="标题" :border-bottom="false" prop="intro">
-						<view class="viewClass">
-							<input style="height: 96upx; padding-left: 24upx;" placeholder="如:2020年村级第四季度考评工作" v-model="model.intro" />
-						</view>
-					</u-form-item>
+				<!-- 标题 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="标题" :border-bottom="false" prop="intro">
+					<view class="viewClass">
+						<input style="height: 96upx; padding-left: 24upx;" placeholder="如:2020年村级第四季度考评工作" v-model="model.intro" />
+					</view>
+				</u-form-item>
 
-					<!-- 乡村名 -->
-					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="乡村名" :border-bottom="false" prop="name">
-						<view class="viewClass">
-							<input style="height: 96upx; padding-left: 24upx;" placeholder="点击选择需考评的乡村" v-model="model.name" disabled="true"
-							 @click="VillageShow = true" />
-						</view>
-					</u-form-item>
+				<!-- 乡村名 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="乡村名" :border-bottom="false" prop="name">
+					<view class="viewClass">
+						<input style="height: 96upx; padding-left: 24upx;" placeholder="点击选择需考评的乡村" v-model="model.name" disabled="true"
+						 @click="VillageShow = true" />
+					</view>
+				</u-form-item>
 
 
-					<!-- 考评人 -->
-					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="考评人" :border-bottom="false" prop="name">
-						<view class="viewClass">
-							<input style="height: 96upx; padding-left: 24upx;" placeholder="点击选择考评人员" v-model="model.peoplename" disabled="true"
-							 @click="peopleShow=true" />
-						</view>
-					</u-form-item>
+				<!-- 考评人 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="考评人" :border-bottom="false" prop="name">
+					<view class="viewClass">
+						<input style="height: 96upx; padding-left: 24upx;" placeholder="点击选择考评人员" v-model="model.peoplename" disabled="true"
+						 @click="peopleShow=true" />
+					</view>
+				</u-form-item>
 
-					<!-- 考评时间 -->
-					<u-form-item :label-style="customStyle" :label-position="labelPosition" label="考评时间" :border-bottom="false" prop="">
-						<view class="viewClass">
-							<view style="height: 96upx; padding:16upx 0 0 24upx; font-size: 32upx;" @click="onShowDatePicker('date')">{{datestring}}&nbsp;&nbsp;&nbsp;&nbsp;{{Week}}</view>
-							<mx-date-picker :show="showPicker" :type="type" :value="value" :show-tips="true" :begin-text="'入住'" :end-text="'离店'"
-							 :show-seconds="true" @confirm="onSelected" @cancel="onSelected" />
-						</view>
-					</u-form-item>
+				<!-- 考评时间 -->
+				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="考评时间" :border-bottom="false" prop="">
+					<view class="viewClass">
+						<view style="height: 96upx; padding:16upx 0 0 24upx; font-size: 32upx;" @click="onShowDatePicker('date')">{{datestring}}&nbsp;&nbsp;&nbsp;&nbsp;{{Week}}</view>
+						<mx-date-picker :show="showPicker" :type="type" :value="value" :show-tips="true" :begin-text="'入住'" :end-text="'离店'"
+						 :show-seconds="true" @confirm="onSelected" @cancel="onSelected" />
+					</view>
+				</u-form-item>
 
-		
-					<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="相关图片" :border-bottom="false" prop="photo">
+
+				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="相关图片" :border-bottom="false" prop="photo">
 						<view>
 							<u-upload :label-style="uploadStyle" ref="uUpload" :show-upload-list="showUploadList" :action="action" width="164"
 							 height="164" :file-list="fileList" @on-remove="uploadOnRemove" @on-success="uploadOnsuccess"></u-upload>
 						</view>
 					</u-form-item> -->
 
-					<!-- 简要备注 -->
-					<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="问题内容" :border-bottom="false" >
+				<!-- 简要备注 -->
+				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="问题内容" :border-bottom="false" >
 						<view class="viewClass">
 							<u-input :custom-style="textareaStyle" type="textarea" :height="200" :auto-height="autoHeight"  placeholder="请描述遇到的问题" :maxlength="50000" v-model="model.intro" />
 						</view>
 					</u-form-item> -->
-				</u-form>
+			</u-form>
 		</view>
 		<!-- 考评指标 -->
 		<view style="z-index: 999;">
 			<view style="font-size: 17px;font-weight: bold;margin-top:40upx; margin-left : 32upx;">考评指标</view>
-			<view v-if="tesknumber!=-1" style="margin-top: 20upx; margin-left : 32upx;" @click="open">所选指标:{{teskList[tesknumber].group.title}}<text style="color: #007AFF;">(点击查看)</text></view>
-			<view style="display: flex;margin-top: 20upx;" v-if="teskList.length != 0">
-				<view v-for="(item,index) in teskList" :key="index" >
+			<view v-if="tesknumber!=-1" style="margin-top: 20upx; margin-left : 32upx;" @click="open">所选指标:{{teskList[tesknumber].group.title}}<text
+				 style="color: #007AFF;">(点击查看)</text></view>
+			<view style="margin-top: 20upx;" v-if="teskList.length != 0">
+				<view v-for="(item,index) in teskList" :key="index">
 					<view class="tu_square" :class="{current2: valueIndex === index}" @click="openIndex(index,item.group.id)">
 						<view class="allBtn">{{teskList[index].group.title}}</view>
 					</view>
@@ -94,7 +95,7 @@
 		</u-popup>
 
 		<u-popup v-model="VillageShow" mode="center">
-			<view>
+			<view style="width: 100%;">
 				<!-- 顶部搜索框 -->
 				<view class="topSerchView">
 					<view class="SearchBar" elevation='5px'>
@@ -104,16 +105,33 @@
 
 
 				<!-- 搜索列表 -->
+
 				<view class="stationList" :style="{ 'height':scrollHeight }" v-if="SearchStatus">
 					<block v-for="(item,index) in VillageSearchList" :key="index">
 						<view class="listItem" @click="Listclick(item)">
-							<rich-text :nodes="item.village_name"></rich-text>
+							<view v-if="item.village_name==''">
+								<rich-text :nodes="item.city_name+'-'+item.county_name"></rich-text>
+							</view>
+							<view v-if="item.village_name!=''">
+								<rich-text :nodes="item.city_name+'-'+item.county_name+'-'+item.village_name"></rich-text>
+							</view>
 						</view>
 					</block>
 				</view>
 
 				<!-- 原列表 -->
 				<view class="stationList" :style="{ 'height':scrollHeight }" v-if="VillageStatus">
+					<u-select v-model="selectShow" :list="cityList" @confirm="selectCity"></u-select>
+					<view class="cityName" @click="selectShow=true">当前城市:{{cityName}}></view>
+					<view style="width:750upx">
+						<scroll-view scroll-x>
+							<view style="display: flex;">
+								<view class="box_scrollView" v-for="(item,index) in ruralList" :key="index" @click="ruralClick(item.county_name,index)">
+									<text class="scrollView_text" :class="{scrollView_text_color: scrollIndex === index}">{{item.county_name}}</text>
+								</view>
+							</view>
+						</scroll-view>
+					</view>
 					<block v-for="(item,index) in VillageList" :key="index">
 						<view class="listItem" @click="Listclick(item)">
 							<rich-text :nodes="item.village_name"></rich-text>
@@ -122,7 +140,8 @@
 				</view>
 
 				<view class="operButton">
-					<text class="buttonView2" @click="VillageShow = false">关闭弹框</text>
+					<text class="buttonView3" @click="ruralChoice">选择该县</text>
+					<text class="buttonView3" style="background: #18B566;" @click="VillageShow = false">关闭弹框</text>
 				</view>
 			</view>
 		</u-popup>
@@ -187,12 +206,18 @@
 				SearchStatus: false, //搜索框显示状态
 
 				peopleShow: false, //考评人弹框
-				peopleSearchList: [], //关键字查询的乡村
+				peopleSearchList: [], //关键字查询的考评人
 				peopleData: '', //乡村名数据缓存
 				peopleStatus: true, //原列表显示状态
 				peopleSearchStatus: false, //搜索框显示状态
 				AssessorList: [], //考评人信息
 				valueIndex: -1,
+				ruralList: [],
+				cityName: '南平市',
+				selectShow: false,
+				scrollIndex:0,
+				checkType:3,
+				cityList: [],
 				//--------------时间参数-----------
 				value: '',
 				showPicker: false,
@@ -215,12 +240,12 @@
 
 
 				scrollHeight: '800upx', //弹框高度默认值
-				teskList: [], 
+				teskList: [],
 				teskid: 0,
 				tesknumber: -1,
-				targetShow: false,	
-				targetList : [{
-					index:[]
+				targetShow: false,
+				targetList: [{
+					index: []
 				}],
 				//----------------uview样式--------------------------
 				customStyle: {
@@ -300,6 +325,8 @@
 					this.scrollHeight = `${res.windowHeight}px`;
 				}
 			});
+			this.checkData('',0);
+			this.checkData('',3);
 			this.lostData();
 			this.AssessorSuccess();
 			this.teskData();
@@ -310,14 +337,14 @@
 
 		methods: {
 			//打开指标弹框
-			openIndex:function(e,a) {
+			openIndex: function(e, a) {
 				this.targetList = this.teskList[e].index;
 				console.log(this.targetList)
 				this.tesknumber = e;
 				this.valueIndex = e;
 				this.teskid = a;
 			},
-			open:function(){
+			open: function() {
 				this.targetShow = true;
 			},
 			//-------------------------------乘客数据读取-------------------------------
@@ -345,7 +372,7 @@
 			//-----------------请求任务列表-----------------------
 			teskData: function() {
 				uni.showLoading({
-					title:'搜索指标中...'
+					title: '搜索指标中...'
 				})
 				uni.request({
 					url: this.$jdkp.KyInterface.getEvaluationGroup.Url,
@@ -438,7 +465,7 @@
 							})
 						} else if (this.tesknumber == -1) {
 							uni.hideLoading()
-								uni.showToast({
+							uni.showToast({
 								title: '请选择考评指标',
 								icon: 'none'
 							})
@@ -453,6 +480,53 @@
 					}
 				});
 			},
+			//------------------选择县为考评------------------
+			ruralChoice:function(){
+				this.model.name = this.ruralList[this.scrollIndex].county_name;
+				this.VillageData = this.ruralList[this.scrollIndex];
+				this.VillageStatus = true;
+				this.SearchStatus = false;
+				this.VillageShow = false;
+			},
+			//-------------------点击切换村----------------------
+			ruralClick:function(name,e){
+				this.scrollIndex=e;
+				this.checkData(name,2)
+			},
+			//-----------------获取相应市县村列表-----------------------
+			checkData: function(name,type) {
+				uni.request({
+					url: this.$jdkp.KyInterface.getAddressList.Url,
+					method: this.$jdkp.KyInterface.getAddressList.method,
+					data:{
+						name:name,
+						type:type,
+					},
+					success: (res) => {	
+						console.log('数据', res);
+						if(type==1){
+						this.ruralList = res.data.data;
+						}else if(type==0){
+							
+							var obj=new Object();
+							for(var item of res.data.data){
+								console.log(item);
+								obj = {
+									label:item.city_name,									
+								};
+								this.cityList.push(obj)
+							}
+						}else if(type==2){
+						this.VillageList=res.data.data;
+						}else if(type==3){
+						this.VillageList=res.data.data.village;
+						this.ruralList=res.data.data.county;
+						}
+						
+					},
+					fail(res) {}
+				})
+			},
 
 			//-----------------请求乡村列表-----------------------
 			lostData: function() {
@@ -463,8 +537,7 @@
 						// console.log('乡村列表', res);
 						this.VillageList = res.data.data;
 					},
-					fail(res) {
-					}
+					fail(res) {}
 				})
 			},
 
@@ -481,14 +554,14 @@
 
 				uni.showLoading();
 				uni.request({
-					url: this.$pyfw.KyInterface.getVillageListByName.Url,
-					method: this.$pyfw.KyInterface.getVillageListByName.method,
+					url: this.$jdkp.KyInterface.getCountyVillageByKey.Url,
+					method: this.$jdkp.KyInterface.getCountyVillageByKey.method,
 					data: {
-						keyName: e.detail.value
+						key: e.detail.value
 					},
 					success: (res) => {
 						uni.hideLoading();
-						// console.log('模糊搜索', res);
+						console.log('模糊搜索', res);
 						this.VillageSearchList = res.data.data;
 					},
 					fail(res) {
@@ -542,7 +615,6 @@
 				this.model.peoplename = e.name;
 				this.peopleData = e;
 				console.log(this.peopleData)
-				// console.log(this.VillageData)
 				this.peopleStatus = true;
 				this.peopleShow = false;
 				this.peopleSearchStatus = false;
@@ -683,8 +755,13 @@
 						break;
 				}
 			},
-	
-			
+			selectCity(e){
+				console.log(e);
+				this.cityName=e[0].label;
+				this.checkData(e[0].label,1);
+			}
+
+
 		}
 	}
 </script>
@@ -738,6 +815,13 @@
 			font-size: 32upx;
 			line-height: 3;
 		}
+		.buttonView3 {
+			width: 50%;
+			background: #FF6600;
+			color: #FFFFFF;
+			font-size: 32upx;
+			line-height: 3;
+		}
 	}
 
 	.topSerchView {
@@ -772,6 +856,15 @@
 		line-height: 80rpx;
 		box-sizing: border-box;
 		font-size: 28rpx;
+		width: 100%;
+
+		.cityName {
+			width: 500upx;
+			padding: 8upx 0upx;
+			margin-right: 16upx;
+			// text-align: center;
+			font-size: 30upx;
+		}
 
 		.listItem {
 			margin-left: 20rpx;
@@ -930,7 +1023,7 @@
 	}
 
 	.tu_square {
-		margin-left: 32upx;
+		margin:20upx 32upx;
 		// z-index: 28;
 		background: #FFFFFF;
 		border: 1px solid #E2E2E2;
@@ -945,8 +1038,28 @@
 
 		.allBtn {
 			text-align: center;
-			font-size: 36upx;
+			font-size: 32upx;
 			font-weight: 400;
+		}
+	}
+
+	//滑动区域
+	.box_scrollView {
+		margin-bottom:20upx;
+		white-space: nowrap;
+
+		.scrollView_text {
+			margin-left: 24upx;
+			padding: 16upx 32upx;
+			font-size: 28upx;
+			color: #000000;
+			border: 1upx solid #000000;
+			border-radius: 8upx;
+		}
+
+		.scrollView_text_color {
+			color: #19BE6B;
+			border: 1upx solid #19BE6B;
 		}
 	}
 </style>
