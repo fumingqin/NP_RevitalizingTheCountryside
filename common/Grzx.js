@@ -59,6 +59,12 @@ const Interface = {
 		method: 'POST',
 		pages: [],
 	},
+	loginByPassword:{
+		value: Url + '/api/user/loginByPassword',
+		name: '密码登录',
+		method: 'POST',
+		pages: [],
+	},
 	getLoginCode: {
 		//value: 'https://appdl.xmjdt.cn:18443/api/person/getLoginCode',
 		value: Url +'/api/user/getLoginCode',
