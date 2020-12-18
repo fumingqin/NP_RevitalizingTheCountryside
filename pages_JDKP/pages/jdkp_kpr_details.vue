@@ -65,7 +65,7 @@
 								<view class="teskGrade">评分:暂无评分</view>
 							</view>
 							<view>
-								<image :src="imageDate(item.image)" class="teskimage"></image>
+								<image :src="imageDate(item.image)" class="teskimage" @click="goImgList(imageDate(item.image))"></image>
 								<!-- <image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image> -->
 							</view>
 						</view>
@@ -120,14 +120,15 @@
 						<view style="display: block;margin-left: 40upx;">
 							<!-- <u-upload :action="action" :file-list="fileList"></u-upload> -->
 							<view style="margin-bottom: 22upx;">上传图片</view>
-							<view style="display: flex;"   @click="uploadSubscript(index)">
+							<view style="display: flex;" @click="uploadSubscript(index)">
 								<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1"
-								 width="100" height="100" @on-success="uploadOnsuccess"  @on-remove="remove">
-									<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150" >
+								 width="100" height="100" @on-success="uploadOnsuccess" @on-remove="remove">
+									<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 										<u-icon name="photo" size="40" color="#c0c4cc"></u-icon>
 									</view>
 								</u-upload>
-								<image style="width: 100upx; height: 100upx; margin-left: 24upx; padding-top: 8upx;" :src="dataParse(dataList[index].image) " mode="aspectFill" :hidden="dataList[index].image == ''" @click="goImgList(dataParse(dataList[index].image))" ></image>
+								<image style="width: 100upx; height: 100upx; margin-left: 24upx; padding-top: 8upx;" :src="dataParse(dataList[index].image) "
+								 mode="aspectFill" :hidden="dataList[index].image == ''" @click="goImgList(dataParse(dataList[index].image))"></image>
 							</view>
 						</view>
 					</view>
@@ -256,9 +257,9 @@
 							key: 'dataList',
 							success: (ress) => {
 								console.log(ress)
-								if(this.id == ress.data.id){
+								if (this.id == ress.data.id) {
 									this.dataList = ress.data.data;
-								}else{
+								} else {
 									for (let i = 0; i < res.data.data.item.length; i++) {
 										var a = {
 											itemId: res.data.data.item[i].itemId,
@@ -268,7 +269,7 @@
 										this.dataList.push(a)
 									}
 								}
-								
+
 								console.log(this.dataList)
 							},
 							fail: (err) => {
@@ -395,14 +396,14 @@
 				// console.log('上传图片', this.uploadList)
 				console.log('插入图片', this.dataList)
 			},
-			
+
 			//删除图片
-			remove : function(e){
+			remove: function(e) {
 				console.log(e)
 				this.dataList[this.uploadIndex].image = ''
 			},
-			
-			
+
+
 			//提交
 			Submit: function() {
 				uni.showLoading({
@@ -480,61 +481,61 @@
 					return a[0];
 				}
 			},
-			
+
 			//图片转换
-			dataParse : function(e){
-				if(e !== ''){
+			dataParse: function(e) {
+				if (e !== '') {
 					var a = JSON.parse(e)
 					return a[0]
-				}else{
+				} else {
 					return e
 				}
 			},
-			
+
 			//保存数据
-			keepData :function(){
-				if(this.stepsData.state == '已发布'){
+			keepData: function() {
+				if (this.stepsData.state == '已发布') {
 					uni.getStorage({
 						key: 'dataList',
 						success: (ress) => {
 							console.log(ress)
-							if(this.id == ress.data.id){
+							if (this.id == ress.data.id) {
 								let a = {
-									id : this.id,
-									title : this.stepsData.title,
-									data : this.dataList
+									id: this.id,
+									title: this.stepsData.title,
+									data: this.dataList
 								};
 								uni.setStorage({
 									key: 'dataList',
 									data: a
 								})
-							}else{
+							} else {
 								uni.showModal({
-									title:'考评任务提示',
-									content:'保存中的考评数据(' +ress.data.title +')与现查看的考评任务(' +this.stepsData.title  +')不相符，是否替代原有的任务数据？',
-									success:(res)=>{
+									title: '考评任务提示',
+									content: '保存中的考评数据(' + ress.data.title + ')与现查看的考评任务(' + this.stepsData.title + ')不相符，是否替代原有的任务数据？',
+									success: (res) => {
 										console.log(res)
-										if(res.confirm == true){
+										if (res.confirm == true) {
 											let a = {
-												id : this.id,
-												title : this.stepsData.title,
-												data : this.dataList
+												id: this.id,
+												title: this.stepsData.title,
+												data: this.dataList
 											};
 											uni.setStorage({
 												key: 'dataList',
 												data: a
 											})
 										}
-										
+
 									}
 								})
 							}
 						},
-						fail:()=> {
+						fail: () => {
 							let a = {
-								id : this.id,
-								title : this.stepsData.title,
-								data : this.dataList
+								id: this.id,
+								title: this.stepsData.title,
+								data: this.dataList
 							};
 							uni.setStorage({
 								key: 'dataList',
@@ -543,13 +544,13 @@
 						}
 					})
 				}
-				
-				
+
+
 			},
-			
+
 			//保存图片至本地并打开新页面
 			goImgList(e) {
-				uni.setStorageSync('imagePiclist',e);
+				uni.setStorageSync('imagePiclist', e);
 				uni.navigateTo({
 					url: 'imgPreview4',
 				})
