@@ -14,6 +14,12 @@
 				</view>
 			</view>
 		</view>
+		
+		<!-- 选择乡县市 -->
+		<view class="operButton" @click="statusChange">
+			<u-picker :value="rangValue" v-model="show" :mode="mode" :range="rangeList" @confirm="rangeConfirm"></u-picker>
+			<text class="buttonView2">{{range}}</text>
+		</view>
 	</view>
 </template>
 
@@ -23,29 +29,86 @@
 			return {
 				rankingList : [], //排行数组
 				scrollHeight : '1334upx',//弹框高度默认值
+				show: false,
+				range: '请选择乡县市',
+				rangeList:[],
+				rangValue:0,
+				mode: 'selector',
+				rangeIndex:'',//下标
+				lists:'',
 			}
 		},
-		onLoad:function(){
+		
+		onShow:function(){
 			/* 设置当前滚动容器的高，若非窗口的高度，请自行修改 */
 			uni.getSystemInfo({
 				success: (res) => {
 					this.scrollHeight = `${res.windowHeight}px`;
 				}
 			});
-			this.loadData();
+			this.choiceData();
 		},
+		
+		onPullDownRefresh: function() {
+			this.choiceData();
+		},
+		
 		methods: {
-			loadData:function(){
+			//选择打开弹框
+			statusChange() {
+				this.show = true;
+			},
+			
+			rangeConfirm:function(e){
+				console.log('点击回调',e)
+				uni.startPullDownRefresh();
+				this.rangeIndex=e[0]
+				this.range=this.rangeList[this.rangeIndex]
+				console.log('点击回调',this.range)
+			},
+			
+			choiceData:function(){
+				uni.request({
+					url: this.$jdkp.KyInterface.getCountyList.Url,
+					method: this.$jdkp.KyInterface.getCountyList.method,
+					success: (res) => {
+						// console.log('乡县市所有列表数据',this.list)
+						for (let i = 0; i < res.data.data.length; i++) {
+							var a=[]
+							a = res.data.data[i].county_name
+							this.rangeList.push(a)
+						}
+						// console.log('乡县市重组列表',this.rangeList)
+						
+						if(this.range!=='请选择乡县市'){
+							this.lists = res.data.data.filter(item => {
+								return item.county_name == this.range;
+							})
+							console.log('筛选列表',this.lists)
+							this.loadData(this.lists[0]);
+						}
+					},
+					fail: (err) => {
+						uni.stopPullDownRefresh();
+						uni.hideLoading()
+						console.log(err)
+					}
+				})
+			},
+			
+			loadData:function(e){
 				uni.showLoading({
 					title:'加载排名中...'
 				})
+				console.log(this.lists[0].id)
 				uni.request({
 					url: this.$jdkp.KyInterface.getEvaluationByCountyId.Url,
 					method: this.$jdkp.KyInterface.getEvaluationByCountyId.method,
 					data:{
-						countyId:26
+						countyId:e.id
 					},
 					success: (res) => {
+						uni.stopPullDownRefresh();
 						this.rankingList = [];
 						for(var i=0; i<res.data.data.length;i++){
 							var a = {
@@ -60,6 +123,7 @@
 						console.log(res)
 					},
 					fail: (err) => {
+						uni.stopPullDownRefresh();
 						uni.hideLoading()
 						console.log(err)
 					}
@@ -72,5 +136,23 @@
 <style lang="scss">
 	page{
 		background: #b1eaf8;
+	}
+	
+	//选择乡县市
+	.operButton {
+		display: flex;
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		height: 96upx;
+		text-align: center;
+	
+		.buttonView2 {
+			width: 100%;
+			background: #18B566;
+			color: #FFFFFF;
+			font-size: 32upx;
+			line-height: 3;
+		}
 	}
 </style>

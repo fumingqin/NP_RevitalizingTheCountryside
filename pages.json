@@ -1139,6 +1139,7 @@
 			    ,{
                     "path" : "pages/jdkp_appraisalList",
                     "style" : {
+						"enablePullDownRefresh": true,
 						"navigationBarBackgroundColor":"#c0f3ee",
 						"navigationBarTitleText": "乡村评榜"
 					}
