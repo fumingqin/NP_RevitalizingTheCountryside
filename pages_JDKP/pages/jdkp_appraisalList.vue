@@ -18,7 +18,7 @@
 		<!-- 选择乡县市 -->
 		<view class="operButton" @click="statusChange">
 			<u-picker :value="rangValue" v-model="show" :mode="mode" :range="rangeList" @confirm="rangeConfirm"></u-picker>
-			<text class="buttonView2">{{range}}</text>
+			<text class="buttonView2">{{range}} > </text>
 		</view>
 	</view>
 </template>
@@ -30,16 +30,17 @@
 				rankingList : [], //排行数组
 				scrollHeight : '1334upx',//弹框高度默认值
 				show: false,
-				range: '请选择乡县市',
+				rangData : '',//乡县数据
+				range: '建阳区',
 				rangeList:[],
 				rangValue:0,
+				rangIndex : 0,
 				mode: 'selector',
-				rangeIndex:'',//下标
 				lists:'',
 			}
 		},
 		
-		onShow:function(){
+		onLoad:function(){
 			/* 设置当前滚动容器的高，若非窗口的高度，请自行修改 */
 			uni.getSystemInfo({
 				success: (res) => {
@@ -50,7 +51,7 @@
 		},
 		
 		onPullDownRefresh: function() {
-			this.choiceData();
+			this.loadData();
 		},
 		
 		methods: {
@@ -59,34 +60,29 @@
 				this.show = true;
 			},
 			
+			//点击传值
 			rangeConfirm:function(e){
 				console.log('点击回调',e)
+				this.rangIndex = e[0];
+				this.range = this.rangeList[e[0]]
 				uni.startPullDownRefresh();
-				this.rangeIndex=e[0]
-				this.range=this.rangeList[this.rangeIndex]
-				console.log('点击回调',this.range)
 			},
 			
+			//请求乡县
 			choiceData:function(){
 				uni.request({
 					url: this.$jdkp.KyInterface.getCountyList.Url,
 					method: this.$jdkp.KyInterface.getCountyList.method,
 					success: (res) => {
-						// console.log('乡县市所有列表数据',this.list)
+						// console.log('乡县市所有列表数据',res)
+						this.rangData = res.data.data;
+						this.rangeList = [];
 						for (let i = 0; i < res.data.data.length; i++) {
-							var a=[]
-							a = res.data.data[i].county_name
+							var a = res.data.data[i].county_name
 							this.rangeList.push(a)
 						}
-						// console.log('乡县市重组列表',this.rangeList)
-						
-						if(this.range!=='请选择乡县市'){
-							this.lists = res.data.data.filter(item => {
-								return item.county_name == this.range;
-							})
-							console.log('筛选列表',this.lists)
-							this.loadData(this.lists[0]);
-						}
+						this.loadData(); //执行加载排行
+						// console.log(this.rangeList)
 					},
 					fail: (err) => {
 						uni.stopPullDownRefresh();
@@ -96,16 +92,16 @@
 				})
 			},
 			
-			loadData:function(e){
+			//执行加载排行
+			loadData:function(){
 				uni.showLoading({
 					title:'加载排名中...'
 				})
-				console.log(this.lists[0].id)
 				uni.request({
 					url: this.$jdkp.KyInterface.getEvaluationByCountyId.Url,
 					method: this.$jdkp.KyInterface.getEvaluationByCountyId.method,
 					data:{
-						countyId:e.id
+						countyId:this.rangData[this.rangIndex].id
 					},
 					success: (res) => {
 						uni.stopPullDownRefresh();
