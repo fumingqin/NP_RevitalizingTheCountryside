@@ -1,20 +1,20 @@
 <template>
 	<view>
 		<!-- 搜索栏 -->
-		<view class="searchTopBox">
+		<!-- <view class="searchTopBox">
 			<view class="searchBoxRadius">
 				<input class="inputIocale" type="search" v-model="searchValue" @confirm="searchNow" placeholder="搜索村名称" />
 				<image class="searchImage" src="../../static/search.png" />
 			</view>
-		</view>
+		</view> -->
 		
 			<!-- 内容1 -->
 			<view>
-				<view class="tab">
+				<!-- <view class="tab">
 					<uni-segmented-control :current="current" :values="items" @clickItem="onClickItem" style-type="text" active-color="#3DABFC"></uni-segmented-control>
-				</view>
+				</view> -->
 				<view v-if="current === 0" style="margin-top: 20rpx;">
-				<view class="infor_view" v-for="(item,index) in groupTitle" :key="index" @click="details(item.ruralId)">
+				<view class="infor_view" v-for="(item,index) in groupTitle" :key="index" @click="details(item.rural_id)">
 					<view class="view_titleView">
 						<view class="tv_view">
 							<view style="display: flex;">
@@ -25,11 +25,11 @@
 							</view>
 							<!-- <text class="tv_richText">{{item.content}}</text> -->
 							<view class="tv_view2">
-								<view class="tv_richText">村长：{{item.head_name}}</view>
-								<view class="tv_richText">总人口：{{item.total_people}}人</view>
+								<view class="tv_richText">村支书：{{item.secretary_name}}</view>
+								<!-- <view class="tv_richText">总人口：{{item.total_people}}人</view> -->
 							</view>
 						</view>
-						<image class="tv_image" :src="item.image" mode="aspectFill"></image>
+						<image class="tv_image" :src="imageDate(item.image_address)" mode="aspectFill"></image>
 					</view>
 					
 					<view class="view_contentView">
@@ -43,7 +43,7 @@
 				</view>
 				
 				<view v-if="current === 1" style="margin-top: 20rpx;">
-				<view class="infor_view" v-for="(item,index) in people" :key="index" @click="details(item.ruralId)">
+				<view class="infor_view" v-for="(item,index) in people" :key="index" @click="details(item.rural_id)">
 					<view class="view_titleView">
 						<view class="tv_view">
 							<view style="display: flex;">
@@ -194,6 +194,16 @@
 						},3000);
 					}
 				})
+			},
+			
+			imageDate: function(e) {
+				if (e == "") {
+					return "暂无"
+				} else {
+					var a = JSON.parse(e);
+					return a[0];
+				}
+			
 			},
 			//-------------加载更多----------------
 			getMore(){
