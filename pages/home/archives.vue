@@ -116,12 +116,14 @@
 					<view class="dyn_view" :hidden="newsData.village.village_name == ''">
 						<view class="dyn_text">所属市级：{{newsData.village.city_name}}</view>
 						<view class="dyn_text">所属县级：{{newsData.village.county_name}}</view>
-						<view class="dyn_text">村长姓名：{{newsData.village.head_name}}</view>
+						<view class="dyn_text">村支书姓名：{{newsData.village.secretary_name}}</view>
+						<view class="dyn_text">建档时间：{{newsData.village.create_time}}</view>
+						<!-- <view class="dyn_text">村长姓名：{{newsData.village.head_name}}</view>
 						<view class="dyn_text">村长年龄：{{newsData.village.head_age}}岁</view>
 						<view class="dyn_text">任职工龄：{{newsData.village.head_year}}年</view>
 						<view class="dyn_text">职责人数：{{newsData.village.duty_num}}人</view>
 						<view class="dyn_text">总户口数：{{newsData.village.registered_num}}户</view>
-						<view class="dyn_text">总人口数：{{newsData.village.total_people}}人</view>
+						<view class="dyn_text">总人口数：{{newsData.village.total_people}}人</view> -->
 						<view class="dyn_text_view">
 							<view>建档时间：{{informationDate(newsData.village.create_time)}}</view>
 							<view class="dyn_text_view_text" @click="detailsClick(1,newsData.ruralId)">查看详细档案 ></view>
@@ -567,7 +569,7 @@
 							} else {
 								this.queryStatus = 1;
 								this.newsData = res.data.data;
-								console.log(this.newsData)
+								console.log('村档管理',this.newsData)
 							}
 						} else {
 							this.queryStatus = 1;
