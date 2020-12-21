@@ -1139,10 +1139,17 @@
 			    ,{
                     "path" : "pages/jdkp_appraisalList",
                     "style" : {
+						"enablePullDownRefresh": true,
 						"navigationBarBackgroundColor":"#c0f3ee",
 						"navigationBarTitleText": "乡村评榜"
 					}
                 }
+				,{
+				    "path" : "pages/imgPreview4",
+				    "style" : {
+						"navigationBarTitleText": "查看图片"
+					}
+				}
             ]
 		},//---------------------------------------------第十七个包：视频会议------------------------------------------
 		{

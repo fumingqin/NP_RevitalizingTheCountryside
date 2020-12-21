@@ -110,6 +110,12 @@ const KyInterface = {
 		method: 'POST',
 	},
 	
+	//--------------------------------------拉取乡县市--------------------------------------
+	getCountyList: {
+		Url: Url + '/api/quarterEvaluate/getCountyList',
+		name: '拉取乡县市',
+		method: 'POST',
+	},
 }
 
 

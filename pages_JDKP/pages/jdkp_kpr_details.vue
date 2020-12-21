@@ -22,7 +22,7 @@
 			<view class="deta_text"><text>发布时间：</text>{{informationDate(stepsData.update_time)}}</view>
 			<view class="deta_text"><text>发布人电话：</text>{{stepsData.phoneNumber}}</view>
 		</view>
-		
+
 		<!-- <view class="deta_view">
 			<view class="deta_title">问题信息</view>
 			<view class="deta_text"><text>问题类型：</text>{{stepsData.apply_type}}</view>
@@ -46,33 +46,33 @@
 			<view class="deta_title">考评结果</view>
 			<view class="deta_text"><text>分数：</text>{{stepsData.score}}分</view>
 		</view>
-		
+
 		<uni-popup ref="popup" type="bottom">
-				<view class="boxVlew">
-					<view class="titleView">
-						<text class="Nb_text1">指标详情</text>
-						<text class="Nb_text2 jdticon icon-fork " @click="close()"></text>
-					</view>
-					<scroll-view class="noticeBox" scroll-y="ture">
-						<view v-for="(item,index) in stepsData.item" :key="index">
-								<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
-								<view class="teskView">
-									<view class="teskScore">满分:{{item.itemscore}}分</view>
-									<view v-if="stepsData.state=='已完成'">
-									<view class="teskGrade">评分:{{item.score}}分</view>
-									</view>
-									<view v-if="stepsData.state!='已完成'">
-									<view class="teskGrade">评分:暂无评分</view>
-									</view>
-								<view >
-									<image :src="imageDate(item.image)" class="teskimage"></image>
-									<!-- <image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image> -->
-								</view>
-								</view>
-						</view>
-					</scroll-view>
+			<view class="boxVlew">
+				<view class="titleView">
+					<text class="Nb_text1">指标详情</text>
+					<text class="Nb_text2 jdticon icon-fork " @click="close()"></text>
 				</view>
-			</uni-popup>
+				<scroll-view class="noticeBox" scroll-y="ture">
+					<view v-for="(item,index) in stepsData.item" :key="index">
+						<view class="teskName">{{index+1}}.{{item.itemTitle}}</view>
+						<view class="teskView">
+							<view class="teskScore">满分:{{item.itemscore}}分</view>
+							<view v-if="stepsData.state=='已完成'">
+								<view class="teskGrade">评分:{{item.score}}分</view>
+							</view>
+							<view v-if="stepsData.state!='已完成'">
+								<view class="teskGrade">评分:暂无评分</view>
+							</view>
+							<view>
+								<image :src="imageDate(item.image)" class="teskimage" @click="goImgList(imageDate(item.image))"></image>
+								<!-- <image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image> -->
+							</view>
+						</view>
+					</view>
+				</scroll-view>
+			</view>
+		</uni-popup>
 
 		<!-- 防触底空模块 -->
 		<view style="width: 100%; height: 112upx;"></view>
@@ -94,6 +94,8 @@
 				<view class="box_refundView">
 					<view class="box_refundContentView">
 						<text class="box_refundContentTitle">请为本次考评打分</text>
+						<view style="color: #FC4646; font-size:28upx; margin-top: 12upx;">注：删除图片先点击右侧图片再点×</view>
+						<!-- <text ></text> -->
 					</view>
 				</view>
 
@@ -111,26 +113,31 @@
 
 						<view style="display: block;width: 50%;">
 							<view style="margin-bottom: 40upx;">最高评分<text style="color: #FC4646;">(最高评分{{item.itemscore}}分)</text></view>
-							<u-input type="number" :border="border" @click="inputSubscript(index,item.itemscore)" @input="inputData" />
+							<u-input type="number" v-model="dataList[index].score" :border="border" @click="inputSubscript(index,item.itemscore)"
+							 @input="inputData" />
 						</view>
 
 						<view style="display: block;margin-left: 40upx;">
 							<!-- <u-upload :action="action" :file-list="fileList"></u-upload> -->
 							<view style="margin-bottom: 22upx;">上传图片</view>
-							<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1"
-							 width="90" height="90" @on-success="uploadOnsuccess">
-								<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150" @click="uploadSubscript(index)">
-									<u-icon name="photo" size="40" color="#c0c4cc"></u-icon>
-								</view>
-							</u-upload>
+							<view style="display: flex;" @click="uploadSubscript(index)">
+								<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1"
+								 width="100" height="100" @on-success="uploadOnsuccess" @on-remove="remove">
+									<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
+										<u-icon name="photo" size="40" color="#c0c4cc"></u-icon>
+									</view>
+								</u-upload>
+								<image style="width: 100upx; height: 100upx; margin-left: 24upx; padding-top: 8upx;" :src="dataParse(dataList[index].image) "
+								 mode="aspectFill" :hidden="dataList[index].image == ''" @click="goImgList(dataParse(dataList[index].image))"></image>
+							</view>
 						</view>
 					</view>
 				</view>
-				
+
 				<view style="margin-top: 60upx;"></view>
-				
+
 			</view>
-			
+
 			<!-- 确认按钮 -->
 			<view class="operButton" style="z-index: 3;">
 				<view class="buttonView3" style="width: 100%;" hover-class="btn_Click" @click="Submit">确认</view>
@@ -178,7 +185,7 @@
 				goodsType: '', //输入框参数
 				uploadList: [], //上传图片数组
 				inpuIndex: '', //输入框下标
-				scoreIndex:'',//最高分
+				scoreIndex: '', //最高分
 				uploadIndex: '', //上传图片下标
 				showUploadList: true, //是否选择图片内部组件预览
 				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
@@ -196,6 +203,16 @@
 		onPullDownRefresh: function() {
 			this.loadData();
 		},
+		onHide: function() {
+			this.keepData()
+		},
+		onUnload: function() {
+			this.keepData()
+		},
+		onBackPress: function() {
+			this.keepData()
+		},
+
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
 			userData: function() {
@@ -236,14 +253,38 @@
 					success: (res) => {
 						console.log(res)
 						this.stepsData = res.data.data;
-						for (let i = 0; i < res.data.data.item.length; i++) {
-							var a = {
-								itemId: res.data.data.item[i].itemId,
-								score: '',
-								image: '',
+						uni.getStorage({
+							key: 'dataList',
+							success: (ress) => {
+								console.log(ress)
+								if (this.id == ress.data.id) {
+									this.dataList = ress.data.data;
+								} else {
+									for (let i = 0; i < res.data.data.item.length; i++) {
+										var a = {
+											itemId: res.data.data.item[i].itemId,
+											score: '',
+											image: '',
+										}
+										this.dataList.push(a)
+									}
+								}
+
+								console.log(this.dataList)
+							},
+							fail: (err) => {
+								for (let i = 0; i < res.data.data.item.length; i++) {
+									var a = {
+										itemId: res.data.data.item[i].itemId,
+										score: '',
+										image: '',
+									}
+									this.dataList.push(a)
+								}
+								console.log(this.dataList)
 							}
-							this.dataList.push(a)
-						}
+						})
+
 						console.log('插入数组', this.dataList)
 						if (res.data.data.state == '已发布') {
 							this.StepsIndex = 1
@@ -263,14 +304,14 @@
 					}
 				})
 			},
-			
+
 			//打开popup下弹框
-				open() {
-					this.$refs.popup.open()
-				},
-				close() {
-					this.$refs.popup.close()
-				},
+			open() {
+				this.$refs.popup.open()
+			},
+			close() {
+				this.$refs.popup.close()
+			},
 
 
 			//拨打申请人电话
@@ -306,15 +347,15 @@
 				var c = b.concat(a)
 				this.contentInputData = c;
 			},
-			
+
 			//编号
 			numberData: function(e) {
-				var a = e+1;
+				var a = e + 1;
 				return a
 			},
 
 			//输入框下标
-			inputSubscript: function(e,res) {
+			inputSubscript: function(e, res) {
 				// console.log('输入框下标',e)
 				this.inpuIndex = e
 				this.scoreIndex = res
@@ -328,7 +369,7 @@
 				if (this.goodsType <= this.scoreIndex && this.goodsType >= 0) {
 					this.dataList[this.inpuIndex].score = this.goodsType
 				} else {
-					if(this.goodsType!==''){
+					if (this.goodsType !== '') {
 						uni.showToast({
 							title: '分数不能大于' + this.stepsData.item[this.inpuIndex].itemscore,
 							icon: 'none'
@@ -356,6 +397,13 @@
 				console.log('插入图片', this.dataList)
 			},
 
+			//删除图片
+			remove: function(e) {
+				console.log(e)
+				this.dataList[this.uploadIndex].image = ''
+			},
+
+
 			//提交
 			Submit: function() {
 				uni.showLoading({
@@ -382,6 +430,9 @@
 										this.cancelShow = false;
 										uni.startPullDownRefresh();
 									}
+								})
+								uni.removeStorage({
+									key: 'dataList'
 								})
 							} else {
 								uni.hideLoading()
@@ -429,8 +480,81 @@
 					var a = JSON.parse(e);
 					return a[0];
 				}
-			
-			}
+			},
+
+			//图片转换
+			dataParse: function(e) {
+				if (e !== '') {
+					var a = JSON.parse(e)
+					return a[0]
+				} else {
+					return e
+				}
+			},
+
+			//保存数据
+			keepData: function() {
+				if (this.stepsData.state == '已发布') {
+					uni.getStorage({
+						key: 'dataList',
+						success: (ress) => {
+							console.log(ress)
+							if (this.id == ress.data.id) {
+								let a = {
+									id: this.id,
+									title: this.stepsData.title,
+									data: this.dataList
+								};
+								uni.setStorage({
+									key: 'dataList',
+									data: a
+								})
+							} else {
+								uni.showModal({
+									title:'自动保存提示',
+									content:'您的上一个任务信息还未提交，保存中的考评数据(' +ress.data.title +')与现查看的考评数据(' +this.stepsData.title  +')不相符，是否覆盖原有保存的数s据？',
+									success: (res) => {
+										console.log(res)
+										if (res.confirm == true) {
+											let a = {
+												id: this.id,
+												title: this.stepsData.title,
+												data: this.dataList
+											};
+											uni.setStorage({
+												key: 'dataList',
+												data: a
+											})
+										}
+
+									}
+								})
+							}
+						},
+						fail: () => {
+							let a = {
+								id: this.id,
+								title: this.stepsData.title,
+								data: this.dataList
+							};
+							uni.setStorage({
+								key: 'dataList',
+								data: a
+							})
+						}
+					})
+				}
+
+
+			},
+
+			//保存图片至本地并打开新页面
+			goImgList(e) {
+				uni.setStorageSync('imagePiclist', e);
+				uni.navigateTo({
+					url: 'imgPreview4',
+				})
+			},
 
 		}
 	}
@@ -584,21 +708,23 @@
 	.slot-btn__hover {
 		background-color: rgb(235, 236, 238);
 	}
+
 	.allBtn {
 		padding-top: 12upx;
 		font-size: 26upx;
 		background-color: #fff;
 		color: #06B4FD;
 	}
+
 	.boxVlew {
 		width: 100%;
 		padding: 16upx 40upx;
 		padding-bottom: 92upx;
 		background: #FFFFFF;
-	
+
 		.titleView {
 			margin: 24upx 0;
-	
+
 			//弹框标题
 			.Nb_text1 {
 				position: relative;
@@ -607,7 +733,7 @@
 				top: 8upx;
 				margin-bottom: 16upx;
 			}
-	
+
 			//弹框关闭按钮
 			.Nb_text2 {
 				margin-top: 8upx;
@@ -616,24 +742,28 @@
 				font-size: 32upx;
 			}
 		}
-	
+
 		.noticeBox {
 			height: 800upx;
 			line-height: 32upx;
-	.teskName{
-		width: 660upx;
-		padding: 8upx 0upx;
-		// text-align: center;
-		font-size: 32upx;
-		font-weight: bold;
-	}
+
+			.teskName {
+				width: 660upx;
+				padding: 8upx 0upx;
+				// text-align: center;
+				font-size: 32upx;
+				font-weight: bold;
+			}
+
 			.teskView {
 				position: relative;
 				display: flex;
-				.teskimage{
+
+				.teskimage {
 					width: 100upx;
 					height: 100upx;
 				}
+
 				.teskScore {
 					position: absolute;
 					left: 0;
@@ -642,6 +772,7 @@
 					font-size: 26upx;
 					color: #888;
 				}
+
 				.teskGrade {
 					position: absolute;
 					left: 0;
@@ -650,8 +781,8 @@
 					font-size: 26upx;
 					color: #ff0000;
 				}
-				}
-				
+			}
+
 		}
 	}
 </style>

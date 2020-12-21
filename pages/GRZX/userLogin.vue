@@ -4,11 +4,13 @@
 		<image :src="background" class="backClass"></image>
 		<image src="../../static/GRZX/loginReturn.png" class="returnClass" @click="returnClick"></image>
 
-		<view class="inputContent">
+		<!-- 手机号+验证码 -->
+		<view class="inputContent" v-if="codeOrPwd">
 			<!-- 手机号 -->
 			<view class="inputItem phoneNum">
 				<image src="../../static/GRZX/shouji.png" class="iconClass1"></image>
-				<input type="number" placeholder="手机号码" maxlength="11" class="inputClass" v-model="phoneNumber" @input="inputChange1" @blur="changePhone"/>
+				<input type="number" placeholder="手机号码" maxlength="11" class="inputClass" v-model="phoneNumber" @input="inputChange1"
+				 @blur="changePhone" />
 			</view>
 			<!-- 验证码 -->
 			<view class="inputItem Captcha">
@@ -18,6 +20,26 @@
 			<!-- 按钮颜色和发送验证码的样式 -->
 			<view class="getCode style1" @click="getCodeClick" id="Code">{{textCode}}</view>
 			<text class="fontStyle" @click="loginClick">确定</text>
+			<text @click="switchClick(false)" class="switchClass">密码登录</text>
+		</view>
+		
+		
+		<!-- 手机号+密码 -->
+		<view class="inputContent" v-if="!codeOrPwd">
+			<!-- 手机号 -->
+			<view class="inputItem phoneNum">
+				<image src="../../static/GRZX/shouji.png" class="iconClass1"></image>
+				<input type="number" placeholder="手机号码" maxlength="11" class="inputClass" v-model="phoneNumber" @input="inputChange1"
+				 @blur="changePhone" />
+			</view>
+			<!-- 密码 -->
+			<view class="inputItem Captcha">
+				<image src="../../static/GRZX/yanzhengma.png" class="iconClass2"></image>
+				<input type="password" placeholder="输入密码" maxlength="30" class="inputClass" v-model="password"/>
+			</view>
+			<!-- 按钮颜色和发送验证码的样式 -->
+			<text class="fontStyle" @click="pwdLogin">确定</text>
+			<text @click="switchClick(true)" class="switchClass">验证码登录</text>
 		</view>
 
 		<!-- logo -->
@@ -32,30 +54,34 @@
 				textCode: "获取验证码", //获取验证码
 				phoneNumber: '', //手机号
 				captchaCode: '', //验证码
+				password:'',	//密码
 				imgHeight: '', //背景图高度
 				urlData: '', //用来判断进入该页面的地址
 				background: '../../static/GRZX/back.png', //背景图路径
 				logo: '../../static/GRZX/logo.png', //logo路径
 
 				state: true, //是否允许点击
-				system: '', 	// 系统版本
-				platform: '',   // 平台
-				whetherClick:true,//是否允许点击
+				system: '', // 系统版本
+				platform: '', // 平台
+				whetherClick: true, //是否允许点击
+
+				testPhone: '11145879222', //测试手机号
+				testCode: '8879', //测试验证码
+				testPwd:'123456',
 				
-				testPhone:'11145879222', //测试手机号
-				testCode:'8879',//测试验证码
+				codeOrPwd:true,//是否为验证码登录（true为验证码登录，false为手机号密码登录）
 			}
 		},
 		onLoad(options) {
 			//this.loadImg();//加载图片
-			this.urlData = options.urlData;//用来判断进入该页面的地址
-			this.load();//加载页面高度
-			
-			var that=this;
+			this.urlData = options.urlData; //用来判断进入该页面的地址
+			this.load(); //加载页面高度
+
+			var that = this;
 			// 先判断 系统版本
 			uni.getSystemInfo({
 				success: (res) => {
-					console.log("系统",res);
+					console.log("系统", res);
 					that.system = res.system;
 					that.platform = res.platform;
 				}
@@ -64,22 +90,22 @@
 		onShow() {
 			// this.phoneNumber = "";
 			this.captchaCode = "";
-			this.whetherClick=true;
+			this.whetherClick = true;
 		},
 		onUnload() {
-			uni.hideLoading();//退出页面时，关闭所有的弹窗
+			uni.hideLoading(); //退出页面时，关闭所有的弹窗
 		},
 		methods: {
 			//----------------------------------加载图片----------------------------------
-			loadImg: function() {
-				var that = this;
-				that.$ChangeImage.GetImage("南平综合出行", "南平背景图").then(function(data) {
-					that.background = data;
-				});
-				that.$ChangeImage.GetImage("南平综合出行", "nanpinglogo").then(function(data) {
-					that.logo = data;
-				});
-			},
+			// loadImg: function() {
+			// 	var that = this;
+			// 	that.$ChangeImage.GetImage("南平综合出行", "南平背景图").then(function(data) {
+			// 		that.background = data;
+			// 	});
+			// 	that.$ChangeImage.GetImage("南平综合出行", "nanpinglogo").then(function(data) {
+			// 		that.logo = data;
+			// 	});
+			// },
 
 			//----------------------------------加载页面高度----------------------------------
 			load: function() {
@@ -130,12 +156,13 @@
 				}
 				const key = e.currentTarget.dataset.key;
 				this[key] = e.detail.value;
-			},		
-			
+			},
+
 			//-------------------------------------登录按钮----------------------------------
 			loginClick: function() {
 				uni.showLoading({
-					title: '登录中...'
+					title: '登录中...',
+					mask: true
 				})
 				var that = this;
 				const {
@@ -144,21 +171,20 @@
 				} = this;
 				var phone = this.phoneNumber;
 				var captcha = this.captchaCode;
-				var reg=(/^1(3|4|5|6|7|8|9)\d{9}$/);
-				if(phone == this.testPhone){
+				var reg = (/^1(3|4|5|6|7|8|9)\d{9}$/);
+				if (phone == this.testPhone) {
 					that.requestInter(phone, captcha);
-				}else if (phone == null || phone == "") {
+				} else if (phone == null || phone == "") {
 					uni.showToast({
 						title: "请输入手机号码",
 						icon: "none"
 					})
-				} else if(phone.length != 11 || !reg.test(phone)){
+				} else if (phone.length != 11 || !reg.test(phone)) {
 					uni.showToast({
 						title: "请输入正确的手机号码",
 						icon: "none"
 					})
-				}
-				else {
+				} else {
 					if (captcha == null || captcha == "") {
 						uni.showToast({
 							title: "请输入验证码",
@@ -187,16 +213,17 @@
 									console.log(res)
 									let data = res.data.data;
 									uni.hideLoading();
-									if(data.rId == "" || data.rId == null){
-										uni.navigateTo({
-											url:'./selectVillage?id='+data.userId,
-										})
-									}else{
+									if (res.data.status) {
 										uni.setStorageSync('userInfo', data);
-										if(phone != that.testPhone){
+										if (phone != that.testPhone) {
 											uni.removeStorageSync('captchaCode');
 										}
 										that.successReturn(); //登陆成功后返回
+									}else{
+										uni.showToast({
+											title: '登录失败',
+											icon:'none'
+										});
 									}
 								}
 							})
@@ -223,7 +250,7 @@
 					title: "登录成功!",
 					icon: "success"
 				})
-				setTimeout(function(){
+				setTimeout(function() {
 					// if (that.urlData == 1) {
 					// 	that.$GrzxInter.navToHome();//返回首页
 					// } else if (that.urlData == 2) {
@@ -232,35 +259,108 @@
 					// 	console.log("返回上一页")
 					// }
 					uni.navigateBack(); //返回上一页
-				},500);
+				}, 500);
 			},
-
+			
+			//-------------------------------------密码登录-------------------------------------
+			pwdLogin:function(){
+				uni.showLoading({
+					title: '登录中...',
+					mask: true
+				});
+				var reg = (/^1(3|4|5|6|7|8|9)\d{9}$/);
+				if(this.phoneNumber =="11145879222"){
+					if(this.password =="123456"){
+						this.pwdRequest(this.phoneNumber,this.password);
+					}else{
+						uni.showToast({
+							title: '密码错误',
+							icon:'none'
+						});
+					}
+				}else if (this.phoneNumber == null || this.phoneNumber == "") {
+					uni.showToast({
+						title: "请输入手机号码",
+						icon: "none"
+					})
+				} else if (this.phoneNumber.length != 11 || !reg.test(this.phoneNumber)) {
+					uni.showToast({
+						title: "请输入正确的手机号码",
+						icon: "none"
+					})
+				} else {
+					if (this.password == null || this.password == "") {
+						uni.showToast({
+							title: "请输入密码",
+							icon: "none"
+						})
+					} else {
+						this.pwdRequest(this.phoneNumber, this.password);
+					}
+				}
+			},
+			
+			pwdRequest:function(phone,pwd){
+				uni.request({
+					url: this.$GrzxInter.Interface.loginByPassword.value,
+					method: this.$GrzxInter.Interface.loginByPassword.method,
+					data: {
+						password : pwd,
+						phoneNumber : phone,
+					},
+					success: res => {
+						console.log(res);
+						if(res.data.status){
+							uni.setStorageSync('userInfo', res.data.data);
+							if (phone != this.testPhone) {
+								uni.removeStorageSync('captchaCode');
+							}
+							this.successReturn(); //登陆成功后返回
+						}else{
+							uni.showToast({
+								title: res.data.msg,
+								icon:'none'
+							});
+						}
+					},
+					fail: () => {
+						uni.showToast({
+							title: '网络连接失败',
+							icon:'none'
+						});
+					},
+					complete: () => {
+						uni.hideLoading();
+					}
+				});
+			},
+			
 			//-------------------------------------微信授权登录----------------------------------
 			wxLogin: function() {
 				var that = this;
-				if(that.whetherClick){
-					that.whetherClick=false;
+				if (that.whetherClick) {
+					that.whetherClick = false;
 					uni.showLoading({
-						title:'授权登录中...',
-						mask:true,
+						title: '授权登录中...',
+						mask: true,
 					})
 					uni.getProvider({
-					    service: 'oauth',
-					    success: function(oauthRes) {
-					        console.log(oauthRes,"授权1");
-							if(~oauthRes.provider.indexOf('weixin')){
+						service: 'oauth',
+						success: function(oauthRes) {
+							console.log(oauthRes, "授权1");
+							if (~oauthRes.provider.indexOf('weixin')) {
 								uni.login({
 									provider: 'weixin',
 									success: function(loginRes) {
-										console.log(loginRes,"授权2");
+										console.log(loginRes, "授权2");
 										uni.getUserInfo({
 											provider: 'weixin',
 											success: function(res) {
-												that.requestInterface(res.userInfo,"wx");
+												that.requestInterface(res.userInfo, "wx");
 											},
 											fail: function(err1) {
 												uni.hideLoading();
-												console.log(err1,'获取用户信息失败');
+												console.log(err1, '获取用户信息失败');
 												uni.showModal({
 													title: '获取用户信息失败',
 													content: JSON.stringify(err1)
@@ -270,11 +370,11 @@
 									},
 									fail(err) {
 										uni.hideLoading();
-										console.log(err,"获取失败");
-										uni.showModal({  
-											title: '获取失败',  
-											content: JSON.stringify(err)  
-										}) 
+										console.log(err, "获取失败");
+										uni.showModal({
+											title: '获取失败',
+											content: JSON.stringify(err)
+										})
 									}
 								})
 							}
@@ -282,158 +382,158 @@
 					})
 				}
 			},
-			
+
 			//-------------------------------------QQ微信授权登录请求接口----------------------------------
-			requestInterface:function(userInfo,type){
-				var that=this;
-				if(type=="wx"){ //微信授权登录
+			requestInterface: function(userInfo, type) {
+				var that = this;
+				if (type == "wx") { //微信授权登录
 					uni.request({
-						url:that.$GrzxInter.Interface.GetUserInfoByOpenId.value,
-						data:{
-							openid:userInfo.openId,
-							systemname:that.$GrzxInter.systemConfig.appName,//应用名称
-							openidtype:that.$GrzxInter.systemConfig.openidtype,//应用类型
+						url: that.$GrzxInter.Interface.GetUserInfoByOpenId.value,
+						data: {
+							openid: userInfo.openId,
+							systemname: that.$GrzxInter.systemConfig.appName, //应用名称
+							openidtype: that.$GrzxInter.systemConfig.openidtype, //应用类型
 						},
-						method:that.$GrzxInter.Interface.GetUserInfoByOpenId.method,
+						method: that.$GrzxInter.Interface.GetUserInfoByOpenId.method,
 						success(res) {
 							uni.hideLoading();
-							console.log(res,"提示！！！！");
-							if(!res.data.status){
-								uni.setStorageSync('appUserInfo',userInfo);
+							console.log(res, "提示！！！！");
+							if (!res.data.status) {
+								uni.setStorageSync('appUserInfo', userInfo);
 								uni.navigateTo({
-									url: '/pages/GRZX/wxLogin?type=appWxLogin&&urlData='+that.urlData,
+									url: '/pages/GRZX/wxLogin?type=appWxLogin&&urlData=' + that.urlData,
 								})
-							}else if(res.data.status){
+							} else if (res.data.status) {
 								var data = res.data.data;
 								var user = new Object();
 								user = {
-									address : data.Address,
-									autograph : data.Autograph,
-									birthday : data.Birthday,
-									gender : data.Gender,
-									openId_app : data.OpenId_app,
-									openId_ios : data.OpenId_ios,
-									openId_qq : data.OpenId_qq,
-									openId_wx : data.OpenId_wx,
-									openId_xcx : data.OpenId_xcx,
-									phoneNumber : data.PhoneNumber,
-									portrait : data.Portrait,
-									userId : data.UserId,
-									nickname : data.Nickname,
+									address: data.Address,
+									autograph: data.Autograph,
+									birthday: data.Birthday,
+									gender: data.Gender,
+									openId_app: data.OpenId_app,
+									openId_ios: data.OpenId_ios,
+									openId_qq: data.OpenId_qq,
+									openId_wx: data.OpenId_wx,
+									openId_xcx: data.OpenId_xcx,
+									phoneNumber: data.PhoneNumber,
+									portrait: data.Portrait,
+									userId: data.UserId,
+									nickname: data.Nickname,
 								};
 								uni.setStorageSync('userInfo', user);
-								setTimeout(function(){
+								setTimeout(function() {
 									that.successReturn(); //登陆成功后返回
-								},500);
+								}, 500);
 							}
 						},
 						fail() {
-							uni.hideLoading();	
+							uni.hideLoading();
 						}
 					})
-				}else if(type=="qq"){  //QQ授权登录
+				} else if (type == "qq") { //QQ授权登录
 					uni.request({
-						url:that.$GrzxInter.Interface.GetUserInfoByOpenId.value,
-						data:{
-							openid:userInfo.openId,
-							systemname:that.$GrzxInter.systemConfig.appName,//应用名称
-							openidtype:that.$GrzxInter.systemConfig.openidtype,//应用类型
+						url: that.$GrzxInter.Interface.GetUserInfoByOpenId.value,
+						data: {
+							openid: userInfo.openId,
+							systemname: that.$GrzxInter.systemConfig.appName, //应用名称
+							openidtype: that.$GrzxInter.systemConfig.openidtype, //应用类型
 						},
-						method:that.$GrzxInter.Interface.GetUserInfoByOpenId.method,
+						method: that.$GrzxInter.Interface.GetUserInfoByOpenId.method,
 						success(res) {
 							uni.hideLoading();
-							if(!res.data.status){
-								uni.setStorageSync('appUserInfo',userInfo);
+							if (!res.data.status) {
+								uni.setStorageSync('appUserInfo', userInfo);
 								uni.navigateTo({
-									url: '/pages/GRZX/wxLogin?type=appQQLogin&&urlData='+that.urlData,
+									url: '/pages/GRZX/wxLogin?type=appQQLogin&&urlData=' + that.urlData,
 								})
-							}else if(res.data.status){
+							} else if (res.data.status) {
 								var data = res.data.data;
 								var user = new Object();
 								user = {
-									address : data.Address,
-									autograph : data.Autograph,
-									birthday : data.Birthday,
-									gender : data.Gender,
-									openId_app : data.OpenId_app,
-									openId_ios : data.OpenId_ios,
-									openId_qq : data.OpenId_qq,
-									openId_wx : data.OpenId_wx,
-									openId_xcx : data.OpenId_xcx,
-									phoneNumber : data.PhoneNumber,
-									portrait : data.Portrait,
-									userId : data.UserId,
-									nickname : data.Nickname,
+									address: data.Address,
+									autograph: data.Autograph,
+									birthday: data.Birthday,
+									gender: data.Gender,
+									openId_app: data.OpenId_app,
+									openId_ios: data.OpenId_ios,
+									openId_qq: data.OpenId_qq,
+									openId_wx: data.OpenId_wx,
+									openId_xcx: data.OpenId_xcx,
+									phoneNumber: data.PhoneNumber,
+									portrait: data.Portrait,
+									userId: data.UserId,
+									nickname: data.Nickname,
 								};
 								uni.setStorageSync('userInfo', user);
 								that.successReturn(); //登陆成功后返回
 							}
 						},
 						fail() {
-							uni.hideLoading();	
+							uni.hideLoading();
 						}
 					})
-				}else if(type=="apple"){  //苹果授权登录
+				} else if (type == "apple") { //苹果授权登录
 					uni.request({
-						url:that.$GrzxInter.Interface.GetUserInfoByOpenId.value,
-						data:{
-							openid:userInfo.openId,
-							systemname:that.$GrzxInter.systemConfig.appName,//应用名称
-							openidtype:that.$GrzxInter.systemConfig.openidtype,//应用类型
+						url: that.$GrzxInter.Interface.GetUserInfoByOpenId.value,
+						data: {
+							openid: userInfo.openId,
+							systemname: that.$GrzxInter.systemConfig.appName, //应用名称
+							openidtype: that.$GrzxInter.systemConfig.openidtype, //应用类型
 						},
-						method:that.$GrzxInter.Interface.GetUserInfoByOpenId.method,
+						method: that.$GrzxInter.Interface.GetUserInfoByOpenId.method,
 						success(res) {
 							uni.hideLoading();
-							if(!res.data.status){
-								uni.setStorageSync('appUserInfo',userInfo);
+							if (!res.data.status) {
+								uni.setStorageSync('appUserInfo', userInfo);
 								uni.navigateTo({
-									url: '/pages/GRZX/wxLogin?type=appleLogin&&urlData='+that.urlData,
+									url: '/pages/GRZX/wxLogin?type=appleLogin&&urlData=' + that.urlData,
 								})
-							}else if(res.data.status){
+							} else if (res.data.status) {
 								var data = res.data.data;
 								var user = new Object();
 								user = {
-									address : data.Address,
-									autograph : data.Autograph,
-									birthday : data.Birthday,
-									gender : data.Gender,
-									openId_app : data.OpenId_app,
-									openId_ios : data.OpenId_ios,
-									openId_qq : data.OpenId_qq,
-									openId_wx : data.OpenId_wx,
-									openId_xcx : data.OpenId_xcx,
-									phoneNumber : data.PhoneNumber,
-									portrait : data.Portrait,
-									userId : data.UserId,
-									nickname : data.Nickname,
+									address: data.Address,
+									autograph: data.Autograph,
+									birthday: data.Birthday,
+									gender: data.Gender,
+									openId_app: data.OpenId_app,
+									openId_ios: data.OpenId_ios,
+									openId_qq: data.OpenId_qq,
+									openId_wx: data.OpenId_wx,
+									openId_xcx: data.OpenId_xcx,
+									phoneNumber: data.PhoneNumber,
+									portrait: data.Portrait,
+									userId: data.UserId,
+									nickname: data.Nickname,
 								};
 								uni.setStorageSync('userInfo', user);
 								that.successReturn(); //登陆成功后返回
 							}
 						},
 						fail() {
-							uni.hideLoading();	
+							uni.hideLoading();
 						}
 					})
 				}
 			},
-			
+
 			//-------------------------------------苹果授权登录----------------------------------
-			appleLogin:function(){
+			appleLogin: function() {
 				var that = this;
 				uni.showLoading({
-					title:'授权登录中...',
-					mask:true,
+					title: '授权登录中...',
+					mask: true,
 				})
 				uni.login({
 					provider: 'apple',
 					success: function(loginRes) {
-						console.log("苹果信息",loginRes);
+						console.log("苹果信息", loginRes);
 						uni.getUserInfo({
 							provider: 'apple',
 							success: function(res) {
-								console.log("苹果用户信息",res);
-								that.requestInterface(res.userInfo,"apple");
+								console.log("苹果用户信息", res);
+								that.requestInterface(res.userInfo, "apple");
 							},
 							fail: function() {
 								uni.showToast({
@@ -444,7 +544,7 @@
 						})
 					},
 					fail(err) {
-						console.log("获取失败",err);
+						console.log("获取失败", err);
 						uni.showToast({
 							title: '获取失败',
 							icon: "none"
@@ -452,15 +552,15 @@
 					}
 				})
 			},
-			
+
 			//-------------------------------------QQ授权登录----------------------------------
 			qqLogin: function() {
 				var that = this;
-				if(that.whetherClick){
-					that.whetherClick=false;
+				if (that.whetherClick) {
+					that.whetherClick = false;
 					uni.showLoading({
-						title:'授权登录中...',
-						mask:true,
+						title: '授权登录中...',
+						mask: true,
 					})
 					uni.login({
 						provider: 'qq',
@@ -468,8 +568,8 @@
 							uni.getUserInfo({
 								provider: 'qq',
 								success: function(res) {
-									console.log(res,"qq用户信息");
-									that.requestInterface(res.userInfo,"qq");
+									console.log(res, "qq用户信息");
+									that.requestInterface(res.userInfo, "qq");
 								},
 								fail: function() {
 									uni.hideLoading();
@@ -512,15 +612,20 @@
 					})
 				}
 			},
+
 			
-			changePhone(){
-				if(this.phoneNumber == this.testPhone){
-					uni.setStorageSync('captchaCode',
-						{
-							code: this.testCode,
-							phone: this.testPhone,
-						})
+			changePhone: function() {
+				if (this.phoneNumber == this.testPhone) {
+					uni.setStorageSync('captchaCode', {
+						code: this.testCode,
+						phone: this.testPhone,
+					})
 				}
+			},
+			
+			//-------------------------------------切换按钮-------------------------------------
+			switchClick: function(m){
+				this.codeOrPwd = m;
 			},
 
 			//-------------------------------------获取验证码的请求----------------------------
@@ -555,7 +660,7 @@
 								icon: "none"
 							})
 						} else { //成功发送验证码
-							if(that.phoneNumber != that.testPhone){
+							if (that.phoneNumber != that.testPhone) {
 								uni.setStorage({
 									key: 'captchaCode',
 									data: {
@@ -581,9 +686,9 @@
 			//-------------------------------------返回按钮------------------------------------
 			returnClick: function() {
 				var that = this;
-				if(that.urlData == 1){
-					that.$GrzxInter.navToHome();//返回首页
-				}else{
+				if (that.urlData == 1) {
+					that.$GrzxInter.navToHome(); //返回首页
+				} else {
 					uni.navigateBack(); //返回上一页
 				}
 			},
@@ -764,6 +869,7 @@
 		width: 47upx;
 		height: 50upx;
 	}
+
 	.appleClass {
 		//QQ
 		position: absolute;
@@ -813,6 +919,14 @@
 		line-height: 64upx;
 		height: 64upx;
 	}
+	
+	.switchClass{
+		position: absolute;
+		top: 440upx;
+		left: 70%;
+		color: #959595;
+		font-size: 34upx;
+	}
 
 	.style1 {
 		//获取验证码
@@ -823,7 +937,7 @@
 	.fontStyle {
 		//确定字体样式
 		position: absolute;
-		top: 480upx;
+		top: 520upx;
 		left: 5%;
 		text-align: center;
 		font-size: 36upx;

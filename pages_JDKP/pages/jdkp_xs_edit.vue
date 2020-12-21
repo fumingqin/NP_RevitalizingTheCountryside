@@ -55,7 +55,7 @@
 		<!-- 考评指标 -->
 		<view style="z-index: 999;">
 			<view style="font-size: 17px;font-weight: bold;margin-top:40upx; margin-left : 32upx;">考评指标</view>
-			<view v-if="tesknumber!=-1" style="margin-top: 20upx; margin-left : 32upx;" @click="open">所选指标:{{teskList[tesknumber].group.title}}<text
+			<view v-if="tesknumber!=-1" style=" margin : 0 32upx; margin-top: 20upx;" @click="open">所选指标:{{teskList[tesknumber].group.title}}<text
 				 style="color: #007AFF;">(点击查看)</text></view>
 			<view style="margin-top: 20upx;" v-if="teskList.length != 0">
 				<view v-for="(item,index) in teskList" :key="index">
@@ -141,7 +141,7 @@
 
 				<view class="operButton">
 					<text class="buttonView3" @click="ruralChoice">选择该县</text>
-					<text class="buttonView3"style="background: #18B566;" @click="VillageShow = false">关闭弹框</text>
+					<text class="buttonView3" style="background: #18B566;" @click="VillageShow = false">关闭弹框</text>
 				</view>
 			</view>
 		</u-popup>
@@ -817,7 +817,7 @@
 		}
 		.buttonView3 {
 			width: 50%;
-			background: #00ffff;
+			background: #FF6600;
 			color: #FFFFFF;
 			font-size: 32upx;
 			line-height: 3;

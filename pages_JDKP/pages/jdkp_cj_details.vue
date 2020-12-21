@@ -94,7 +94,7 @@
 								<view class="teskGrade">评分:暂无评分</view>
 							</view>
 							<view>
-								<image :src="imageDate(item.image)" class="teskimage"></image>
+								<image :src="imageDate(item.image)" class="teskimage" @click="goImgList(imageDate(item.image))"></image>
 								<!-- <image v-if="item.image == '[]'" src="../static/tupian.png" mode="aspectFill"></image> -->
 							</view>
 						</view>
@@ -567,7 +567,15 @@
 					return a[0];
 				}
 
-			}
+			},
+			
+			//保存图片至本地并打开新页面
+			goImgList(e) {
+				uni.setStorageSync('imagePiclist', e);
+				uni.navigateTo({
+					url: 'imgPreview4',
+				})
+			},
 
 		}
 
