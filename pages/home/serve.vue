@@ -76,7 +76,8 @@
 					ImageURL2: "../../static/home/serve/xmjd2.png", //暗
 					ItemTitle: "项目监督",
 					style: "sv_print",
-				},{
+				},
+				{
 					IsUse: true,
 					// clickURL: "../../pages_WSSC/pages/WSSC/goodsList",
 					clickURL: "../../pages_WSSC/pages/WSSC/onlineShoppingMall/osm_homePage",
@@ -84,7 +85,8 @@
 					ImageURL2: "../../static/home/serve/sc2.png", //暗
 					ItemTitle: "网上商城",
 					style: "sv_print",
-				},{
+				},
+				{
 					IsUse: true,
 					clickURL: "../../pages_SMJJ/pages/shuimeiEconomy/se_generalList",
 					ImageURL1: "../../static/home/serve/smjj.png", //亮
@@ -121,14 +123,16 @@
 					ImageURL2: "../../static/home/serve/kprw2.png", //暗
 					ItemTitle: "考评任务",
 					style: "sv_print",
-				},{
-					IsUse: true,
-					clickURL: "../GRZX/notice",
-					ImageURL1: "../../static/home/serve/xttz.png", //亮
-					ImageURL2: "../../static/home/serve/xttz2.png", //暗
-					ItemTitle: "系统通知",
-					style: "sv_print",
-				}],
+				},
+				// {
+				// 	IsUse: true,
+				// 	clickURL: "../GRZX/notice",
+				// 	ImageURL1: "../../static/home/serve/xttz.png", //亮
+				// 	ImageURL2: "../../static/home/serve/xttz2.png", //暗
+				// 	ItemTitle: "系统通知",
+				// 	style: "sv_print",
+				// }
+				],
 
 				//村级管理区
 				ItemArr2: [{
@@ -230,6 +234,13 @@
 					ImageURL1: "../../static/home/serve/kpcx.png", //亮
 					ImageURL2: "../../static/home/serve/kpcx2.png", //暗
 					ItemTitle: "考评查询",
+					style: "sv_print",
+				},{
+					IsUse: true,
+					clickURL: "../../pages_JDKP/pages/jdkp_appraisalList",
+					ImageURL1: "../../static/home/vajra/jidukaohe.png", //亮
+					ImageURL2: "../../static/home/vajra/jidukaohe2.png", //暗
+					ItemTitle: "乡村评榜",
 					style: "sv_print",
 				}
 				// ,{

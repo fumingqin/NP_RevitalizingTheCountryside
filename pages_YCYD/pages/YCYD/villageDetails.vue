@@ -14,11 +14,9 @@
 					<text class="time">{{gettime(groupTitle.create_time)}}</text>
 				</view>
 				<view class="grClass">
-					<image v-if="groupTitle.avatar!==''" class="txImage" :src="groupTitle.head_avatar" mode="aspectFill"></image>
-					<image v-if="groupTitle.avatar==''" class="txImage" src="../../static/missing-face.png" mode="aspectFill"></image>
+					<image  class="txImage" src="../../static/face.jpg" mode="aspectFill"></image>
 					<view class="grView">
-						<view class="name">{{groupTitle.head_name}}</view>
-						<view class="number">{{groupTitle.head_age}}岁&nbsp;&nbsp;任职工龄:{{groupTitle.head_year}}</view>
+						<view class="name">村支书：{{groupTitle.secretary_name}}</view>
 					</view>
 				</view>
 			</view>
@@ -29,37 +27,123 @@
 				<view class="screen">
 					<view class="screenView">
 						<view class="screenText" :class="{current:type===0}" @click="tabClick(0)"> 
-							职责人员
-						</view>
-						<view class="screenText" :class="{current:type===1}" @click="tabClick(1)">
-							包含街道
+							基础信息：
 						</view>
 					</view>
 				</view>
 					<u-read-more v-if="type==0" :toggle="toggle" :show-height="showHeight">
-						<view>总计：{{crewinfo.length}}人</view>
-						<view style="height: 400upx;">
-						<view  v-if="crewinfo.length!=0" class="ditailsView">
-							<view class="detailsname">姓名</view>
-							<view class="detailsage">年龄</view>
-							<view class="detailstele">联系电话</view>
-							<view class="detailsduty">职责</view>
-						</view>
-						<view class="infor_view" v-for="(item,index) in crewinfo" :key="index">
 							<view class="ditailsView">
-								<view class="detailsname">{{item.name}}</view>
-								<view class="detailsage">{{item.age}}</view>
-								<view class="detailstele">{{item.phone}}</view>
-								<view class="detailsduty">{{item.duty}}</view>
+								<view class="detailsname">是否位于政府驻地</view>
+								<view v-if="groupTitle.is_government_region==false" class="detailsage">否</view>
+								<view v-if="groupTitle.is_government_region==true" class="detailsage">是</view>
 							</view>
-						</view>
-						<view v-if="crewinfo.length==0" style="padding-top:150upx;">
-							<u-empty :isShow="crewinfo.length==0" text="暂无数据" textColor="#999999"></u-empty>
-						</view>
+							<view class="ditailsView">
+								<view class="detailsname">村集体自主经营性收入</view>
+								<view class="detailsage">{{groupTitle.collective_income}}元</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">农村居民人均收入可支配收入</view>
+								<view class="detailsage">{{groupTitle.average_income}}元</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">户籍户数</view>
+								<view class="detailsage">{{groupTitle.households_count}}户</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">户籍人口数</view>
+								<view class="detailsage">{{groupTitle.inhabitant_count}}人</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">常住人口数</view>
+								<view class="detailsage">{{groupTitle.always_live_count}}人</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">16-60岁常住人口</view>
+								<view class="detailsage">{{groupTitle.small_sixty_count}}人</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">60岁以上常住人口</view>
+								<view class="detailsage">{{groupTitle.large_sixty_count}}人</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">地形地貌</view>
+								<view class="detailsage">{{groupTitle.terrain_landforms}}</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">村域面积</view>
+								<view class="detailsage">{{groupTitle.space}}KM2</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">耕地面积</view>
+								<view class="detailsage">{{groupTitle.land_space}}亩</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">林地面积</view>
+								<view class="detailsage">{{groupTitle.forest_space}}亩</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">山垅田面积</view>
+								<view class="detailsage">{{groupTitle.mountain_space}}亩</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">村庄建筑用地面积</view>
+								<view class="detailsage">{{groupTitle.available_space}}亩</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">自然村数量</view>
+								<view class="detailsage">{{groupTitle.natural_count}}个</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">农村住房总户数</view>
+								<view class="detailsage">{{groupTitle.housing_count}}户</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">常年无人居住住房户数</view>
+								<view class="detailsage">{{groupTitle.no_housing_count}}户</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">省级以上农民专业合作示范社数量</view>
+								<view class="detailsage">{{groupTitle.cooperation_count}}个</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">省级以上家庭农场数量</view>
+								<view class="detailsage">{{groupTitle.farm_count}}个</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">集中供水率</view>
+								<view class="detailsage">{{groupTitle.water_rate}}%</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">垃圾收集处理率</view>
+								<view class="detailsage">{{groupTitle.garbage_rate}}%</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">污水处理率</view>
+								<view class="detailsage">{{groupTitle.bad_water_rate}}%</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">通自然村道路硬化数</view>
+								<view class="detailsage">{{groupTitle.road_harden_count}}</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">通光纤宽带自然村数</view>
+								<view class="detailsage">{{groupTitle.bandwidth_count}}</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">年垃圾处理费</view>
+								<view class="detailsage">{{groupTitle.handle_garbage}}元</view>
+							</view>
+							<view class="ditailsView">
+								<view class="detailsname">公共垃圾收集桶</view>
+								<view class="detailsage">{{groupTitle.garbage_barrel}}个</view>
+							</view>
+							
+						<view v-if="groupTitle.length==0" style="padding-top:150upx;">
+							<u-empty :isShow="groupTitle.length==0" text="暂无数据" textColor="#999999"></u-empty>
 						</view>
 					</u-read-more>
 					
-					<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
+				<!-- 	<u-read-more v-if="type==1" :toggle="toggle" :show-height="showHeight">
 						<view>总人口:{{groupTitle.total_people}}人</view>	
 						<view style="height: 400upx;">
 						<view v-if="streetinfo.length!=0" class="ditailsView">
@@ -78,7 +162,7 @@
 							<u-empty :isShow="streetinfo.length==0" text="暂无数据" textColor="#999999"></u-empty>
 						</view>
 						</view>
-					</u-read-more>
+					</u-read-more> -->
 			</view>
 		</view>
 	</view>
@@ -130,10 +214,9 @@
 					success: (res) => {
 						console.log('详情', res)
 						if(res.data.status == true){
-							this.imageinfo.push(res.data.data.image);
+							var a = JSON.parse(res.data.data.image_address);
+							this.imageinfo.push(a);
 							this.groupTitle=res.data.data;
-							this.crewinfo=res.data.data.duty;
-							this.streetinfo=res.data.data.info;
 							uni.stopPullDownRefresh();
 							uni.hideLoading();
 						}else{
@@ -167,7 +250,7 @@
 				if(param==''||param==undefined){
 					return '暂无';
 				}else{
-					let array=param.split(' ');
+					let array=param.split('T');
 					let array2=array[1].split(':');
 					var a=array[0]+' '+array2[0]+':'+array2[1];
 					return a;
@@ -244,8 +327,8 @@
 		// padding-right: 40upx;
 		.txImage {
 			border-radius: 50%;
-			width: 88upx;
-			height: 88upx;
+			width: 66upx;
+			height: 66upx;
 		}
 	
 		.grView {
@@ -254,6 +337,7 @@
 				display: flex;
 				font-size: 32upx;
 				color: #333333;
+				margin-top: 16upx;
 	
 				.ladelView {
 					border-radius: 5px;
@@ -308,65 +392,51 @@
 			.screenText {
 				flex: 1;
 				display: flex;
-				justify-content: center;
-				align-items: center;
+				// justify-content: center;
+				// align-items: center;
+				padding:30upx 60upx;
 				height: 100%;
-				font-size: 30upx;
-				color: #888;
+				font-size: 36upx;
+				font-weight: 500;
+				color: #000000;
 				position: relative;
-				margin-left: 10upx;
+				margin-bottom: 10upx;
 
 
 
-				&.current {
-					color: #70c778;
-					// background-color: #FFFFFF;
+				// &.current {
+				// 	color: #70c778;
+				// 	// background-color: #FFFFFF;
 
-					&:after {
-						content: '';
-						position: absolute;
-						left: 50%;
-						bottom: 0;
-						transform: translateX(-50%);
-						width: 104upx;
-						height: 0;
-						border-bottom: 4upx solid #70c778;
-					}
-				}
+				// 	&:after {
+				// 		content: '';
+				// 		position: absolute;
+				// 		left: 50%;
+				// 		bottom: 0;
+				// 		transform: translateX(-50%);
+				// 		width: 104upx;
+				// 		height: 0;
+				// 		border-bottom: 4upx solid #70c778;
+				// 	}
+				// }
 			}
 		}
-	}
-	.uploader_video{
-	    position: relative;
-	    z-index: 1;
-	    width: 200upx;
-	    height: 200upx;
-		margin-top: 30upx;
-		margin-bottom: 30upx;
-	}
-	.at_button {
-		text-indent : 0em;
-		padding: 16upx 68upx;
-		// font-size: 24upx;
-		border-radius: 6upx;
-		border: 1upx solid #888;
-		color: #888;
-		margin-right: 24upx;
 	}
 	.ditailsView {
 		position: relative;
 		display: flex;
 		.detailsname{
+			width: 450upx;
 			padding: 8upx 0upx;
-			margin-right: 16upx;
-			// text-align: center;
-			font-size: 30upx;
+			font-size: 26upx;
+			color: #000000;
 		}
 		.detailsage {
 			position: absolute;
 			left: 0;
-			margin-left: 150upx;
-			font-size: 30upx;
+			margin-left: 550upx;
+			font-size: 26upx;
+			color: #000000;
 		}
 		.detailstele {
 			position: absolute;

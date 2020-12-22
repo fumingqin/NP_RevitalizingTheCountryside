@@ -159,10 +159,10 @@
 						display: true,
 						entrance: '../../pages_ZCFB/pages/ZCFB/policyList',
 					}, {
-						name: '乡村评榜',
-						image: '../../static/home/vajra/jidukaohe.png',
+						name: '系统通知',
+						image: '../../static/home/serve/xttz.png',
 						display: true,
-						entrance: '../../pages_JDKP/pages/jdkp_appraisalList',
+						entrance: '../GRZX/notice',
 					}, {
 						name: '民情反馈',
 						image: '../../static/home/vajra/minqingfankui.png',
