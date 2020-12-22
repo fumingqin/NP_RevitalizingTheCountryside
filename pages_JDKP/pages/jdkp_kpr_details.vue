@@ -365,7 +365,7 @@
 			//输入框参数值
 			inputData: function(e) {
 				// console.log('输入框参数',e)
-				this.goodsType = e
+				this.goodsType = e;
 				if (this.goodsType <= this.scoreIndex && this.goodsType >= 0) {
 					this.dataList[this.inpuIndex].score = this.goodsType
 				} else {
@@ -410,6 +410,7 @@
 					title: '提交中...'
 				})
 				let res = this.dataList.every(item => item.score)
+				console.log(res)
 				if (res) {
 					console.log('提交成功')
 					uni.request({
