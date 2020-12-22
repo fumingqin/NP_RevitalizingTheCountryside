@@ -78,6 +78,12 @@
 					success: (res) => {
 						// console.log('乡县市所有列表数据',res)
 						this.rangData = res.data.data;
+						let rangdata ={
+							id :'0',
+							county_name : '全部'
+						};
+						this.rangData.unshift(rangdata)
+						console.log(this.rangData)
 						this.rangeList = [];
 						for (let i = 0; i < res.data.data.length; i++) {
 							var a = res.data.data[i].county_name
@@ -99,64 +105,39 @@
 				uni.showLoading({
 					title:'加载排名中...'
 				})
-				if(this.range=="全部"){
-					uni.request({
-						url: this.$jdkp.KyInterface.getEvaluationByCountyId.Url,
-						method: this.$jdkp.KyInterface.getEvaluationByCountyId.method,
-						data:{
-							countyId:0
-						},
-						success: (res) => {
-							uni.stopPullDownRefresh();
-							this.rankingList = [];
-							for(var i=0; i<res.data.data.length;i++){
-								var a = {
-									index : 1 + i,
-									rural_name : res.data.data[i].rural_name,
-									score : res.data.data[i].score
-								}
-								console.log(a)
-								this.rankingList.push(a)
-							}
-							uni.hideLoading()
-							console.log(res)
-						},
-						fail: (err) => {
-							uni.stopPullDownRefresh();
-							uni.hideLoading()
-							console.log(err)
-						}
-					})
+				var a;
+				if(this.range == '全部'){
+					a = 0;
 				}else{
-					console.log(this.rangData[this.rangIndex].id)
-					uni.request({
-						url: this.$jdkp.KyInterface.getEvaluationByCountyId.Url,
-						method: this.$jdkp.KyInterface.getEvaluationByCountyId.method,
-						data:{
-							countyId:this.rangData[this.rangIndex].id
-						},
-						success: (res) => {
-							uni.stopPullDownRefresh();
-							this.rankingList = [];
-							for(var i=0; i<res.data.data.length;i++){
-								var a = {
-									index : 1 + i,
-									rural_name : res.data.data[i].rural_name,
-									score : res.data.data[i].score
-								}
-								console.log(a)
-								this.rankingList.push(a)
-							}
-							uni.hideLoading()
-							console.log(res)
-						},
-						fail: (err) => {
-							uni.stopPullDownRefresh();
-							uni.hideLoading()
-							console.log(err)
-						}
-					})
+					a = this.rangData[this.rangIndex].id;
 				}
+				uni.request({
+					url: this.$jdkp.KyInterface.getEvaluationByCountyId.Url,
+					method: this.$jdkp.KyInterface.getEvaluationByCountyId.method,
+					data:{
+						countyId:a
+					},
+					success: (res) => {
+						uni.stopPullDownRefresh();
+						this.rankingList = [];
+						for(var i=0; i<res.data.data.length;i++){
+							var a = {
+								index : 1 + i,
+								rural_name : res.data.data[i].rural_name,
+								score : res.data.data[i].score
+							}
+							console.log(a)
+							this.rankingList.push(a)
+						}
+						uni.hideLoading()
+						console.log(res)
+					},
+					fail: (err) => {
+						uni.stopPullDownRefresh();
+						uni.hideLoading()
+						console.log(err)
+					}
+				})
 			}
 		}
 	}
