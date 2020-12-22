@@ -240,7 +240,7 @@
 					clickURL: "../../pages_JDKP/pages/jdkp_appraisalList",
 					ImageURL1: "../../static/home/vajra/jidukaohe.png", //亮
 					ImageURL2: "../../static/home/vajra/jidukaohe2.png", //暗
-					ItemTitle: "考评考榜",
+					ItemTitle: "乡村评榜",
 					style: "sv_print",
 				}
 				// ,{
