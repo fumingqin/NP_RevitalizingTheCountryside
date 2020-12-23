@@ -103,9 +103,12 @@
 							that.port1 = "";
 							that.portrait= "";
 						} else {
-							that.port="http://120.24.144.6:888/prod-api" + data.portrait;
+							that.port = data.portrait;
 							that.port1 = data.portrait;
-							that.portrait = "http://120.24.144.6:888/prod-api" + data.portrait;
+							that.portrait =  data.portrait;
+							// that.port="http://120.24.144.6:888/prod-api" + data.portrait;
+							// that.port1 = data.portrait;
+							// that.portrait = "http://120.24.144.6:888/prod-api" + data.portrait;
 						}
 						// ------------2.昵称-------------
 						that.userName =data.userName;
@@ -201,7 +204,8 @@
 						icon:'none'
 					})
 				}else{
-					if(this.port.indexOf("http://120.24.144.6:888") != -1 || this.port == ""){
+					//if(this.port.indexOf("http://120.24.144.6:888") != -1 || this.port == ""){
+					if(this.port.indexOf("http://8.135.49.179:888") != -1 || this.port == ""){
 						this.changeInfo(this.port1);
 					}else{
 						console.log(this.port,"111");
