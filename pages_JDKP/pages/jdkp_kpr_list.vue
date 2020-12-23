@@ -68,10 +68,10 @@
 			}
 		},
 		onLoad: function() {
-
+			this.userData();
 		},
 		onShow: function() {
-			this.userData();
+			
 		},
 		onPullDownRefresh: function() {
 			this.loadData();
@@ -112,8 +112,6 @@
 			
 			//加载接口数据
 			loadData: function() {
-				uni.startPullDownRefresh()
-				console.log(this.userInfo.phoneNumber)
 				uni.request({
 					url: this.$jdkp.KyInterface.getListByPhone.Url,
 					method: this.$jdkp.KyInterface.getListByPhone.method,
