@@ -254,7 +254,7 @@
 						console.log(res)
 						this.stepsData = res.data.data;
 						uni.getStorage({
-							key: 'dataList',
+							key: 'dataList' +this.id,
 							success: (ress) => {
 								console.log(ress)
 								if (this.id == ress.data.id) {
@@ -365,7 +365,7 @@
 			//输入框参数值
 			inputData: function(e) {
 				// console.log('输入框参数',e)
-				this.goodsType = e
+				this.goodsType = e;
 				if (this.goodsType <= this.scoreIndex && this.goodsType >= 0) {
 					this.dataList[this.inpuIndex].score = this.goodsType
 				} else {
@@ -410,6 +410,7 @@
 					title: '提交中...'
 				})
 				let res = this.dataList.every(item => item.score)
+				console.log(res)
 				if (res) {
 					console.log('提交成功')
 					uni.request({
@@ -432,7 +433,7 @@
 									}
 								})
 								uni.removeStorage({
-									key: 'dataList'
+									key: 'dataList' +this.id
 								})
 							} else {
 								uni.hideLoading()
@@ -496,7 +497,7 @@
 			keepData: function() {
 				if (this.stepsData.state == '已发布') {
 					uni.getStorage({
-						key: 'dataList',
+						key: 'dataList' +this.id,
 						success: (ress) => {
 							console.log(ress)
 							if (this.id == ress.data.id) {
@@ -506,28 +507,8 @@
 									data: this.dataList
 								};
 								uni.setStorage({
-									key: 'dataList',
+									key: 'dataList' +this.id,
 									data: a
-								})
-							} else {
-								uni.showModal({
-									title:'自动保存提示',
-									content:'您的上一个任务信息还未提交，保存中的考评数据(' +ress.data.title +')与现查看的考评数据(' +this.stepsData.title  +')不相符，是否覆盖原有保存的数s据？',
-									success: (res) => {
-										console.log(res)
-										if (res.confirm == true) {
-											let a = {
-												id: this.id,
-												title: this.stepsData.title,
-												data: this.dataList
-											};
-											uni.setStorage({
-												key: 'dataList',
-												data: a
-											})
-										}
-
-									}
 								})
 							}
 						},
@@ -538,7 +519,7 @@
 								data: this.dataList
 							};
 							uni.setStorage({
-								key: 'dataList',
+								key: 'dataList' +this.id,
 								data: a
 							})
 						}

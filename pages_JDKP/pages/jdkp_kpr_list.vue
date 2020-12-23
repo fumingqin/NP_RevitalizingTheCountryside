@@ -112,6 +112,7 @@
 			
 			//加载接口数据
 			loadData: function() {
+				uni.startPullDownRefresh()
 				console.log(this.userInfo.phoneNumber)
 				uni.request({
 					url: this.$jdkp.KyInterface.getListByPhone.Url,

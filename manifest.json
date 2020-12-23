@@ -2,8 +2,8 @@
     "name" : "振兴乡村",
     "appid" : "__UNI__F79F3E2",
     "description" : "振兴乡村平台是一款针对乡村治理、乡村发展、乡村民情、乡村旅游、交通运输的智慧化平台系统；针对乡村的治理难、发展难、服务难为主的“三难”，提供了现成有效的解决方式",
-    "versionName" : "1.0.4",
-    "versionCode" : 140,
+    "versionName" : "1.0.8",
+    "versionCode" : 180,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -57,7 +57,33 @@
                 "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ]
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "privacyDescription" : {
+                    "NSPhotoLibraryUsageDescription" : "APP需要您的同意，才能访问相册使用相册中的图片",
+                    "NSPhotoLibraryAddUsageDescription" : "APP需要您的同意，才能访问相册将图片保存到相册中",
+                    "NSCameraUsageDescription" : "APP需要您的同意，才能使用摄像头",
+                    "NSMicrophoneUsageDescription" : "APP需要您的同意，才能使用麦克风",
+                    "NSLocationWhenInUseUsageDescription" : "APP需要您的同意，才能在试用期间访问位置",
+                    "NSLocationAlwaysAndWhenInUseUsageDescription" : "APP需要您的同意，才能访问位置",
+                    "NSLocationAlwaysUsageDescription" : "APP需要您的同意，才能在后台运行访问位置",
+                    "NSCalendarsUsageDescription" : "APP需要您的同意，才能访问日历",
+                    "NSBluetoothPeripheralUsageDescription" : "APP需要您的同意，才能访问蓝牙",
+                    "NSBluetoothAlwaysUsageDescription" : "APP需要您的同意，才能访问蓝牙",
+                    "NSAppleMusicUsageDescription" : "APP需要您的同意，才能访问媒体资料库",
+                    "NFCReaderUsageDescription" : "APP需要您的同意，才能使用NFC",
+                    "NSHealthShareUsageDescription" : "APP需要您的同意，才能使用健康分享",
+                    "NSHealthUpdateUsageDescription" : "APP需要您的同意，才能使用健康更新",
+                    "NSMotionUsageDescription" : "APP需要您的同意，才能使用运动与健康",
+                    "NSRemindersUsageDescription" : "APP需要您的同意，才能访问提醒事项",
+                    "NSSpeechRecognitionUsageDescription" : "APP需要您的同意，才能使用系统语音识别",
+                    "NSContactsUsageDescription" : "APP需要您的同意，才能使用通讯录",
+                    "NSHealthClinicalHealthRecordsShareUsageDescription" : "APP需要您的同意，才能访问临床记录",
+                    "NSHomeKitUsageDescription" : "APP需要您的同意，才能访问HomeKit数据",
+                    "NSSiriUsageDescription" : "APP需要您的同意，才能访问Siri",
+                    "NSFaceIDUsageDescription" : "APP需要您的同意，才能使用Face ID",
+                    "NSLocalNetworkUsageDescription" : "APP需要您的同意，才能访问本地网络"
+                }
+            },
             /* SDK配置 */
             "sdkConfigs" : {
                 "oauth" : {
