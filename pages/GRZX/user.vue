@@ -168,11 +168,12 @@
 										} else {
 											that.nickname = data.userName;
 										}
-										if (data.portrait == "" || data.portrait == null) {
-											that.port = "";
-										} else {
-											that.port = "http://120.24.144.6:888/prod-api" + data.portrait;
-										}
+										that.port = data.portrait;
+										// if (data.portrait == "" || data.portrait == null) {
+										// 	that.port = "";
+										// } else {
+										// 	that.port = "http://120.24.144.6:888/prod-api" + data.portrait;
+										// }
 										that.userId = data.userId;
 										that.duty = data.duty;
 									}
