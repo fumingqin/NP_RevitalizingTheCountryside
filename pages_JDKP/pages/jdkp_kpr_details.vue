@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view style="padding: 32upx 0;">
-			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.state == '已发布' || stepsData.state == '已完成'"></uni-steps>
+			<uni-steps :options="stepsList" :active="StepsIndex" :hidden="stepsData.state == '已取消'"></uni-steps>
 			<uni-steps :options="stepsList2" :active="StepsIndex" v-if="stepsData.state == '已取消'" activeColor="#FA3534"></uni-steps>
 		</view>
 
@@ -11,7 +11,7 @@
 			<view class="deta_title">考评信息</view>
 			<view class="deta_text"><text>考评标题：</text>{{stepsData.title}}</view>
 			<view class="deta_text"><text>考评乡村：</text>{{stepsData.rural_name}}</view>
-			<view class="deta_text"><text>考评时间：</text>{{informationDate(stepsData.reviewTime)}}</view>
+			<view class="deta_text"><text>考评截至：</text>{{informationDate(stepsData.reviewTime)}}</view>
 		</view>
 
 
@@ -254,11 +254,18 @@
 					success: (res) => {
 						console.log(res)
 						this.stepsData = res.data.data;
+						if (this.stepsData.state == '已发布') {
+							this.StepsIndex = 1
+						} else if (this.stepsData.state == '已完成' || this.stepsData.state == '已取消') {
+							this.StepsIndex = 2
+						}
 						uni.getStorage({
 							key: 'dataList' +this.id,
 							success: (ress) => {
 								// console.log(ress)
 								this.dataList = ress.data.data;
+								uni.hideLoading()
+								uni.stopPullDownRefresh()
 								// console.log(this.dataList)
 							},
 							fail: (err) => {
@@ -271,18 +278,14 @@
 									}
 									this.dataList.push(a)
 								}
+								uni.hideLoading()
+								uni.stopPullDownRefresh()
 								// console.log(this.dataList)
 							}
 						})
 
-						// console.log('插入数组', this.dataList)
-						if (res.data.data.state == '已发布') {
-							this.StepsIndex = 1
-						} else if (res.data.data.state == '已完成' || res.data.data.state == '已取消') {
-							this.StepsIndex = 2
-						}
-						uni.hideLoading()
-						uni.stopPullDownRefresh()
+						
+						
 					},
 					fail: (err) => {
 						uni.hideLoading()
@@ -465,7 +468,6 @@
 				} else {
 					return '';
 				}
-
 			},
 			imageDate: function(e) {
 				if (e == "") {
@@ -488,6 +490,7 @@
 
 			//保存数据
 			keepData: function() {
+				// console.log('触发保存')
 				if (this.stepsData.state == '已发布') {
 					uni.getStorage({
 						key: 'dataList' +this.id,
@@ -689,7 +692,7 @@
 	.boxVlew {
 		width: 100%;
 		padding: 16upx 40upx;
-		padding-bottom: 92upx;
+		// padding-bottom: 92upx;
 		background: #FFFFFF;
 
 		.titleView {

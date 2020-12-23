@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view style="padding: 32upx 0;">
-			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.state == '已发布' || stepsData.state == '已完成'"></uni-steps>
+			<uni-steps :options="stepsList" :active="StepsIndex" :hidden="stepsData.state == '已取消'"></uni-steps>
 			<uni-steps :options="stepsList2" :active="StepsIndex" v-if="stepsData.state == '已取消'" activeColor="#FA3534"></uni-steps>
 		</view>
 		<!-- 申请信息 -->
@@ -24,7 +24,7 @@
 			<view class="deta_title">考评信息</view>
 			<view class="deta_text"><text>考评标题：</text>{{stepsData.title}}</view>
 			<view class="deta_text"><text>考评乡村：</text>{{stepsData.rural_name}}</view>
-			<view class="deta_text"><text>考评时间：</text>{{informationDate(stepsData.reviewTime)}}</view>
+			<view class="deta_text"><text>考评截至：</text>{{informationDate(stepsData.reviewTime)}}</view>
 
 
 
@@ -756,7 +756,7 @@
 	.boxVlew {
 		width: 100%;
 		padding: 16upx 40upx;
-		padding-bottom: 92upx;
+		// padding-bottom: 92upx;
 		background: #FFFFFF;
 
 		.titleView {
