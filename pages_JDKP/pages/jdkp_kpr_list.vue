@@ -4,10 +4,11 @@
 		<u-tabs :list="headList" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
 
 		<!-- 资讯列表 -->
-		<view class="infor_view" v-for="(item,index) in informationList" :key="index" @click="detailsClick(item.id)">
+		<view class="infor_view" v-for="(item,index) in informationList" :key="index" v-if="index < page" @click="detailsClick(item.id)">
 			<view class="view_titleView">
 				<text class="tv_view">
-					<text class="tv_label" style="background: #007AFF;" v-if="item.state !== '已取消'">{{item.state}}</text>
+					<text class="tv_label" style="background: #007AFF;" v-if="item.state == '已完成'">{{item.state}}</text>
+					<text class="tv_label" style="background: #FF6600;" v-if="item.state == '已发布'">待考评</text>
 					<text class="tv_label" style="background: #FA3534;" v-if="item.state == '已取消'">{{item.state}}</text>
 					<text class="tv_title">{{item.title}}</text>
 					<text class="tv_content"><text style="font-weight: bold;">乡村名：</text>{{item.rural_name}}</text>
@@ -65,6 +66,10 @@
 				modalStatus: false, //压屏弹框
 				modalContent :  `您需与相关村级/县市级职责管理人员添加您的考评人资质信息`,
 				commissionerID : '',
+				
+				//-------------前端分割加载更多--------------
+				page : 8,//加载数据量
+				isLoadMore:false,//是否加载中
 			}
 		},
 		onLoad: function() {
@@ -80,6 +85,9 @@
 			uni.removeStorage({
 				key: 'pyfw_list'
 			})
+		},
+		onReachBottom:function(){
+			this.page = this.page +8
 		},
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
@@ -120,13 +128,10 @@
 					},
 					success: (res) => {
 						console.log(res)
-						if(res.data.msg == "您当前不是考评人" && res.data.status == false ){
+						if(res.data.status == false ){
 							uni.stopPullDownRefresh()
 							uni.hideLoading()
 							this.modalStatus = true;
-						}else if(res.data.status == false){
-							uni.stopPullDownRefresh()
-							uni.hideLoading()
 						}else{
 							if (this.headCurrent == 0&&res.data.data.length!=0) {
 								this.informationList = res.data.data.filter(item => {
