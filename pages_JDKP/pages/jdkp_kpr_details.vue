@@ -199,6 +199,7 @@
 		},
 		onShow: function() {
 			//this.userData();
+			this.loadData();
 		},
 		onPullDownRefresh: function() {
 			this.loadData();
@@ -257,22 +258,11 @@
 							key: 'dataList' +this.id,
 							success: (ress) => {
 								console.log(ress)
-								if (this.id == ress.data.id) {
-									this.dataList = ress.data.data;
-								} else {
-									for (let i = 0; i < res.data.data.item.length; i++) {
-										var a = {
-											itemId: res.data.data.item[i].itemId,
-											score: '',
-											image: '',
-										}
-										this.dataList.push(a)
-									}
-								}
-
+								this.dataList = ress.data.data;
 								console.log(this.dataList)
 							},
 							fail: (err) => {
+								this.dataList = [];
 								for (let i = 0; i < res.data.data.item.length; i++) {
 									var a = {
 										itemId: res.data.data.item[i].itemId,
@@ -500,7 +490,6 @@
 						key: 'dataList' +this.id,
 						success: (ress) => {
 							console.log(ress)
-							if (this.id == ress.data.id) {
 								let a = {
 									id: this.id,
 									title: this.stepsData.title,
@@ -510,7 +499,6 @@
 									key: 'dataList' +this.id,
 									data: a
 								})
-							}
 						},
 						fail: () => {
 							let a = {
@@ -525,8 +513,6 @@
 						}
 					})
 				}
-
-
 			},
 
 			//保存图片至本地并打开新页面
