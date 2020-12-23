@@ -397,7 +397,8 @@
 			//提交
 			Submit: function() {
 				uni.showLoading({
-					title: '提交中...'
+					title: '提交中...',
+					mask:true,
 				})
 				let res = this.dataList.every(item => item.score)
 				console.log(res)
