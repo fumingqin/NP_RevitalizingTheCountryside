@@ -1,12 +1,12 @@
 <template>
 	<view>
 		<!-- 搜索栏 -->
-		<!-- <view class="searchTopBox">
+		<view class="searchTopBox">
 			<view class="searchBoxRadius">
 				<input class="inputIocale" type="search" v-model="searchValue" @confirm="searchNow" placeholder="搜索村名称" />
 				<image class="searchImage" src="../../static/search.png" />
 			</view>
-		</view> -->
+		</view>
 		
 			<!-- 内容1 -->
 			<view>
@@ -248,6 +248,8 @@
 							that.searchValue = ''
 							uni.hideLoading()
 						} else {
+							that.groupTitle = [];
+							uni.stopPullDownRefresh();
 							uni.hideLoading()
 							uni.showToast({
 								title: res.data.msg,
