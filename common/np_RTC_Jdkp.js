@@ -128,6 +128,18 @@ const KyInterface = {
 		name: '拉取指标排行',
 		method: 'POST',
 	},
+	//--------------------------------------考评保存数据--------------------------------------
+	saveData: {
+		Url: Url + '/api/quarterEvaluate/saveData',
+		name: '考评保存数据',
+		method: 'POST',
+	},
+	//--------------------------------------考评获取数据--------------------------------------
+	getData: {
+		Url: Url + '/api/quarterEvaluate/getData',
+		name: '考评获取数据',
+		method: 'POST',
+	}
 }
 
 export default {

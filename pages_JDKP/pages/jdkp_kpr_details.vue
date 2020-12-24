@@ -123,7 +123,7 @@
 								<view style="margin-bottom: 22upx;">上传图片</view>
 								<view style="margin-bottom: 22upx; margin-left: 30upx; color: #E3424B;" @click="remove(0,index)" v-if="dataList[index].image !== ''">删除图片</view>
 							</view>
-						
+
 							<view style="display: flex;" @click="uploadSubscript(index)">
 								<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1"
 								 width="100" height="100" @on-success="uploadOnsuccess" @on-remove="remove(1,index)">
@@ -132,7 +132,7 @@
 									</view>
 								</u-upload>
 								<image style="width: 100upx; height: 100upx; margin-left: 32upx; padding-top: 8upx;" :src="dataParse(dataList[index].image)"
-								 mode="aspectFill" :hidden="dataList[index].image == ''" @click="goImgList(dataList[index].image)"></image>
+								 mode="aspectFill" v-if="dataList[index].image != ''" @click="goImgList(dataList[index].image)"></image>
 							</view>
 						</view>
 					</view>
@@ -190,11 +190,11 @@
 				uploadList: '', //上传图片数组
 				inpuIndex: '', //输入框下标
 				scoreIndex: '', //最高分
-				uploadIndex: '', //上传图片下标
+				uploadIndex: 0, //上传图片下标
 				showUploadList: true, //是否选择图片内部组件预览
 				action: 'http://8.135.49.179:8080/api/file/upload', // 演示地址
 				dataList: [],
-				ModalStatus : false,//删除模态框状态
+				ModalStatus: false, //删除模态框状态
 			}
 		},
 
@@ -203,16 +203,13 @@
 			this.userData();
 		},
 		onShow: function() {
-			//this.userData();
-			this.loadData();
+
+
 		},
 		onPullDownRefresh: function() {
 			this.loadData();
 		},
 		onHide: function() {
-			this.keepData()
-		},
-		onUnload: function() {
 			this.keepData()
 		},
 		onBackPress: function() {
@@ -254,50 +251,111 @@
 					method: this.$jdkp.KyInterface.getEvaluationById.method,
 					data: {
 						id: this.id
-						// id: 42
 					},
 					success: (res) => {
 						console.log(res)
+						
 						this.stepsData = res.data.data;
+						console.log(JSON.stringify(this.stepsData.item) )
 						if (this.stepsData.state == '已发布') {
 							this.StepsIndex = 1
 						} else if (this.stepsData.state == '已完成' || this.stepsData.state == '已取消') {
 							this.StepsIndex = 2
 						}
-						uni.getStorage({
-							key: 'dataList' + this.id,
-							success: (ress) => {
-								// console.log(ress)
-								this.dataList = ress.data.data;
-								uni.hideLoading()
-								uni.stopPullDownRefresh()
-								// console.log(this.dataList)
-							},
-							fail: (err) => {
-								this.dataList = [];
-								for (let i = 0; i < res.data.data.item.length; i++) {
-									var a = {
-										itemId: res.data.data.item[i].itemId,
-										score: '',
-										image: '',
-									}
-									this.dataList.push(a)
-								}
-								uni.hideLoading()
-								uni.stopPullDownRefresh()
-								// console.log(this.dataList)
-							}
-						})
-
-
-
+						if (this.stepsData.state == '已发布') {
+							this.IndexData(); //加载指标
+						} else {
+							this.dataList = this.stepsData.item;
+						}
 					},
 					fail: (err) => {
 						uni.hideLoading()
 						uni.stopPullDownRefresh()
 						uni.showToast({
-							title: '加载数据失败，刷下拉刷新重试',
+							title: '网络异常，下拉刷新试试',
 							icon: 'none'
+						})
+					}
+				})
+			},
+
+			//加载指标
+			IndexData: function() {
+				uni.getStorage({
+					key: 'dataList' + this.id,
+					success: (Storage) => {
+						console.log(Storage)
+						this.dataList = [];
+						if (Storage.data.data.length == this.stepsData.item_count && this.stepsData.groupTitle ==
+							'2020年度省级乡村振兴试点村“一村一档”情况考评') {
+							this.dataList = Storage.data.data;
+							uni.removeStorage({
+								key: 'dataList' + this.id
+							})
+							this.keepData();
+						} else if (Storage.data.data.length == this.stepsData.item_count && this.stepsData.groupTitle ==
+							'2020年度乡村振兴“一带N点”示范带建设情况考评') {
+							this.dataList = Storage.data.data;
+							uni.removeStorage({
+								key: 'dataList' + this.id
+							})
+							this.keepData();
+						} else if (this.stepsData.groupTitle == '2020年度省级乡村振兴试点村“一村一档”情况考评') {
+							for (let i = 0; i < this.stepsData.item_count; i++) {
+								this.dataList.push(Storage.data.data[i])
+							}
+							uni.removeStorage({
+								key: 'dataList' + this.id
+							})
+							this.keepData();
+						} else if (this.stepsData.groupTitle == '2020年度乡村振兴“一带N点”示范带建设情况考评') {
+							for (let i = 0; i < this.stepsData.item_count; i++) {
+								this.dataList.push(Storage.data.data[i])
+							}
+							uni.removeStorage({
+								key: 'dataList' + this.id
+							})
+							this.keepData();
+						}
+
+					},
+					fail: () => {
+						uni.request({ 
+							url: this.$jdkp.KyInterface.getData.Url,
+							method: this.$jdkp.KyInterface.getData.method,
+							data: {
+								id: this.id
+							},
+							success: (keepRes) => {
+								console.log('指标回调', keepRes)
+								if (keepRes.data.status == true && keepRes.data.data !== "[]") {
+									this.dataList = keepRes.data.data
+									console.log(this.dataList)
+									uni.hideLoading()
+									uni.stopPullDownRefresh()
+								} else {
+									this.dataList = [];
+									for (let i = 0; i < this.stepsData.item.length; i++) {
+										var a = {
+											itemId: this.stepsData.item[i].itemId,
+											itemTitle: this.stepsData.item[i].itemTitle,
+											score: '',
+											image: '',
+										}
+										this.dataList.push(a)
+									}
+									uni.hideLoading()
+									uni.stopPullDownRefresh()
+								}
+							},
+							fail: () => {
+								uni.hideLoading()
+								uni.stopPullDownRefresh()
+								uni.showToast({
+									title: '获取保存数据失败，网络异常',
+									icon: 'none'
+								})
+							}
 						})
 					}
 				})
@@ -366,7 +424,6 @@
 				this.goodsType = e;
 				if (this.goodsType <= this.scoreIndex && this.goodsType >= 0) {
 					this.dataList[this.inpuIndex].score = this.goodsType
-					this.keepData()
 				} else {
 					if (this.goodsType !== '') {
 						uni.showToast({
@@ -381,41 +438,37 @@
 
 			//上传图片下标
 			uploadSubscript: function(e) {
-				// console.log('上传图片下标',e)
+				console.log('上传图片下标', e)
 				this.uploadIndex = e;
-				this.keepData()
 				// console.log('上传图片下标', this.uploadIndex)
 			},
 
 			//上传图片成功
 			uploadOnsuccess: function(e) {
-				// console.log('上传图片', e)
-				this.uploadList = [];
-				// console.log('上传图片2', this.uploadList)
-				this.uploadList.push(e.data)
-				this.dataList[this.uploadIndex].image = this.uploadList
-				this.keepData()
+				var that = this;
+				that.uploadList = [];
+				that.uploadList.push(e.data)
+				that.dataList[that.uploadIndex].image = that.uploadList
+				// console.log('3',that.dataList[that.uploadIndex].image)
 			},
 
 			//删除图片
-			remove: function(e,index) {
-				if(e == 0){
+			remove: function(e, index) {
+				if (e == 0) {
 					uni.showModal({
-						content:'您确认删除该已保存的图片吗？',
+						content: '您确认删除该已保存的图片吗？',
 						success: (res) => {
-							if(res.confirm){
+							if (res.confirm) {
 								this.dataList[index].image = ''
-								this.$refs.clear.fileList;	
-								this.keepData() 
+								this.$refs.clear.fileList;
 							}
 						}
 					})
-				}else if(e == 1){
+				} else if (e == 1) {
 					this.dataList[index].image = ''
-					this.keepData()
 				}
-				
-				
+
+
 			},
 
 
@@ -464,7 +517,7 @@
 							uni.hideLoading()
 							uni.stopPullDownRefresh()
 							uni.showToast({
-								title: '提交数据失败，下拉刷新重试',
+								title: '提交数据失败，下拉刷新试试',
 								icon: 'none'
 							})
 						}
@@ -500,41 +553,36 @@
 
 			//图片转换
 			dataParse: function(e) {
-				if (e !== '') {
-					// var a = JSON.parse(e)
-					return e[0]
-				} else {
+				if (e == '') {
 					return e
+				} else {
+					return e[0]
 				}
 			},
 
+
 			//保存数据
 			keepData: function() {
-				// console.log('触发保存')
+				console.log('触发保存')
 				if (this.stepsData.state == '已发布') {
-					uni.getStorage({
-						key: 'dataList' + this.id,
-						success: (ress) => {
-							// console.log(ress)
-							let a = {
-								id: this.id,
-								title: this.stepsData.title,
-								data: this.dataList
-							};
-							uni.setStorage({
-								key: 'dataList' + this.id,
-								data: a
-							})
+					uni.request({
+						url: this.$jdkp.KyInterface.saveData.Url,
+						method: this.$jdkp.KyInterface.saveData.method,
+						data: {
+							id: this.id,
+							content: this.dataList
+						},
+						success: (res) => {
+							console.log('保存成功', res)
+							uni.hideLoading()
+							uni.stopPullDownRefresh()
 						},
 						fail: () => {
-							let a = {
-								id: this.id,
-								title: this.stepsData.title,
-								data: this.dataList
-							};
-							uni.setStorage({
-								key: 'dataList' + this.id,
-								data: a
+							uni.hideLoading()
+							uni.stopPullDownRefresh()
+							uni.showToast({
+								title: '自动保存失败，网络异常',
+								icon: 'none'
 							})
 						}
 					})
@@ -543,7 +591,7 @@
 
 			//保存图片至本地并打开新页面
 			goImgList(e) {
-				uni.setStorageSync('imagePiclist', e[0]);
+				uni.setStorageSync('imagePiclist', e);
 				uni.navigateTo({
 					url: 'imgPreview4',
 				})
