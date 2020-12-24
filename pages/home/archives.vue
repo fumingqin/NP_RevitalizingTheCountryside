@@ -117,7 +117,7 @@
 						<view class="dyn_text">所属市级：{{newsData.village.city_name}}</view>
 						<view class="dyn_text">所属县级：{{newsData.village.county_name}}</view>
 						<view class="dyn_text">村支书姓名：{{newsData.village.secretary_name}}</view>
-						<view class="dyn_text">建档时间：{{newsData.village.create_time}}</view>
+						<!-- <view class="dyn_text">建档时间：{{newsData.village.create_time}}</view> -->
 						<!-- <view class="dyn_text">村长姓名：{{newsData.village.head_name}}</view>
 						<view class="dyn_text">村长年龄：{{newsData.village.head_age}}岁</view>
 						<view class="dyn_text">任职工龄：{{newsData.village.head_year}}年</view>
