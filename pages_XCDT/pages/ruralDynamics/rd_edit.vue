@@ -50,7 +50,7 @@
 				<!-- 上传视频 -->
 				<u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false" prop="photo">
 					<view style="display: block;">
-						<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
+						<easy-upload :dataList="imageList" uploadUrl="http://8.135.49.179:8080/api/file/uploadvideo" :types="category"
 						 :uploadCount="1" @successVideo="successvideo" @delImage="delVideo"></easy-upload>
 						<text class="videoClass">*目前该功能暂时只能上传小于200MB的视频</text>
 					</view>
@@ -300,7 +300,7 @@
 				jumpStatus: '',
 				id: '',
 				informationDetail: [],
-				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
+				action: 'http://8.135.49.179:8080/api/file/upload', // 演示地址
 				showUploadList: true,
 				lists: [],
 				fileList: [],

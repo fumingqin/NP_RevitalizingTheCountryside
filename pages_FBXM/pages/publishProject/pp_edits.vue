@@ -36,8 +36,8 @@
 
 				<!-- 上传视频 -->
 				<!-- <u-form-item :label-style="customStyle" :label-position="labelPosition" label="上传视频" :border-bottom="false">
-					<easy-upload :dataList="imageList" uploadUrl="http://120.24.144.6:8080/api/file/uploadvideo" :types="category"
-					 deleteUrl='http://120.24.144.6:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
+					<easy-upload :dataList="imageList" uploadUrl="http://8.135.49.179:8080/api/file/uploadvideo" :types="category"
+					 deleteUrl='http://8.135.49.179:8080/api/file/uploadvideo' :uploadCount="1" @successVideo="successvideo"></easy-upload>
 					 <text class="videoClass">*目前该功能暂时只能上传小于20MB的视频</text>
 				</u-form-item> -->
 
@@ -276,7 +276,7 @@
 				jumpStatus: '',
 				id: '',
 				informationDetail: [],
-				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
+				action: 'http://8.135.49.179:8080/api/file/upload', // 演示地址
 				showUploadList: true,
 				lists: [],
 				fileList: [],
@@ -648,7 +648,7 @@
 					currentWebview: this.$mp.page.$getAppWebview(),
 					// #endif
 					//非真实地址，记得更换,调试时ios有跨域，需要后端开启跨域并且接口地址不要使用http://localhost/
-					url: 'http://120.24.144.6:8080/api/file/upload',
+					url: 'http://8.135.49.179:8080/api/file/upload',
 					//默认file,上传文件的key
 					name: 'file',
 					// header: {'Authorization':'token'},
