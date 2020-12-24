@@ -5,7 +5,7 @@
 			<uni-steps :options="stepsList2" :active="StepsIndex" v-if="stepsData.state == '已取消'" activeColor="#FA3534"></uni-steps>
 		</view>
 
-
+		<view style="font-size: 24upx; margin: 8upx 32upx; color: #DD524D;">*如若顶部进度条未变绿/红色 或 打不开评分栏，请下拉刷新</view>
 		<!-- 申请信息 -->
 		<view class="deta_view">
 			<view class="deta_title">考评信息</view>
@@ -94,7 +94,7 @@
 				<view class="box_refundView">
 					<view class="box_refundContentView">
 						<text class="box_refundContentTitle">请为本次考评打分</text>
-						<view style="color: #FC4646; font-size:28upx; margin-top: 12upx;">注：上传图片后会出现可删除图片操作</view>
+						<view style="color: #FC4646; font-size:28upx; margin-top: 12upx;">注：随手保存是美德</view>
 						<!-- <text ></text> -->
 					</view>
 				</view>
@@ -144,7 +144,8 @@
 
 			<!-- 确认按钮 -->
 			<view class="operButton" style="z-index: 3;">
-				<view class="buttonView3" style="width: 100%;" hover-class="btn_Click" @click="Submit">确认</view>
+				<view class="buttonView3 buttonView4" style="width: 65%;" hover-class="btn_Click" @click="keepData(1)">手动保存</view>
+				<view class="buttonView3" style="width: 35%;" hover-class="btn_Click" @click="Submit">提交</view>
 			</view>
 		</u-popup>
 
@@ -203,8 +204,6 @@
 			this.userData();
 		},
 		onShow: function() {
-
-
 		},
 		onPullDownRefresh: function() {
 			this.loadData();
@@ -220,7 +219,8 @@
 			//-------------------------------乘客数据读取-------------------------------
 			userData: function() {
 				uni.showLoading({
-					title: '加载信息中...'
+					title: '加载信息中...',
+					// mask: true,
 				})
 				uni.getStorage({
 					key: 'userInfo',
@@ -288,32 +288,20 @@
 						if (Storage.data.data.length == this.stepsData.item_count && this.stepsData.groupTitle ==
 							'2020年度省级乡村振兴试点村“一村一档”情况考评') {
 							this.dataList = Storage.data.data;
-							uni.removeStorage({
-								key: 'dataList' + this.id
-							})
 							this.keepData();
 						} else if (Storage.data.data.length == this.stepsData.item_count && this.stepsData.groupTitle ==
 							'2020年度乡村振兴“一带N点”示范带建设情况考评') {
 							this.dataList = Storage.data.data;
-							uni.removeStorage({
-								key: 'dataList' + this.id
-							})
 							this.keepData();
 						} else if (this.stepsData.groupTitle == '2020年度省级乡村振兴试点村“一村一档”情况考评') {
 							for (let i = 0; i < this.stepsData.item_count; i++) {
 								this.dataList.push(Storage.data.data[i])
 							}
-							uni.removeStorage({
-								key: 'dataList' + this.id
-							})
 							this.keepData();
 						} else if (this.stepsData.groupTitle == '2020年度乡村振兴“一带N点”示范带建设情况考评') {
 							for (let i = 0; i < this.stepsData.item_count; i++) {
 								this.dataList.push(Storage.data.data[i])
 							}
-							uni.removeStorage({
-								key: 'dataList' + this.id
-							})
 							this.keepData();
 						}
 
@@ -327,13 +315,27 @@
 							},
 							success: (keepRes) => {
 								console.log('指标回调', keepRes)
+								this.dataList = [];
 								if (keepRes.data.status == true && keepRes.data.data !== "[]") {
-									this.dataList = keepRes.data.data
-									console.log(this.dataList)
+									var keepRes2 = keepRes.data.data.sort((a,b)=>{
+										return a.itemId - b.itemId
+									})
+									for (let i = 0; i < keepRes2.length; i++) {
+										var a = {
+											itemId: keepRes2[i].itemId,
+											itemTitle: keepRes2[i].itemTitle,
+											score: keepRes2[i].score,
+											image: '',
+										}
+										console.log(keepRes2[i].image)
+										if(keepRes2[i].image !== ''){
+											a.image = JSON.parse(keepRes2[i].image) 
+										}
+										this.dataList.push(a)
+									}
 									uni.hideLoading()
 									uni.stopPullDownRefresh()
 								} else {
-									this.dataList = [];
 									for (let i = 0; i < this.stepsData.item.length; i++) {
 										var a = {
 											itemId: this.stepsData.item[i].itemId,
@@ -471,64 +473,105 @@
 			},
 
 
-			//提交
+			//提交校验
 			Submit: function() {
-				uni.showLoading({
-					title: '提交中...',
-					mask: true,
-				})
-				let res = this.dataList.every(item => item.score)
+				var that = this;
+				// uni.showLoading({
+				// 	title: '提交中...',
+				// 	mask: true,
+				// })
+				if(that.dataList.length == that.stepsData.item_count){
+					that.reallySubmit()
+				}else{
+					var SubmitList = that.dataList;
+					that.dataList = []
+					for (let i = 0; i < that.stepsData.item_count; i++) {
+						that.dataList.push(SubmitList[index])
+					}
+					if(that.dataList.length == that.stepsData.item_count){
+						that.reallySubmit()
+					}
+				}
+				
+				
+			},
+			
+			//待校验后提交
+			reallySubmit:function(){
+				let res = this.dataList.every(item => 0 <= item.score)
+				let res2 = this.dataList.every(item =>  item.score <= 3)
 				// console.log(res)
+				// console.log(res2)
 				if (res) {
-					// console.log('提交成功')
-					uni.request({
-						url: this.$jdkp.KyInterface.evaluationScore.Url,
-						method: this.$jdkp.KyInterface.evaluationScore.method,
-						data: {
-							id: this.id,
-							// id: 42,
-							item: this.dataList
-						},
-						success: (res) => {
-							// console.log(res)
-							if (res.data.status) {
-								uni.hideLoading()
-								uni.showToast({
-									title: '提交成功',
-									success: () => {
-										this.cancelShow = false;
-										uni.startPullDownRefresh();
-									}
-								})
-								uni.removeStorage({
-									key: 'dataList' + this.id
-								})
-							} else {
-								uni.hideLoading()
-								uni.showToast({
-									title: res.data.msg,
-									icon: 'none'
-								})
+					if(res2){
+						// console.log('提交成功')
+						uni.showModal({
+							title:'您确认提交吗？',
+							content:'一旦提交考评信息，将无法进行修改',
+							success: (res) => {
+								// console.log(res)
+								if(res.confirm){
+									// console.log('我提交了')
+										uni.request({
+											url: this.$jdkp.KyInterface.evaluationScore.Url,
+											method: this.$jdkp.KyInterface.evaluationScore.method,
+											data: {
+												id: this.id,
+												item: this.dataList
+											},
+											success: (res) => {
+												// console.log(res)
+												if (res.data.status) {
+													uni.hideLoading()
+													uni.showToast({
+														title: '提交成功',
+														success: () => {
+															this.cancelShow = false;
+															uni.startPullDownRefresh();
+														}
+													})
+													uni.removeStorage({
+														key: 'dataList' + this.id
+													})
+												} else {
+													uni.hideLoading()
+													uni.showToast({
+														title: res.data.msg,
+														icon: 'none'
+													})
+												}
+									
+											},
+											fail: (err) => {
+												uni.hideLoading()
+												uni.stopPullDownRefresh()
+												uni.showToast({
+													title: '提交数据失败，下拉刷新试试',
+													icon: 'none'
+												})
+											}
+										})
+								}
 							}
-
-						},
-						fail: (err) => {
-							uni.hideLoading()
-							uni.stopPullDownRefresh()
-							uni.showToast({
-								title: '提交数据失败，下拉刷新试试',
-								icon: 'none'
-							})
-						}
-					})
+						})
+					}else{
+						uni.hideLoading()
+						uni.showToast({
+							title: '您有一项/多项大于最高评分值',
+							icon: 'none'
+						})
+					}
+					
+				
 				} else {
 					uni.hideLoading()
 					uni.showToast({
-						title: '请打分或者请不要超过最大评分',
+						title: '您有评分未填入',
 						icon: 'none'
 					})
 				}
 			},
+			
 
 			//资讯时间
 			informationDate: function(e) {
@@ -552,29 +595,69 @@
 
 			//图片转换
 			dataParse: function(e) {
+				console.log(e)
 				if (e == '') {
 					return e
 				} else {
+					// var a = JSON.parse(e)
 					return e[0]
 				}
 			},
 
 
 			//保存数据
-			keepData: function() {
+			keepData: function(e) {
+				if(e == 1){
+					uni.showLoading({
+						title:'保存中...',
+						mask: true,
+					})
+				}
 				console.log('触发保存')
 				if (this.stepsData.state == '已发布') {
+					var keepList = [];
+					for (let i = 0; i < this.dataList.length; i++) {
+						var keepA = {
+							itemId: this.dataList[i].itemId,
+							itemTitle: this.dataList[i].itemTitle,
+							score: this.dataList[i].score,
+							image: '',
+						}
+						if(this.dataList[i].image !== ''){
+							keepA.image = JSON.stringify(this.dataList[i].image) 
+						}
+						keepList.push(keepA)
+					}
 					uni.request({
 						url: this.$jdkp.KyInterface.saveData.Url,
 						method: this.$jdkp.KyInterface.saveData.method,
 						data: {
 							id: this.id,
-							content: this.dataList
+							content: keepList
 						},
 						success: (res) => {
 							console.log('保存成功', res)
-							uni.hideLoading()
-							uni.stopPullDownRefresh()
+							if(res.data.status){
+								uni.removeStorage({
+									key: 'dataList' + this.id
+								})
+								if(e == 1){
+									uni.hideLoading()
+									uni.stopPullDownRefresh()
+									uni.showToast({
+										title:'保存成功'
+									})
+								}
+							}else {
+								if(e == 1){
+									uni.hideLoading()
+									uni.stopPullDownRefresh()
+									uni.showToast({
+										title:'保存失败，10秒后重试',
+										icon:'none'
+									})
+								} 
+							}
 						},
 						fail: () => {
 							uni.hideLoading()
@@ -632,6 +715,10 @@
 			color: #FFFFFF;
 			font-size: 32upx;
 			line-height: 3;
+		}
+		
+		.buttonView4 {
+			background: #FF6600;
 		}
 	}
 
@@ -751,7 +838,7 @@
 
 	.allBtn {
 		padding-top: 12upx;
-		font-size: 26upx;
+		font-size: 30upx;
 		background-color: #fff;
 		color: #06B4FD;
 	}

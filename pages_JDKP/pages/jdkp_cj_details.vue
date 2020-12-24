@@ -748,7 +748,7 @@
 
 	.allBtn {
 		padding-top: 12upx;
-		font-size: 26upx;
+		font-size: 30upx;
 		background-color: #fff;
 		color: #06B4FD;
 	}
