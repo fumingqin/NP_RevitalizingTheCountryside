@@ -192,7 +192,7 @@
 				scoreIndex: '', //最高分
 				uploadIndex: '', //上传图片下标
 				showUploadList: true, //是否选择图片内部组件预览
-				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
+				action: 'http://8.135.49.179:8080/api/file/upload', // 演示地址
 				dataList: [],
 				ModalStatus : false,//删除模态框状态
 			}

@@ -62,7 +62,7 @@
 		<view class="h_quickEntry">
 			<view class="qui_titleView">乡村美景</view>
 			<view class="sixBackground">
-				<view v-for="(item,index) in quickEntryData" :key="index" v-if="index < 6" @click="navigateToClick(0,item.id)">
+				<view v-for="(item,index) in quickEntryData" :key="index" v-if="index < 6" @click="navigateToClick(item.id)">
 					<view class="darkCurtain"></view>
 					<image :src="item.image"></image>
 					<view class="sixView">
@@ -75,7 +75,7 @@
 		<!-- 公示项目 -->
 		<view class="gs_view">
 			<view class="gs_title">公示项目</view>
-			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" bg-color="#ffffff" interval="4500" @click="navigateToClick"></u-swiper>
+			<u-swiper class="gs_swiper" :list="advertisingMap" :effect3d="true" :title="true" bg-color="#ffffff" interval="4500" @click="navigateToClick2"></u-swiper>
 		</view>
 
 		<!-- 隐藏协议弹出 -->
@@ -549,20 +549,18 @@
 			},
 
 			//页面跳转
-			navigateToClick: function(index, e) {
-				console.log(index)
-				console.log(e)
-				if (index == 0) {
-					uni.navigateTo({
-						url: '../../pages_SMJJ/pages/shuimeiEconomy/se_detailsPage?id=' + e,
-					})
-				} else if (index == 1) {
-					uni.navigateTo({
-						url: 'pages_FBRCP/pages/agricultureProducts/ap_details?id=' + e,
-					})
-				}
-
+			navigateToClick: function(e) {
+				uni.navigateTo({
+					url: '../../pages_SMJJ/pages/shuimeiEconomy/se_detailsPage?id=' + e,
+				})
 			},
+			navigateToClick2: function(e) {
+				// console.log(this.advertisingMap)
+				uni.navigateTo({
+					url: '../../pages_FBXM/pages/publishProject/pp_detailsPage?id=' + this.advertisingMap[e].id,
+				})
+			},
+			
 			// #ifdef MP-WEIXIN
 			getLoginState() {
 				uni.getStorage({
