@@ -94,7 +94,7 @@
 				<view class="box_refundView">
 					<view class="box_refundContentView">
 						<text class="box_refundContentTitle">请为本次考评打分</text>
-						<view style="color: #FC4646; font-size:28upx; margin-top: 12upx;">注：删除图片先点击右侧图片再点×</view>
+						<view style="color: #FC4646; font-size:28upx; margin-top: 12upx;">注：上传图片后会出现可删除图片操作</view>
 						<!-- <text ></text> -->
 					</view>
 				</view>
@@ -119,16 +119,20 @@
 
 						<view style="display: block;margin-left: 40upx;">
 							<!-- <u-upload :action="action" :file-list="fileList"></u-upload> -->
-							<view style="margin-bottom: 22upx;">上传图片</view>
+							<view style="display: flex;">
+								<view style="margin-bottom: 22upx;">上传图片</view>
+								<view style="margin-bottom: 22upx; margin-left: 30upx; color: #E3424B;" @click="remove(0,index)" v-if="dataList[index].image !== ''">删除图片</view>
+							</view>
+						
 							<view style="display: flex;" @click="uploadSubscript(index)">
 								<u-upload :custom-btn="true" ref="uUpload" :show-upload-list="showUploadList" :action="action" max-count="1"
-								 width="100" height="100" @on-success="uploadOnsuccess" @on-remove="remove">
+								 width="100" height="100" @on-success="uploadOnsuccess" @on-remove="remove(1,index)">
 									<view slot="addBtn" class="slot-btn" hover-class="slot-btn__hover" hover-stay-time="150">
 										<u-icon name="photo" size="40" color="#c0c4cc"></u-icon>
 									</view>
 								</u-upload>
-								<image style="width: 100upx; height: 100upx; margin-left: 24upx; padding-top: 8upx;" :src="dataParse(dataList[index].image) "
-								 mode="aspectFill" :hidden="dataList[index].image == ''" @click="goImgList(dataParse(dataList[index].image))"></image>
+								<image style="width: 100upx; height: 100upx; margin-left: 32upx; padding-top: 8upx;" :src="dataParse(dataList[index].image)"
+								 mode="aspectFill" :hidden="dataList[index].image == ''" @click="goImgList(dataList[index].image)"></image>
 							</view>
 						</view>
 					</view>
@@ -183,13 +187,14 @@
 				contentList: ['100', '90', '80', '70', '60', '50', '40', '30', '20', '10', '0'], //可选失败内容
 				fileList: [],
 				goodsType: '', //输入框参数
-				uploadList: [], //上传图片数组
+				uploadList: '', //上传图片数组
 				inpuIndex: '', //输入框下标
 				scoreIndex: '', //最高分
 				uploadIndex: '', //上传图片下标
 				showUploadList: true, //是否选择图片内部组件预览
 				action: 'http://120.24.144.6:8080/api/file/upload', // 演示地址
 				dataList: [],
+				ModalStatus : false,//删除模态框状态
 			}
 		},
 
@@ -260,7 +265,7 @@
 							this.StepsIndex = 2
 						}
 						uni.getStorage({
-							key: 'dataList' +this.id,
+							key: 'dataList' + this.id,
 							success: (ress) => {
 								// console.log(ress)
 								this.dataList = ress.data.data;
@@ -284,8 +289,8 @@
 							}
 						})
 
-						
-						
+
+
 					},
 					fail: (err) => {
 						uni.hideLoading()
@@ -384,18 +389,33 @@
 
 			//上传图片成功
 			uploadOnsuccess: function(e) {
-				// console.log('上传图片',e)
+				// console.log('上传图片', e)
 				this.uploadList = [];
+				// console.log('上传图片2', this.uploadList)
 				this.uploadList.push(e.data)
-				this.dataList[this.uploadIndex].image = JSON.stringify(this.uploadList)
+				this.dataList[this.uploadIndex].image = this.uploadList
 				this.keepData()
 			},
 
 			//删除图片
-			remove: function(e) {
-				// console.log(e)
-				this.dataList[this.uploadIndex].image = ''
-				this.keepData()
+			remove: function(e,index) {
+				if(e == 0){
+					uni.showModal({
+						content:'您确认删除该已保存的图片吗？',
+						success: (res) => {
+							if(res.confirm){
+								this.dataList[index].image = ''
+								this.$refs.clear.fileList;	
+								this.keepData() 
+							}
+						}
+					})
+				}else if(e == 1){
+					this.dataList[index].image = ''
+					this.keepData()
+				}
+				
+				
 			},
 
 
@@ -403,7 +423,7 @@
 			Submit: function() {
 				uni.showLoading({
 					title: '提交中...',
-					mask:true,
+					mask: true,
 				})
 				let res = this.dataList.every(item => item.score)
 				// console.log(res)
@@ -429,7 +449,7 @@
 									}
 								})
 								uni.removeStorage({
-									key: 'dataList' +this.id
+									key: 'dataList' + this.id
 								})
 							} else {
 								uni.hideLoading()
@@ -481,8 +501,8 @@
 			//图片转换
 			dataParse: function(e) {
 				if (e !== '') {
-					var a = JSON.parse(e)
-					return a[0]
+					// var a = JSON.parse(e)
+					return e[0]
 				} else {
 					return e
 				}
@@ -493,18 +513,18 @@
 				// console.log('触发保存')
 				if (this.stepsData.state == '已发布') {
 					uni.getStorage({
-						key: 'dataList' +this.id,
+						key: 'dataList' + this.id,
 						success: (ress) => {
 							// console.log(ress)
-								let a = {
-									id: this.id,
-									title: this.stepsData.title,
-									data: this.dataList
-								};
-								uni.setStorage({
-									key: 'dataList' +this.id,
-									data: a
-								})
+							let a = {
+								id: this.id,
+								title: this.stepsData.title,
+								data: this.dataList
+							};
+							uni.setStorage({
+								key: 'dataList' + this.id,
+								data: a
+							})
 						},
 						fail: () => {
 							let a = {
@@ -513,7 +533,7 @@
 								data: this.dataList
 							};
 							uni.setStorage({
-								key: 'dataList' +this.id,
+								key: 'dataList' + this.id,
 								data: a
 							})
 						}
@@ -523,7 +543,7 @@
 
 			//保存图片至本地并打开新页面
 			goImgList(e) {
-				uni.setStorageSync('imagePiclist', e);
+				uni.setStorageSync('imagePiclist', e[0]);
 				uni.navigateTo({
 					url: 'imgPreview4',
 				})
