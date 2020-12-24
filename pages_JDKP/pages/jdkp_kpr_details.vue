@@ -254,9 +254,8 @@
 					},
 					success: (res) => {
 						console.log(res)
-						
+						// console.log(this.stepsData.item)
 						this.stepsData = res.data.data;
-						console.log(JSON.stringify(this.stepsData.item) )
 						if (this.stepsData.state == '已发布') {
 							this.StepsIndex = 1
 						} else if (this.stepsData.state == '已完成' || this.stepsData.state == '已取消') {
@@ -320,7 +319,7 @@
 
 					},
 					fail: () => {
-						uni.request({ 
+						uni.request({
 							url: this.$jdkp.KyInterface.getData.Url,
 							method: this.$jdkp.KyInterface.getData.method,
 							data: {
