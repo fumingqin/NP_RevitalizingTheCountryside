@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view style="padding: 32upx 0;">
-			<uni-steps :options="stepsList" :active="StepsIndex" v-if="stepsData.state == '已发布' || stepsData.state == '已完成'"></uni-steps>
+			<uni-steps :options="stepsList" :active="StepsIndex" :hidden="stepsData.state == '已取消'"></uni-steps>
 			<uni-steps :options="stepsList2" :active="StepsIndex" v-if="stepsData.state == '已取消'" activeColor="#FA3534"></uni-steps>
 		</view>
 
@@ -11,7 +11,7 @@
 			<view class="deta_title">考评信息</view>
 			<view class="deta_text"><text>考评标题：</text>{{stepsData.title}}</view>
 			<view class="deta_text"><text>考评乡村：</text>{{stepsData.rural_name}}</view>
-			<view class="deta_text"><text>考评时间：</text>{{informationDate(stepsData.reviewTime)}}</view>
+			<view class="deta_text"><text>考评截至：</text>{{informationDate(stepsData.reviewTime)}}</view>
 		</view>
 
 
@@ -225,7 +225,7 @@
 					success: (res) => {
 						this.userInfo = res.data;
 						this.loadData()
-						console.log('获取个人信息', this.userInfo)
+						// console.log('获取个人信息', this.userInfo)
 					},
 					fail: (err) => {
 						uni.hideLoading()
@@ -254,12 +254,19 @@
 					success: (res) => {
 						console.log(res)
 						this.stepsData = res.data.data;
+						if (this.stepsData.state == '已发布') {
+							this.StepsIndex = 1
+						} else if (this.stepsData.state == '已完成' || this.stepsData.state == '已取消') {
+							this.StepsIndex = 2
+						}
 						uni.getStorage({
 							key: 'dataList' +this.id,
 							success: (ress) => {
-								console.log(ress)
+								// console.log(ress)
 								this.dataList = ress.data.data;
-								console.log(this.dataList)
+								uni.hideLoading()
+								uni.stopPullDownRefresh()
+								// console.log(this.dataList)
 							},
 							fail: (err) => {
 								this.dataList = [];
@@ -271,18 +278,14 @@
 									}
 									this.dataList.push(a)
 								}
-								console.log(this.dataList)
+								uni.hideLoading()
+								uni.stopPullDownRefresh()
+								// console.log(this.dataList)
 							}
 						})
 
-						console.log('插入数组', this.dataList)
-						if (res.data.data.state == '已发布') {
-							this.StepsIndex = 1
-						} else if (res.data.data.state == '已完成' || res.data.data.state == '已取消') {
-							this.StepsIndex = 2
-						}
-						uni.hideLoading()
-						uni.stopPullDownRefresh()
+						
+						
 					},
 					fail: (err) => {
 						uni.hideLoading()
@@ -326,7 +329,7 @@
 
 			//点击放大图片
 			previewOpen: function(e) {
-				console.log(e);
+				// console.log(e);
 				this.$refs.previewImage.open(e); // 传入当前选中的图片地址或序号
 			},
 
@@ -349,7 +352,7 @@
 				// console.log('输入框下标',e)
 				this.inpuIndex = e
 				this.scoreIndex = res
-				console.log('输入框下标', this.inpuIndex)
+				// console.log('输入框下标', this.inpuIndex)
 			},
 
 			//输入框参数值
@@ -358,6 +361,7 @@
 				this.goodsType = e;
 				if (this.goodsType <= this.scoreIndex && this.goodsType >= 0) {
 					this.dataList[this.inpuIndex].score = this.goodsType
+					this.keepData()
 				} else {
 					if (this.goodsType !== '') {
 						uni.showToast({
@@ -366,15 +370,16 @@
 						})
 					}
 				}
-				console.log('输入框参数', this.goodsType)
-				console.log('输入框参数2', this.dataList)
+				// console.log('输入框参数', this.goodsType)
+				// console.log('输入框参数2', this.dataList)
 			},
 
 			//上传图片下标
 			uploadSubscript: function(e) {
 				// console.log('上传图片下标',e)
-				this.uploadIndex = e,
-					console.log('上传图片下标', this.uploadIndex)
+				this.uploadIndex = e;
+				this.keepData()
+				// console.log('上传图片下标', this.uploadIndex)
 			},
 
 			//上传图片成功
@@ -383,14 +388,14 @@
 				this.uploadList = [];
 				this.uploadList.push(e.data)
 				this.dataList[this.uploadIndex].image = JSON.stringify(this.uploadList)
-				// console.log('上传图片', this.uploadList)
-				console.log('插入图片', this.dataList)
+				this.keepData()
 			},
 
 			//删除图片
 			remove: function(e) {
-				console.log(e)
+				// console.log(e)
 				this.dataList[this.uploadIndex].image = ''
+				this.keepData()
 			},
 
 
@@ -401,9 +406,9 @@
 					mask:true,
 				})
 				let res = this.dataList.every(item => item.score)
-				console.log(res)
+				// console.log(res)
 				if (res) {
-					console.log('提交成功')
+					// console.log('提交成功')
 					uni.request({
 						url: this.$jdkp.KyInterface.evaluationScore.Url,
 						method: this.$jdkp.KyInterface.evaluationScore.method,
@@ -413,7 +418,7 @@
 							item: this.dataList
 						},
 						success: (res) => {
-							console.log(res)
+							// console.log(res)
 							if (res.data.status) {
 								uni.hideLoading()
 								uni.showToast({
@@ -455,7 +460,7 @@
 
 			//资讯时间
 			informationDate: function(e) {
-				console.log(e)
+				// console.log(e)
 				// var tsetDate = e.replace('T',' ')
 				if (e !== undefined) {
 					var a = e.substr(0, 10)
@@ -463,7 +468,6 @@
 				} else {
 					return '';
 				}
-
 			},
 			imageDate: function(e) {
 				if (e == "") {
@@ -486,11 +490,12 @@
 
 			//保存数据
 			keepData: function() {
+				// console.log('触发保存')
 				if (this.stepsData.state == '已发布') {
 					uni.getStorage({
 						key: 'dataList' +this.id,
 						success: (ress) => {
-							console.log(ress)
+							// console.log(ress)
 								let a = {
 									id: this.id,
 									title: this.stepsData.title,
@@ -687,7 +692,7 @@
 	.boxVlew {
 		width: 100%;
 		padding: 16upx 40upx;
-		padding-bottom: 92upx;
+		// padding-bottom: 92upx;
 		background: #FFFFFF;
 
 		.titleView {

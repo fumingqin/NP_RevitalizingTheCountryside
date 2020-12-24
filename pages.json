@@ -1143,6 +1143,13 @@
 						"navigationBarBackgroundColor":"#c0f3ee",
 						"navigationBarTitleText": "乡村评榜"
 					}
+                },{
+                    "path" : "pages/jdkp_indexRating",
+                    "style" : {
+						"enablePullDownRefresh": true,
+						"navigationBarBackgroundColor":"#c0f3ee",
+						"navigationBarTitleText": "指标评榜"
+					}
                 }
 				,{
 				    "path" : "pages/imgPreview4",

@@ -4,20 +4,21 @@
 		<u-tabs :list="headList" :is-scroll="false" :current="headCurrent" @change="headChange" height="104"></u-tabs>
 
 		<!-- 资讯列表 -->
-		<view class="infor_view" v-for="(item,index) in informationList" :key="index" @click="detailsClick(item.id)">
+		<view class="infor_view" v-for="(item,index) in informationList" :key="index" v-if="index < page" @click="detailsClick(item.id)">
 			<view class="view_titleView">
 				<text class="tv_view">
-					<text class="tv_label" style="background: #007AFF;" v-if="item.state !== '已取消'">{{item.state}}</text>
+					<text class="tv_label" style="background: #007AFF;" v-if="item.state == '已完成'">{{item.state}}</text>
+					<text class="tv_label" style="background: #FF6600;" v-if="item.state == '已发布'">待考评</text>
 					<text class="tv_label" style="background: #FA3534;" v-if="item.state == '已取消'">{{item.state}}</text>
 					<text class="tv_title">{{item.title}}</text>
 					<text class="tv_content"><text style="font-weight: bold;">乡村名：</text>{{item.rural_name}}</text>
 					<text class="tv_content"><text style="font-weight: bold;">发布人：</text>{{item.nick_name}}</text>
-					<text class="tv_content" selectable=""><text style="font-weight: bold;">考评时间：</text>{{informationDate(item.reviewTime)}}</text>
+					<text class="tv_content" selectable=""><text style="font-weight: bold;">考评截至：</text>{{informationDate(item.reviewTime)}}</text>
 				</text>
 			</view>
 
 			<view class="view_contentView">
-				<text>申请时间：{{informationDate(item.create_time)}}</text>
+				<text>发布时间：{{informationDate(item.create_time)}}</text>
 				<!-- <text class="cont_text"></text> -->
 				<u-icon class="cont_icon" name="more-dot-fill"></u-icon>
 			</view>
@@ -65,12 +66,29 @@
 				modalStatus: false, //压屏弹框
 				modalContent :  `您需与相关村级/县市级职责管理人员添加您的考评人资质信息`,
 				commissionerID : '',
+				
+				userStatus : false,
+				
+				//------------------------- 前端分割加载更多 --------------------------
+				page : 8 , //加载数据量
+				isLoadMore : false ,//是否加载中
+				
 			}
 		},
 		onLoad: function() {
+			uni.showLoading({
+				title: '加载信息中...'
+			})
 			this.userData();
 		},
 		onShow: function() {
+			setTimeout(() => {
+				if(this.userStatus){
+					console.log(this.userStatus)
+					this.loadData();
+				}
+			},2000)
+			
 			
 		},
 		onPullDownRefresh: function() {
@@ -81,19 +99,22 @@
 				key: 'pyfw_list'
 			})
 		},
+		onReachBottom:function(){
+			this.page = this.page +8
+		},
 		methods: {
 			//-------------------------------乘客数据读取-------------------------------
 			userData: function() {
-				uni.showLoading({
-					title: '加载信息中...'
-				})
 				uni.getStorage({
 					key: 'userInfo',
 					success: (res) => {
 						this.userInfo = res.data;
-						this.loadData();
+						if(this.userStatus == false){
+							this.loadData();
+						}
 						console.log('获取个人信息', this.userInfo)
 					},
+					
 					fail: (err) => {
 						uni.hideLoading()
 						uni.showToast({
@@ -120,13 +141,11 @@
 					},
 					success: (res) => {
 						console.log(res)
-						if(res.data.msg == "您当前不是考评人" && res.data.status == false ){
+						this.userStatus = true;
+						if(res.data.status == false ){
 							uni.stopPullDownRefresh()
 							uni.hideLoading()
 							this.modalStatus = true;
-						}else if(res.data.status == false){
-							uni.stopPullDownRefresh()
-							uni.hideLoading()
 						}else{
 							if (this.headCurrent == 0&&res.data.data.length!=0) {
 								this.informationList = res.data.data.filter(item => {

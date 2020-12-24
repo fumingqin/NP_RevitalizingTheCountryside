@@ -19,8 +19,8 @@
 		</view>
 		<!-- 选择乡县市 -->
 		<view class="operButton">
-			<u-picker :value="rankingIndex" v-model="rankingShow" :mode="mode" :range="rankingData" @confirm="rankingConfirm"></u-picker>
-			<text class="buttonView2" style="background: #18B566;" @click="rankingChange">{{rankingValue}} ↑ </text>
+			<!-- <u-picker :value="rankingIndex" v-model="rankingShow" :mode="mode" :range="rankingData" @confirm="rankingConfirm"></u-picker>
+			<text class="buttonView2" style="background: #18B566;" @click="rankingChange">{{rankingValue}} ↑ </text> -->
 			<u-picker :value="rangValue" v-model="show" :mode="mode" :range="rangeList" @confirm="rangeConfirm"></u-picker>
 			<text class="buttonView2" style="background: #FF6600;" @click="statusChange">{{range}} ↑ </text>
 		</view>
@@ -74,7 +74,7 @@
 				scrollHeight: '1334upx', //弹框高度默认值
 				show: false,
 				rangData: '', //乡县数据
-				range: '全部',
+				range: '是否有龙头企业结对',
 				rangeList: [],
 				rangValue: 0,
 				rangIndex: 0,
@@ -135,24 +135,18 @@
 				uni.startPullDownRefresh();
 			},
 
-			//请求乡县
+			//请求指标
 			choiceData: function() {
 				uni.request({
-					url: this.$jdkp.KyInterface.getCountyList.Url,
-					method: this.$jdkp.KyInterface.getCountyList.method,
+					url: this.$jdkp.KyInterface.getAllItems.Url,
+					method: this.$jdkp.KyInterface.getAllItems.method,
 					success: (res) => {
-						// console.log('乡县市所有列表数据',res)
+						console.log('请求指标列表数据',res)
 						this.rangData = res.data.data;
-						let rangdata = {
-							id: '0',
-							county_name: '全部'
-						};
-						this.rangData.unshift(rangdata)
-						console.log(this.rangData)
 						this.rangeList = [];
 						for (let i = 0; i < res.data.data.length; i++) {
-							var a = res.data.data[i].county_name
-							this.rangeList.push(a)
+							var b = res.data.data[i].title;
+							this.rangeList.push(b)
 						}
 						this.loadData(); //执行加载排行
 						// console.log(this.rangeList)
@@ -238,48 +232,26 @@
 				uni.showLoading({
 					title: '加载排名中...'
 				})
-				var a;
-				if (this.range == '全部') {
-					a = 0;
-				} else {
-					a = this.rangData[this.rangIndex].id;
-				}
+				var a = this.rangData[this.rangIndex].id;
+				console.log(a)
 				uni.request({
-					url: this.$jdkp.KyInterface.getEvaluationByCountyId.Url,
-					method: this.$jdkp.KyInterface.getEvaluationByCountyId.method,
+					url: this.$jdkp.KyInterface.getListByItemId.Url,
+					method: this.$jdkp.KyInterface.getListByItemId.method,
 					data: {
-						countyId: a
+						id: a
 					},
 					success: (res) => {
 						console.log(res)
 						uni.stopPullDownRefresh();
 						this.rankingList = [];
-						if (this.rankingValue == '试点村排行') {
-							var resData = res.data.data.filter(item => {
-								return item.title == '2020年度省级乡村振兴试点村“一村一档”情况考评'
-							})
-							for (var i = 0; i < resData.length; i++) {
-								var a = {
-									index: 1 + i,
-									rural_name: resData[i].rural_name,
-									score: resData[i].score,
-									id: resData[i].id,
-								}
-								this.rankingList.push(a)
+						for (var i = 0; i < res.data.data.length; i++) {
+							var a = {
+								index: 1 + i,
+								rural_name: res.data.data[i].village_name,
+								score: res.data.data[i].score,
+								id: res.data.data[i].quarterly_review_id,
 							}
-						} else if (this.rankingValue == '示范带排行') {
-							var resData = res.data.data.filter(item => {
-								return item.title == '2020年度乡村振兴“一带N点”示范带建设情况考评'
-							})
-							for (var i = 0; i < resData.length; i++) {
-								var a = {
-									index: 1 + i,
-									rural_name: resData[i].rural_name,
-									score: resData[i].score,
-									id: resData[i].id,
-								}
-								this.rankingList.push(a)
-							}
+							this.rankingList.push(a)
 						}
 						uni.hideLoading()
 						console.log(res)
@@ -311,7 +283,7 @@
 		text-align: center;
 
 		.buttonView2 {
-			width: 50%;
+			width: 100%;
 			color: #FFFFFF;
 			font-size: 32upx;
 			line-height: 3;

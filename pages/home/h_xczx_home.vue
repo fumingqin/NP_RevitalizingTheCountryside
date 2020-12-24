@@ -102,7 +102,7 @@
 		<!-- 发现新版本弹出 -->
 		<u-modal v-model="downLoadShow" title="正在下载新版本" confirm-text="取消下载" @confirm="cancelDownload">
 			<view class="textClass">
-				<text class="text_content">请勿关闭APP,下载完成后请安装APP</text>
+				<text class="text_content">请勿关闭/切换APP,下载完成后请安装APP</text>
 			</view>
 			<view class="lineClass">
 				<u-line-progress :percent="percent" :show-percent="true" :striped-active="true"></u-line-progress>

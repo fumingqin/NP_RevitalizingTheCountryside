@@ -116,9 +116,19 @@ const KyInterface = {
 		name: '拉取乡县市',
 		method: 'POST',
 	},
+	//--------------------------------------拉取指标列表--------------------------------------
+	getAllItems: {
+		Url: Url + '/api/quarterEvaluate/getAllItems',
+		name: '拉取指标列表',
+		method: 'POST',
+	},
+	//--------------------------------------拉取指标排行--------------------------------------
+	getListByItemId: {
+		Url: Url + '/api/quarterEvaluate/getListByItemId',
+		name: '拉取指标排行',
+		method: 'POST',
+	},
 }
-
-
 
 export default {
 	KyInterface
