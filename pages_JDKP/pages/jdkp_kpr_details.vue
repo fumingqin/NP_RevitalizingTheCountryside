@@ -264,7 +264,20 @@
 						if (this.stepsData.state == '已发布') {
 							this.IndexData(); //加载指标
 						} else {
-							this.dataList = this.stepsData.item;
+							for (let i = 0; i < this.stepsData.item_count; i++) {
+								var a = {
+									itemId: this.stepsData.item[i].itemId,
+									itemTitle: this.stepsData.item[i].itemTitle,
+									score: this.stepsData.item[i].score,
+									image: '',
+								}
+								if(this.stepsData.item[i].image !== ''){
+									a.image = JSON.parse(this.stepsData.item[i].image) 
+								}
+								this.dataList.push(a)
+							}
+							uni.hideLoading()
+							uni.stopPullDownRefresh()
 						}
 					},
 					fail: (err) => {
@@ -285,6 +298,8 @@
 					success: (Storage) => {
 						console.log(Storage)
 						this.dataList = [];
+						uni.hideLoading()
+						uni.stopPullDownRefresh()
 						if (Storage.data.data.length == this.stepsData.item_count && this.stepsData.groupTitle ==
 							'2020年度省级乡村振兴试点村“一村一档”情况考评') {
 							this.dataList = Storage.data.data;
@@ -327,7 +342,6 @@
 											score: keepRes2[i].score,
 											image: '',
 										}
-										console.log(keepRes2[i].image)
 										if(keepRes2[i].image !== ''){
 											a.image = JSON.parse(keepRes2[i].image) 
 										}
@@ -476,10 +490,10 @@
 			//提交校验
 			Submit: function() {
 				var that = this;
-				// uni.showLoading({
-				// 	title: '提交中...',
-				// 	mask: true,
-				// })
+				uni.showLoading({
+					title: '提交中...',
+					mask: true,
+				})
 				if(that.dataList.length == that.stepsData.item_count){
 					that.reallySubmit()
 				}else{
@@ -512,12 +526,25 @@
 								// console.log(res)
 								if(res.confirm){
 									// console.log('我提交了')
+										var keepList = [];
+										for (let i = 0; i < this.stepsData.item_count; i++) {
+											var keepA = {
+												itemId: this.dataList[i].itemId,
+												itemTitle: this.dataList[i].itemTitle,
+												score: this.dataList[i].score,
+												image: '',
+											}
+											if(this.dataList[i].image !== ''){
+												keepA.image = JSON.stringify(this.dataList[i].image) 
+											}
+											keepList.push(keepA)
+										}
 										uni.request({
 											url: this.$jdkp.KyInterface.evaluationScore.Url,
 											method: this.$jdkp.KyInterface.evaluationScore.method,
 											data: {
 												id: this.id,
-												item: this.dataList
+												item: keepList
 											},
 											success: (res) => {
 												// console.log(res)

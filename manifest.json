@@ -2,8 +2,8 @@
     "name" : "振兴乡村",
     "appid" : "__UNI__F79F3E2",
     "description" : "振兴乡村平台是一款针对乡村治理、乡村发展、乡村民情、乡村旅游、交通运输的智慧化平台系统；针对乡村的治理难、发展难、服务难为主的“三难”，提供了现成有效的解决方式",
-    "versionName" : "1.1.1",
-    "versionCode" : 210,
+    "versionName" : "1.1.4",
+    "versionCode" : 240,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
