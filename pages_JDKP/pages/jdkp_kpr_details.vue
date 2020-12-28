@@ -428,7 +428,9 @@
 				this.goodsType = e;
 				if (this.goodsType <= this.scoreIndex && this.goodsType >= 0) {
 					this.dataList[this.inpuIndex].score = this.goodsType
+					console.log(this.dataList[this.inpuIndex].score)
 				} else {
+					this.dataList[this.inpuIndex].score = 0;
 					if (this.goodsType !== '') {
 						uni.showToast({
 							title: '分数不能大于' + this.stepsData.item[this.inpuIndex].itemscore,
