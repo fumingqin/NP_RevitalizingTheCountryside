@@ -428,7 +428,9 @@
 				this.goodsType = e;
 				if (this.goodsType <= this.scoreIndex && this.goodsType >= 0) {
 					this.dataList[this.inpuIndex].score = this.goodsType
+					console.log(this.dataList[this.inpuIndex].score)
 				} else {
+					this.dataList[this.inpuIndex].score = 0;
 					if (this.goodsType !== '') {
 						this.dataList[this.inpuIndex].score = 0 ;
 						uni.showToast({
