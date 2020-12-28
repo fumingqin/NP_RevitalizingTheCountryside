@@ -13,7 +13,7 @@
 					<view style="line-height: 1.8; right: 12upx; position: absolute;">{{item.score}}分</view>
 				</view>
 				<!-- 防触底空模块 -->
-				<view style="width: 100%; height: 112upx;" v-if="rankingList.length >= 10"></view>
+				<view style="width: 100%; height: 112upx;" v-if="rankingList.length >= 8"></view>
 			</view>
 
 		</view>

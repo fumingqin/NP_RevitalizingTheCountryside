@@ -209,7 +209,7 @@
 			this.loadData();
 		},
 		onHide: function() {
-			this.keepData()
+			// this.keepData()
 		},
 		onBackPress: function() {
 			this.keepData()
@@ -265,6 +265,8 @@
 							this.IndexData(); //加载指标
 						} else {
 							this.dataList = this.stepsData.item;
+							uni.hideLoading()
+							uni.stopPullDownRefresh()
 						}
 					},
 					fail: (err) => {
@@ -285,6 +287,8 @@
 					success: (Storage) => {
 						console.log(Storage)
 						this.dataList = [];
+						uni.hideLoading()
+						uni.stopPullDownRefresh()
 						if (Storage.data.data.length == this.stepsData.item_count && this.stepsData.groupTitle ==
 							'2020年度省级乡村振兴试点村“一村一档”情况考评') {
 							this.dataList = Storage.data.data;
@@ -311,7 +315,7 @@
 							url: this.$jdkp.KyInterface.getData.Url,
 							method: this.$jdkp.KyInterface.getData.method,
 							data: {
-								id: this.id
+								id: this.id	
 							},
 							success: (keepRes) => {
 								console.log('指标回调', keepRes)
@@ -320,14 +324,13 @@
 									var keepRes2 = keepRes.data.data.sort((a,b)=>{
 										return a.itemId - b.itemId
 									})
-									for (let i = 0; i < keepRes2.length; i++) {
+									for (let i = 0; i < this.stepsData.item_count; i++) {
 										var a = {
 											itemId: keepRes2[i].itemId,
 											itemTitle: keepRes2[i].itemTitle,
 											score: keepRes2[i].score,
 											image: '',
 										}
-										console.log(keepRes2[i].image)
 										if(keepRes2[i].image !== ''){
 											a.image = JSON.parse(keepRes2[i].image) 
 										}
@@ -425,16 +428,17 @@
 				this.goodsType = e;
 				if (this.goodsType <= this.scoreIndex && this.goodsType >= 0) {
 					this.dataList[this.inpuIndex].score = this.goodsType
+					console.log(this.dataList[this.inpuIndex].score)
 				} else {
+					this.dataList[this.inpuIndex].score = 0;
 					if (this.goodsType !== '') {
+						this.dataList[this.inpuIndex].score = 0 ;
 						uni.showToast({
 							title: '分数不能大于' + this.stepsData.item[this.inpuIndex].itemscore,
 							icon: 'none'
 						})
 					}
 				}
-				// console.log('输入框参数', this.goodsType)
-				// console.log('输入框参数2', this.dataList)
 			},
 
 			//上传图片下标
@@ -476,10 +480,10 @@
 			//提交校验
 			Submit: function() {
 				var that = this;
-				// uni.showLoading({
-				// 	title: '提交中...',
-				// 	mask: true,
-				// })
+				uni.showLoading({
+					title: '提交中...',
+					mask: true,
+				})
 				if(that.dataList.length == that.stepsData.item_count){
 					that.reallySubmit()
 				}else{
@@ -500,24 +504,32 @@
 			reallySubmit:function(){
 				let res = this.dataList.every(item => 0 <= item.score)
 				let res2 = this.dataList.every(item =>  item.score <= 3)
-				// console.log(res)
-				// console.log(res2)
 				if (res) {
 					if(res2){
-						// console.log('提交成功')
 						uni.showModal({
 							title:'您确认提交吗？',
 							content:'一旦提交考评信息，将无法进行修改',
 							success: (res) => {
-								// console.log(res)
 								if(res.confirm){
-									// console.log('我提交了')
+										var keepList = [];
+										for (let i = 0; i < this.stepsData.item_count; i++) {
+											var keepA = {
+												itemId: this.dataList[i].itemId,
+												itemTitle: this.dataList[i].itemTitle,
+												score: this.dataList[i].score,
+												image: '',
+											}
+											if(this.dataList[i].image !== ''){
+												keepA.image = JSON.stringify(this.dataList[i].image) 
+											}
+											keepList.push(keepA)
+										}
 										uni.request({
 											url: this.$jdkp.KyInterface.evaluationScore.Url,
 											method: this.$jdkp.KyInterface.evaluationScore.method,
 											data: {
 												id: this.id,
-												item: this.dataList
+												item: keepList
 											},
 											success: (res) => {
 												// console.log(res)
@@ -595,7 +607,7 @@
 
 			//图片转换
 			dataParse: function(e) {
-				console.log(e)
+				// console.log(e)
 				if (e == '') {
 					return e
 				} else {
@@ -615,8 +627,9 @@
 				}
 				console.log('触发保存')
 				if (this.stepsData.state == '已发布') {
+					// console.log('上传前数组',this.dataList)
 					var keepList = [];
-					for (let i = 0; i < this.dataList.length; i++) {
+					for (let i = 0; i < this.stepsData.item_count; i++) {
 						var keepA = {
 							itemId: this.dataList[i].itemId,
 							itemTitle: this.dataList[i].itemTitle,
@@ -627,48 +640,58 @@
 							keepA.image = JSON.stringify(this.dataList[i].image) 
 						}
 						keepList.push(keepA)
-					}
-					uni.request({
-						url: this.$jdkp.KyInterface.saveData.Url,
-						method: this.$jdkp.KyInterface.saveData.method,
-						data: {
-							id: this.id,
-							content: keepList
-						},
-						success: (res) => {
-							console.log('保存成功', res)
-							if(res.data.status){
-								uni.removeStorage({
-									key: 'dataList' + this.id
-								})
-								if(e == 1){
-									uni.hideLoading()
-									uni.stopPullDownRefresh()
-									uni.showToast({
-										title:'保存成功'
-									})
-								}
-							}else {
-								if(e == 1){
-									uni.hideLoading()
-									uni.stopPullDownRefresh()
-									uni.showToast({
-										title:'保存失败，10秒后重试',
-										icon:'none'
-									})
-								} 
-							}
-						},
-						fail: () => {
-							uni.hideLoading()
-							uni.stopPullDownRefresh()
-							uni.showToast({
-								title: '自动保存失败，网络异常',
-								icon: 'none'
-							})
+						if(i == (this.stepsData.item_count - 1)){
+							// console.log('执行提交',keepList)
+							this.keepDataSumbit(keepList,e)
 						}
-					})
+					}
+					
 				}
+			},
+			
+			//提交保存
+			keepDataSumbit:function(item,e){
+				console.log('准备提交保存', item)
+				uni.request({
+					url: this.$jdkp.KyInterface.saveData.Url,
+					method: this.$jdkp.KyInterface.saveData.method,
+					data: {
+						id: this.id,
+						content: item
+					},
+					success: (res) => {
+						console.log('保存成功', res)
+						if(res.data.status){
+							uni.removeStorage({
+								key: 'dataList' + this.id
+							})
+							if(e == 1){
+								uni.hideLoading()
+								uni.stopPullDownRefresh()
+								uni.showToast({
+									title:'保存成功'
+								})
+							}
+						}else {
+							if(e == 1){
+								uni.hideLoading()
+								uni.stopPullDownRefresh()
+								uni.showToast({
+									title:'保存失败，10秒后重试',
+									icon:'none'
+								})
+							} 
+						}
+					},
+					fail: () => {
+						uni.hideLoading()
+						uni.stopPullDownRefresh()
+						uni.showToast({
+							title: '自动保存失败，网络异常',
+							icon: 'none'
+						})
+					}
+				})
 			},
 
 			//保存图片至本地并打开新页面

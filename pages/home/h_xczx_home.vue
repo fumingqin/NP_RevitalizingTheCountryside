@@ -651,7 +651,7 @@
 					console.log("下载apk");
 					var that = this;
 					that.downloadTask = uni.downloadFile({
-						url: 'http://27.148.155.9:9248/LoadAppWebsite/振兴乡村APP.apk',
+						url: 'http://8.135.49.179:8081/LoadAppWebSite/zxxc_app.apk',
 						success: (downloadResult) => {
 							console.log(downloadResult, "下载文件apk");
 							if (downloadResult.statusCode === 200) {
