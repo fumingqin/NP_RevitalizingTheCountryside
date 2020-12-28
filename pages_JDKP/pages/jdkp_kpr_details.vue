@@ -430,14 +430,13 @@
 					this.dataList[this.inpuIndex].score = this.goodsType
 				} else {
 					if (this.goodsType !== '') {
+						this.dataList[this.inpuIndex].score = 0 ;
 						uni.showToast({
 							title: '分数不能大于' + this.stepsData.item[this.inpuIndex].itemscore,
 							icon: 'none'
 						})
 					}
 				}
-				// console.log('输入框参数', this.goodsType)
-				// console.log('输入框参数2', this.dataList)
 			},
 
 			//上传图片下标
