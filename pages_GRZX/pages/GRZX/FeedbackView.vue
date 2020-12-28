@@ -68,7 +68,7 @@
 				if (userInfo.portrait == "" || userInfo.portrait == null) {
 					this.headImg = "";
 				} else {
-					this.headImg = "http://120.24.144.6:888/prod-api" + userInfo.portrait;
+					this.headImg = userInfo.portrait;
 				}
 				this.userId = userInfo.userId;
 			}

@@ -220,7 +220,7 @@
 									this.changeInfo(data.msg);
 								}else{
 									uni.showToast({
-										title: '上传失败',
+										title: '上传失败，图片格式不正确',
 										icon:'none'
 									});
 								}
@@ -245,6 +245,7 @@
 				console.log("姓名",this.userName);
 				uni.request({
 					url:this.$GrzxInter.Interface.changUserInfo.value,
+					//url:'http://localhost:6480/api/user/changUserInfo',
 					data:{
 						userId:this.userId,
 						sex:this.gender,
