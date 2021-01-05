@@ -73,19 +73,8 @@
 			}
 		},
 		onLoad(options) {
-			//this.loadImg();//加载图片
 			this.urlData = options.urlData; //用来判断进入该页面的地址
 			this.load(); //加载页面高度
-
-			var that = this;
-			// 先判断 系统版本
-			uni.getSystemInfo({
-				success: (res) => {
-					console.log("系统", res);
-					that.system = res.system;
-					that.platform = res.platform;
-				}
-			})
 		},
 		onShow() {
 			// this.phoneNumber = "";
@@ -98,10 +87,11 @@
 		methods: {
 			//----------------------------------加载页面高度----------------------------------
 			load: function() {
-				var that = this;
 				uni.getSystemInfo({
-					success: function(res) { // res - 各种系统参数
-						that.imgHeight = res.windowHeight;
+					success: res=> { // res - 各种系统参数
+						this.imgHeight = res.windowHeight;
+						this.system = res.system;
+						this.platform = res.platform;
 					}
 				});
 			},
@@ -112,9 +102,8 @@
 				var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
 				if (regPos.test(val) || regNeg.test(val)) {
 					return true;
-				} else {
-					return false;
 				}
+				return false;
 			},
 
 			//-------------------------------------监听input的变化----------------------------------
