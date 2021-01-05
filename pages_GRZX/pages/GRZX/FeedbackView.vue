@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<u-top-tips ref="uTips"></u-top-tips>
 		<!-- 用户反馈 -->
 		<view class="user-talk" v-if="show">
 			<view class="top-text">
@@ -92,6 +93,11 @@
 						console.log(res);
 						if(res.data.data.length > 0){
 							this.show = true;
+							this.$refs.uTips.show({
+								title: '获取成功',
+								type: 'primary',
+								duration: '1500'
+							})
 						}else{
 							this.show = false;
 						}

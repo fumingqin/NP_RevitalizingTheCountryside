@@ -96,17 +96,6 @@
 			uni.hideLoading(); //退出页面时，关闭所有的弹窗
 		},
 		methods: {
-			//----------------------------------加载图片----------------------------------
-			// loadImg: function() {
-			// 	var that = this;
-			// 	that.$ChangeImage.GetImage("南平综合出行", "南平背景图").then(function(data) {
-			// 		that.background = data;
-			// 	});
-			// 	that.$ChangeImage.GetImage("南平综合出行", "nanpinglogo").then(function(data) {
-			// 		that.logo = data;
-			// 	});
-			// },
-
 			//----------------------------------加载页面高度----------------------------------
 			load: function() {
 				var that = this;
@@ -130,51 +119,32 @@
 
 			//-------------------------------------监听input的变化----------------------------------
 			inputChange1: function(e) {
-				var num = e.detail.value;
-				if (this.judgeNum(num)) {
-
-				} else {
+				if (!this.judgeNum(e.detail.value) && e.detail.value) {
 					uni.showToast({
 						title: '请输入正确的手机号码',
 						icon: 'none',
 					})
 				}
-				const key = e.currentTarget.dataset.key;
-				this[key] = e.detail.value;
 			},
 
 			//-------------------------------------监听input的变化----------------------------------
 			inputChange2: function(e) {
-				var num = e.detail.value;
-				if (this.judgeNum(num)) {
-
-				} else {
+				if (!this.judgeNum(e.detail.value) && e.detail.value) {
 					uni.showToast({
 						title: '请输入正确的验证码',
 						icon: 'none',
 					})
 				}
-				const key = e.currentTarget.dataset.key;
-				this[key] = e.detail.value;
 			},
 
 			//-------------------------------------登录按钮----------------------------------
 			loginClick: function() {
-				uni.showLoading({
-					title: '登录中...',
-					mask: true
-				})
-				var that = this;
-				const {
-					phoneNumber,
-					captchaCode
-				} = this;
 				var phone = this.phoneNumber;
 				var captcha = this.captchaCode;
 				var reg = (/^1(3|4|5|6|7|8|9)\d{9}$/);
 				if (phone == this.testPhone) {
-					that.requestInter(phone, captcha);
-				} else if (phone == null || phone == "") {
+					this.requestInter(phone, captcha);
+				} else if (!phone) {
 					uni.showToast({
 						title: "请输入手机号码",
 						icon: "none"
@@ -184,15 +154,13 @@
 						title: "请输入正确的手机号码",
 						icon: "none"
 					})
-				} else {
-					if (captcha == null || captcha == "") {
+				} else if (!captcha) {
 						uni.showToast({
 							title: "请输入验证码",
 							icon: "none"
 						})
-					} else {
-						that.requestInter(phone, captcha);
-					}
+				} else {
+					this.requestInter(phone, captcha);
 				}
 			},
 
@@ -203,6 +171,10 @@
 					key: 'captchaCode',
 					success(res) {
 						if (captcha == res.data.code && phone == res.data.phone) {
+							uni.showLoading({
+								title: '登录中...',
+								mask: true
+							})
 							uni.request({
 								url: that.$GrzxInter.Interface.login.value,
 								data: {
@@ -245,29 +217,17 @@
 
 			//-------------------------------------登陆成功后返回----------------------------------
 			successReturn: function() {
-				var that = this;
 				uni.showToast({
 					title: "登录成功!",
 					icon: "success"
 				})
 				setTimeout(function() {
-					// if (that.urlData == 1) {
-					// 	that.$GrzxInter.navToHome();//返回首页
-					// } else if (that.urlData == 2) {
-					// 	that.$GrzxInter.navToOrderList();
-					// } else {
-					// 	console.log("返回上一页")
-					// }
 					uni.navigateBack(); //返回上一页
 				}, 500);
 			},
 			
 			//-------------------------------------密码登录-------------------------------------
 			pwdLogin:function(){
-				uni.showLoading({
-					title: '登录中...',
-					mask: true
-				});
 				var reg = (/^1(3|4|5|6|7|8|9)\d{9}$/);
 				if(this.phoneNumber =="11145879222"){
 					if(this.password =="123456"){
@@ -301,6 +261,10 @@
 			},
 			
 			pwdRequest:function(phone,pwd){
+				uni.showLoading({
+					title: '登录中...',
+					mask: true
+				});
 				uni.request({
 					url: this.$GrzxInter.Interface.loginByPassword.value,
 					method: this.$GrzxInter.Interface.loginByPassword.method,
@@ -651,7 +615,7 @@
 					success: (res) => {
 						console.log(res, "340");
 						console.log(res.data.data);
-						if (res.data.status == false) { //发送验证码次数上限
+						if (!res.data.status) { //发送验证码次数上限
 							that.state = true;
 							that.textCode = "获取验证码";
 							clearInterval(timer);

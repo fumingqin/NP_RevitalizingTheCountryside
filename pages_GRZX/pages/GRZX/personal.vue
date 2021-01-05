@@ -11,7 +11,7 @@
 			<image v-if="backImg!=''" class="bg" :src="backImg||'/static/GRZX/backImg.png'" mode="aspectFill" name="backImg"></image>
 			<view v-if="backImg==''" class="bg bc_GRZX" name="backImg"></view>
 			
-			<image class="tx" :src="portrait||'/static/GRZX/missing-face.png'" name="portrait" @click="getPhoto"></image>
+			<image class="tx" :src="portrait||'/static/GRZX/missing-face.png'" name="portrait" @click="getPhoto" mode="aspectFill"></image>
 			<button class="xgbg"  plain="" @click="reviseBackground">修改背景</button>
 			<!-- #endif -->
 			

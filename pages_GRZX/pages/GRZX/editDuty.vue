@@ -1,5 +1,7 @@
 <template>
 	<view class="content">
+		<!-- 顶部提示 -->
+		<u-top-tips ref="uTips"></u-top-tips>
 		<view class="itemClass mm">
 			<text class="fontClass">手机号码</text>
 			<text class="fontClass mb">{{phone}}</text>
@@ -118,18 +120,24 @@
 					success: res => {
 						console.log(res);
 						if(res.data.status){
-							uni.showToast({
+							// uni.showToast({
+							// 	title: '修改成功',
+							// });
+							this.$refs.uTips.show({
 								title: '修改成功',
-							});
+								type: 'primary',
+								duration: '1500'
+							})
 							uni.removeStorageSync('Code');
 							setTimeout(function(){
 								uni.navigateBack();
 							},1000)
 						}else{
-							uni.showToast({
+							this.$refs.uTips.show({
 								title: '修改失败',
-								icon:'none'
-							});
+								type: 'primary',
+								duration: '1500'
+							})
 						}
 					},
 					fail: () => {

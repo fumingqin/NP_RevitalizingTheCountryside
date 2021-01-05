@@ -360,7 +360,38 @@
 					return false;
 				}
 			},
-
+			
+			//--------------------------------预览广告--------------------------------
+			previewPortrait(){
+				uni.showLoading({
+					mask:true,
+					title:'图片加载中...'
+				})
+				var array = [];
+				//array.push(this.advert);
+				uni.previewImage({
+					urls: array,
+					success: () => {
+						setTimeout(()=>{
+							uni.showToast({
+								title:'长按可保存图片',
+								icon:'none'
+							})
+						},1500)
+					},
+					fail: () => {
+						uni.showToast({
+							title:'图片预览失败，请重试',
+							icon:'none'
+						})
+					},
+					complete() {
+						setTimeout(()=>{
+							uni.hideLoading();
+						},2500)
+					}
+				});
+			},
 		}
 
 	}
